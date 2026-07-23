@@ -215,21 +215,19 @@
     <sc-if value="{{ showChuva }}" hint-placeholder-val="{{ false }}">
       <div>
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Chuva de Palavras</div>
-        <div style="font-size:14px;color:#6B6B70;margin-bottom:24px">Em uma palavra: o que 2026 significa para você?</div>
+        <div style="font-size:14px;color:#6B6B70;margin-bottom:24px">O que você espera dessa reunião de Planejamento?</div>
 
-        <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px);margin-bottom:24px">
-          <div style="display:flex;gap:10px;max-width:480px;flex-wrap:wrap">
-            <input placeholder="Escreva uma palavra..." value="{{ wordInput }}" onChange="{{ onWordInputChange }}" onKeyDown="{{ onWordKeyDown }}" maxlength="24" style="flex:1;min-width:200px;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:inherit"></input>
-            <div onClick="{{ submitWord }}" style="cursor:pointer;background:#F39200;color:#fff;font-weight:700;padding:11px 22px;border-radius:10px;font-size:14px;white-space:nowrap">Enviar</div>
-          </div>
+        <div style="background:#002855;border-radius:16px;padding:clamp(28px,4vw,40px);text-align:center;color:#F2F5FA;margin-bottom:24px">
+          <div style="font-size:13px;color:#A9C0DE;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:10px">Acesse e vote em</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(24px,3vw,34px);margin-bottom:6px">menti.com</div>
+          <div style="font-size:13px;color:#A9C0DE;margin-bottom:20px">Código: <span style="color:#F39200;font-weight:800;letter-spacing:0.05em">8928 3821</span></div>
+          <a href="https://www.menti.com" target="_blank" style="display:inline-block;background:#F39200;color:#002855;font-weight:700;padding:12px 28px;border-radius:10px;font-size:14px;text-decoration:none">Abrir Mentimeter</a>
         </div>
 
-<div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(24px,4vw,40px);min-height:280px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;align-content:center;gap:10px 16px;row-gap:14px">
-          <sc-for list="{{ wordCloud }}" as="w" hint-placeholder-count="10">
-            <div style="font-family:'Sora',sans-serif;font-size:{{ w.fontSize }};font-weight:{{ w.weight }};color:{{ w.color }};line-height:1;white-space:nowrap">{{ w.label }}</div>
-          </sc-for>
+        <div style="border-radius:16px;overflow:hidden;border:1px solid #DCE6F2;height:480px">
+          <iframe src="https://www.mentimeter.com/app/presentation" style="width:100%;height:100%;border:0" loading="lazy" title="Mentimeter"></iframe>
         </div>
-        <div style="font-size:12.5px;color:#6B6B70;margin-top:10px;text-align:center">{{ wordsCount }} palavras enviadas · atualiza em tempo real</div>
+        <div style="font-size:12.5px;color:#6B6B70;margin-top:10px;text-align:center">Substitua o link do iframe acima pelo link de apresentação/embed da sua votação do Mentimeter.</div>
       </div>
     </sc-if>
 
@@ -240,13 +238,6 @@
 
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:20px">
           <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
-            <div style="font-weight:700;font-size:14px;margin-bottom:8px">Local</div>
-            <div style="font-size:13.5px;color:#4A4A50;line-height:1.6">{{ cityData.venue }}</div>
-            <sc-if value="{{ cityData.address }}" hint-placeholder-val="{{ false }}">
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.6">{{ cityData.address }}</div>
-            </sc-if>
-          </div>
-          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
             <div style="font-weight:700;font-size:14px;margin-bottom:8px">Credenciamento</div>
             <div style="font-size:13.5px;color:#4A4A50;line-height:1.6">Chegada a partir de 8h30 · lista de presença na entrada do auditório.</div>
           </div>
@@ -256,11 +247,7 @@
           </div>
         </div>
 
-        <div style="border-radius:16px;overflow:hidden;border:1px solid #DCE6F2;height:320px;margin-bottom:20px">
-          <iframe src="{{ cityData.mapEmbedUrl }}" style="width:100%;height:100%;border:0" loading="lazy"></iframe>
-        </div>
-
-        <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:center">
+        <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:center;margin-bottom:20px">
           <img src="assets/camiseta-viart.jpg" alt="Kit do evento VIART 2026" style="width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top center;border-radius:14px;background:#FFFFFF">
           <div>
             <div style="font-weight:700;font-size:15px;margin-bottom:8px">Kit do Evento</div>
@@ -268,7 +255,7 @@
           </div>
         </div>
 
-        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:26px 0 12px">Material do evento</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Material do evento</div>
         <a href="assets/plano-atuacao-viart-26-30.pdf" target="_blank" style="text-decoration:none;color:inherit"><div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;justify-content:space-between">
           <div style="display:flex;align-items:center;gap:16px">
             <img src="assets/plano-atuacao-capa.png" alt="Capa do Plano de Atuação VIART 2026-2030" style="width:90px;aspect-ratio:16/9;object-fit:cover;border-radius:8px;flex-shrink:0">
@@ -279,6 +266,17 @@
           </div>
           <div style="background:#0057A6;color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;font-size:13.5px;white-space:nowrap">Abrir PDF</div>
         </div></a>
+
+        <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;margin-top:20px;margin-bottom:16px">
+          <div style="font-weight:700;font-size:14px;margin-bottom:8px">Local</div>
+          <div style="font-size:13.5px;color:#4A4A50;line-height:1.6">{{ cityData.venue }}</div>
+          <sc-if value="{{ cityData.address }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13.5px;color:#4A4A50;line-height:1.6">{{ cityData.address }}</div>
+          </sc-if>
+        </div>
+        <div style="border-radius:16px;overflow:hidden;border:1px solid #DCE6F2;height:320px">
+          <iframe src="{{ cityData.mapEmbedUrl }}" style="width:100%;height:100%;border:0" loading="lazy"></iframe>
+        </div>
       </div>
     </sc-if>
 
@@ -614,9 +612,6 @@ class Component extends DCLogic {
     qText: '',
     qSending: false,
     qLive: false,
-    words: [],
-    wordInput: '',
-    wordSending: false,
   };
 
   componentDidMount() {
@@ -636,7 +631,7 @@ class Component extends DCLogic {
 
   fetchQuestions = () => {
     fetch(QUESTIONS_URL).then(r => r.json()).then(data => {
-      this.setState({ questions: (data && data.questions) || [], words: (data && data.words) || [], qLive: true });
+      this.setState({ questions: (data && data.questions) || [], qLive: true });
     }).catch(() => this.setState({ qLive: false }));
   };
 
@@ -687,28 +682,12 @@ class Component extends DCLogic {
     fetch(QUESTIONS_URL).then(r => r.json()).then(data => {
       const questions = [q, ...((data && data.questions) || [])];
       return fetch(QUESTIONS_URL, {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ questions, words: (data && data.words) || [] }),
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ questions }),
       }).then(() => questions);
     }).then(questions => {
       this.setState({ questions, qGroup: '', qText: '', qSending: false, qLive: true });
     }).catch(() => this.setState({ qSending: false }));
   };
-
-  onWordInputChange = (e) => this.setState({ wordInput: e.target.value });
-  submitWord = () => {
-    const w = this.state.wordInput.trim();
-    if (!w || this.state.wordSending) return;
-    this.setState({ wordSending: true });
-    fetch(QUESTIONS_URL).then(r => r.json()).then(data => {
-      const words = [...((data && data.words) || []), { id: Date.now(), text: w }];
-      return fetch(QUESTIONS_URL, {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ questions: (data && data.questions) || [], words }),
-      }).then(() => words);
-    }).then(words => {
-      this.setState({ words, wordInput: '', wordSending: false, qLive: true });
-    }).catch(() => this.setState({ wordSending: false }));
-  };
-  onWordKeyDown = (e) => { if (e.key === 'Enter') this.submitWord(); };
 
   printReport = async () => {
     if (this.state.pdfGenerating) return;
@@ -743,23 +722,6 @@ class Component extends DCLogic {
 
   renderVals() {
     const s = this.state;
-
-    const wordCounts = {};
-    const wordOrder = [];
-    s.words.forEach(w => {
-      const key = w.text.trim().toLowerCase();
-      if (!(key in wordCounts)) wordOrder.push(key);
-      wordCounts[key] = (wordCounts[key] || 0) + 1;
-    });
-    const maxCount = Math.max(1, ...Object.values(wordCounts));
-    const cloudPalette = ['#002855', '#0057A6', '#F39200', '#4A4A50'];
-    let colorIdx = 0;
-    const wordCloud = wordOrder.map(key => {
-      const count = wordCounts[key];
-      const size = 15 + Math.sqrt(count / maxCount) * 33;
-      const color = cloudPalette[colorIdx++ % cloudPalette.length];
-      return { key, label: key, count, fontSize: size.toFixed(1) + 'px', color, weight: count > 1 ? 800 : 600 };
-    });
 
     const cityData = s.city === 'sp'
       ? { id: 'sp', name: 'São Paulo', date: '13 de Agosto', venue: 'Edifício SEDES CAIXA · Auditório Térreo + 18º andar', address: 'Av. Paulista, 750 – Bela Vista, São Paulo - SP', count: 124, pct: '67% do total', bikes: 15, mapEmbedUrl: 'https://www.google.com/maps?q=Edifício+SEDES+CAIXA+Av+Paulista+750+São+Paulo&output=embed' }
@@ -832,8 +794,6 @@ class Component extends DCLogic {
       bsbBg: s.city === 'bsb' ? '#F39200' : 'transparent', bsbColor: s.city === 'bsb' ? '#002855' : '#C9D6E8',
       selectSP: this.selectSP, selectBSB: this.selectBSB,
       tabs, cityData,
-      wordCloud, wordsCount: s.words.length, wordInput: s.wordInput, onWordInputChange: this.onWordInputChange,
-      submitWord: this.submitWord, onWordKeyDown: this.onWordKeyDown, wordSending: s.wordSending,
       pdfBtnLabel: s.pdfGenerating ? 'Gerando PDF…' : 'Gerar relatório em PDF',
       showInicio: s.activeTab === 'inicio', showProgramacao: s.activeTab === 'programacao',
       showEstrategia: s.activeTab === 'estrategia', showHistorias: s.activeTab === 'historias',
