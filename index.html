@@ -319,10 +319,12 @@
       </div>
     </sc-if>
 
-    <sc-if value="{{ showCracha }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ showInfo }}" hint-placeholder-val="{{ false }}">
       <div>
-        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Meu crachá</div>
-        <div style="font-size:14px;color:#6B6B70;margin-bottom:24px">Identifique-se uma vez e apresente esta tela no credenciamento — sem fila de lista impressa.</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:24px">Informações · {{ cityData.name }}</div>
+
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 4px">Meu crachá</div>
+        <div style="font-size:13px;color:#6B6B70;margin-bottom:14px">Identifique-se uma vez para ver seu crachá digital e o status da sua presença.</div>
 
         <sc-if value="{{ temNome }}" hint-placeholder-val="{{ false }}">
           <div style="max-width:420px">
@@ -332,9 +334,15 @@
                 <div role="img" aria-label="QR de credenciamento" style="width:180px;height:180px;background-image:{{ crachaQRBg }};background-size:cover;background-repeat:no-repeat"></div>
               </div>
               <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(19px,2.4vw,26px);line-height:1.2">{{ meuNome }}</div>
-              <div style="font-size:13px;color:#A9C0DE;margin-top:8px">{{ cityData.name }} · {{ cityData.date }}</div>
+              <div style="font-size:13px;color:#A9C0DE;margin-top:8px">{{ crachaLocal }}</div>
+              <sc-if value="{{ jaCredenciado }}" hint-placeholder-val="{{ false }}">
+                <div style="display:inline-block;margin-top:14px;background:#1E5E38;color:#C7EFD5;font-size:11.5px;font-weight:800;padding:6px 14px;border-radius:999px;text-transform:uppercase;letter-spacing:0.07em">Presença confirmada</div>
+              </sc-if>
+              <sc-if value="{{ aguardandoCredenciamento }}" hint-placeholder-val="{{ false }}">
+                <div style="display:inline-block;margin-top:14px;background:#0A3C6E;color:#A9C0DE;font-size:11.5px;font-weight:700;padding:6px 14px;border-radius:999px">Apresente na mesa de credenciamento</div>
+              </sc-if>
             </div>
-            <div onClick="{{ limparMeuNome }}" style="cursor:pointer;text-align:center;font-size:12.5px;font-weight:700;color:#6B6B70;padding:10px">Não sou eu · trocar nome</div>
+            <div onClick="{{ limparMeuNome }}" style="cursor:pointer;text-align:center;font-size:12.5px;font-weight:700;color:#6B6B70;padding:10px 10px 20px">Não sou eu · trocar nome</div>
           </div>
         </sc-if>
 
@@ -349,14 +357,8 @@
             </div>
           </div>
         </sc-if>
-      </div>
-    </sc-if>
 
-    <sc-if value="{{ showInfo }}" hint-placeholder-val="{{ false }}">
-      <div>
-        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:24px">Informações · {{ cityData.name }}</div>
-
-        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Como chegar</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:26px 0 12px">Como chegar</div>
         <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;margin-bottom:20px">
           <div style="font-weight:700;font-size:14.5px">{{ cityData.venue }}</div>
           <div style="font-size:13px;color:#4A4A50;margin-top:4px">{{ cityData.address }}</div>
@@ -417,21 +419,14 @@
           </sc-for>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:20px">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Wi-Fi</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:20px;max-width:420px">
           <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px">
-            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px">Wi-Fi do local</div>
             <div style="font-size:12px;color:#6B6B70">Rede</div>
             <div style="font-weight:700;font-size:14px;margin-bottom:8px">{{ cityData.wifiRede }}</div>
             <div style="font-size:12px;color:#6B6B70">Senha</div>
             <div style="font-weight:700;font-size:14px">{{ cityData.wifiSenha }}</div>
             <div onClick="{{ copiarWifi }}" style="cursor:pointer;display:inline-block;margin-top:14px;border:1px solid #C9D6E8;color:#002855;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px">{{ wifiCopiado }}</div>
-          </div>
-          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px">
-            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px">Almoço e confraternização</div>
-            <div style="font-size:12px;color:#6B6B70">Almoço</div>
-            <div style="font-size:13.5px;margin-bottom:10px">{{ cityData.almoco }}</div>
-            <div style="font-size:12px;color:#6B6B70">Confraternização</div>
-            <div style="font-size:13.5px">{{ cityData.confraternizacao }}</div>
           </div>
         </div>
 
@@ -454,7 +449,7 @@
 
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Contatos de emergência</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:20px">
-          <sc-for list="{{ cityData.contatos }}" as="ct" hint-placeholder-count="3">
+          <sc-for list="{{ cityData.contatos }}" as="ct" hint-placeholder-count="1">
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:15px 16px">
               <div style="font-weight:700;font-size:13.5px">{{ ct.nome }}</div>
               <div style="font-size:12px;color:#6B6B70;margin-top:3px">{{ ct.papel }}</div>
@@ -957,7 +952,6 @@ const CARTAZES = [
 const TABS_DEF = [
   { id: 'inicio', label: 'Início' },
   { id: 'programacao', label: 'Programação' },
-  { id: 'cracha', label: 'Meu crachá' },
   { id: 'info', label: 'Informações' },
   { id: 'chuva', label: 'Chuva de Palavras' },
   { id: 'estrategia', label: 'Falando de Estratégia' },
@@ -1489,8 +1483,6 @@ class Component extends DCLogic {
           almoco: 'No próprio prédio · 12h15 às 14h', confraternizacao: 'Local a definir · a partir das 19h',
           contatos: [
             { nome: 'Ponto focal São Paulo', papel: 'Organização do evento', tel: 'a confirmar' },
-            { nome: 'Portaria / segurança do prédio', papel: 'Acesso e emergências', tel: 'a confirmar' },
-            { nome: 'Ambulatório CAIXA', papel: 'Primeiros socorros', tel: 'a confirmar' },
           ] }
       : { id: 'bsb', name: 'Brasília', date: '20 de Agosto', dateISO: '2026-08-20', venue: 'Auditório Matriz II', address: 'SAUS Quadra 5, Lote 9/10, Brasília - DF, CEP 70070-050', count: 62, pct: 'Brasília: 57 + Rio de Janeiro: 5', bikes: 10, mapEmbedUrl: 'https://www.google.com/maps?q=Caixa+Econômica+Federal+Matriz+II+SAUS+Quadra+5+Brasília&output=embed',
           transporte: 'Estação Galeria dos Estados (metrô), a 900 m · diversas linhas de ônibus no Setor de Autarquias Sul', estacionamento: 'Estacionamento do edifício conforme disponibilidade — chegue com folga ou use transporte por app',
@@ -1498,8 +1490,6 @@ class Component extends DCLogic {
           almoco: 'No próprio prédio · 12h15 às 14h', confraternizacao: 'Local a definir · a partir das 19h',
           contatos: [
             { nome: 'Ponto focal Brasília', papel: 'Organização do evento', tel: 'a confirmar' },
-            { nome: 'Portaria / segurança do prédio', papel: 'Acesso e emergências', tel: 'a confirmar' },
-            { nome: 'Ambulatório CAIXA', papel: 'Primeiros socorros', tel: 'a confirmar' },
           ] };
 
     const PILLAR_STYLE = {
@@ -1715,8 +1705,13 @@ class Component extends DCLogic {
       ? PARTICIPANTES.filter(n => norm(n).includes(cq)).slice(0, 8).map(n => ({ nome: n, escolher: this.setMeuNome(n) }))
       : [];
     const temNome = !!s.meuNome;
+    const minhaCidadeId = temNome ? cidadeDe(s.meuNome) : '';
+    const minhaCidade = minhaCidadeId === 'sp' ? 'São Paulo' : (minhaCidadeId === 'bsb' ? 'Brasília' : '');
+    const minhaData = minhaCidadeId === 'sp' ? '13 de agosto' : (minhaCidadeId === 'bsb' ? '20 de agosto' : '');
+    const jaCredenciado = temNome && !!gv('ps-' + s.meuNome);
+    const crachaLocal = minhaCidade ? minhaCidade + ' · ' + minhaData : 'Cidade definida no credenciamento';
     const crachaQR = temNome
-      ? 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=0&data=' + encodeURIComponent('VIART2026|' + cityData.name + '|' + s.meuNome)
+      ? 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=0&data=' + encodeURIComponent('VIART2026|' + (minhaCidade || 'cidade a definir') + '|' + s.meuNome)
       : '';
     const primeiroNome = temNome ? s.meuNome.split(' ')[0] : '';
 
@@ -1799,11 +1794,11 @@ class Component extends DCLogic {
       syncLabel: s.syncStatus === 'online' ? 'Sincronizado com a equipe' : 'Somente neste aparelho (sem conexão com o servidor)',
       syncColor: s.syncStatus === 'online' ? '#2E9E5B' : '#F39200',
       atualizarAgora: this.puxarEstado,
-      showCracha: s.activeTab === 'cracha',
       mostrarAgora, agoraLabel, agoraTitulo, agoraHora, proximoTexto, temProximo, mostrarFeedback,
       mapsUrl, uberUrl,
       crachaQuery: s.crachaQuery, onCrachaQuery: this.onCrachaQuery, crachaOpcoes,
       temNome, crachaSemNome: !temNome, meuNome: s.meuNome, primeiroNome, limparMeuNome: this.limparMeuNome,
+      crachaLocal, jaCredenciado, aguardandoCredenciamento: temNome && !jaCredenciado,
       crachaQRBg: crachaQR ? 'url("' + crachaQR + '")' : 'none',
       levar,
       restricaoTipo: s.restricaoTipo, onRestricaoTipo: this.onRestricaoTipo,
