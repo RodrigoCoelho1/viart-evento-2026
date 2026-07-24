@@ -91,6 +91,27 @@
           </div>
         </div>
 
+        <sc-if value="{{ mostrarAgora }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:16px;padding:22px 24px;margin-bottom:28px">
+            <div style="font-size:11px;font-weight:800;color:#B4600A;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px">{{ agoraLabel }}</div>
+            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(19px,2vw,26px);line-height:1.2">{{ agoraTitulo }}</div>
+            <div style="font-size:13.5px;color:#6B6B70;margin-top:4px">{{ agoraHora }}</div>
+            <sc-if value="{{ temProximo }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;font-size:13px;color:#4A4A50"><b>A seguir:</b> {{ proximoTexto }}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ mostrarFeedback }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#E8EFF9;border-radius:16px;padding:20px 24px;margin-bottom:28px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-weight:700;font-size:14.5px">Como foi o seu dia?</div>
+              <div style="font-size:13px;color:#4A4A50;margin-top:3px">Sua avaliação ajuda a montar o próximo encontro. Leva dois minutos.</div>
+            </div>
+            <a href="https://www.menti.com" target="_blank" style="background:#0057A6;color:#fff;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px;text-decoration:none;white-space:nowrap">Responder pesquisa</a>
+          </div>
+        </sc-if>
+
         <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
           <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(18px,1.8vw,24px)">Novo formato 2026</div>
         </div>
@@ -160,23 +181,20 @@
 
         <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px 22px;font-size:14px;font-style:italic;margin-bottom:32px">Regra de ouro: aqui não tem pergunta proibida — transparência é o combinado do dia.</div>
 
-        <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px)">
-          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:18px;margin-bottom:4px">Envie seu torpedo</div>
-          <div style="display:flex;flex-direction:column;gap:10px;max-width:520px">
-            <input placeholder="Nome do Participante ou do Grupo" value="{{ qGroup }}" onChange="{{ onQGroupChange }}" style="padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif"></input>
-            <textarea placeholder="Sua pergunta para a liderança..." value="{{ qText }}" onChange="{{ onQTextChange }}" style="padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;min-height:80px;resize:vertical"></textarea>
-            <div onClick="{{ submitQuestion }}" style="cursor:pointer;align-self:flex-start;background:#F39200;color:#fff;font-weight:700;padding:11px 22px;border-radius:10px;font-size:14px">Enviar torpedo</div>
+        <div style="background:#002855;border-radius:16px;padding:clamp(28px,4vw,40px);text-align:center;color:#F2F5FA;margin-bottom:16px">
+          <div style="font-size:13px;color:#A9C0DE;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:10px">Envie seu torpedo em</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(24px,3vw,34px);margin-bottom:6px">menti.com</div>
+          <div style="font-size:13px;color:#A9C0DE;margin-bottom:20px">Código: <span style="color:#F39200;font-weight:800;letter-spacing:0.05em">1155 7596</span></div>
+          <a href="https://www.menti.com" target="_blank" style="display:inline-block;background:#F39200;color:#002855;font-weight:700;padding:12px 28px;border-radius:10px;font-size:14px;text-decoration:none">Abrir Mentimeter</a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+          <div style="background:#E8EFF9;border-radius:14px;padding:18px">
+            <div style="font-weight:700;font-size:14px;margin-bottom:8px">Como participar</div>
+            <div style="font-size:13px;color:#4A4A50;line-height:1.6">Abra o menti.com, digite o código e escreva sua pergunta. Você pode enviar de forma anônima — e curtir as perguntas dos colegas para elas subirem na fila.</div>
           </div>
-          <div style="margin-top:22px;border-top:1px solid #DCE6F2;padding-top:16px">
-            <div style="font-size:12.5px;font-weight:700;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">{{ questionsCount }} pergunta(s) enviada(s)</div>
-            <div style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto">
-              <sc-for list="{{ questions }}" as="q" hint-placeholder-count="0">
-                <div style="background:#F2F5FA;border-radius:10px;padding:10px 14px">
-                  <div style="font-size:12px;font-weight:700;color:#0057A6">{{ q.group }} · {{ q.cityLabel }}</div>
-                  <div style="font-size:13.5px;color:#002855;margin-top:2px">{{ q.text }}</div>
-                </div>
-              </sc-for>
-            </div>
+          <div style="background:#E8EFF9;border-radius:14px;padding:18px">
+            <div style="font-weight:700;font-size:14px;margin-bottom:8px">Como as perguntas são respondidas</div>
+            <div style="font-size:13px;color:#4A4A50;line-height:1.6">As perguntas aparecem ao vivo no telão, ordenadas pelos votos. A liderança responde no painel de 11h40 às 12h15; o que não couber no tempo é respondido depois pelos canais da VIART.</div>
           </div>
         </div>
       </div>
@@ -225,9 +243,225 @@
       </div>
     </sc-if>
 
+    <sc-if value="{{ showCheckin }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:560px">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Credenciamento</div>
+        <div style="font-size:14px;color:#6B6B70;margin-bottom:24px">Confirme sua presença em {{ cityData.name }} e retire seu kit com a equipe na entrada.</div>
+
+        <sc-if value="{{ ciFeito }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <sc-if value="{{ ciEnviadoOk }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#002855;color:#F2F5FA;border-radius:20px;padding:clamp(26px,4vw,38px);text-align:center;margin-bottom:14px">
+                <div style="font-size:44px;font-weight:800;color:#8FD9A8;line-height:1;margin-bottom:16px">✓</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(19px,2.4vw,26px);line-height:1.2">Presença confirmada</div>
+                <div style="font-size:14px;color:#DCE6F2;margin-top:10px">{{ meuNome }}</div>
+                <div style="font-size:12.5px;color:#A9C0DE;margin-top:4px">{{ cityData.name }} · {{ cityData.date }}</div>
+                <div style="font-size:13px;color:#DCE6F2;margin-top:20px;line-height:1.6">Já apareceu na lista da organização. Retire seu kit na mesa de credenciamento — seu crachá digital está na aba <b>Meu crachá</b>.</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ ciSalvoLocal }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FDF1DC;border:2px solid #F39200;border-radius:20px;padding:clamp(24px,4vw,34px);margin-bottom:14px">
+                <div style="font-size:11px;font-weight:800;color:#8A5A0B;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:10px">Ainda não chegou à organização</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(18px,2.2vw,24px);line-height:1.25;color:#002855">Sua presença ficou salva só neste celular</div>
+                <div style="font-size:13.5px;color:#4A4A50;margin-top:12px;line-height:1.65">Sem conexão com o servidor agora. <b>Avise a equipe na mesa de credenciamento</b> para marcar você na lista, ou tente novamente com uma conexão melhor — o envio é automático quando a internet voltar.</div>
+                <div onClick="{{ ciTentarNovamente }}" style="cursor:pointer;display:inline-block;margin-top:18px;background:#002855;color:#fff;font-weight:700;padding:12px 22px;border-radius:10px;font-size:14px">Tentar enviar novamente</div>
+              </div>
+            </sc-if>
+            <div onClick="{{ ciNovo }}" style="cursor:pointer;text-align:center;font-size:12.5px;font-weight:700;color:#6B6B70;padding:10px">Credenciar outra pessoa</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ ciFormVisivel }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px)">
+            <sc-if value="{{ ciSemNome }}" hint-placeholder-val="{{ true }}">
+              <div>
+                <div style="font-weight:700;font-size:15px;margin-bottom:4px">Quem é você?</div>
+                <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">Digite as primeiras letras do seu nome.</div>
+                <input placeholder="Seu nome..." value="{{ ciQuery }}" onChange="{{ onCiQuery }}" style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:15px;font-family:'Manrope',sans-serif"></input>
+                <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">
+                  <sc-for list="{{ ciOpcoes }}" as="op" hint-placeholder-count="0">
+                    <div onClick="{{ op.escolher }}" style="cursor:pointer;background:#F2F5FA;border-radius:10px;padding:13px 14px;font-size:14px;color:#002855">{{ op.nome }}</div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ ciTemNome }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="background:#F2F7FD;border:1px solid #C9D6E8;border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px">
+                  <div>
+                    <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.07em">Você</div>
+                    <div style="font-weight:700;font-size:14.5px;margin-top:3px">{{ ciNome }}</div>
+                  </div>
+                  <div onClick="{{ ciTrocar }}" style="cursor:pointer;font-size:12px;font-weight:700;color:#0057A6;white-space:nowrap">trocar</div>
+                </div>
+                <sc-if value="{{ ciCodigoDoQR }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;gap:8px;background:#E3F3E8;border-radius:10px;padding:12px 14px;margin-bottom:4px">
+                    <div style="color:#1E7A45;font-weight:800;font-size:14px">✓</div>
+                    <div style="font-size:13px;color:#1E7A45;font-weight:700">Local confirmado pelo QR da entrada</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ ciPedirCodigo }}" hint-placeholder-val="{{ true }}">
+                  <div>
+                    <div style="font-weight:700;font-size:15px;margin-bottom:4px">2. Código da entrada</div>
+                    <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">Se você não leu o QR do cartaz, peça os 4 dígitos à equipe na mesa.</div>
+                    <input type="tel" placeholder="0000" value="{{ ciCodigo }}" onChange="{{ onCiCodigo }}" style="width:140px;box-sizing:border-box;padding:13px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:20px;font-weight:800;letter-spacing:0.22em;text-align:center;font-family:'Manrope',sans-serif"></input>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ ciTemErro }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:12.5px;color:#C0392B;font-weight:700;margin-top:10px">{{ ciErro }}</div>
+                </sc-if>
+                <div onClick="{{ ciConfirmar }}" style="cursor:pointer;margin-top:18px;background:#F39200;color:#fff;font-weight:700;padding:14px 26px;border-radius:10px;font-size:15px;text-align:center">{{ ciBotaoLabel }}</div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showCracha }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Meu crachá</div>
+        <div style="font-size:14px;color:#6B6B70;margin-bottom:24px">Identifique-se uma vez e apresente esta tela no credenciamento — sem fila de lista impressa.</div>
+
+        <sc-if value="{{ temNome }}" hint-placeholder-val="{{ false }}">
+          <div style="max-width:420px">
+            <div style="background:#002855;color:#F2F5FA;border-radius:20px;padding:clamp(24px,4vw,34px);text-align:center;margin-bottom:14px">
+              <div style="font-size:11px;font-weight:800;color:#A9C0DE;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:18px">Planejamento VIART 2026</div>
+              <div style="background:#FFFFFF;border-radius:14px;padding:14px;display:inline-flex;margin-bottom:20px">
+                <div role="img" aria-label="QR de credenciamento" style="width:180px;height:180px;background-image:{{ crachaQRBg }};background-size:cover;background-repeat:no-repeat"></div>
+              </div>
+              <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(19px,2.4vw,26px);line-height:1.2">{{ meuNome }}</div>
+              <div style="font-size:13px;color:#A9C0DE;margin-top:8px">{{ cityData.name }} · {{ cityData.date }}</div>
+            </div>
+            <div onClick="{{ limparMeuNome }}" style="cursor:pointer;text-align:center;font-size:12.5px;font-weight:700;color:#6B6B70;padding:10px">Não sou eu · trocar nome</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ crachaSemNome }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px);max-width:520px">
+            <div style="font-weight:700;font-size:15px;margin-bottom:12px">Qual é o seu nome?</div>
+            <input placeholder="Digite as primeiras letras..." value="{{ crachaQuery }}" onChange="{{ onCrachaQuery }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif"></input>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">
+              <sc-for list="{{ crachaOpcoes }}" as="op" hint-placeholder-count="0">
+                <div onClick="{{ op.escolher }}" style="cursor:pointer;background:#F2F5FA;border-radius:10px;padding:12px 14px;font-size:13.5px;color:#002855">{{ op.nome }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ showInfo }}" hint-placeholder-val="{{ false }}">
       <div>
-        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:24px">Informações práticas · {{ cityData.name }}</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:24px">Informações · {{ cityData.name }}</div>
+
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Como chegar</div>
+        <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;margin-bottom:20px">
+          <div style="font-weight:700;font-size:14.5px">{{ cityData.venue }}</div>
+          <div style="font-size:13px;color:#4A4A50;margin-top:4px">{{ cityData.address }}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px">
+            <a href="{{ mapsUrl }}" target="_blank" style="background:#0057A6;color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;font-size:13px;text-decoration:none">Rota no Google Maps</a>
+            <a href="{{ uberUrl }}" target="_blank" style="background:#002855;color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;font-size:13px;text-decoration:none">Chamar Uber</a>
+            <div onClick="{{ copiarEndereco }}" style="cursor:pointer;border:1px solid #C9D6E8;color:#002855;font-weight:700;padding:10px 18px;border-radius:10px;font-size:13px">{{ enderecoCopiado }}</div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid #E8EFF9;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+            <div>
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px">Transporte público</div>
+              <div style="font-size:13px;color:#4A4A50;line-height:1.55">{{ cityData.transporte }}</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px">Estacionamento</div>
+              <div style="font-size:13px;color:#4A4A50;line-height:1.55">{{ cityData.estacionamento }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Clima em {{ cityData.name }}</div>
+        <sc-if value="{{ climaPronto }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-bottom:20px">
+            <div style="background:#002855;color:#F2F5FA;border-radius:16px;padding:20px 22px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <div style="display:flex;align-items:center;gap:16px">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:40px;line-height:1">{{ climaAtual.temp }}</div>
+                <div>
+                  <div style="font-size:14px;font-weight:700">{{ climaAtual.desc }}</div>
+                  <div style="font-size:12px;color:#A9C0DE;margin-top:3px">{{ climaAtual.umidade }} · agora</div>
+                </div>
+              </div>
+              <div style="max-width:420px;font-size:13px;color:#DCE6F2;line-height:1.6">{{ climaDica }}</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px">
+              <sc-for list="{{ climaDias }}" as="d" hint-placeholder-count="7">
+                <div style="background:{{ d.destaque }};border:1px solid #DCE6F2;border-radius:12px;padding:12px 10px;text-align:center">
+                  <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em">{{ d.dia }}</div>
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;margin:8px 0 2px">{{ d.max }}</div>
+                  <div style="font-size:12px;color:#6B6B70">mín {{ d.min }}</div>
+                  <div style="font-size:11px;color:#4A4A50;margin-top:8px;line-height:1.35;min-height:28px">{{ d.desc }}</div>
+                  <div style="font-size:11px;font-weight:700;color:{{ d.chuvaColor }};margin-top:4px">chuva {{ d.chuva }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ climaErro }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px;font-size:13px;color:#6B6B70;margin-bottom:20px">Não foi possível carregar a previsão agora. Verifique a conexão e recarregue o app.</div>
+        </sc-if>
+
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">O que levar</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:20px">
+          <sc-for list="{{ levar }}" as="lv" hint-placeholder-count="4">
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:15px 16px">
+              <div style="font-weight:700;font-size:13.5px">{{ lv.item }}</div>
+              <div style="font-size:12px;color:#6B6B70;margin-top:3px;line-height:1.45">{{ lv.desc }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:20px">
+          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px">
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px">Wi-Fi do local</div>
+            <div style="font-size:12px;color:#6B6B70">Rede</div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:8px">{{ cityData.wifiRede }}</div>
+            <div style="font-size:12px;color:#6B6B70">Senha</div>
+            <div style="font-weight:700;font-size:14px">{{ cityData.wifiSenha }}</div>
+            <div onClick="{{ copiarWifi }}" style="cursor:pointer;display:inline-block;margin-top:14px;border:1px solid #C9D6E8;color:#002855;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px">{{ wifiCopiado }}</div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px">
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px">Almoço e confraternização</div>
+            <div style="font-size:12px;color:#6B6B70">Almoço</div>
+            <div style="font-size:13.5px;margin-bottom:10px">{{ cityData.almoco }}</div>
+            <div style="font-size:12px;color:#6B6B70">Confraternização</div>
+            <div style="font-size:13.5px">{{ cityData.confraternizacao }}</div>
+          </div>
+        </div>
+
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Restrição alimentar</div>
+        <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;margin-bottom:20px;max-width:560px">
+          <div style="font-size:13px;color:#4A4A50;line-height:1.6;margin-bottom:14px">Tem alguma restrição? Informe para a organização repassar ao buffet.</div>
+          <select value="{{ restricaoTipo }}" onChange="{{ onRestricaoTipo }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF;margin-bottom:10px">
+            <option value="">Selecione...</option>
+            <option value="Nenhuma">Nenhuma</option>
+            <option value="Vegetariano">Vegetariano</option>
+            <option value="Vegano">Vegano</option>
+            <option value="Sem glúten">Sem glúten</option>
+            <option value="Sem lactose">Sem lactose</option>
+            <option value="Alergia alimentar">Alergia alimentar</option>
+            <option value="Outra">Outra</option>
+          </select>
+          <textarea placeholder="Detalhes (opcional)" value="{{ restricaoObs }}" onChange="{{ onRestricaoObs }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;min-height:70px;resize:vertical;margin-bottom:12px"></textarea>
+          <a href="{{ restricaoMail }}" style="display:inline-block;background:#F39200;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;font-size:13.5px;text-decoration:none">Enviar para a organização</a>
+        </div>
+
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Contatos de emergência</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:20px">
+          <sc-for list="{{ cityData.contatos }}" as="ct" hint-placeholder-count="3">
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:15px 16px">
+              <div style="font-weight:700;font-size:13.5px">{{ ct.nome }}</div>
+              <div style="font-size:12px;color:#6B6B70;margin-top:3px">{{ ct.papel }}</div>
+              <div style="font-size:13.5px;font-weight:700;color:#0057A6;margin-top:8px">{{ ct.tel }}</div>
+            </div>
+          </sc-for>
+        </div>
 
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Kit do Evento</div>
         <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:20px">
@@ -302,12 +536,12 @@
                 <div style="font-size:11.5px;color:#6B6B70;margin-top:4px">checklist concluído</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px;color:#F39200">{{ nextStepsPct }}%</div>
-                <div style="font-size:11.5px;color:#6B6B70;margin-top:4px">próximos passos feitos</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px;color:#F39200">{{ atrasadas }}</div>
+                <div style="font-size:11.5px;color:#6B6B70;margin-top:4px">data-marco vencida</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px">{{ questionsCount }}</div>
-                <div style="font-size:11.5px;color:#6B6B70;margin-top:4px">perguntas recebidas</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;line-height:1.5">Chuva 8928 3821<br>Q&amp;A 1155 7596</div>
+                <div style="font-size:11.5px;color:#6B6B70;margin-top:4px">códigos Mentimeter</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px">
                 <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px">{{ budgetTotalFmt }}</div>
@@ -320,50 +554,211 @@
 
             <sc-if value="{{ showOrgChecklist }}" hint-placeholder-val="{{ false }}">
             <div>
-            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 12px">Checklist de logística</div>
-            <sc-for list="{{ checklistCats }}" as="cat" hint-placeholder-count="4">
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px;margin-bottom:12px">
-                <div style="font-weight:700;font-size:14px;margin-bottom:10px">{{ cat.title }}</div>
-                <sc-for list="{{ cat.items }}" as="it" hint-placeholder-count="5">
-                  <div onClick="{{ it.toggle }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:7px 0">
-                    <div style="width:18px;height:18px;border-radius:5px;flex-shrink:0;border:2px solid {{ it.borderColor }};background:{{ it.checkBg }};display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800">{{ it.mark }}</div>
-                    <div style="font-size:13.5px;color:{{ it.textColor }};text-decoration:{{ it.strike }}">{{ it.label }}</div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Checklist de execução</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Tarefas marcadas <b>SP</b> e <b>BSB</b> são acompanhadas nas duas cidades separadamente; <b>Geral</b> vale para as duas. Toque em uma linha para avançar o status: concluído → em andamento → não iniciado → não é o caso. O que você marcar aparece para toda a equipe.</div>
+
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:8px;height:8px;border-radius:999px;background:{{ syncColor }}"></div>
+                <div style="font-size:12px;font-weight:700;color:#6B6B70">{{ syncLabel }}</div>
+              </div>
+              <div onClick="{{ atualizarAgora }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Atualizar agora</div>
+              <sc-if value="{{ temPendentes }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:11.5px;font-weight:700;color:#B4471F">{{ pendentesLabel }}</div>
+              </sc-if>
+            </div>
+            <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px 20px;margin-bottom:18px">
+              <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px;color:#F39200">{{ checklistPct }}%</div>
+                <div style="font-size:12.5px;color:#A9C0DE">{{ checklistDone }} de {{ checklistTotal }} tarefas aplicáveis concluídas</div>
+              </div>
+              <div style="height:8px;border-radius:999px;background:#0A3C6E;overflow:hidden;margin-bottom:14px">
+                <div style="height:100%;width:{{ checklistBarWidth }};background:#F39200;border-radius:999px"></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ statusCounts }}" as="sc" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:center;gap:7px;background:#0A3C6E;border-radius:999px;padding:5px 12px">
+                    <div style="width:8px;height:8px;border-radius:999px;background:{{ sc.dot }}"></div>
+                    <div style="font-size:12px;color:#DCE6F2">{{ sc.label }}</div>
+                    <div style="font-size:12px;font-weight:800">{{ sc.n }}</div>
                   </div>
                 </sc-for>
               </div>
+            </div>
+
+            <sc-for list="{{ checklistCats }}" as="cat" hint-placeholder-count="6">
+              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px;margin-bottom:12px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px">
+                  <div style="font-weight:700;font-size:14px">{{ cat.title }}</div>
+                  <div style="font-size:11.5px;font-weight:700;color:#6B6B70;white-space:nowrap">{{ cat.progress }}</div>
+                </div>
+                <div style="display:flex;flex-direction:column">
+                  <sc-for list="{{ cat.items }}" as="it" hint-placeholder-count="5">
+                    <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;align-items:start;gap:14px;padding:10px 0;border-top:1px solid #E8EFF9">
+                      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+                        <div style="font-size:13.5px;color:{{ it.textColor }};line-height:1.45">{{ it.label }}</div>
+                        <sc-if value="{{ it.hasObs }}" hint-placeholder-val="{{ false }}">
+                          <div style="font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:#FDECE3;color:#B4471F;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap">{{ it.obs }}</div>
+                        </sc-if>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:6px">
+                        <sc-for list="{{ it.tracks }}" as="tk" hint-placeholder-count="1">
+                          <div onClick="{{ tk.toggle }}" style="cursor:pointer;display:grid;grid-template-columns:9px 40px 132px 112px;align-items:center;gap:5px">
+                            <div style="width:9px;height:9px;border-radius:999px;background:{{ tk.dot }}"></div>
+                            <div style="font-size:10px;font-weight:800;color:{{ tk.badgeColor }};text-transform:uppercase;letter-spacing:0.05em">{{ tk.badge }}</div>
+                            <div style="display:flex;justify-content:flex-end">
+                              <sc-if value="{{ tk.showPrazo }}" hint-placeholder-val="{{ false }}">
+                                <input type="date" value="{{ tk.prazoValue }}" onChange="{{ tk.onPrazoChange }}" onClick="{{ tk.stop }}" title="Data-marco" style="width:132px;box-sizing:border-box;padding:6px 8px;border-radius:8px;border:1px solid #C9D6E8;font-size:12px;font-weight:700;color:{{ tk.prazoColor }};font-family:'Manrope',sans-serif;background:#FFFFFF"></input>
+                              </sc-if>
+                            </div>
+                            <div style="font-size:11px;font-weight:700;padding:5px 0;border-radius:999px;background:{{ tk.statusBg }};color:{{ tk.statusColor }};white-space:nowrap;text-align:center">{{ tk.statusLabel }}</div>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
             </sc-for>
 
-            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:26px 0 12px">Próximos passos</div>
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:6px 18px;margin-bottom:22px">
-              <sc-for list="{{ nextSteps }}" as="ns" hint-placeholder-count="6">
-                <div onClick="{{ ns.toggle }}" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #E8EFF9">
-                  <div style="width:18px;height:18px;border-radius:5px;flex-shrink:0;border:2px solid {{ ns.borderColor }};background:{{ ns.checkBg }};display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800">{{ ns.mark }}</div>
-                  <div style="flex:1;font-size:13.5px;color:{{ ns.textColor }};text-decoration:{{ ns.strike }}">{{ ns.label }}</div>
-                  <div style="font-size:11.5px;font-weight:700;color:#F39200;white-space:nowrap">{{ ns.prazo }}</div>
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ showOrgOrcamento }}" hint-placeholder-val="{{ false }}">
+            <div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Orçamento · orçado × realizado</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Valores das ordens de execução de serviços. Edite o realizado conforme as notas forem chegando — os valores são compartilhados com a equipe.</div>
+
+            <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px 20px;margin-bottom:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px">
+              <div>
+                <div style="font-size:11.5px;color:#A9C0DE;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;margin-bottom:6px">Orçado</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px">{{ orcTotalFmt }}</div>
+              </div>
+              <div>
+                <div style="font-size:11.5px;color:#A9C0DE;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;margin-bottom:6px">Realizado</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px;color:#F39200">{{ realTotalFmt }}</div>
+              </div>
+              <div>
+                <div style="font-size:11.5px;color:#A9C0DE;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;margin-bottom:6px">Saldo</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px;color:{{ saldoColor }}">{{ saldoFmt }}</div>
+              </div>
+            </div>
+
+            <sc-for list="{{ budgetGroups }}" as="g" hint-placeholder-count="3">
+              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px;margin-bottom:12px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:12px">{{ g.title }}</div>
+                <div style="display:flex;gap:14px;padding-bottom:8px">
+                  <div style="flex:1"></div>
+                  <div style="width:120px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;text-align:right">Orçado</div>
+                  <div style="width:130px;font-size:10.5px;font-weight:800;color:#F39200;text-transform:uppercase;letter-spacing:0.06em;text-align:right">Realizado</div>
+                </div>
+                <div style="display:flex;flex-direction:column">
+                  <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-top:1px solid #E8EFF9">
+                      <div style="flex:1;min-width:120px">
+                        <div style="font-size:13.5px">{{ r.label }}</div>
+                        <sc-if value="{{ r.hasNote }}" hint-placeholder-val="{{ false }}">
+                          <div style="font-size:11.5px;color:#6B6B70;margin-top:2px">{{ r.note }}</div>
+                        </sc-if>
+                      </div>
+                      <div style="width:120px;text-align:right;font-size:13.5px;font-weight:700;color:#002855">{{ r.orcFmt }}</div>
+                      <div style="width:130px;display:flex;align-items:center;gap:4px;justify-content:flex-end">
+                        <div style="font-size:12.5px;color:#6B6B70">R$</div>
+                        <input type="number" placeholder="0,00" value="{{ r.realValue }}" onChange="{{ r.onRealChange }}" style="width:100px;padding:8px 10px;border-radius:8px;border:1px solid #C9D6E8;font-size:13.5px;text-align:right;font-family:'Manrope',sans-serif"></input>
+                      </div>
+                    </div>
+                  </sc-for>
+                  <div style="display:flex;align-items:center;gap:14px;padding-top:12px;border-top:2px solid #DCE6F2;margin-top:4px">
+                    <div style="flex:1;font-weight:800;font-size:13.5px">Subtotal</div>
+                    <div style="width:120px;text-align:right;font-weight:800;font-size:13.5px">{{ g.orcFmt }}</div>
+                    <div style="width:130px;text-align:right;font-weight:800;font-size:13.5px;color:#F39200;padding-right:4px">{{ g.realFmt }}</div>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+
+            <div style="background:#E8EFF9;border-radius:14px;padding:16px 18px;font-size:13px;color:#4A4A50;line-height:1.6;margin-bottom:22px">Orçado de alimentação e infra vem das ordens de execução (SP: OS 406 e 263 · BSB: OS 744 e 194). As demais frentes entram no orçado quando as contratações forem fechadas.</div>
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ showOrgPessoas }}" hint-placeholder-val="{{ false }}">
+            <div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Participantes · {{ participantesTotal }} nomes</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:8px;height:8px;border-radius:999px;background:{{ syncColor }}"></div>
+                <div style="font-size:12px;font-weight:700;color:#6B6B70">{{ syncLabel }}</div>
+              </div>
+              <div onClick="{{ atualizarAgora }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Atualizar agora</div>
+            </div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Presenças chegam sozinhas pelo QR da entrada. Marque <b>SP</b> ou <b>BSB</b> em cada nome para dividir a lista entre as duas cidades. Toque no nome para registrar presença e em <b>Kit</b> para a entrega — tudo compartilhado com a equipe.</div>
+
+            <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px 20px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between">
+              <div style="display:flex;gap:26px;align-items:baseline">
+                <div>
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#F39200">{{ presentesCount }}</div>
+                  <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">presenças registradas</div>
+                </div>
+                <div>
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ presentesPct }}</div>
+                  <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">da lista</div>
+                </div>
+                <div>
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ kitsCount }}</div>
+                  <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">kits entregues</div>
+                </div>
+                <div>
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ spCount }} · {{ bsbCount }}</div>
+                  <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">SP · BSB ({{ semCidadeCount }} sem cidade)</div>
+                </div>
+              </div>
+              <div onClick="{{ limparPresencas }}" style="cursor:pointer;font-size:12.5px;font-weight:700;color:#A9C0DE;border:1px solid #0A3C6E;border-radius:999px;padding:8px 16px">Limpar presenças</div>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+              <sc-for list="{{ pessoaFiltros }}" as="pf" hint-placeholder-count="4">
+                <div onClick="{{ pf.onClick }}" style="cursor:pointer;padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ pf.bg }};color:{{ pf.color }};border:1px solid #DCE6F2">{{ pf.label }}</div>
+              </sc-for>
+            </div>
+            <input placeholder="Buscar nome..." value="{{ nameQuery }}" onChange="{{ onNameQuery }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:6px"></input>
+            <div style="font-size:11.5px;color:#6B6B70;margin-bottom:14px">{{ participantesFiltrados }} nome(s) exibido(s)</div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:22px">
+              <sc-for list="{{ participantes }}" as="p" hint-placeholder-count="12">
+                <div onClick="{{ p.toggle }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;background:{{ p.bg }};border:1px solid #DCE6F2;border-radius:10px;padding:10px 12px">
+                  <div style="width:18px;height:18px;border-radius:5px;flex-shrink:0;border:2px solid {{ p.borderColor }};background:{{ p.checkBg }};display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800">{{ p.mark }}</div>
+                  <div style="flex:1;font-size:13px;color:{{ p.textColor }};line-height:1.35">{{ p.nome }}</div>
+                  <div style="display:flex;gap:4px;flex-shrink:0">
+                    <div onClick="{{ p.setSP }}" style="cursor:pointer;font-size:10px;font-weight:800;padding:4px 7px;border-radius:6px;background:{{ p.spBg }};color:{{ p.spColor }}">SP</div>
+                    <div onClick="{{ p.setBSB }}" style="cursor:pointer;font-size:10px;font-weight:800;padding:4px 7px;border-radius:6px;background:{{ p.bsbBg }};color:{{ p.bsbColor }}">BSB</div>
+                    <div onClick="{{ p.kitToggle }}" style="cursor:pointer;font-size:10px;font-weight:800;padding:4px 7px;border-radius:6px;background:{{ p.kitBg }};color:{{ p.kitColor }}">{{ p.kitLabel }}</div>
+                  </div>
                 </div>
               </sc-for>
             </div>
             </div>
             </sc-if>
 
-            <sc-if value="{{ showOrgOrcamento }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ showOrgLinks }}" hint-placeholder-val="{{ false }}">
             <div>
-            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 12px">Orçamento consolidado (SP + Brasília)</div>
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px;margin-bottom:22px">
-              <sc-for list="{{ budgetRows }}" as="b" hint-placeholder-count="7">
-                <div style="display:flex;align-items:center;gap:14px;padding:9px 0;border-bottom:1px solid #E8EFF9">
-                  <div style="flex:1;font-size:13.5px">{{ b.label }}</div>
-                  <div style="display:flex;align-items:center;gap:4px">
-                    <div style="font-size:13px;color:#6B6B70">R$</div>
-                    <input type="number" value="{{ b.value }}" onChange="{{ b.onChange }}" style="width:110px;padding:8px 10px;border-radius:8px;border:1px solid #C9D6E8;font-size:13.5px;text-align:right"></input>
-                  </div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Links úteis</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:18px">Atalhos para as ferramentas do dia a dia da organização. Abrem em nova aba.</div>
+            <sc-for list="{{ linksUteis }}" as="g" hint-placeholder-count="3">
+              <div style="margin-bottom:22px">
+                <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:10px">{{ g.grupo }}</div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px">
+                  <sc-for list="{{ g.itens }}" as="l" hint-placeholder-count="4">
+                    <a href="{{ l.url }}" target="_blank" rel="noreferrer" style="text-decoration:none;color:inherit;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px" style-hover="border-color:#0057A6;background:#F7FAFE">
+                      <div>
+                        <div style="font-weight:700;font-size:13.5px;color:#002855">{{ l.nome }}</div>
+                        <div style="font-size:11.5px;color:#6B6B70;margin-top:3px;line-height:1.4">{{ l.desc }}</div>
+                      </div>
+                      <div style="font-size:15px;color:#0057A6;flex-shrink:0">↗</div>
+                    </a>
+                  </sc-for>
                 </div>
-              </sc-for>
-              <div style="display:flex;justify-content:space-between;padding-top:14px;font-weight:800;font-size:15px">
-                <div>Total consolidado</div>
-                <div>{{ budgetTotalFmt }}</div>
               </div>
-            </div>
+            </sc-for>
             </div>
             </sc-if>
 
@@ -485,22 +880,52 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 
+const PARTICIPANTES = 'Adriano Shiratsu Ueda|Alan Barbieri|Alan Ferreira de Lima Filho|Alan Rodrigo do Nascimento Rodrigues|Alessandra Grellet Miranda|Alexandre da Silva Dias|Alica Dias Ribeiro Marques Pereira|Alisson Araujo de Lima|Alvaro Cunha Matos Lessa de Oliveira|Amaralina de Oliveira Abrantes Sant Anna|Ana Paula Alves Paschoalini|Ana Sefora Pires Farias|Anderson Buso|Andrea Felicio Chaves|Andrea Natashya Fukushima Fukuda|Anna Patricia de Pinho Silva|Antonio Francisco Maciel|Arthur Felipe Rodrigues da Silva|Bruno Oliveira Manhaes de Almeida|Calil Abdo Marino Salum|Camila de Oliveira Ragognete|Camila Gregorio do Nascimento|Carlos Eugenio de Brito Sousa|Catarina Moretti Ribeiro|Cinthia Freitas Duarte|Cintia da Silva Arruda|Cristiane Maya Yoshida|Cristiane Paulino|Daniel Correa Munhoz|Daniel Pereira Cunha|Daniela Gadelha Saraiva do Amaral|Daniela Nagumo|Danielle Eskenazi Cruzolini|Danielle Monteiro Cruz da Silva|Danielle Patricia Cordeiro Aurelio|Dazia Vanessa Eguchi Kemper|Diego Augusto Granado|Diego Mathias|Diogo Caetano Ribeiro|Douglas Martins Neves Costa|Edney Jonas Sena|Eduardo Alves de Oliveira|Eduardo Capitulino Viana|Eduardo Luiz Rocha dos Santos|Eladio Caldas de Almeida|Eliana Marques Lisboa|Emily Mendes Xavier|Erika Carolina Ruiz Ganga|Erika Cerqueira Silva|Fabiana Graciano|Fabio Becare Junqueira|Fabio Coelho da Silva|Fabio da Silva Bueno|Fabio Henrique Secomandi|Fabricio Honorato Soares|Fernanda Bueno Frederico Martinis|Fernando Ferreira dos Santos|Fernando Gomes Saidel Herbst|Fernando Henrique Augusto|Fernando Vinicius Barros de Almeida|Fernando Zandona Assuncao|Filipe Sousa Moreira|Flavia Gualtieri|Flavia Regina Finholdt B Mazzocchi|Gabriel Dalessandro Pereira|Gabriela Birk|Gabrielle Matosinho de Oliveira|Gerrana Campos Favieiro|Glayce Lopes da Nobrega|Guilherme Ehlers Farias|Guilherme Godoy de Medeiros|Guilherme Ivan Batista|Guilherme Ribeiro de Oliveira|Gustavo Luiz Costa Araujo|Hugo Alves Richard|Humberto Dantas de Matos|Ian Victor de Oliveira Cimino|Ingrid de Jesus Cabral|Ivan Dechen Pedro|Janaina de Amorim Silva|Jeferson Ferreira|Jerusa Alberton de Alencar Nogueira|Joao Cesar Nobre|Joao Paulo Barroso dos Santos|Joao Paulo Vargas da Silveira|Joe Moroizumi|Jose Romulo de Castro Vieira|Julio Cesar Brandao da Silva|Julio Cesar Silva|Karen Gloria Buono|Karen Rondelo Duarte|Katia Cilene da Silva Peralta|Kleber de Jesus Ivanchuk|Lais Rodrigues Carudelli Badin|Laiza Fabiola Martins de Santa Rosa|Leandro Cenati Bueno de Lima|Leandro Franco da Silveira|Leonardo Barbosa Tavares|Leonardo Matzenbacher Finger|Livia Dombroski Santos|Lorena dos Santos Bezerra|Lucas Rafael Ramos da Silva|Lucas Roberto Ribeiro da Silva|Luci Cleide Silva e Castro|Luciana de Oliveira Ferreira|Luciana Mickel Miyamoto|Luciano Garrido|Luis Gustavo Viana de Araujo Zanfra|Luiz Eduardo Cerrato Costa|Maisa Abrantes de Pina Afonso|Marcela dos Anjos Abeid|Marcia Midori Kataoka|Marcio Caetano dos Santos|Marcos Vieira dos Santos|Maria Perpetuo Socorro Passos L Almeida|Maria Stela Kamisaki Katayama|Mariana Mazivieiro|Marina Baggio Rodrigues|Mario Erbolato Neto|Mauricio Antonio Alves da Costa|Michael Prudencio Favero|Moacyr Ligabo Junior|Natalia Walkovics|Nellie Nagasse|Nicole Suemi Suzuki|Patricia Keiko Honda|Patrik Hideki Ito|Paula Baffini de Castro Santana|Paula Cristina da Silva|Paula Hitomi Konishi|Pedro Henrique Machado Martins|Pedro Victor Oliveira Costa Giacomazzo|Priscila Castilho de Almeida Pereira|Priscila Rodrigues Ferreira|Rafael de Vasconcelos Florentino|Raoni Ferreira Pinho|Raphael Henrique de Oliveira Santos|Renan Gama Oliveira|Renata Casemiro do Prado Santos|Renata Leonel Dias Ajame|Renata Lopes Franco|Renata Loureiro e Silva Koshimura|Renato Silva dos Santos|Renato Yoshio Okabe|Ricardo Alexandre Barbosa Dantas|Ricardo Alexandre Ramos|Ricardo Kendy Yokomizo|Ricardo Oliveira do Amaral|Ricardo Silva Nunes de Siqueira|Ricardo Troes|Roberto Cavalcante Amorim|Rodney Yamane|Rodrigo Chaves Batista|Rodrigo de Oliveira Coutinho|Rodrigo Devchi|Rodrigo Gomes Coelho|Rolando Tadashi Oride|Ronaldo de Oliveira|Rosemeire Aparecida Duque Prosperi|Ruthe Ventura Cuesta|Sergio Henrique Oliveira Bini|Simone Shiroma|Sintia das Neves Barbosa Rodrigues|Sonayara Oliveira Lima|Stella Mitiko Ushizima|Talita Sabioni Itocazo|Tania Gobatti Calca|Tatiana Pereira Cosentino|Tatiana Sanches Biscari Nagase|Tatianna Felix dos Santos Morais|Tatyana Arashiro|Thais Moura Brito|Thiago Bosisio Ferreira|Thiago de Oliveira Montanari|Thiago Pereira Gonzalez|Vagner Junio da Silva|Vanessa Bittencourt Bernardes|Vanessa Paes Suppa|Vinicius Barbieri Domingues|Vitor Roque Valentim|Viviana Machado dos Santos|Willian Abreu Canelada|Zeila Itokazu'.split('|');
+
+const LINKS_UTEIS = [
+  { grupo: 'Evento', itens: [
+    { nome: 'Mentimeter', desc: 'Chuva de palavras e Q&A', url: 'https://www.mentimeter.com/app' },
+    { nome: 'menti.com', desc: 'Tela do participante · digitar o código', url: 'https://www.menti.com' },
+    { nome: 'Google Maps', desc: 'Rotas para os locais do evento', url: 'https://www.google.com/maps' },
+    { nome: 'Uber', desc: 'Deslocamento de convidados e palestrantes', url: 'https://m.uber.com' },
+  ] },
+  { grupo: 'App do evento', itens: [
+    { nome: 'GitHub · viart-evento-2026', desc: 'Repositório do app', url: 'https://github.com/RodrigoCoelho1/viart-evento-2026' },
+    { nome: 'Vercel', desc: 'Painel de deploy do app', url: 'https://vercel.com/dashboard' },
+    { nome: 'App publicado', desc: 'viart-evento-2026…vercel.app', url: 'https://viart-evento-2026-4353fa01-3ec0-4ec.vercel.app' },
+  ] },
+  { grupo: 'Ferramentas', itens: [
+    { nome: 'Copilot 365', desc: 'Assistente Microsoft corporativo', url: 'https://copilot.cloud.microsoft' },
+    { nome: 'Claude', desc: 'claude.ai', url: 'https://claude.ai' },
+    { nome: 'ChatGPT', desc: 'chatgpt.com', url: 'https://chatgpt.com' },
+    { nome: 'Gemini', desc: 'gemini.google.com', url: 'https://gemini.google.com' },
+    { nome: 'Perplexity', desc: 'Busca com fontes', url: 'https://www.perplexity.ai' },
+    { nome: 'NotebookLM', desc: 'Estudo e resumo de documentos', url: 'https://notebooklm.google.com' },
+    { nome: 'Calculadora HP 12C', desc: 'Simulador online', url: 'https://epxx.co/ctb/hp12c.html' },
+  ] },
+];
+
 const ORG_SUBTABS_DEF = [
   { id: 'visao', label: 'Visão geral' },
   { id: 'checklist', label: 'Checklist & passos' },
   { id: 'orcamento', label: 'Orçamento' },
+  { id: 'pessoas', label: 'Participantes' },
   { id: 'contatos', label: 'Contatos & painel' },
   { id: 'teambike', label: 'Team Bike 🔒' },
   { id: 'compartilhar', label: 'Compartilhar & mapas' },
+  { id: 'links', label: 'Links úteis' },
 ];
+
+const CODIGO_ENTRADA = { sp: '1308', bsb: '2008' };
 
 const TABS_DEF = [
   { id: 'inicio', label: 'Início' },
   { id: 'programacao', label: 'Programação' },
+  { id: 'cracha', label: 'Meu crachá' },
+  { id: 'info', label: 'Informações' },
+  { id: 'chuva', label: 'Chuva de Palavras' },
   { id: 'estrategia', label: 'Falando de Estratégia' },
   { id: 'historias', label: 'Histórias que Inspiram' },
-  { id: 'chuva', label: 'Chuva de Palavras' },
-  { id: 'info', label: 'Informações práticas' },
   { id: 'org', label: 'Organização' },
 ];
 
@@ -549,30 +974,100 @@ const HISTORIAS_INFO = [
   { title: 'Para engajar', desc: 'Cartões nas mesas · cronômetro no telão · reconhecimento às 4 histórias.' },
 ];
 
+const CHECK_STATUS = [
+  { id: 'ok', label: 'Concluído', bg: '#E3F3E8', color: '#1E7A45', dot: '#2E9E5B' },
+  { id: 'and', label: 'Em andamento', bg: '#FDF1DC', color: '#8A5A0B', dot: '#F39200' },
+  { id: 'nao', label: 'Não iniciado', bg: '#F2F5FA', color: '#6B6B70', dot: '#C9D6E8' },
+  { id: 'nc', label: 'Não é o caso', bg: '#F7F7F8', color: '#9A9AA0', dot: '#DCDCE2' },
+];
+
 const CHECKLIST_CATS = [
-  { id: 'espaco', title: 'Espaço & Estrutura', items: ['Confirmar auditório (capacidade, A/V)', 'Testar projetor, microfone e som', 'Verificar acessibilidade', 'Sinalização interna no dia', 'Credenciamento / lista de presença'] },
-  { id: 'alimentacao', title: 'Alimentação', items: ['Definir local do almoço', 'Confirmar número de pessoas', 'Opções vegetarianas / restrições', 'Coffee break (manhã e tarde?)', 'Local da confraternização (19h30)'] },
-  { id: 'conteudo', title: 'Conteúdo & Comunicação', items: ['Finalizar apresentação do Report', 'Definir facilitador da dinâmica', 'Enviar convite oficial aos funcionários', 'Comunicado interno com antecedência', 'Material de apoio / handout'] },
-  { id: 'pessoas', title: 'Pessoas & Deslocamento', items: ['Passagens/hospedagem RJ → BSB (5 pessoas)', 'Lista de confirmação de presença', 'Contato do ponto focal em cada cidade', 'Plano B para ausências de última hora'] },
+  { id: 'plan', title: 'Planejamento & orçamento', items: [
+    ['Iniciar o planejamento com pelo menos 45 dias de antecedência', 'ok'],
+    ['Definir objetivos claros e escopo do evento', 'and'],
+    ['Elaborar script global do evento', 'and'],
+    ['Preparar lista de convidados', 'and'],
+    ['Enviar "save the date" aos participantes', 'ok'],
+    ['Reunião de "Definição de Escopo" — requisitos específicos', 'and'],
+    ['Fazer reunião de preparação com todos os envolvidos', 'and'],
+    ['Solicitar dotações orçamentárias com 45 dias de antecedência', 'ok'],
+    ['Preparar orçamento detalhado (espaço, coquetel, diárias, hotel, passagens)', 'ok'],
+    ['Pedir dotação complementar, se necessário (modelo p/ GEORC01 e SUCTR)', 'ok'],
+    ['Coordenar com CESEA09 a negociação de tarifas de hospedagem em grupo', 'ok'],
+    ['Solicitar pré-comprometimento para infraestrutura via CESEA05', 'ok'],
+    ['Verificar conformidade financeira com as diretrizes da CAIXA', 'ok'],
+  ] },
+  { id: 'infra', title: 'Infraestrutura & logística', items: [
+    ['Selecionar e reservar o local do evento pós visita técnica', 'and', '', 'dupla'],
+    ['Verificar capacidade, layout e equipamentos disponíveis', 'and', '', 'dupla'],
+    ['Providenciar equipamentos audiovisuais e painel de LED', 'ok', '', 'dupla'],
+    ['Emissão de passagens', 'ok', '', 'dupla'],
+    ['Organizar hospedagem', 'ok', '', 'dupla'],
+    ['Planejar coffee breaks e almoço simples (evitar coquetéis)', 'ok', '', 'dupla'],
+    ['Preparar kit com itens de papelaria para organizadores', 'and'],
+  ] },
+  { id: 'com', title: 'Comunicação & materiais', items: [
+    ['Elaborar e enviar convites formais', 'nao'],
+    ['Verificar presença PRESI', 'nao', '', 'dupla'],
+    ['Criar materiais de comunicação (cards, e-mails informativos)', 'and'],
+    ['Preparar sinalização para o local do evento', 'nao', '', 'dupla'],
+    ['Providenciar camisetas', 'and'],
+    ['Providenciar brindes simples', 'and'],
+    ['Providenciar gravação', 'nao', '', 'dupla'],
+    ['Chamar GEIMP para cobrir o evento para a Intranet', 'nao', '', 'dupla'],
+  ] },
+  { id: 'prog', title: 'Programação & palestrantes', items: [
+    ['Selecionar e convidar facilitadores e palestrantes (incluindo externos)', 'ok'],
+    ['Palestrante Cucamundi', 'ok', '', 'dupla'],
+    ['Palestrante Legalas', 'and', '', 'dupla'],
+    ['Definir formato e dinâmica do evento', 'and'],
+    ['Preparar apresentações e material de apoio', 'nao'],
+    ['Planejar dinâmicas rápidas pós-almoço para manter o engajamento', 'and'],
+    ['Evitar palestras muito técnicas ou monótonas, especialmente após o almoço', 'and'],
+    ['Organizar atividades interativas e de networking (crachás letras/números)', 'nao'],
+    ['Preparar momentos de reconhecimento para facilitadores e staff', 'nao'],
+  ] },
+  { id: 'tec', title: 'Tecnologia, acessibilidade & riscos', items: [
+    ['Implementar soluções tecnológicas para gestão do evento', 'and'],
+    ['Link e câmera para transmissão ao vivo', 'and', '', 'dupla'],
+    ['Garantir acesso à internet de qualidade', 'ok', '', 'dupla'],
+    ['Testar todos os equipamentos um dia antes do evento', 'and', '', 'dupla'],
+    ['Implementar práticas sustentáveis', 'ok'],
+    ['Garantir acessibilidade para todos os participantes', 'ok', '', 'dupla'],
+    ['Verificar necessidade de tradução em Libras', 'ok', '', 'dupla'],
+    ['Identificar e analisar possíveis riscos para o evento', 'and'],
+    ['Preparar planos de contingência (B-plan)', 'and'],
+    ['Verificar conformidade com políticas de integridade e ética da CAIXA', 'ok'],
+  ] },
+  { id: 'pos', title: 'Reconhecimento & pós-evento', items: [
+    ['Preparar placas ou troféus de reconhecimento para facilitadores', 'and'],
+    ['Planejar categorias de reconhecimento para os participantes', 'and'],
+    ['Preparar pesquisa de feedback', 'nao'],
+    ['Realizar reunião de avaliação com stakeholders', 'nao'],
+    ['Enviar agradecimentos às áreas envolvidas', 'nao'],
+    ['Documentar lições aprendidas para futuros eventos', 'nao'],
+    ['Compilar resultados e feedback para relatório final', 'nao'],
+  ] },
 ];
 
-const NEXT_STEPS = [
-  { id: 'step-1', label: 'Confirmar datas e auditórios com as equipes locais', prazo: 'Até 15/jun' },
-  { id: 'step-2', label: 'Definir formato da dinâmica de grupo e contratar facilitador se necessário', prazo: 'Até 20/jun' },
-  { id: 'step-3', label: 'Organizar deslocamento e hospedagem dos funcionários do Rio de Janeiro', prazo: 'Até 30/jun' },
-  { id: 'step-4', label: 'Enviar comunicado oficial do evento a todos os funcionários', prazo: 'Até 14/jul' },
-  { id: 'step-5', label: 'Finalizar apresentação do Report Planejamento VIART 2026', prazo: 'Até 01/ago' },
-  { id: 'step-6', label: 'Confirmar local do almoço e da confraternização nas duas cidades', prazo: 'Até 01/ago' },
-];
-
-const BUDGET_CATS = [
-  { id: 'teambuilding', label: 'Team Building (Cuca Mundi)' },
-  { id: 'estrutura', label: 'Estrutura & A/V (auditórios)' },
-  { id: 'alimentacao', label: 'Alimentação (almoço, coffee, confraternização)' },
-  { id: 'camisetas', label: 'Camisetas & brindes' },
-  { id: 'deslocamento', label: 'Deslocamento & hospedagem (RJ → BSB)' },
-  { id: 'comunicacao', label: 'Comunicação & material de apoio' },
-  { id: 'outros', label: 'Outros / imprevistos' },
+const BUDGET_GROUPS = [
+  { id: 'sp', title: 'São Paulo · ID 918-26', rows: [
+    { id: 'sp-almoco', label: 'Almoço tipo 2', note: 'OS 406 · R$ 93,29 por pessoa × 120', orc: 11194.80 },
+    { id: 'sp-coffee', label: 'Coffee break tipo 2', note: 'OS 406 · R$ 37,85 por pessoa × 120 × 2 diárias', orc: 9084.00 },
+    { id: 'sp-infra', label: 'Infraestrutura', note: 'OS 263', orc: 9043.88 },
+  ] },
+  { id: 'bsb', title: 'Brasília · ID 919-26', rows: [
+    { id: 'bsb-brunch', label: 'Brunch executivo', note: 'OS 744 · R$ 98,00 por pessoa × 70', orc: 6860.00 },
+    { id: 'bsb-coffee', label: 'Coffee break', note: 'OS 744 · R$ 39,00 por pessoa × 70 × 2 diárias', orc: 5460.00 },
+    { id: 'bsb-infra', label: 'Infraestrutura', note: 'OS 194', orc: 5655.00 },
+  ] },
+  { id: 'outros', title: 'Demais frentes', rows: [
+    { id: 'ot-camisetas', label: 'Camisetas & brindes', note: 'cotações em andamento', orc: 0 },
+    { id: 'ot-team', label: 'Team Building (Cuca Mundi)', note: '', orc: 0 },
+    { id: 'ot-desloc', label: 'Deslocamento & hospedagem', note: 'passagens e diárias', orc: 0 },
+    { id: 'ot-com', label: 'Comunicação & material de apoio', note: '', orc: 0 },
+    { id: 'ot-outros', label: 'Outros / imprevistos', note: '', orc: 0 },
+  ] },
 ];
 
 const FOCAL = [
@@ -585,8 +1080,6 @@ const PAINEL = [
   { name: 'Composição VP/DE do painel', role: 'Falando de Estratégia · 11h40–12h15', status: 'A confirmar', statusBg: '#FDECE3', statusColor: '#B4471F' },
 ];
 
-const QUESTIONS_URL = 'https://jsonblob.com/api/jsonBlob/019f901c-08a8-73d7-8337-4a8664edb355';
-
 class Component extends DCLogic {
   state = {
     city: 'sp',
@@ -595,35 +1088,166 @@ class Component extends DCLogic {
     orgUnlocked: false,
     pwInput: '',
     pwError: '',
-    checklist: {},
-    budget: {},
-    questions: [],
-    qGroup: '',
-    qText: '',
-    qSending: false,
-    qLive: false,
+    sync: {},
+    syncStatus: 'local',
+    nameQuery: '',
+    pessoaFiltro: 'todos',
+    clima: null,
+    climaErro: false,
+    meuNome: '',
+    crachaQuery: '',
+    restricaoTipo: '',
+    restricaoObs: '',
+    copiado: '',
+    ciQuery: '',
+    ciNome: '',
+    ciCodigo: '',
+    ciErro: '',
+    ciFeito: false,
+    ciEnviando: false,
+    ciSalvoLocal: false,
+    pendentes: 0,
   };
 
   componentDidMount() {
     try {
       const unlocked = localStorage.getItem('viart2026_org_unlocked') === '1';
-      const checklist = JSON.parse(localStorage.getItem('viart2026_checklist') || '{}');
-      const budget = JSON.parse(localStorage.getItem('viart2026_budget') || '{}');
-      this.setState({ orgUnlocked: unlocked, checklist, budget });
+      this.setState({
+        orgUnlocked: unlocked,
+        meuNome: localStorage.getItem('viart2026_meu_nome') || '',
+        restricaoTipo: localStorage.getItem('viart2026_restricao_tipo') || '',
+        restricaoObs: localStorage.getItem('viart2026_restricao_obs') || '',
+      });
     } catch (e) {}
-    this.fetchQuestions();
-    this._poll = setInterval(() => this.fetchQuestions(), 4000);
+
+    let sync = {};
+    try { sync = JSON.parse(localStorage.getItem('viart2026_sync') || '{}'); } catch (e) {}
+    if (!Object.keys(sync).length) sync = this.migrarAntigos();
+    this.setState({ sync });
+
+    if (/[?&]checkin=1/.test(location.search)) {
+      const par = new URLSearchParams(location.search);
+      const cod = (par.get('c') || '').replace(/\D/g, '').slice(0, 4);
+      const cidadeQR = par.get('cidade') === 'bsb' ? 'bsb' : (par.get('cidade') === 'sp' ? 'sp' : null);
+      const st = { activeTab: 'checkin' };
+      if (cidadeQR) st.city = cidadeQR;
+      if (cod) st.ciCodigo = cod;
+      this.setState(st);
+    }
+
+    this.fetchClima();
+    this.puxarEstado();
+    window.addEventListener('online', this.reenviarPendentes);
+    this._sync = setInterval(() => {
+      if (this._pendentes) this.reenviarPendentes();
+      const s = this.state;
+      if (s.activeTab === 'org' && s.orgUnlocked && document.visibilityState === 'visible') this.puxarEstado();
+    }, 20000);
   }
+
+  migrarAntigos() {
+    const t = Date.now();
+    const out = {};
+    const ler = (k) => { try { return JSON.parse(localStorage.getItem(k) || '{}'); } catch (e) { return {}; } };
+    const chk = ler('viart2026_checklist');
+    Object.keys(chk).forEach(k => { if (typeof chk[k] === 'string') out['st-' + k] = { v: chk[k], t }; });
+    const pz = ler('viart2026_prazos');
+    Object.keys(pz).forEach(k => { if (pz[k]) out['pz-' + k] = { v: pz[k], t }; });
+    const bd = ler('viart2026_budget');
+    Object.keys(bd).forEach(k => { if (bd[k]) out['bd-' + k.replace(/^real-/, '')] = { v: bd[k], t }; });
+    const pr = ler('viart2026_presentes');
+    Object.keys(pr).forEach(k => { if (pr[k]) out['ps-' + k] = { v: true, t }; });
+    const cd = ler('viart2026_pessoa_cidade');
+    Object.keys(cd).forEach(k => { if (cd[k]) out['cd-' + k] = { v: cd[k], t }; });
+    return out;
+  }
+
+  gravarLocal = (sync) => {
+    try { localStorage.setItem('viart2026_sync', JSON.stringify(sync)); } catch (e) {}
+  };
+
+  // grava um ou mais campos: setCampos({ 'st-chk-x': 'ok' })
+  setCampos = (pares) => {
+    return this.gravarCampos(pares);
+  };
+
+  gravarCampos = (pares) => {
+    const t = Date.now();
+    const sync = { ...this.state.sync };
+    const envio = {};
+    Object.keys(pares).forEach(k => {
+      sync[k] = { v: pares[k], t };
+      envio[k] = { v: pares[k], t };
+    });
+    this.gravarLocal(sync);
+    this.setState({ sync });
+    return this.empurrarEstado(envio);
+  };
+
+  empurrarEstado = (campos) => {
+    const pend = { ...(this._pendentes || {}), ...campos };
+    this._pendentes = pend;
+    return fetch('/api/estado', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ campos: pend }),
+    }).then(r => r.json()).then(j => {
+      if (j && j.ok) {
+        this._pendentes = null;
+        this.mesclar(j.campos);
+        this.setState({ syncStatus: 'online', pendentes: 0 });
+        return true;
+      }
+      this.setState({ syncStatus: 'local', pendentes: Object.keys(pend).length });
+      return false;
+    }).catch(() => {
+      this.setState({ syncStatus: 'local', pendentes: Object.keys(pend).length });
+      return false;
+    });
+  };
+
+  reenviarPendentes = () => {
+    if (this._pendentes && Object.keys(this._pendentes).length) return this.empurrarEstado({});
+    return Promise.resolve(true);
+  };
+
+  puxarEstado = () => {
+    fetch('/api/estado').then(r => r.json()).then(j => {
+      if (j && j.ok) { this.mesclar(j.campos); this.setState({ syncStatus: 'online' }); }
+      else this.setState({ syncStatus: 'local' });
+    }).catch(() => this.setState({ syncStatus: 'local' }));
+  };
+
+  mesclar = (remoto) => {
+    if (!remoto) return;
+    const sync = { ...this.state.sync };
+    let mudou = false;
+    Object.keys(remoto).forEach(k => {
+      const r = remoto[k];
+      if (!r || typeof r.t !== 'number') return;
+      if (!sync[k] || r.t > sync[k].t) { sync[k] = r; mudou = true; }
+    });
+    if (mudou) { this.gravarLocal(sync); this.setState({ sync }); }
+  };
+
+  fetchClima = () => {
+    const pontos = {
+      sp: { lat: -23.5614, lon: -46.6559 },
+      bsb: { lat: -15.7975, lon: -47.8919 },
+    };
+    const url = (p) => 'https://api.open-meteo.com/v1/forecast?latitude=' + p.lat + '&longitude=' + p.lon +
+      '&current=temperature_2m,relative_humidity_2m,weather_code' +
+      '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+      '&timezone=America%2FSao_Paulo&forecast_days=7';
+    Promise.all([fetch(url(pontos.sp)).then(r => r.json()), fetch(url(pontos.bsb)).then(r => r.json())])
+      .then(([sp, bsb]) => this.setState({ clima: { sp, bsb }, climaErro: false }))
+      .catch(() => this.setState({ climaErro: true }));
+  };
 
   componentWillUnmount() {
     if (this._poll) clearInterval(this._poll);
+    if (this._sync) clearInterval(this._sync);
+    window.removeEventListener('online', this.reenviarPendentes);
   }
-
-  fetchQuestions = () => {
-    fetch(QUESTIONS_URL).then(r => r.json()).then(data => {
-      this.setState({ questions: (data && data.questions) || [], qLive: true });
-    }).catch(() => this.setState({ qLive: false }));
-  };
 
   selectSP = () => this.setState({ city: 'sp' });
   selectBSB = () => this.setState({ city: 'bsb' });
@@ -645,39 +1269,87 @@ class Component extends DCLogic {
     this.setState({ orgUnlocked: false });
   };
 
+  valor = (k) => (this.state.sync[k] ? this.state.sync[k].v : undefined);
+
+  cycleCheck = (id, def) => () => {
+    const order = ['ok', 'and', 'nao', 'nc'];
+    const atual = this.valor('st-' + id) || def;
+    const next = order[(order.indexOf(atual) + 1) % order.length];
+    this.setCampos({ ['st-' + id]: next });
+  };
+
   toggleCheck = (id) => () => {
     const checklist = { ...this.state.checklist, [id]: !this.state.checklist[id] };
     try { localStorage.setItem('viart2026_checklist', JSON.stringify(checklist)); } catch (e) {}
     this.setState({ checklist });
   };
 
-  updateBudget = (id) => (e) => {
-    const v = e.target.value;
-    const budget = { ...this.state.budget, [id]: v };
-    try { localStorage.setItem('viart2026_budget', JSON.stringify(budget)); } catch (e2) {}
-    this.setState({ budget });
+  stopEvt = (e) => { e.stopPropagation(); };
+
+  onNameQuery = (e) => this.setState({ nameQuery: e.target.value });
+  onCrachaQuery = (e) => this.setState({ crachaQuery: e.target.value });
+  onCiQuery = (e) => this.setState({ ciQuery: e.target.value, ciErro: '' });
+  ciEscolher = (nome) => () => this.setState({ ciNome: nome, ciQuery: '', ciErro: '' });
+  ciTrocar = () => this.setState({ ciNome: '', ciErro: '' });
+  onCiCodigo = (e) => this.setState({ ciCodigo: e.target.value.replace(/\D/g, '').slice(0, 4), ciErro: '' });
+  ciConfirmar = () => {
+    const { ciNome, ciCodigo, city } = this.state;
+    if (!ciNome) return this.setState({ ciErro: 'Escolha seu nome na lista.' });
+    if (ciCodigo !== CODIGO_ENTRADA[city]) return this.setState({ ciErro: 'Código incorreto. Leia o QR do cartaz na entrada ou peça o código à equipe.' });
+    try { localStorage.setItem('viart2026_meu_nome', ciNome); } catch (e) {}
+    this.setState({ ciEnviando: true, ciErro: '' });
+    this.setCampos({ ['ps-' + ciNome]: true, ['cd-' + ciNome]: city }).then(ok => {
+      this.setState({ ciEnviando: false, ciFeito: true, ciSalvoLocal: !ok, ciCodigo: '', meuNome: ciNome });
+    });
   };
 
-  onQGroupChange = (e) => this.setState({ qGroup: e.target.value });
-  onQTextChange = (e) => this.setState({ qText: e.target.value });
-  submitQuestion = () => {
-    if (!this.state.qText.trim() || this.state.qSending) return;
-    const q = {
-      id: Date.now(),
-      group: this.state.qGroup.trim() || 'Anônimo',
-      text: this.state.qText.trim(),
-      cityLabel: this.state.city === 'sp' ? 'São Paulo' : 'Brasília',
-    };
-    this.setState({ qSending: true });
-    fetch(QUESTIONS_URL).then(r => r.json()).then(data => {
-      const questions = [q, ...((data && data.questions) || [])];
-      return fetch(QUESTIONS_URL, {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ questions }),
-      }).then(() => questions);
-    }).then(questions => {
-      this.setState({ questions, qGroup: '', qText: '', qSending: false, qLive: true });
-    }).catch(() => this.setState({ qSending: false }));
+  ciTentarNovamente = () => {
+    this.setState({ ciEnviando: true });
+    this.reenviarPendentes().then(ok => this.setState({ ciEnviando: false, ciSalvoLocal: !ok }));
   };
+  ciNovo = () => this.setState({ ciFeito: false, ciSalvoLocal: false, ciNome: '', ciQuery: '', ciCodigo: '', ciErro: '' });
+  setMeuNome = (nome) => () => {
+    try { localStorage.setItem('viart2026_meu_nome', nome); } catch (e) {}
+    this.setState({ meuNome: nome, crachaQuery: '' });
+  };
+  limparMeuNome = () => {
+    try { localStorage.setItem('viart2026_meu_nome', ''); } catch (e) {}
+    this.setState({ meuNome: '' });
+  };
+  onRestricaoTipo = (e) => {
+    try { localStorage.setItem('viart2026_restricao_tipo', e.target.value); } catch (er) {}
+    this.setState({ restricaoTipo: e.target.value });
+  };
+  onRestricaoObs = (e) => {
+    try { localStorage.setItem('viart2026_restricao_obs', e.target.value); } catch (er) {}
+    this.setState({ restricaoObs: e.target.value });
+  };
+  copiar = (texto, marca) => (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    try { navigator.clipboard.writeText(texto); } catch (er) {}
+    this.setState({ copiado: marca });
+    setTimeout(() => this.setState({ copiado: '' }), 1800);
+  };
+  togglePresente = (nome) => () => this.setCampos({ ['ps-' + nome]: !this.valor('ps-' + nome) });
+  toggleKit = (nome) => (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    this.setCampos({ ['kit-' + nome]: !this.valor('kit-' + nome) });
+  };
+  setPessoaCidade = (nome, cidade) => (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    this.setCampos({ ['cd-' + nome]: this.valor('cd-' + nome) === cidade ? '' : cidade });
+  };
+  setPessoaFiltro = (id) => () => this.setState({ pessoaFiltro: id });
+
+  limparPresencas = () => {
+    const pares = {};
+    PARTICIPANTES.forEach(n => { if (this.valor('ps-' + n)) pares['ps-' + n] = false; });
+    if (Object.keys(pares).length) this.setCampos(pares);
+  };
+
+  updatePrazo = (id) => (e) => this.setCampos({ ['pz-' + id]: e.target.value });
+
+  updateBudget = (id) => (e) => this.setCampos({ ['bd-' + id]: e.target.value });
 
   printReport = async () => {
     if (this.state.pdfGenerating) return;
@@ -714,8 +1386,24 @@ class Component extends DCLogic {
     const s = this.state;
 
     const cityData = s.city === 'sp'
-      ? { id: 'sp', name: 'São Paulo', date: '13 de Agosto', venue: 'Edifício SEDES CAIXA · Auditório Térreo + 18º andar', address: 'Av. Paulista, 750 – Bela Vista, São Paulo - SP', count: 124, pct: '67% do total', bikes: 15, mapEmbedUrl: 'https://www.google.com/maps?q=Edifício+SEDES+CAIXA+Av+Paulista+750+São+Paulo&output=embed' }
-      : { id: 'bsb', name: 'Brasília', date: '20 de Agosto', venue: 'Auditório Matriz II', address: 'SAUS Quadra 3, Lote 3/4, Asa Sul, Brasília - DF', count: 62, pct: 'Brasília: 57 + Rio de Janeiro: 5', bikes: 10, mapEmbedUrl: 'https://www.google.com/maps?q=Caixa+Econômica+Federal+Matriz+II+SAUS+Quadra+5+Brasília&output=embed' };
+      ? { id: 'sp', name: 'São Paulo', date: '13 de Agosto', dateISO: '2026-08-13', venue: 'Edifício SEDES CAIXA · Auditório Térreo + 18º andar', address: 'Av. Paulista, 750 – Bela Vista, São Paulo - SP', count: 124, pct: '67% do total', bikes: 15, mapEmbedUrl: 'https://www.google.com/maps?q=Edifício+SEDES+CAIXA+Av+Paulista+750+São+Paulo&output=embed',
+          transporte: 'Metrô Brigadeiro (linha 2-Verde), a 400 m · Metrô Trianon-Masp, a 600 m', estacionamento: 'Estacionamento do prédio sem vagas para participantes — use os estacionamentos da Alameda Santos ou transporte por app',
+          wifiRede: 'a confirmar', wifiSenha: 'a confirmar',
+          almoco: 'No próprio prédio · 12h15 às 14h', confraternizacao: 'Local a definir · a partir das 19h',
+          contatos: [
+            { nome: 'Ponto focal São Paulo', papel: 'Organização do evento', tel: 'a confirmar' },
+            { nome: 'Portaria / segurança do prédio', papel: 'Acesso e emergências', tel: 'a confirmar' },
+            { nome: 'Ambulatório CAIXA', papel: 'Primeiros socorros', tel: 'a confirmar' },
+          ] }
+      : { id: 'bsb', name: 'Brasília', date: '20 de Agosto', dateISO: '2026-08-20', venue: 'Auditório Matriz II', address: 'SAUS Quadra 5, Lote 9/10, Brasília - DF, CEP 70070-050', count: 62, pct: 'Brasília: 57 + Rio de Janeiro: 5', bikes: 10, mapEmbedUrl: 'https://www.google.com/maps?q=Caixa+Econômica+Federal+Matriz+II+SAUS+Quadra+5+Brasília&output=embed',
+          transporte: 'Estação Galeria dos Estados (metrô), a 900 m · diversas linhas de ônibus no Setor de Autarquias Sul', estacionamento: 'Estacionamento do edifício conforme disponibilidade — chegue com folga ou use transporte por app',
+          wifiRede: 'a confirmar', wifiSenha: 'a confirmar',
+          almoco: 'No próprio prédio · 12h15 às 14h', confraternizacao: 'Local a definir · a partir das 19h',
+          contatos: [
+            { nome: 'Ponto focal Brasília', papel: 'Organização do evento', tel: 'a confirmar' },
+            { nome: 'Portaria / segurança do prédio', papel: 'Acesso e emergências', tel: 'a confirmar' },
+            { nome: 'Ambulatório CAIXA', papel: 'Primeiros socorros', tel: 'a confirmar' },
+          ] };
 
     const PILLAR_STYLE = {
       Alinhar: { bg: '#E3ECF9', color: '#0057A6' },
@@ -740,44 +1428,237 @@ class Component extends DCLogic {
       color: s.orgSubTab === t.id ? '#FFFFFF' : '#002855',
     }));
 
-    const checklistCats = CHECKLIST_CATS.map(cat => ({
-      title: cat.title,
-      items: cat.items.map((label, i) => {
-        const id = 'chk-' + cat.id + '-' + i;
-        const done = !!s.checklist[id];
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    let atrasadas = 0;
+    const statusById = {};
+    CHECK_STATUS.forEach(st => { statusById[st.id] = st; });
+    const counts = { ok: 0, and: 0, nao: 0, nc: 0 };
+    const gv = (k) => (s.sync[k] ? s.sync[k].v : undefined);
+    const statusOf = (id, def) => (typeof gv('st-' + id) === 'string' ? gv('st-' + id) : def);
+    const checklistCats = CHECKLIST_CATS.map(cat => {
+      let catTotal = 0, catDone = 0;
+      const items = cat.items.map((row) => {
+        const base = 'chk-' + row[0].toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 22);
+        const dupla = row[3] === 'dupla';
+        const defs = dupla
+          ? [{ key: base + '-sp', badge: 'SP' }, { key: base + '-bsb', badge: 'BSB' }]
+          : [{ key: base, badge: 'Geral' }];
+        const tracks = defs.map(d => {
+          const st = statusById[statusOf(d.key, row[1])] || statusById.nao;
+          counts[st.id] = (counts[st.id] || 0) + 1;
+          if (st.id !== 'nc') { catTotal++; if (st.id === 'ok') catDone++; }
+          const pendente = st.id === 'and' || st.id === 'nao';
+          const prazo = gv('pz-' + d.key) || '';
+          let prazoColor = '#6B6B70', atrasada = false;
+          if (prazo) {
+            const dias = Math.round((new Date(prazo + 'T00:00:00') - hoje) / 86400000);
+            if (dias < 0) { prazoColor = '#C0392B'; if (pendente) { atrasadas++; atrasada = true; } }
+            else if (dias === 0) prazoColor = '#B4471F';
+            else prazoColor = '#1E7A45';
+          }
+          return {
+            badge: d.badge, badgeColor: dupla ? '#0057A6' : '#9A9AA0',
+            toggle: this.cycleCheck(d.key, row[1]),
+            dot: atrasada ? '#C0392B' : st.dot,
+            statusLabel: atrasada ? 'Em atraso' : st.label,
+            statusBg: atrasada ? '#FBE3E0' : st.bg,
+            statusColor: atrasada ? '#B02D1C' : st.color,
+            showPrazo: pendente, prazoValue: prazo, prazoColor,
+            onPrazoChange: this.updatePrazo(d.key), stop: this.stopEvt,
+          };
+        });
+        const allOk = tracks.every(t => t.statusLabel === 'Concluído' || t.statusLabel === 'Não é o caso');
         return {
-          label, toggle: this.toggleCheck(id), mark: done ? '✓' : '',
-          borderColor: done ? '#0057A6' : '#C9D6E8', checkBg: done ? '#0057A6' : 'transparent',
-          textColor: done ? '#8A8A8A' : '#002855', strike: done ? 'line-through' : 'none',
+          label: row[0], obs: row[2] || '', hasObs: !!row[2], tracks,
+          textColor: allOk ? '#8A8A8A' : '#002855',
         };
-      }),
-    }));
-    let checklistTotal = 0, checklistDone = 0;
-    CHECKLIST_CATS.forEach(cat => cat.items.forEach((_, i) => {
-      checklistTotal++;
-      if (s.checklist['chk-' + cat.id + '-' + i]) checklistDone++;
-    }));
+      });
+      return { title: cat.title, items, progress: catDone + '/' + catTotal };
+    });
+    const checklistTotal = counts.ok + counts.and + counts.nao;
+    const checklistDone = counts.ok;
     const checklistPct = checklistTotal ? Math.round(100 * checklistDone / checklistTotal) : 0;
+    const statusCounts = CHECK_STATUS.map(st => ({ label: st.label, n: counts[st.id] || 0, dot: st.dot }));
+    if (atrasadas) statusCounts.push({ label: 'Em atraso', n: atrasadas, dot: '#C0392B' });
 
-    const nextSteps = NEXT_STEPS.map(step => {
-      const done = !!s.checklist[step.id];
+    const norm = (t) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const q = norm(s.nameQuery.trim());
+    const cidadeDe = (n) => gv('cd-' + n) || '';
+    const spCount = PARTICIPANTES.filter(n => cidadeDe(n) === 'sp').length;
+    const bsbCount = PARTICIPANTES.filter(n => cidadeDe(n) === 'bsb').length;
+    const semCidadeCount = PARTICIPANTES.length - spCount - bsbCount;
+    const presentesCount = PARTICIPANTES.filter(n => gv('ps-' + n)).length;
+    const kitsCount = PARTICIPANTES.filter(n => gv('kit-' + n)).length;
+    const participantes = PARTICIPANTES.filter(n => {
+      if (q && !norm(n).includes(q)) return false;
+      const c = cidadeDe(n);
+      if (s.pessoaFiltro === 'sp') return c === 'sp';
+      if (s.pessoaFiltro === 'bsb') return c === 'bsb';
+      if (s.pessoaFiltro === 'sem') return !c;
+      return true;
+    }).map(n => {
+      const p = !!gv('ps-' + n);
+      const kit = !!gv('kit-' + n);
+      const c = cidadeDe(n);
       return {
-        label: step.label, prazo: step.prazo, toggle: this.toggleCheck(step.id), mark: done ? '✓' : '',
-        borderColor: done ? '#F39200' : '#C9D6E8', checkBg: done ? '#F39200' : 'transparent',
-        textColor: done ? '#8A8A8A' : '#002855', strike: done ? 'line-through' : 'none',
+        nome: n, toggle: this.togglePresente(n), mark: p ? '✓' : '',
+        borderColor: p ? '#0057A6' : '#C9D6E8', checkBg: p ? '#0057A6' : 'transparent',
+        bg: p ? '#F2F7FD' : '#FFFFFF', textColor: p ? '#0057A6' : '#002855',
+        setSP: this.setPessoaCidade(n, 'sp'), setBSB: this.setPessoaCidade(n, 'bsb'),
+        kitToggle: this.toggleKit(n), kitLabel: kit ? 'Kit ok' : 'Kit',
+        kitBg: kit ? '#E3F3E8' : '#F2F5FA', kitColor: kit ? '#1E7A45' : '#8A8A90',
+        spBg: c === 'sp' ? '#0057A6' : '#F2F5FA', spColor: c === 'sp' ? '#FFFFFF' : '#8A8A90',
+        bsbBg: c === 'bsb' ? '#F39200' : '#F2F5FA', bsbColor: c === 'bsb' ? '#FFFFFF' : '#8A8A90',
       };
     });
-    const nextDone = NEXT_STEPS.filter(step => s.checklist[step.id]).length;
-    const nextStepsPct = Math.round(100 * nextDone / NEXT_STEPS.length);
+    const pessoaFiltros = [
+      { id: 'todos', label: 'Todos', n: PARTICIPANTES.length },
+      { id: 'sp', label: 'São Paulo', n: spCount },
+      { id: 'bsb', label: 'Brasília', n: bsbCount },
+      { id: 'sem', label: 'Sem cidade', n: semCidadeCount },
+    ].map(x => ({
+      label: x.label + ' · ' + x.n, onClick: this.setPessoaFiltro(x.id),
+      bg: s.pessoaFiltro === x.id ? '#0057A6' : '#FFFFFF',
+      color: s.pessoaFiltro === x.id ? '#FFFFFF' : '#002855',
+    }));
 
-    let budgetTotal = 0;
-    const budgetRows = BUDGET_CATS.map(cat => {
-      const raw = s.budget[cat.id];
-      const num = parseFloat(raw) || 0;
-      budgetTotal += num;
-      return { label: cat.label, value: raw || '', onChange: this.updateBudget(cat.id) };
+    const WMO = {
+      0: ['Céu limpo', 'sol'], 1: ['Predomínio de sol', 'sol'], 2: ['Parcialmente nublado', 'nuvem'], 3: ['Nublado', 'nuvem'],
+      45: ['Névoa', 'nuvem'], 48: ['Névoa com geada', 'nuvem'],
+      51: ['Garoa fraca', 'chuva'], 53: ['Garoa', 'chuva'], 55: ['Garoa forte', 'chuva'],
+      61: ['Chuva fraca', 'chuva'], 63: ['Chuva', 'chuva'], 65: ['Chuva forte', 'chuva'],
+      66: ['Chuva congelante', 'chuva'], 67: ['Chuva congelante forte', 'chuva'],
+      71: ['Neve', 'chuva'], 73: ['Neve', 'chuva'], 75: ['Neve forte', 'chuva'], 77: ['Granizo fino', 'chuva'],
+      80: ['Pancadas isoladas', 'chuva'], 81: ['Pancadas de chuva', 'chuva'], 82: ['Pancadas fortes', 'chuva'],
+      95: ['Tempestade', 'chuva'], 96: ['Tempestade com granizo', 'chuva'], 99: ['Tempestade com granizo', 'chuva'],
+    };
+    const DIAS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+    let climaAtual = null, climaDias = [], climaDica = '', climaPronto = false;
+    const cru = s.clima && s.clima[s.city];
+    if (cru && cru.current && cru.daily) {
+      climaPronto = true;
+      const desc = (WMO[cru.current.weather_code] || ['—', 'nuvem'])[0];
+      climaAtual = {
+        temp: Math.round(cru.current.temperature_2m) + '°',
+        desc, umidade: cru.current.relative_humidity_2m + '% de umidade',
+      };
+      const d = cru.daily;
+      climaDias = d.time.map((iso, i) => {
+        const dt = new Date(iso + 'T12:00:00');
+        const info = WMO[d.weather_code[i]] || ['—', 'nuvem'];
+        const chuva = d.precipitation_probability_max[i];
+        return {
+          dia: (i === 0 ? 'hoje' : DIAS[dt.getDay()]) + ' ' + iso.slice(8, 10) + '/' + iso.slice(5, 7),
+          max: Math.round(d.temperature_2m_max[i]) + '°',
+          min: Math.round(d.temperature_2m_min[i]) + '°',
+          desc: info[0], chuva: chuva + '%',
+          chuvaColor: chuva >= 50 ? '#0057A6' : '#9A9AA0',
+          destaque: i === 0 ? '#F2F7FD' : '#FFFFFF',
+        };
+      });
+      const minSemana = Math.min.apply(null, d.temperature_2m_min);
+      const chuvaMax = Math.max.apply(null, d.precipitation_probability_max);
+      const partes = [];
+      if (minSemana < 17) partes.push('casaco para começo e fim do dia (mínima de ' + Math.round(minSemana) + '°)');
+      else if (minSemana < 20) partes.push('uma blusa leve resolve as primeiras horas');
+      else partes.push('temperaturas amenas, casaco dispensável');
+      if (chuvaMax >= 50) partes.push('guarda-chuva na mochila — chance de chuva de até ' + chuvaMax + '%');
+      else if (chuvaMax >= 30) partes.push('chance moderada de chuva (' + chuvaMax + '%), vale um guarda-chuva pequeno');
+      else partes.push('baixa chance de chuva na semana');
+      climaDica = partes.join(' · ');
+    }
+
+    // --- agora / a seguir ---
+    const parseHora = (t) => {
+      const m = t.match(/(\d{2})h(\d{2})?/);
+      return m ? parseInt(m[1], 10) * 60 + (m[2] ? parseInt(m[2], 10) : 0) : null;
+    };
+    const agora = new Date();
+    const hojeISO = agora.getFullYear() + '-' + String(agora.getMonth() + 1).padStart(2, '0') + '-' + String(agora.getDate()).padStart(2, '0');
+    const ehDiaDoEvento = hojeISO === cityData.dateISO;
+    const minutosAgora = agora.getHours() * 60 + agora.getMinutes();
+    let blocoAgora = null, blocoProximo = null, faltamDias = null, mostrarAgora = false, mostrarFeedback = false;
+    if (ehDiaDoEvento) {
+      mostrarAgora = true;
+      const comInicio = SCHEDULE.map(it => ({ it, ini: parseHora(it.time), fim: parseHora((it.time.split('–')[1] || it.time).trim()) }));
+      for (let i = 0; i < comInicio.length; i++) {
+        const c = comInicio[i];
+        const fim = c.fim && c.fim > c.ini ? c.fim : (comInicio[i + 1] ? comInicio[i + 1].ini : c.ini + 60);
+        if (minutosAgora >= c.ini && minutosAgora < fim) blocoAgora = c.it;
+        if (!blocoProximo && c.ini > minutosAgora) blocoProximo = c.it;
+      }
+      mostrarFeedback = minutosAgora >= 17 * 60;
+    } else {
+      const d0 = new Date(cityData.dateISO + 'T00:00:00');
+      const dias = Math.round((d0 - new Date(hojeISO + 'T00:00:00')) / 86400000);
+      if (dias > 0) { faltamDias = dias; mostrarAgora = true; blocoProximo = SCHEDULE[0]; }
+    }
+    const agoraLabel = ehDiaDoEvento
+      ? (blocoAgora ? 'Acontecendo agora' : (blocoProximo ? 'Ainda não começou' : 'Programação encerrada'))
+      : (faltamDias === 1 ? 'Falta 1 dia' : 'Faltam ' + faltamDias + ' dias');
+    const agoraTitulo = blocoAgora ? blocoAgora.title : (blocoProximo ? blocoProximo.title : 'Até a próxima!');
+    const agoraHora = blocoAgora ? blocoAgora.time : (blocoProximo ? blocoProximo.time : '');
+    const proximoTexto = blocoProximo && blocoAgora ? blocoProximo.time + ' · ' + blocoProximo.title : '';
+    const temProximo = !!(blocoProximo && blocoAgora);
+
+    // --- como chegar ---
+    const enderecoQ = encodeURIComponent(cityData.venue.split('·')[0].trim() + ', ' + cityData.address);
+    const mapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + enderecoQ;
+    const uberUrl = 'https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=' + enderecoQ;
+
+    // --- autocredenciamento ---
+    const ciq = norm(s.ciQuery.trim());
+    const ciOpcoes = ciq.length >= 2
+      ? PARTICIPANTES.filter(n => norm(n).includes(ciq)).slice(0, 8).map(n => ({ nome: n, escolher: this.ciEscolher(n) }))
+      : [];
+
+    // --- meu crachá ---
+    const cq = norm(s.crachaQuery.trim());
+    const crachaOpcoes = cq.length >= 2
+      ? PARTICIPANTES.filter(n => norm(n).includes(cq)).slice(0, 8).map(n => ({ nome: n, escolher: this.setMeuNome(n) }))
+      : [];
+    const temNome = !!s.meuNome;
+    const crachaQR = temNome
+      ? 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=0&data=' + encodeURIComponent('VIART2026|' + cityData.name + '|' + s.meuNome)
+      : '';
+    const primeiroNome = temNome ? s.meuNome.split(' ')[0] : '';
+
+    // --- o que levar ---
+    const levar = [
+      { item: 'Documento com foto', desc: 'Necessário na portaria do prédio' },
+      { item: 'Crachá funcional', desc: 'Acesso às áreas internas' },
+      { item: 'Garrafa de água reutilizável', desc: 'Evento sem copos descartáveis' },
+    ];
+    if (climaDica) {
+      if (/casaco/.test(climaDica)) levar.push({ item: 'Casaco', desc: 'Manhã e fim do dia mais frios' });
+      if (/guarda-chuva/.test(climaDica)) levar.push({ item: 'Guarda-chuva', desc: 'Previsão indica chance de chuva' });
+    }
+    levar.push({ item: 'Camiseta VIART 2026', desc: 'Entregue no credenciamento — use no dia' });
+
+    // --- restrição alimentar ---
+    const restricaoMail = 'mailto:?subject=' + encodeURIComponent('Restrição alimentar · Planejamento VIART 2026 · ' + cityData.name) +
+      '&body=' + encodeURIComponent('Nome: ' + (s.meuNome || '(preencher)') + '\nCidade: ' + cityData.name +
+      '\nRestrição: ' + (s.restricaoTipo || '(selecionar)') + '\nObservações: ' + (s.restricaoObs || '-'));
+
+    const brl = (v) => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    let orcTotal = 0, realTotal = 0;
+    const budgetGroups = BUDGET_GROUPS.map(g => {
+      let gOrc = 0, gReal = 0;
+      const rows = g.rows.map(r => {
+        const raw = gv('bd-' + r.id);
+        const real = parseFloat(raw) || 0;
+        gOrc += r.orc; gReal += real;
+        return {
+          label: r.label, note: r.note, hasNote: !!r.note,
+          orcFmt: r.orc ? brl(r.orc) : '—',
+          realValue: raw == null ? '' : raw,
+          onRealChange: this.updateBudget('real-' + r.id),
+        };
+      });
+      orcTotal += gOrc; realTotal += gReal;
+      return { title: g.title, rows, orcFmt: brl(gOrc), realFmt: brl(gReal) };
     });
-    const budgetTotalFmt = 'R$ ' + budgetTotal.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
+    const saldo = orcTotal - realTotal;
 
     return {
       spBg: s.city === 'sp' ? '#F39200' : 'transparent', spColor: s.city === 'sp' ? '#002855' : '#C9D6E8',
@@ -792,8 +1673,6 @@ class Component extends DCLogic {
       objetivos: OBJETIVOS, schedule,
       estrategiaSteps: ESTRATEGIA_STEPS, estrategiaInfo: ESTRATEGIA_INFO,
       historiasSteps: HISTORIAS_STEPS, historiasInfo: HISTORIAS_INFO,
-      qGroup: s.qGroup, qText: s.qText, onQGroupChange: this.onQGroupChange, onQTextChange: this.onQTextChange,
-      submitQuestion: this.submitQuestion, questions: s.questions, questionsCount: s.questions.length,
       orgLocked: !s.orgUnlocked, orgUnlocked: s.orgUnlocked,
       orgSubTabs,
       showOrgVisao: s.orgSubTab === 'visao', showOrgChecklist: s.orgSubTab === 'checklist',
@@ -801,8 +1680,51 @@ class Component extends DCLogic {
       showOrgTeambike: s.orgSubTab === 'teambike', showOrgCompartilhar: s.orgSubTab === 'compartilhar',
       pwInput: s.pwInput, pwError: s.pwError, onPwChange: this.onPwChange, onPwKeyDown: this.onPwKeyDown,
       tryUnlock: this.tryUnlock, lockOrg: this.lockOrg,
-      checklistCats, checklistPct, nextSteps, nextStepsPct,
-      budgetRows, budgetTotalFmt, printReport: this.printReport,
+      checklistCats, checklistPct, checklistDone, checklistTotal, statusCounts,
+      checklistBarWidth: checklistPct + '%',
+      atrasadas,
+      climaAtual, climaDias, climaDica, climaPronto, climaErro: s.climaErro,
+      showCheckin: s.activeTab === 'checkin',
+      ciQuery: s.ciQuery, onCiQuery: this.onCiQuery, ciOpcoes,
+      ciNome: s.ciNome, ciTemNome: !!s.ciNome, ciSemNome: !s.ciNome && !s.ciFeito,
+      ciCodigo: s.ciCodigo, onCiCodigo: this.onCiCodigo, ciConfirmar: this.ciConfirmar,
+      ciCodigoDoQR: s.ciCodigo === CODIGO_ENTRADA[s.city],
+      ciPedirCodigo: s.ciCodigo !== CODIGO_ENTRADA[s.city],
+      ciErro: s.ciErro, ciTemErro: !!s.ciErro, ciFeito: s.ciFeito, ciNovo: this.ciNovo,
+      ciFormVisivel: !s.ciFeito, ciTrocar: this.ciTrocar,
+      ciBotaoLabel: s.ciEnviando ? 'Enviando...' : 'Confirmar presença',
+      ciSalvoLocal: s.ciSalvoLocal, ciEnviadoOk: s.ciFeito && !s.ciSalvoLocal,
+      ciTentarNovamente: this.ciTentarNovamente,
+      pendentesLabel: s.pendentes ? s.pendentes + ' alteração(ões) aguardando envio' : '',
+      temPendentes: !!s.pendentes,
+      kitsCount,
+      syncOnline: s.syncStatus === 'online',
+      syncLabel: s.syncStatus === 'online' ? 'Sincronizado com a equipe' : 'Somente neste aparelho (sem conexão com o servidor)',
+      syncColor: s.syncStatus === 'online' ? '#2E9E5B' : '#F39200',
+      atualizarAgora: this.puxarEstado,
+      showCracha: s.activeTab === 'cracha',
+      mostrarAgora, agoraLabel, agoraTitulo, agoraHora, proximoTexto, temProximo, mostrarFeedback,
+      mapsUrl, uberUrl,
+      crachaQuery: s.crachaQuery, onCrachaQuery: this.onCrachaQuery, crachaOpcoes,
+      temNome, crachaSemNome: !temNome, meuNome: s.meuNome, primeiroNome, limparMeuNome: this.limparMeuNome,
+      crachaQRBg: crachaQR ? 'url("' + crachaQR + '")' : 'none',
+      levar,
+      restricaoTipo: s.restricaoTipo, onRestricaoTipo: this.onRestricaoTipo,
+      restricaoObs: s.restricaoObs, onRestricaoObs: this.onRestricaoObs, restricaoMail,
+      copiarWifi: this.copiar(cityData.wifiSenha, 'wifi'),
+      wifiCopiado: s.copiado === 'wifi' ? 'Copiada!' : 'Copiar senha',
+      copiarEndereco: this.copiar(cityData.address, 'end'),
+      enderecoCopiado: s.copiado === 'end' ? 'Copiado!' : 'Copiar endereço',
+      showOrgLinks: s.orgSubTab === 'links', linksUteis: LINKS_UTEIS,
+      showOrgPessoas: s.orgSubTab === 'pessoas',
+      participantes, nameQuery: s.nameQuery, onNameQuery: this.onNameQuery,
+      participantesTotal: PARTICIPANTES.length, participantesFiltrados: participantes.length,
+      presentesCount, presentesPct: Math.round(100 * presentesCount / PARTICIPANTES.length) + '%',
+      pessoaFiltros, spCount, bsbCount, semCidadeCount,
+      limparPresencas: this.limparPresencas,
+      budgetGroups, orcTotalFmt: brl(orcTotal), realTotalFmt: brl(realTotal),
+      saldoFmt: brl(saldo), saldoColor: saldo < 0 ? '#FF8A7A' : '#8FD9A8',
+      budgetTotalFmt: brl(orcTotal), printReport: this.printReport,
       focal: FOCAL, painel: PAINEL,
     };
   }
