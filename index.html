@@ -762,6 +762,31 @@
             </div>
             </sc-if>
 
+            <sc-if value="{{ showOrgQR }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Cartazes de credenciamento</div>
+              <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">O QR já leva o participante à tela certa, com a cidade e o código do local. Ao gerar o PDF, escolha <b>Salvar como PDF</b> no destino da impressão.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px">
+                <div onClick="{{ pdfCartazes }}" style="cursor:pointer;background:#0057A6;color:#fff;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px">PDF · cartazes A4 (1 por cidade)</div>
+                <div onClick="{{ pdfMesas }}" style="cursor:pointer;background:#FFFFFF;border:1px solid #0057A6;color:#0057A6;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px">PDF · cartões de mesa (6 por folha)</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px">
+                <sc-for list="{{ cartazes }}" as="c" hint-placeholder-count="2">
+                  <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(26px,4vw,44px);text-align:center">
+                    <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.14em">Planejamento Estratégico VIART 2026</div>
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);margin-top:14px;line-height:1.1">Credenciamento</div>
+                    <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(17px,2vw,24px);color:#0057A6;margin-top:8px">{{ c.cidade }} · {{ c.data }}</div>
+                    <div style="font-size:13.5px;color:#6B6B70;margin-top:4px">{{ c.local }}</div>
+                    <div role="img" aria-label="QR de credenciamento" style="width:min(300px,66vw);aspect-ratio:1;margin:26px auto 20px;background-image:{{ c.qrBg }};background-size:cover"></div>
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(19px,2.2vw,26px)">Aponte a câmera do celular</div>
+                    <div style="font-size:14px;color:#4A4A50;margin-top:10px;line-height:1.65;max-width:460px;margin-left:auto;margin-right:auto">Escolha seu nome na lista e toque em <b>Confirmar presença</b>. Depois retire seu kit aqui na mesa.</div>
+                    <div style="margin-top:22px;padding-top:18px;border-top:1px solid #E8EFF9;font-size:12.5px;color:#6B6B70">Sem câmera? Acesse <b>{{ c.urlCurta }}</b> e informe o código <b style="letter-spacing:0.1em">{{ c.codigo }}</b></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            </sc-if>
+
             <sc-if value="{{ showOrgContatos }}" hint-placeholder-val="{{ false }}">
             <div>
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 12px">Contatos · pontos focais</div>
@@ -910,6 +935,7 @@ const ORG_SUBTABS_DEF = [
   { id: 'checklist', label: 'Checklist & passos' },
   { id: 'orcamento', label: 'Orçamento' },
   { id: 'pessoas', label: 'Participantes' },
+  { id: 'qr', label: 'Cartazes QR' },
   { id: 'contatos', label: 'Contatos & painel' },
   { id: 'teambike', label: 'Team Bike 🔒' },
   { id: 'compartilhar', label: 'Compartilhar & mapas' },
@@ -917,6 +943,16 @@ const ORG_SUBTABS_DEF = [
 ];
 
 const CODIGO_ENTRADA = { sp: '1308', bsb: '2008' };
+
+const APP_BASE = 'https://viart-evento-2026-4353fa01-3ec0-4ec.vercel.app/';
+const CARTAZES = [
+  { cidade: 'São Paulo', data: '13 de agosto', local: 'Edifício SEDES CAIXA · Av. Paulista, 750', codigo: '1308', param: 'sp' },
+  { cidade: 'Brasília', data: '20 de agosto', local: 'Auditório Matriz II · SAUS Quadra 5', codigo: '2008', param: 'bsb' },
+].map(c => {
+  const url = APP_BASE + '?checkin=1&c=' + c.codigo + '&cidade=' + c.param;
+  return { ...c, url, urlCurta: APP_BASE.replace('https://', '').replace(/\/$/, ''),
+    qr: 'https://api.qrserver.com/v1/create-qr-code/?size=640x640&margin=10&data=' + encodeURIComponent(url) };
+});
 
 const TABS_DEF = [
   { id: 'inicio', label: 'Início' },
@@ -1011,6 +1047,7 @@ const CHECKLIST_CATS = [
     ['Verificar presença PRESI', 'nao', '', 'dupla'],
     ['Criar materiais de comunicação (cards, e-mails informativos)', 'and'],
     ['Preparar sinalização para o local do evento', 'nao', '', 'dupla'],
+    ['Imprimir cartazes de QR do credenciamento', 'nao', '', 'dupla'],
     ['Providenciar camisetas', 'and'],
     ['Providenciar brindes simples', 'and'],
     ['Providenciar gravação', 'nao', '', 'dupla'],
@@ -1340,6 +1377,66 @@ class Component extends DCLogic {
     this.setCampos({ ['cd-' + nome]: this.valor('cd-' + nome) === cidade ? '' : cidade });
   };
   setPessoaFiltro = (id) => () => this.setState({ pessoaFiltro: id });
+
+  abrirPdf = (corpo, estilo, titulo) => {
+    const w = window.open('', '_blank');
+    if (!w) return;
+    w.document.write('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>' + titulo + '</title>' +
+      '<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">' +
+      '<style>html,body{margin:0;padding:0;background:#fff;font-family:Manrope,sans-serif;color:#002855;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+      estilo + '</style></head><body>' + corpo + '</body></html>');
+    w.document.close();
+    const disparar = () => { w.focus(); w.print(); };
+    if (w.document.readyState === 'complete') setTimeout(disparar, 900);
+    else w.onload = () => setTimeout(disparar, 900);
+  };
+
+  pdfCartazes = () => {
+    const corpo = CARTAZES.map(c => '<section class="folha">' +
+      '<div class="kicker">Planejamento Estratégico VIART 2026</div>' +
+      '<h1>Credenciamento</h1>' +
+      '<div class="cidade">' + c.cidade + ' · ' + c.data + '</div>' +
+      '<div class="local">' + c.local + '</div>' +
+      '<img src="' + c.qr + '" alt="QR">' +
+      '<div class="cta">Aponte a câmera do celular</div>' +
+      '<div class="txt">Escolha seu nome na lista e toque em <b>Confirmar presença</b>.<br>Depois retire seu kit aqui na mesa.</div>' +
+      '<div class="pe">Sem câmera? Acesse <b>' + c.urlCurta + '</b> e informe o código <b>' + c.codigo + '</b></div>' +
+      '</section>').join('');
+    const estilo = '@page{size:A4 portrait;margin:14mm}' +
+      '.folha{min-height:262mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;page-break-after:always}' +
+      '.folha:last-child{page-break-after:auto}' +
+      '.kicker{font-size:11pt;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.16em}' +
+      'h1{font-family:Sora,sans-serif;font-weight:800;font-size:40pt;margin:6mm 0 0;line-height:1}' +
+      '.cidade{font-family:Sora,sans-serif;font-weight:700;font-size:22pt;color:#0057A6;margin-top:4mm}' +
+      '.local{font-size:12pt;color:#6B6B70;margin-top:2mm}' +
+      'img{width:110mm;height:110mm;margin:10mm 0}' +
+      '.cta{font-family:Sora,sans-serif;font-weight:800;font-size:22pt}' +
+      '.txt{font-size:13pt;color:#333;margin-top:5mm;line-height:1.5}' +
+      '.pe{font-size:10.5pt;color:#6B6B70;margin-top:10mm;padding-top:5mm;border-top:1px solid #DCE6F2;width:120mm}';
+    this.abrirPdf(corpo, estilo, 'Cartazes A4 · Credenciamento VIART 2026');
+  };
+
+  pdfMesas = () => {
+    const cartao = (c) => '<div class="cartao">' +
+      '<div class="c-cid">' + c.cidade + ' · ' + c.data + '</div>' +
+      '<div class="c-tit">Confirme sua presença</div>' +
+      '<img src="' + c.qr + '" alt="QR">' +
+      '<div class="c-txt">Aponte a câmera, escolha seu nome<br>e toque em <b>Confirmar presença</b></div>' +
+      '<div class="c-pe">' + c.urlCurta + ' · código ' + c.codigo + '</div>' +
+      '</div>';
+    const corpo = CARTAZES.map(c => '<section class="folha">' +
+      Array(6).fill(0).map(() => cartao(c)).join('') + '</section>').join('');
+    const estilo = '@page{size:A4 portrait;margin:10mm}' +
+      '.folha{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:4mm;height:275mm;page-break-after:always}' +
+      '.folha:last-child{page-break-after:auto}' +
+      '.cartao{border:1px dashed #C9D6E8;border-radius:3mm;padding:5mm;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}' +
+      '.c-cid{font-size:8.5pt;font-weight:800;color:#0057A6;text-transform:uppercase;letter-spacing:0.1em}' +
+      '.c-tit{font-family:Sora,sans-serif;font-weight:800;font-size:13pt;margin-top:2mm}' +
+      '.cartao img{width:38mm;height:38mm;margin:4mm 0}' +
+      '.c-txt{font-size:8.5pt;color:#333;line-height:1.45}' +
+      '.c-pe{font-size:7pt;color:#6B6B70;margin-top:3mm}';
+    this.abrirPdf(corpo, estilo, 'Cartões de mesa · Credenciamento VIART 2026');
+  };
 
   limparPresencas = () => {
     const pares = {};
@@ -1716,6 +1813,8 @@ class Component extends DCLogic {
       copiarEndereco: this.copiar(cityData.address, 'end'),
       enderecoCopiado: s.copiado === 'end' ? 'Copiado!' : 'Copiar endereço',
       showOrgLinks: s.orgSubTab === 'links', linksUteis: LINKS_UTEIS,
+      showOrgQR: s.orgSubTab === 'qr', pdfCartazes: this.pdfCartazes, pdfMesas: this.pdfMesas,
+      cartazes: CARTAZES.map(c => ({ ...c, qrBg: 'url("' + c.qr + '")' })),
       showOrgPessoas: s.orgSubTab === 'pessoas',
       participantes, nameQuery: s.nameQuery, onNameQuery: this.onNameQuery,
       participantesTotal: PARTICIPANTES.length, participantesFiltrados: participantes.length,
