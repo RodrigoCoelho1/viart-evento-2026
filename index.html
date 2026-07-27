@@ -73,6 +73,9 @@
         <div style="background:#002855;border-radius:20px;padding:clamp(28px,5vw,56px);color:#F2F5FA;margin-bottom:28px">
           <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(28px,4.2vw,54px);line-height:1.05">Planejamento Estratégico VIART</div>
           <div style="font-size:clamp(15px,1.4vw,20px);color:#C9D6E8;margin-top:14px;max-width:640px">Um só time que faz acontecer.<br/>Um novo formato: todos os funcionários, uma única mensagem, ao vivo.</div>
+          <sc-if value="{{ mostrarContador }}" hint-placeholder-val="{{ false }}">
+            <div style="display:inline-block;margin-top:16px;background:rgba(243,146,0,0.15);border:1px solid #F39200;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:800;color:#F39200;text-transform:uppercase;letter-spacing:0.06em">{{ agoraLabel }}</div>
+          </sc-if>
           <div style="display:flex;flex-wrap:wrap;gap:28px;margin-top:28px">
             <div>
               <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(26px,3vw,38px);color:#F39200">{{ cityData.date }}</div>
@@ -92,7 +95,7 @@
           </div>
         </div>
 
-        <sc-if value="{{ mostrarAgora }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ ehDiaDoEvento }}" hint-placeholder-val="{{ false }}">
           <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:16px;padding:22px 24px;margin-bottom:28px">
             <div style="font-size:11px;font-weight:800;color:#B4600A;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px">{{ agoraLabel }}</div>
             <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(19px,2vw,26px);line-height:1.2">{{ agoraTitulo }}</div>
@@ -103,6 +106,25 @@
           </div>
         </sc-if>
 
+        <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(22px,3.5vw,32px);margin-bottom:28px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap">
+          <image-slot id="vp-foto" src="assets/vp-bini.jpg" shape="circle" placeholder="Foto do VP" style="width:88px;height:88px;flex-shrink:0"></image-slot>
+          <div style="flex:1;min-width:220px">
+            <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Palavra do VP</div>
+            <div style="font-size:15px;color:#002855;line-height:1.65;font-style:italic">"Este encontro é a chance de estarmos juntos, SP e Brasília, alinhados sobre onde queremos chegar até 2030. Quero ouvir vocês, celebrar o que já construímos e reforçar o que nos torna um só time. Cada área tem um papel importante nessa jornada, e é reunindo essas perspectivas que avançamos com mais clareza. Vamos aproveitar esse dia para trocar ideias e sair daqui com um propósito comum ainda mais forte. Contem com o Colegiado da VIART nessa caminhada."</div>
+            <div style="font-size:13.5px;font-weight:700;color:#002855;margin-top:12px">Sérgio Bini</div>
+            <div style="font-size:12px;color:#6B6B70">Vice-Presidente · VIART</div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
+          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(18px,1.8vw,24px)">Novo formato 2026</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:32px">
+          <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:14px;padding:20px">
+            <div style="font-size:14px;line-height:1.7;color:#002855">Um único dia por cidade, para todos. Mesma mensagem, ao vivo. Integração real entre equipes e confraternização.</div>
+          </div>
+        </div>
+
         <sc-if value="{{ mostrarFeedback }}" hint-placeholder-val="{{ false }}">
           <div style="background:#E8EFF9;border-radius:16px;padding:20px 24px;margin-bottom:28px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between">
             <div>
@@ -112,15 +134,6 @@
             <a href="https://www.menti.com" target="_blank" style="background:#0057A6;color:#fff;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px;text-decoration:none;white-space:nowrap">Responder pesquisa</a>
           </div>
         </sc-if>
-
-        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
-          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(18px,1.8vw,24px)">Novo formato 2026</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:32px">
-          <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:14px;padding:20px">
-            <div style="font-size:14px;line-height:1.7;color:#002855">Um único dia por cidade, para todos. Mesma mensagem, ao vivo. Integração real entre equipes e confraternização ao final do dia.</div>
-          </div>
-        </div>
 
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(18px,1.8vw,24px);margin-bottom:14px">Objetivos do evento</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
@@ -536,12 +549,114 @@
                 <div style="font-size:11.5px;color:#6B6B70;margin-top:4px">data-marco vencida</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;line-height:1.5">Chuva 8928 3821<br>Q&amp;A 1155 7596</div>
-                <div style="font-size:11.5px;color:#6B6B70;margin-top:4px">códigos Mentimeter</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px;color:#F39200">{{ diasProximoEvento }}</div>
+                <div style="font-size:11.5px;color:#6B6B70;margin-top:4px">{{ diasProximoLabel }}</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px">
                 <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px">{{ budgetTotalFmt }}</div>
                 <div style="font-size:11.5px;color:#6B6B70;margin-top:4px">orçamento consolidado</div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px">
+              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;display:flex;gap:18px;align-items:center">
+                <div style="width:120px;height:120px;border-radius:999px;background:{{ statusDonutBg }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                  <div style="width:76px;height:76px;border-radius:999px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px;color:#0057A6">{{ checklistPct }}%</div>
+                    <div style="font-size:9px;color:#6B6B70">concluído</div>
+                  </div>
+                </div>
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:14px;margin-bottom:10px">Status das tarefas</div>
+                  <sc-for list="{{ statusBars }}" as="sb" hint-placeholder-count="5">
+                    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#4A4A50;margin-bottom:5px">
+                      <div style="width:8px;height:8px;border-radius:999px;background:{{ sb.dot }};flex-shrink:0"></div>
+                      <div style="flex:1">{{ sb.label }}</div>
+                      <div style="font-weight:700">{{ sb.n }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;display:flex;gap:18px;align-items:center">
+                <div style="width:120px;height:120px;border-radius:999px;background:{{ cidadeDonutBg }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                  <div style="width:76px;height:76px;border-radius:999px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px">183</div>
+                    <div style="font-size:9px;color:#6B6B70">pessoas</div>
+                  </div>
+                </div>
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:14px;margin-bottom:10px">Participantes por cidade</div>
+                  <sc-for list="{{ cidadeLegend }}" as="cl" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#4A4A50;margin-bottom:5px">
+                      <div style="width:8px;height:8px;border-radius:999px;background:{{ cl.color }};flex-shrink:0"></div>
+                      <div style="flex:1">{{ cl.label }}</div>
+                      <div style="font-weight:700">{{ cl.n }}</div>
+                    </div>
+                  </sc-for>
+                  <div style="display:flex;gap:14px;margin-top:8px;padding-top:8px;border-top:1px solid #EDF1F7">
+                    <div style="font-size:11px;color:#6B6B70">Presença <b style="color:#002855">{{ presencaPct }}</b></div>
+                    <div style="font-size:11px;color:#6B6B70">Kits <b style="color:#002855">{{ kitPct }}</b></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Participantes por área (top 6)</div>
+                <sc-for list="{{ areaBars }}" as="ab" hint-placeholder-count="6">
+                  <div style="margin-bottom:9px">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;color:#4A4A50;margin-bottom:3px">
+                      <div>{{ ab.nome }}</div>
+                      <div style="font-weight:700">{{ ab.n }}</div>
+                    </div>
+                    <div style="height:7px;border-radius:999px;background:#EDF1F7;overflow:hidden">
+                      <div style="height:100%;width:{{ ab.barWidth }};background:#0057A6;border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Programação por pilar</div>
+                <div style="height:22px;border-radius:999px;overflow:hidden;display:flex;margin-bottom:14px">
+                  <sc-for list="{{ pilarRows }}" as="pr" hint-placeholder-count="3">
+                    <div style="height:100%;width:{{ pr.pct }}%;background:{{ pr.color }}"></div>
+                  </sc-for>
+                </div>
+                <sc-for list="{{ pilarRows }}" as="pr" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#4A4A50;margin-bottom:6px">
+                    <div style="width:8px;height:8px;border-radius:999px;background:{{ pr.color }};flex-shrink:0"></div>
+                    <div style="flex:1">{{ pr.nome }}</div>
+                    <div style="font-weight:700">{{ pr.n }} blocos</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Checklist por área</div>
+                <sc-for list="{{ dashboardCats }}" as="dc" hint-placeholder-count="9">
+                  <div style="margin-bottom:10px">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;color:#4A4A50;margin-bottom:4px">
+                      <div>{{ dc.title }}</div>
+                      <div style="font-weight:700">{{ dc.progress }}</div>
+                    </div>
+                    <div style="height:7px;border-radius:999px;background:#EDF1F7;overflow:hidden">
+                      <div style="height:100%;width:{{ dc.catPct }}%;background:#0057A6;border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Orçamento — orçado vs. realizado</div>
+                <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px">{{ realTotalFmt }}</div>
+                  <div style="font-size:12px;color:#6B6B70">de {{ orcTotalFmt }} orçados</div>
+                </div>
+                <div style="height:14px;border-radius:999px;background:#EDF1F7;overflow:hidden;margin-bottom:10px">
+                  <div style="height:100%;width:{{ realBarW }};background:#F39200;border-radius:999px"></div>
+                </div>
+                <div style="font-size:12px;color:#6B6B70">Saldo: <b style="color:{{ saldoColor }}">{{ saldoFmt }}</b></div>
               </div>
             </div>
 
@@ -936,7 +1051,7 @@
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:26px 0 12px">Mapas · logística por cidade</div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
               <div>
-                <div style="font-size:13px;font-weight:700;margin-bottom:8px">São Paulo · Edifício SEDES/SP</div>
+                <div style="font-size:13px;font-weight:700;margin-bottom:8px">São Paulo · Edifício Sedes/SP</div>
                 <div style="border-radius:14px;overflow:hidden;border:1px solid #DCE6F2;height:220px"><iframe src="https://www.google.com/maps?q=Edifício+SEDES+CAIXA+Av+Paulista+750+São+Paulo&output=embed" style="width:100%;height:100%;border:0" loading="lazy"></iframe></div>
               </div>
               <div>
@@ -977,18 +1092,13 @@ const LINKS_UTEIS = [
   ] },
   { grupo: 'Ferramentas', itens: [
     { nome: 'Copilot 365', desc: 'Assistente Microsoft corporativo', url: 'https://copilot.cloud.microsoft' },
-    { nome: 'Claude', desc: 'claude.ai', url: 'https://claude.ai' },
-    { nome: 'ChatGPT', desc: 'chatgpt.com', url: 'https://chatgpt.com' },
-    { nome: 'Gemini', desc: 'gemini.google.com', url: 'https://gemini.google.com' },
-    { nome: 'Perplexity', desc: 'Busca com fontes', url: 'https://www.perplexity.ai' },
-    { nome: 'NotebookLM', desc: 'Estudo e resumo de documentos', url: 'https://notebooklm.google.com' },
     { nome: 'Calculadora HP 12C', desc: 'Simulador online', url: 'https://epxx.co/ctb/hp12c.html' },
   ] },
 ];
 
 const ORG_SUBTABS_DEF = [
   { id: 'visao', label: 'Visão geral' },
-  { id: 'checklist', label: 'Checklist & passos' },
+  { id: 'checklist', label: 'Checklist' },
   { id: 'orcamento', label: 'Orçamento' },
   { id: 'pessoas', label: 'Participantes' },
   { id: 'contatos', label: 'Contatos & painel' },
@@ -1000,7 +1110,7 @@ const CODIGO_ENTRADA = { sp: '1308', bsb: '2008' };
 
 const APP_BASE = 'https://viart-evento-2026-4353fa01-3ec0-4ec.vercel.app/';
 const CARTAZES = [
-  { cidade: 'São Paulo', data: '13 de agosto', local: 'Edifício SEDES CAIXA · Av. Paulista, 750', codigo: '1308', param: 'sp' },
+  { cidade: 'São Paulo', data: '13 de agosto', local: 'Edifício Sedes/SP · Av. Paulista, 750', codigo: '1308', param: 'sp' },
   { cidade: 'Brasília', data: '20 de agosto', local: 'Auditório Matriz II · SAUS Quadra 5', codigo: '2008', param: 'bsb' },
 ].map(c => {
   const url = APP_BASE + '?checkin=1&c=' + c.codigo + '&cidade=' + c.param;
@@ -1112,6 +1222,9 @@ const CHECKLIST_CATS = [
     ['Palestrante Legalas', 'and', '', 'dupla'],
     ['Definir formato e dinâmica do evento', 'and'],
     ['Preparar apresentações e material de apoio', 'nao'],
+    ['Coletar apresentações individuais das áreas (Comissão do Clima, Comissão da Diversidade, Escola VIART, INOVAVIART)', 'nao'],
+    ['Padronizar modelo visual e linguagem das apresentações recebidas', 'nao'],
+    ['Montar a apresentação coletiva/unificada do evento', 'nao'],
     ['Planejar dinâmicas rápidas pós-almoço para manter o engajamento', 'and'],
     ['Evitar palestras muito técnicas ou monótonas, especialmente após o almoço', 'and'],
     ['Organizar atividades interativas e de networking (crachás letras/números)', 'nao'],
@@ -1560,7 +1673,7 @@ class Component extends DCLogic {
     const s = this.state;
 
     const cityData = s.city === 'sp'
-      ? { id: 'sp', name: 'São Paulo', date: '13 de Agosto', dateISO: '2026-08-13', venue: 'Edifício SEDES CAIXA · Auditório Térreo + 18º andar', address: 'Av. Paulista, 750 – Bela Vista, São Paulo - SP', count: 123, pct: '67% do total', bikes: 15, mapEmbedUrl: 'https://www.google.com/maps?q=Edifício+SEDES+CAIXA+Av+Paulista+750+São+Paulo&output=embed',
+      ? { id: 'sp', name: 'São Paulo', date: '13 de Agosto', dateISO: '2026-08-13', venue: 'Edifício Sedes/SP · Auditório Térreo + 18º andar', address: 'Av. Paulista, 750 – Bela Vista, São Paulo - SP', count: 123, pct: '67% do total', bikes: 15, mapEmbedUrl: 'https://www.google.com/maps?q=Edifício+SEDES+CAIXA+Av+Paulista+750+São+Paulo&output=embed',
           transporte: 'Metrô Brigadeiro (linha 2-Verde), a 400 m · Metrô Trianon-Masp, a 600 m', estacionamento: 'Estacionamento do prédio sem vagas para participantes — use os estacionamentos da Alameda Santos ou transporte por app',
           wifiRede: 'a confirmar', wifiSenha: 'a confirmar',
           almoco: 'No próprio prédio · 12h15 às 14h', confraternizacao: 'Local a definir · a partir das 19h',
@@ -1643,7 +1756,7 @@ class Component extends DCLogic {
           textColor: allOk ? '#8A8A8A' : '#002855',
         };
       });
-      return { id: cat.id, title: cat.title, items, progress: catDone + '/' + catTotal };
+      return { id: cat.id, title: cat.title, items, progress: catDone + '/' + catTotal, catDone, catTotal, catPct: catTotal ? Math.round(100 * catDone / catTotal) : 0 };
     });
 
     // Linha do tempo (Gantt) — vinculada aos mesmos dados/prazos do checklist
@@ -1885,6 +1998,64 @@ class Component extends DCLogic {
       return { title: g.title, rows, orcFmt: brl(gOrc), realFmt: brl(gReal) };
     });
     const saldo = orcTotal - realTotal;
+    const diasSP = Math.round((new Date('2026-08-13T00:00:00') - hoje) / DAY_MS);
+    const diasBSB = Math.round((new Date('2026-08-20T00:00:00') - hoje) / DAY_MS);
+    const diasProximoEvento = diasSP >= 0 ? diasSP : diasBSB;
+    const diasProximoLabel = diasProximoEvento < 0 ? 'Eventos concluídos' : diasProximoEvento === 0 ? 'É hoje!' : diasProximoEvento === 1 ? 'Falta 1 dia' : 'Faltam ' + diasProximoEvento + ' dias';
+
+    const dashboardCats = checklistCats.filter(c => c.id !== 'pend');
+    const maxStatusN = Math.max(1, ...statusCounts.map(s => s.n));
+    const statusBars = statusCounts.map(s => ({ ...s, barWidth: Math.round(100 * s.n / maxStatusN) + '%' }));
+    const maxCidadeN = Math.max(1, spCount, bsbCount);
+    const cidadeBarSP = Math.round(100 * spCount / maxCidadeN) + '%';
+    const cidadeBarBSB = Math.round(100 * bsbCount / maxCidadeN) + '%';
+    const maxOrcN = Math.max(1, orcTotal, realTotal);
+    const orcBarW = Math.round(100 * orcTotal / maxOrcN) + '%';
+    const realBarW = Math.round(100 * realTotal / maxOrcN) + '%';
+    const presencaPct = Math.round(100 * presentesCount / PARTICIPANTES.length) + '%';
+    const kitPct = Math.round(100 * kitsCount / PARTICIPANTES.length) + '%';
+
+    // donut: status das tarefas
+    const statusTotalN = statusCounts.reduce((a, s) => a + s.n, 0) || 1;
+    let acc = 0;
+    const statusDonutStops = statusCounts.map(s => {
+      const from = acc / statusTotalN * 100;
+      acc += s.n;
+      const to = acc / statusTotalN * 100;
+      return s.dot + ' ' + from.toFixed(2) + '% ' + to.toFixed(2) + '%';
+    }).join(', ');
+    const statusDonutBg = 'conic-gradient(' + statusDonutStops + ')';
+
+    // donut: participantes por cidade (sp / bsb-only / sem cidade), dual contado como fatia própria
+    const spOnly = Math.max(0, spCount - dualCount);
+    const bsbOnly = Math.max(0, bsbCount - dualCount);
+    const cidadeSegs = [
+      { label: 'São Paulo', n: spOnly, color: '#0057A6' },
+      { label: 'Brasília', n: bsbOnly, color: '#F39200' },
+      { label: 'Nos 2 eventos', n: dualCount, color: '#8A5A0B' },
+      { label: 'Sem cidade', n: semCidadeCount, color: '#DCE6F2' },
+    ];
+    const cidadeTotalN = cidadeSegs.reduce((a, s) => a + s.n, 0) || 1;
+    let acc2 = 0;
+    const cidadeDonutBg = 'conic-gradient(' + cidadeSegs.map(s => {
+      const from = acc2 / cidadeTotalN * 100; acc2 += s.n; const to = acc2 / cidadeTotalN * 100;
+      return s.color + ' ' + from.toFixed(2) + '% ' + to.toFixed(2) + '%';
+    }).join(', ') + ')';
+    const cidadeLegend = cidadeSegs.filter(s => s.n > 0);
+
+    // participantes por área (top unidades)
+    const unidadeCount = {};
+    Object.values(PARTICIPANTES_INFO).forEach(info => { if (info.u) { const k = info.u.split(' - ')[0]; unidadeCount[k] = (unidadeCount[k] || 0) + 1; } });
+    const areaRows = Object.entries(unidadeCount).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const maxAreaN = Math.max(1, ...areaRows.map(r => r[1]));
+    const areaBars = areaRows.map(([nome, n]) => ({ nome, n, barWidth: Math.round(100 * n / maxAreaN) + '%' }));
+
+    // pilares da programação (Alinhar/Conectar/Executar)
+    const pilarCount = { Alinhar: 0, Conectar: 0, Executar: 0 };
+    SCHEDULE.forEach(it => { if (it.pillar && pilarCount[it.pillar] !== undefined) pilarCount[it.pillar]++; });
+    const pilarTotalN = Object.values(pilarCount).reduce((a, b) => a + b, 0) || 1;
+    const pilarColors = { Alinhar: '#0057A6', Conectar: '#F39200', Executar: '#002855' };
+    const pilarRows = Object.entries(pilarCount).map(([nome, n]) => ({ nome, n, pct: Math.round(100 * n / pilarTotalN), color: pilarColors[nome] }));
 
     return {
       spBg: s.city === 'sp' ? '#F39200' : 'transparent', spColor: s.city === 'sp' ? '#002855' : '#C9D6E8',
@@ -1936,7 +2107,8 @@ class Component extends DCLogic {
       syncLabel: s.syncStatus === 'online' ? 'Sincronizado com a equipe' : 'Somente neste aparelho (sem conexão com o servidor)',
       syncColor: s.syncStatus === 'online' ? '#2E9E5B' : '#F39200',
       atualizarAgora: this.puxarEstado,
-      mostrarAgora, agoraLabel, agoraTitulo, agoraHora, proximoTexto, temProximo, mostrarFeedback,
+      mostrarAgora, agoraLabel, agoraTitulo, agoraHora, proximoTexto, temProximo, mostrarFeedback, ehDiaDoEvento,
+      mostrarContador: mostrarAgora && !ehDiaDoEvento,
       mapsUrl, uberUrl,
       crachaQuery: s.crachaQuery, onCrachaQuery: this.onCrachaQuery, crachaOpcoes,
       temNome, crachaSemNome: !temNome, meuNome: s.meuNome, primeiroNome, limparMeuNome: this.limparMeuNome,
@@ -1963,6 +2135,8 @@ class Component extends DCLogic {
       saldoFmt: brl(saldo), saldoColor: saldo < 0 ? '#FF8A7A' : '#8FD9A8',
       budgetTotalFmt: brl(orcTotal), printReport: this.printReport,
       focal: FOCAL, prestadores: PRESTADORES, organizacaoContatos: ORGANIZACAO_CONTATOS,
+      dashboardCats, statusBars, cidadeBarSP, cidadeBarBSB, orcBarW, realBarW, presencaPct, kitPct,
+      statusDonutBg, cidadeDonutBg, cidadeLegend, areaBars, pilarRows, diasProximoEvento, diasProximoLabel,
       showContatosOrg: (s.contatosView || 'org') === 'org', showContatosPrest: s.contatosView === 'prest',
       viewOrgBg: (s.contatosView || 'org') === 'org' ? '#0057A6' : '#FFFFFF',
       viewOrgColor: (s.contatosView || 'org') === 'org' ? '#FFFFFF' : '#002855',
