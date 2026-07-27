@@ -50,7 +50,8 @@
         <div style="width:1px;align-self:stretch;background:#2A5490;flex-shrink:0"></div>
         <div style="display:flex;flex-direction:column;gap:4px">
         <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(20px,2.4vw,28px);color:#F2F5FA;letter-spacing:0.01em;line-height:1">VIART <span style="color:#F39200">2026</span></div>
-        <div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:clamp(9px,0.85vw,11px);color:#A9C0DE;text-transform:uppercase;letter-spacing:0.1em">VP Fundos de Investimento · Alinhar · Conectar · Executar</div>
+        <div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:clamp(9px,0.85vw,11px);color:#A9C0DE;text-transform:uppercase;letter-spacing:0.1em">VP Fundos de Investimento</div>
+        <div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:clamp(9px,0.85vw,11px);color:#A9C0DE;text-transform:uppercase;letter-spacing:0.1em">Alinhar · Conectar · Executar</div>
         </div>
       </div>
       <div style="display:flex;background:#013A73;border-radius:999px;padding:4px;gap:4px">
@@ -85,7 +86,7 @@
               <div style="font-size:13px;color:#A9C0DE;margin-top:2px">{{ cityData.pct }}</div>
             </div>
             <div>
-              <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(26px,3vw,38px)">186</div>
+              <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(26px,3vw,38px)">183</div>
               <div style="font-size:13px;color:#A9C0DE;margin-top:2px">funcionários · 2 cidades · 2 dias</div>
             </div>
           </div>
@@ -523,7 +524,7 @@
             <div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:28px">
               <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px">186</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px">183</div>
                 <div style="font-size:11.5px;color:#A9C0DE;margin-top:4px">participantes · 2 cidades</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px">
@@ -686,8 +687,6 @@
               </div>
               <div onClick="{{ atualizarAgora }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Atualizar agora</div>
             </div>
-            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Presenças chegam sozinhas pelo QR da entrada. Marque <b>SP</b> ou <b>BSB</b> em cada nome para dividir a lista entre as duas cidades. Toque no nome para registrar presença e em <b>Kit</b> para a entrega — tudo compartilhado com a equipe.</div>
-
             <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px 20px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between">
               <div style="display:flex;gap:26px;align-items:baseline">
                 <div>
@@ -706,6 +705,10 @@
                   <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ spCount }} · {{ bsbCount }}</div>
                   <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">SP · BSB ({{ semCidadeCount }} sem cidade)</div>
                 </div>
+                <div>
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ dualCount }}</div>
+                  <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">nos 2 eventos (custeio)</div>
+                </div>
               </div>
               <div onClick="{{ limparPresencas }}" style="cursor:pointer;font-size:12.5px;font-weight:700;color:#A9C0DE;border:1px solid #0A3C6E;border-radius:999px;padding:8px 16px">Limpar presenças</div>
             </div>
@@ -715,19 +718,34 @@
                 <div onClick="{{ pf.onClick }}" style="cursor:pointer;padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ pf.bg }};color:{{ pf.color }};border:1px solid #DCE6F2">{{ pf.label }}</div>
               </sc-for>
             </div>
+            <select value="{{ s.pessoaUnidade }}" onChange="{{ onUnidadeChange }}" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;color:#002855;margin-bottom:10px;background:#fff">
+              <option value="">Todas as áreas</option>
+              <sc-for list="{{ unidadesOpcoes }}" as="u" hint-placeholder-count="12">
+                <option value="{{ u.value }}">{{ u.label }}</option>
+              </sc-for>
+            </select>
             <input placeholder="Buscar nome..." value="{{ nameQuery }}" onChange="{{ onNameQuery }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:6px"></input>
             <div style="font-size:11.5px;color:#6B6B70;margin-bottom:14px">{{ participantesFiltrados }} nome(s) exibido(s)</div>
 
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:22px">
               <sc-for list="{{ participantes }}" as="p" hint-placeholder-count="12">
-                <div onClick="{{ p.toggle }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;background:{{ p.bg }};border:1px solid #DCE6F2;border-radius:10px;padding:10px 12px">
-                  <div style="width:18px;height:18px;border-radius:5px;flex-shrink:0;border:2px solid {{ p.borderColor }};background:{{ p.checkBg }};display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800">{{ p.mark }}</div>
-                  <div style="flex:1;font-size:13px;color:{{ p.textColor }};line-height:1.35">{{ p.nome }}</div>
-                  <div style="display:flex;gap:4px;flex-shrink:0">
-                    <div onClick="{{ p.setSP }}" style="cursor:pointer;font-size:10px;font-weight:800;padding:4px 7px;border-radius:6px;background:{{ p.spBg }};color:{{ p.spColor }}">SP</div>
-                    <div onClick="{{ p.setBSB }}" style="cursor:pointer;font-size:10px;font-weight:800;padding:4px 7px;border-radius:6px;background:{{ p.bsbBg }};color:{{ p.bsbColor }}">BSB</div>
-                    <div onClick="{{ p.kitToggle }}" style="cursor:pointer;font-size:10px;font-weight:800;padding:4px 7px;border-radius:6px;background:{{ p.kitBg }};color:{{ p.kitColor }}">{{ p.kitLabel }}</div>
+                <div onClick="{{ p.toggle }}" style="cursor:pointer;display:flex;flex-direction:column;gap:6px;background:{{ p.bg }};border:1px solid #DCE6F2;border-radius:10px;padding:10px 12px">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="width:18px;height:18px;border-radius:5px;flex-shrink:0;border:2px solid {{ p.borderColor }};background:{{ p.checkBg }};display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800">{{ p.mark }}</div>
+                    <div style="flex:1;font-size:13px;color:{{ p.textColor }};line-height:1.35">{{ p.nome }}</div>
+                    <div style="display:flex;gap:4px;flex-shrink:0">
+                      <div onClick="{{ p.setSP }}" style="cursor:pointer;font-size:10px;font-weight:800;padding:4px 7px;border-radius:6px;background:{{ p.spBg }};color:{{ p.spColor }}">SP</div>
+                      <div onClick="{{ p.setBSB }}" style="cursor:pointer;font-size:10px;font-weight:800;padding:4px 7px;border-radius:6px;background:{{ p.bsbBg }};color:{{ p.bsbColor }}">BSB</div>
+                      <div onClick="{{ p.kitToggle }}" style="cursor:pointer;font-size:10px;font-weight:800;padding:4px 7px;border-radius:6px;background:{{ p.kitBg }};color:{{ p.kitColor }}">{{ p.kitLabel }}</div>
+                    </div>
                   </div>
+                  <sc-if value="{{ p.hasSub }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-left:28px">
+                    <sc-if value="{{ p.funcao }}" hint-placeholder-val="{{ false }}"><div style="font-size:11px;color:#6B6B70">{{ p.funcao }}</div></sc-if>
+                    <sc-if value="{{ p.dual }}" hint-placeholder-val="{{ false }}"><div style="font-size:10px;font-weight:800;padding:2px 6px;border-radius:5px;background:#FDECC8;color:#8A5A00">SP + BSB</div></sc-if>
+                    <sc-if value="{{ p.celular }}" hint-placeholder-val="{{ false }}"><a href="{{ p.celularHref }}" onClick="{{ p.stopProp }}" style="font-size:11px;color:#0057A6;text-decoration:none">{{ p.celular }}</a></sc-if>
+                  </div>
+                  </sc-if>
                 </div>
               </sc-for>
             </div>
@@ -784,20 +802,9 @@
 
             <sc-if value="{{ showOrgContatos }}" hint-placeholder-val="{{ false }}">
             <div>
-            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 12px">Contatos · pontos focais</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:22px">
-              <sc-for list="{{ focal }}" as="f" hint-placeholder-count="2">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px">
-                  <div style="font-weight:700;font-size:14px;margin-bottom:6px">{{ f.city }}</div>
-                  <div style="font-size:13px;color:#4A4A50">{{ f.name }}</div>
-                  <div style="font-size:12.5px;color:#6B6B70;margin-top:2px">{{ f.contact }}</div>
-                </div>
-              </sc-for>
-            </div>
-
-            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:26px 0 12px">Painel "Falando de Estratégia" · liderança</div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 12px">Contatos · prestadores</div>
             <div style="display:flex;flex-direction:column;gap:10px">
-              <sc-for list="{{ painel }}" as="p" hint-placeholder-count="2">
+              <sc-for list="{{ prestadores }}" as="p" hint-placeholder-count="2">
                 <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px">
                   <div>
                     <div style="font-weight:700;font-size:14px">{{ p.name }}</div>
@@ -901,6 +908,8 @@
 <script type="text/x-dc" data-dc-script>
 
 const PARTICIPANTES = 'Adriano Shiratsu Ueda|Alan Barbieri|Alan Ferreira de Lima Filho|Alan Rodrigo do Nascimento Rodrigues|Alessandra Grellet Miranda|Alexandre da Silva Dias|Alica Dias Ribeiro Marques Pereira|Alisson Araujo de Lima|Alvaro Cunha Matos Lessa de Oliveira|Amaralina de Oliveira Abrantes Sant Anna|Ana Paula Alves Paschoalini|Ana Sefora Pires Farias|Anderson Buso|Andrea Felicio Chaves|Andrea Natashya Fukushima Fukuda|Anna Patricia de Pinho Silva|Antonio Francisco Maciel|Arthur Felipe Rodrigues da Silva|Bruno Oliveira Manhaes de Almeida|Calil Abdo Marino Salum|Camila de Oliveira Ragognete|Camila Gregorio do Nascimento|Carlos Eugenio de Brito Sousa|Catarina Moretti Ribeiro|Cinthia Freitas Duarte|Cintia da Silva Arruda|Cristiane Maya Yoshida|Cristiane Paulino|Daniel Correa Munhoz|Daniel Pereira Cunha|Daniela Gadelha Saraiva do Amaral|Daniela Nagumo|Danielle Eskenazi Cruzolini|Danielle Monteiro Cruz da Silva|Danielle Patricia Cordeiro Aurelio|Dazia Vanessa Eguchi Kemper|Diego Augusto Granado|Diego Mathias|Diogo Caetano Ribeiro|Douglas Martins Neves Costa|Edney Jonas Sena|Eduardo Alves de Oliveira|Eduardo Capitulino Viana|Eduardo Luiz Rocha dos Santos|Eladio Caldas de Almeida|Eliana Marques Lisboa|Emily Mendes Xavier|Erika Carolina Ruiz Ganga|Erika Cerqueira Silva|Fabiana Graciano|Fabio Becare Junqueira|Fabio Coelho da Silva|Fabio da Silva Bueno|Fabio Henrique Secomandi|Fabricio Honorato Soares|Fernanda Bueno Frederico Martinis|Fernando Ferreira dos Santos|Fernando Gomes Saidel Herbst|Fernando Henrique Augusto|Fernando Vinicius Barros de Almeida|Fernando Zandona Assuncao|Filipe Sousa Moreira|Flavia Gualtieri|Flavia Regina Finholdt B Mazzocchi|Gabriel Dalessandro Pereira|Gabriela Birk|Gabrielle Matosinho de Oliveira|Gerrana Campos Favieiro|Glayce Lopes da Nobrega|Guilherme Ehlers Farias|Guilherme Godoy de Medeiros|Guilherme Ivan Batista|Guilherme Ribeiro de Oliveira|Gustavo Luiz Costa Araujo|Hugo Alves Richard|Humberto Dantas de Matos|Ian Victor de Oliveira Cimino|Ingrid de Jesus Cabral|Ivan Dechen Pedro|Janaina de Amorim Silva|Jeferson Ferreira|Jerusa Alberton de Alencar Nogueira|Joao Cesar Nobre|Joao Paulo Barroso dos Santos|Joao Paulo Vargas da Silveira|Joe Moroizumi|Jose Romulo de Castro Vieira|Julio Cesar Brandao da Silva|Julio Cesar Silva|Karen Gloria Buono|Karen Rondelo Duarte|Katia Cilene da Silva Peralta|Kleber de Jesus Ivanchuk|Lais Rodrigues Carudelli Badin|Laiza Fabiola Martins de Santa Rosa|Leandro Cenati Bueno de Lima|Leandro Franco da Silveira|Leonardo Barbosa Tavares|Leonardo Matzenbacher Finger|Livia Dombroski Santos|Lorena dos Santos Bezerra|Lucas Rafael Ramos da Silva|Lucas Roberto Ribeiro da Silva|Luci Cleide Silva e Castro|Luciana de Oliveira Ferreira|Luciana Mickel Miyamoto|Luciano Garrido|Luis Gustavo Viana de Araujo Zanfra|Luiz Eduardo Cerrato Costa|Maisa Abrantes de Pina Afonso|Marcela dos Anjos Abeid|Marcia Midori Kataoka|Marcio Caetano dos Santos|Marcos Vieira dos Santos|Maria Perpetuo Socorro Passos L Almeida|Maria Stela Kamisaki Katayama|Mariana Mazivieiro|Marina Baggio Rodrigues|Mario Erbolato Neto|Mauricio Antonio Alves da Costa|Michael Prudencio Favero|Moacyr Ligabo Junior|Natalia Walkovics|Nellie Nagasse|Nicole Suemi Suzuki|Patricia Keiko Honda|Patrik Hideki Ito|Paula Baffini de Castro Santana|Paula Cristina da Silva|Paula Hitomi Konishi|Pedro Henrique Machado Martins|Pedro Victor Oliveira Costa Giacomazzo|Priscila Castilho de Almeida Pereira|Priscila Rodrigues Ferreira|Rafael de Vasconcelos Florentino|Raoni Ferreira Pinho|Raphael Henrique de Oliveira Santos|Renan Gama Oliveira|Renata Casemiro do Prado Santos|Renata Leonel Dias Ajame|Renata Lopes Franco|Renata Loureiro e Silva Koshimura|Renato Silva dos Santos|Renato Yoshio Okabe|Ricardo Alexandre Barbosa Dantas|Ricardo Alexandre Ramos|Ricardo Kendy Yokomizo|Ricardo Oliveira do Amaral|Ricardo Silva Nunes de Siqueira|Ricardo Troes|Roberto Cavalcante Amorim|Rodney Yamane|Rodrigo Chaves Batista|Rodrigo de Oliveira Coutinho|Rodrigo Devchi|Rodrigo Gomes Coelho|Rolando Tadashi Oride|Ronaldo de Oliveira|Rosemeire Aparecida Duque Prosperi|Ruthe Ventura Cuesta|Sergio Henrique Oliveira Bini|Simone Shiroma|Sintia das Neves Barbosa Rodrigues|Sonayara Oliveira Lima|Stella Mitiko Ushizima|Talita Sabioni Itocazo|Tania Gobatti Calca|Tatiana Pereira Cosentino|Tatiana Sanches Biscari Nagase|Tatianna Felix dos Santos Morais|Tatyana Arashiro|Thais Moura Brito|Thiago Bosisio Ferreira|Thiago de Oliveira Montanari|Thiago Pereira Gonzalez|Vagner Junio da Silva|Vanessa Bittencourt Bernardes|Vanessa Paes Suppa|Vinicius Barbieri Domingues|Vitor Roque Valentim|Viviana Machado dos Santos|Willian Abreu Canelada|Zeila Itokazu'.split('|');
+const PARTICIPANTES_CIDADE_AUTO = {'Luiz Eduardo Cerrato Costa':'bsb','Vitor Roque Valentim':'bsb','Alessandra Grellet Miranda':'sp','Flavia Gualtieri':'sp','Ricardo Troes':'sp','Cinthia Freitas Duarte':'bsb','Diego Mathias':'sp','Joao Paulo Vargas da Silveira':'bsb','Lais Rodrigues Carudelli Badin':'bsb','Raoni Ferreira Pinho':'bsb','Alexandre da Silva Dias':'bsb','Alica Dias Ribeiro Marques Pereira':'bsb','Alvaro Cunha Matos Lessa de Oliveira':'sp','Amaralina de Oliveira Abrantes Sant Anna':'bsb','Antonio Francisco Maciel':'bsb','Arthur Felipe Rodrigues da Silva':'bsb','Bruno Oliveira Manhaes de Almeida':'bsb','Carlos Eugenio de Brito Sousa':'bsb','Danielle Monteiro Cruz da Silva':'bsb','Diego Augusto Granado':'bsb','Diogo Caetano Ribeiro':'bsb','Douglas Martins Neves Costa':'bsb','Eduardo Alves de Oliveira':'bsb','Eladio Caldas de Almeida':'bsb','Emily Mendes Xavier':'bsb','Fabiana Graciano':'bsb','Fabio Coelho da Silva':'bsb','Fernando Ferreira dos Santos':'sp','Fernando Vinicius Barros de Almeida':'bsb','Fernando Zandona Assuncao':'bsb','Gabriel Dalessandro Pereira':'bsb','Guilherme Ehlers Farias':'bsb','Guilherme Ivan Batista':'bsb','Guilherme Ribeiro de Oliveira':'bsb','Gustavo Luiz Costa Araujo':'bsb','Hugo Alves Richard':'bsb','Humberto Dantas de Matos':'sp','Ian Victor de Oliveira Cimino':'bsb','Jerusa Alberton de Alencar Nogueira':'bsb','Laiza Fabiola Martins de Santa Rosa':'sp','Leonardo Barbosa Tavares':'bsb','Livia Dombroski Santos':'bsb','Lorena dos Santos Bezerra':'bsb','Luciana de Oliveira Ferreira':'bsb','Luis Gustavo Viana de Araujo Zanfra':'sp','Maisa Abrantes de Pina Afonso':'bsb','Patricia Keiko Honda':'sp','Pedro Victor Oliveira Costa Giacomazzo':'bsb','Priscila Rodrigues Ferreira':'bsb','Renato Silva dos Santos':'bsb','Renato Yoshio Okabe':'bsb','Ricardo Alexandre Barbosa Dantas':'bsb','Roberto Cavalcante Amorim':'bsb','Rodrigo Chaves Batista':'bsb','Rodrigo Devchi':'bsb','Sintia das Neves Barbosa Rodrigues':'bsb','Tania Gobatti Calca':'sp','Tatianna Felix dos Santos Morais':'bsb','Thais Moura Brito':'bsb','Thiago de Oliveira Montanari':'bsb','Vanessa Paes Suppa':'bsb','Vinicius Barbieri Domingues':'bsb','Adriano Shiratsu Ueda':'sp','Ana Paula Alves Paschoalini':'sp','Ana Sefora Pires Farias':'sp','Anderson Buso':'sp','Andrea Natashya Fukushima Fukuda':'sp','Camila de Oliveira Ragognete':'sp','Cristiane Paulino':'sp','Daniel Correa Munhoz':'sp','Daniela Gadelha Saraiva do Amaral':'sp','Danielle Eskenazi Cruzolini':'sp','Dazia Vanessa Eguchi Kemper':'sp','Eduardo Luiz Rocha dos Santos':'sp','Eliana Marques Lisboa':'sp','Erika Cerqueira Silva':'sp','Fabricio Honorato Soares':'sp','Fernanda Bueno Frederico Martinis':'sp','Fernando Henrique Augusto':'sp','Gabriela Birk':'sp','Ivan Dechen Pedro':'sp','Jeferson Ferreira':'sp','Joao Cesar Nobre':'sp','Joe Moroizumi':'sp','Julio Cesar Silva':'sp','Karen Rondelo Duarte':'sp','Katia Cilene da Silva Peralta':'sp','Leandro Cenati Bueno de Lima':'sp','Luciana Mickel Miyamoto':'sp','Luciano Garrido':'sp','Marcia Midori Kataoka':'sp','Mauricio Antonio Alves da Costa':'sp','Michael Prudencio Favero':'sp','Nicole Suemi Suzuki':'sp','Patrik Hideki Ito':'sp','Paula Baffini de Castro Santana':'sp','Paula Cristina da Silva':'sp','Pedro Henrique Machado Martins':'sp','Renan Gama Oliveira':'sp','Ricardo Oliveira do Amaral':'sp','Rodney Yamane':'sp','Rodrigo de Oliveira Coutinho':'sp','Rolando Tadashi Oride':'sp','Ronaldo de Oliveira':'sp','Talita Sabioni Itocazo':'sp','Tatiana Pereira Cosentino':'sp','Raphael Henrique de Oliveira Santos':'sp','Alan Ferreira de Lima Filho':'sp','Alan Rodrigo do Nascimento Rodrigues':'sp','Anna Patricia de Pinho Silva':'sp','Camila Gregorio do Nascimento':'sp','Cintia da Silva Arruda':'sp','Daniel Pereira Cunha':'sp','Daniela Nagumo':'sp','Fabio da Silva Bueno':'sp','Fernando Gomes Saidel Herbst':'sp','Glayce Lopes da Nobrega':'bsb','Kleber de Jesus Ivanchuk':'sp','Leonardo Matzenbacher Finger':'sp','Marcela dos Anjos Abeid':'sp','Marcio Caetano dos Santos':'sp','Maria Perpetuo Socorro Passos L Almeida':'bsb','Mariana Mazivieiro':'sp','Marina Baggio Rodrigues':'sp','Paula Hitomi Konishi':'bsb','Renata Casemiro do Prado Santos':'sp','Renata Lopes Franco':'bsb','Renata Loureiro e Silva Koshimura':'sp','Ricardo Kendy Yokomizo':'sp','Vanessa Bittencourt Bernardes':'bsb','Alan Barbieri':'sp','Alisson Araujo de Lima':'sp','Andrea Felicio Chaves':'sp','Calil Abdo Marino Salum':'sp','Catarina Moretti Ribeiro':'sp','Cristiane Maya Yoshida':'sp','Danielle Patricia Cordeiro Aurelio':'sp','Edney Jonas Sena':'sp','Eduardo Capitulino Viana':'sp','Erika Carolina Ruiz Ganga':'sp','Fabio Becare Junqueira':'sp','Fabio Henrique Secomandi':'sp','Filipe Sousa Moreira':'sp','Flavia Regina Finholdt B Mazzocchi':'sp','Gabrielle Matosinho de Oliveira':'sp','Ingrid de Jesus Cabral':'sp','Janaina de Amorim Silva':'sp','Joao Paulo Barroso dos Santos':'sp','Julio Cesar Brandao da Silva':'sp','Karen Gloria Buono':'sp','Leandro Franco da Silveira':'sp','Lucas Rafael Ramos da Silva':'sp','Lucas Roberto Ribeiro da Silva':'sp','Marcos Vieira dos Santos':'sp','Maria Stela Kamisaki Katayama':'sp','Moacyr Ligabo Junior':'sp','Natalia Walkovics':'sp','Nellie Nagasse':'sp','Priscila Castilho de Almeida Pereira':'sp','Rafael de Vasconcelos Florentino':'sp','Renata Leonel Dias Ajame':'sp','Ricardo Alexandre Ramos':'sp','Ricardo Silva Nunes de Siqueira':'sp','Rosemeire Aparecida Duque Prosperi':'sp','Ruthe Ventura Cuesta':'sp','Simone Shiroma':'sp','Sonayara Oliveira Lima':'sp','Stella Mitiko Ushizima':'sp','Tatiana Sanches Biscari Nagase':'sp','Tatyana Arashiro':'sp','Thiago Bosisio Ferreira':'sp','Thiago Pereira Gonzalez':'sp','Vagner Junio da Silva':'sp','Willian Abreu Canelada':'sp','Zeila Itokazu':'sp','Jose Romulo de Castro Vieira':'bsb','Viviana Machado dos Santos':'bsb','Guilherme Godoy de Medeiros':'bsb','Gerrana Campos Favieiro':'bsb','Luci Cleide Silva e Castro':'sp','Mario Erbolato Neto':'sp','Rodrigo Gomes Coelho':'sp','Sergio Henrique Oliveira Bini':'sp'};
+const PARTICIPANTES_INFO = {'Luiz Eduardo Cerrato Costa':{f:'ASSISTENTE SENIOR',u:'CESOA - CN SOLUCOES DE TI - NUCLEO A'},'Vitor Roque Valentim':{f:'ASSISTENTE SENIOR',u:'CESOB - CN SOLUCOES DE TI - NUCLEO B',t:'(61) 99857-8899'},'Alessandra Grellet Miranda':{f:'CONSULTOR DE DIRIGENTE',u:'DEASQ - DE ADM FUNDOS INVEST SERV QUALIFICADOS'},'Flavia Gualtieri':{f:'ASSESSOR EXECUTIVO',u:'DEASQ - DE ADM FUNDOS INVEST SERV QUALIFICADOS'},'Ricardo Troes':{f:'DIRETOR',u:'DEASQ - DE ADM FUNDOS INVEST SERV QUALIFICADOS',t:'(11) 98121-7803',d:1},'Cinthia Freitas Duarte':{f:'ASSESSOR EXECUTIVO',u:'DEGES - DE GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99434-5853'},'Diego Mathias':{f:'ASSIST EXECUTIVO JR',u:'DEGES - DE GESTAO FUNDOS ESTRUTURADOS',t:'(11) 96304-7113'},'Joao Paulo Vargas da Silveira':{f:'DIRETOR',u:'DEGES - DE GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99172-1311'},'Lais Rodrigues Carudelli Badin':{f:'SECRETARIO EXECUTIVO',u:'DEGES - DE GESTAO FUNDOS ESTRUTURADOS'},'Raoni Ferreira Pinho':{f:'CONSULTOR DE DIRIGENTE',u:'DEGES - DE GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99676-7410'},'Alexandre da Silva Dias':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98158-0129'},'Alica Dias Ribeiro Marques Pereira':{f:'GERENTE EXECUTIVO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Alvaro Cunha Matos Lessa de Oliveira':{f:'TECNICO BANCARIO NOVO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(11) 98713-8633'},'Amaralina de Oliveira Abrantes Sant Anna':{f:'GER CLIENTES NEGOCIOS I',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98595-0507'},'Antonio Francisco Maciel':{f:'GERENTE EXECUTIVO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98287-0748'},'Arthur Felipe Rodrigues da Silva':{f:'GERENTE NACIONAL',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(44) 99828-4163'},'Bruno Oliveira Manhaes de Almeida':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Carlos Eugenio de Brito Sousa':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99154-8792'},'Danielle Monteiro Cruz da Silva':{f:'GER CLIENTES NEGOCIOS I SE',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Diego Augusto Granado':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Diogo Caetano Ribeiro':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Douglas Martins Neves Costa':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98250-0311'},'Eduardo Alves de Oliveira':{u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Eladio Caldas de Almeida':{u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Emily Mendes Xavier':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99905-8194'},'Fabiana Graciano':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99881-9769'},'Fabio Coelho da Silva':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99858-7006'},'Fernando Ferreira dos Santos':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(13) 99630-8466'},'Fernando Vinicius Barros de Almeida':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99866-1009'},'Fernando Zandona Assuncao':{u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Gabriel Dalessandro Pereira':{u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Guilherme Ehlers Farias':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98127-0007'},'Guilherme Ivan Batista':{u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Guilherme Ribeiro de Oliveira':{u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Gustavo Luiz Costa Araujo':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Hugo Alves Richard':{u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Humberto Dantas de Matos':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(11) 99114-0814'},'Ian Victor de Oliveira Cimino':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Jerusa Alberton de Alencar Nogueira':{f:'TEC BANC SUPERIOR NOVO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Laiza Fabiola Martins de Santa Rosa':{f:'TECNICO BANCARIO NOVO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(13) 99128-2042'},'Leonardo Barbosa Tavares':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99988-0507'},'Livia Dombroski Santos':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98183-8832'},'Lorena dos Santos Bezerra':{f:'GERENTE EXECUTIVO SE',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Luciana de Oliveira Ferreira':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Luis Gustavo Viana de Araujo Zanfra':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(11) 97089-4619'},'Maisa Abrantes de Pina Afonso':{f:'GERENTE EXECUTIVO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Patricia Keiko Honda':{f:'COOR PROJ/PROCES MATRIZ',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Pedro Victor Oliveira Costa Giacomazzo':{f:'GERENTE EXECUTIVO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98136-1655'},'Priscila Rodrigues Ferreira':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98384-4560'},'Renato Silva dos Santos':{f:'GER CLIENTES NEGOCIOS I',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(21) 99163-7438'},'Renato Yoshio Okabe':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Ricardo Alexandre Barbosa Dantas':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98528-4286'},'Roberto Cavalcante Amorim':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98260-7670'},'Rodrigo Chaves Batista':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Rodrigo Devchi':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Sintia das Neves Barbosa Rodrigues':{f:'GERENTE EXECUTIVO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 98222-3652'},'Tania Gobatti Calca':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(11) 98082-1908'},'Tatianna Felix dos Santos Morais':{f:'OPERADOR DE MESA JUNIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99918-9851'},'Thais Moura Brito':{f:'OPERADOR DE MESA PLENO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Thiago de Oliveira Montanari':{f:'GERENTE EXECUTIVO',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99805-0379'},'Vanessa Paes Suppa':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS',t:'(61) 99815-4574'},'Vinicius Barbieri Domingues':{f:'OPERADOR DE MESA SENIOR',u:'GEAFE - GN GESTAO FUNDOS ESTRUTURADOS'},'Adriano Shiratsu Ueda':{f:'OPERADOR DE MESA PLENO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 99624-4355'},'Ana Paula Alves Paschoalini':{f:'ASSIST EXECUTIVO PL',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Ana Sefora Pires Farias':{f:'OPERADOR DE MESA PLENO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Anderson Buso':{f:'ASSIST EXECUTIVO PL',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Andrea Natashya Fukushima Fukuda':{u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Camila de Oliveira Ragognete':{f:'ASSIST EXECUTIVO PL',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 99001-3626'},'Cristiane Paulino':{f:'ASSIST EXECUTIVO MASTER',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 98185-5530'},'Daniel Correa Munhoz':{f:'OPERADOR DE MESA PLENO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Daniela Gadelha Saraiva do Amaral':{f:'COOR PROJ/PROCES MATRIZ',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Danielle Eskenazi Cruzolini':{f:'OPERADOR DE MESA PLENO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Dazia Vanessa Eguchi Kemper':{f:'ASSIST EXECUTIVO SR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Eduardo Luiz Rocha dos Santos':{f:'ASSIST EXECUTIVO PL',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 97359-6226'},'Eliana Marques Lisboa':{f:'OPERADOR DE MESA SENIOR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 94121-1225'},'Erika Cerqueira Silva':{f:'ASSIST EXECUTIVO SR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Fabricio Honorato Soares':{f:'OPERADOR DE MESA PLENO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(14) 99183-1762'},'Fernanda Bueno Frederico Martinis':{f:'COOR PROJ/PROCES MATRIZ',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 99696-1992'},'Fernando Henrique Augusto':{f:'GERENTE NACIONAL SE',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 95583-7799'},'Gabriela Birk':{f:'OPERADOR DE MESA SENIOR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(54) 99925-7890'},'Ivan Dechen Pedro':{f:'ASSIST EXECUTIVO SR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 98617-3787'},'Jeferson Ferreira':{f:'ASSIST EXECUTIVO SR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 97531-0676'},'Joao Cesar Nobre':{f:'GERENTE EXECUTIVO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Joe Moroizumi':{f:'ASSIST EXECUTIVO MASTER',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 99948-1753'},'Julio Cesar Silva':{f:'OPERADOR DE MESA PLENO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Karen Rondelo Duarte':{f:'ASSESSOR EXECUTIVO SE',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Katia Cilene da Silva Peralta':{f:'OPERADOR DE MESA PLENO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 98387-6903'},'Leandro Cenati Bueno de Lima':{f:'CONSULTOR MATRIZ',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Luciana Mickel Miyamoto':{f:'ASSIST EXECUTIVO JR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 99922-5077'},'Luciano Garrido':{f:'GERENTE NACIONAL',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 97166-7835'},'Marcia Midori Kataoka':{f:'ASSIST EXECUTIVO JR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 99595-2275'},'Mauricio Antonio Alves da Costa':{f:'COOR PROJ/PROCES MATRIZ',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Michael Prudencio Favero':{f:'ASSIST EXECUTIVO SR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Nicole Suemi Suzuki':{f:'GERENTE EXECUTIVO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Patrik Hideki Ito':{f:'ASSIST EXECUTIVO SR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Paula Baffini de Castro Santana':{f:'CONSULTOR MATRIZ',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Paula Cristina da Silva':{u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Pedro Henrique Machado Martins':{f:'GERENTE EXECUTIVO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 95596-1036'},'Renan Gama Oliveira':{f:'OPERADOR DE MESA JUNIOR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Ricardo Oliveira do Amaral':{f:'GERENTE EXECUTIVO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 97035-7055'},'Rodney Yamane':{f:'ASSIST EXECUTIVO PL',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 99695-7878'},'Rodrigo de Oliveira Coutinho':{f:'COOR PROJ/PROCES MATRIZ',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Rolando Tadashi Oride':{f:'TECNICO BANCARIO NOVO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 99783-1151'},'Ronaldo de Oliveira':{u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Talita Sabioni Itocazo':{f:'OPERADOR DE MESA PLENO',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO',t:'(11) 99341-9054'},'Tatiana Pereira Cosentino':{f:'OPERADOR DE MESA SENIOR',u:'GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO'},'Raphael Henrique de Oliveira Santos':{f:'ASSIST EXECUTIVO SR',u:'GECAT - GN GOVERNANCA, RISCOS ESP E COMPLIANCE'},'Alan Ferreira de Lima Filho':{f:'COOR PROJ/PROCES MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE',t:'(11) 98077-1500'},'Alan Rodrigo do Nascimento Rodrigues':{f:'CONSULTOR MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE',t:'(61) 99169-9019'},'Anna Patricia de Pinho Silva':{f:'TECNICO BANCARIO NOVO',u:'GERIC - GN RISCO E COMPLIANCE',t:'(61) 99130-2132'},'Camila Gregorio do Nascimento':{u:'GERIC - GN RISCO E COMPLIANCE'},'Cintia da Silva Arruda':{f:'COOR PROJ/PROCES MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE',t:'(61) 98135-7965'},'Daniel Pereira Cunha':{f:'COOR PROJ/PROCES MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE'},'Daniela Nagumo':{f:'CONSULTOR MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE'},'Fabio da Silva Bueno':{f:'COOR PROJ/PROCES MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE',t:'(11) 95973-6694'},'Fernando Gomes Saidel Herbst':{f:'CONSULTOR DE DIRIGENTE SE',u:'GERIC - GN RISCO E COMPLIANCE',t:'(11) 98931-9941'},'Glayce Lopes da Nobrega':{f:'GERENTE EXECUTIVO',u:'GERIC - GN RISCO E COMPLIANCE',t:'(61) 98132-2981'},'Kleber de Jesus Ivanchuk':{f:'GERENTE EXECUTIVO',u:'GERIC - GN RISCO E COMPLIANCE'},'Leonardo Matzenbacher Finger':{f:'CONSULTOR MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE'},'Marcela dos Anjos Abeid':{f:'CONSULTOR MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE'},'Marcio Caetano dos Santos':{f:'COOR PROJ/PROCES MATRIZ SE',u:'GERIC - GN RISCO E COMPLIANCE'},'Maria Perpetuo Socorro Passos L Almeida':{f:'ASSIST EXECUTIVO MASTER',u:'GERIC - GN RISCO E COMPLIANCE',t:'(69) 99227-6643'},'Mariana Mazivieiro':{f:'ASSIST EXECUTIVO SR',u:'GERIC - GN RISCO E COMPLIANCE',t:'(11) 98316-6608'},'Marina Baggio Rodrigues':{f:'CONSULTOR MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE'},'Paula Hitomi Konishi':{f:'GERENTE EXECUTIVO',u:'GERIC - GN RISCO E COMPLIANCE'},'Renata Casemiro do Prado Santos':{f:'GERENTE NACIONAL',u:'GERIC - GN RISCO E COMPLIANCE',d:1},'Renata Lopes Franco':{f:'CONSULTOR MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE',t:'(61) 98112-8258'},'Renata Loureiro e Silva Koshimura':{f:'ASSIST EXECUTIVO MASTER',u:'GERIC - GN RISCO E COMPLIANCE'},'Ricardo Kendy Yokomizo':{f:'ASSIST EXECUTIVO MASTER',u:'GERIC - GN RISCO E COMPLIANCE'},'Vanessa Bittencourt Bernardes':{f:'CONSULTOR MATRIZ',u:'GERIC - GN RISCO E COMPLIANCE'},'Alan Barbieri':{f:'GERENTE EXECUTIVO',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Alisson Araujo de Lima':{f:'OPERADOR DE MESA SENIOR',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Andrea Felicio Chaves':{f:'TECNICO BANCARIO NOVO',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Calil Abdo Marino Salum':{u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Catarina Moretti Ribeiro':{f:'GERENTE NACIONAL SE',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 99626-1501'},'Cristiane Maya Yoshida':{f:'ASSIST EXECUTIVO PL',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Danielle Patricia Cordeiro Aurelio':{f:'ASSIST EXECUTIVO PL',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Edney Jonas Sena':{f:'GERENTE EXECUTIVO SE',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Eduardo Capitulino Viana':{f:'CONSULTOR MATRIZ',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Erika Carolina Ruiz Ganga':{f:'ASSIST EXECUTIVO MASTER',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Fabio Becare Junqueira':{f:'OPERADOR DE MESA PLENO',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Fabio Henrique Secomandi':{f:'GERENTE EXECUTIVO',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 99369-1150'},'Filipe Sousa Moreira':{f:'CONSULTOR MATRIZ',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Flavia Regina Finholdt B Mazzocchi':{f:'CONSULTOR MATRIZ',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Gabrielle Matosinho de Oliveira':{f:'ASSIST EXECUTIVO JR',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Ingrid de Jesus Cabral':{f:'CONSULTOR MATRIZ',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Janaina de Amorim Silva':{f:'GERENTE EXECUTIVO',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 98686-7176'},'Joao Paulo Barroso dos Santos':{f:'ASSIST EXECUTIVO PL',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 99854-5595'},'Julio Cesar Brandao da Silva':{f:'ASSIST EXECUTIVO PL',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Karen Gloria Buono':{f:'OPERADOR DE MESA SENIOR',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Leandro Franco da Silveira':{f:'OPERADOR DE MESA SENIOR',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 97334-6679'},'Lucas Rafael Ramos da Silva':{f:'ASSIST EXECUTIVO SR',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Lucas Roberto Ribeiro da Silva':{f:'ASSIST EXECUTIVO PL',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 95286-2946'},'Marcos Vieira dos Santos':{f:'ASSIST EXECUTIVO SR',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Maria Stela Kamisaki Katayama':{f:'GERENTE EXECUTIVO SE',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Moacyr Ligabo Junior':{f:'GERENTE EXECUTIVO',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(12) 99723-7596'},'Natalia Walkovics':{f:'ASSIST EXECUTIVO MASTER',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Nellie Nagasse':{f:'ASSIST EXECUTIVO SR',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Priscila Castilho de Almeida Pereira':{u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Rafael de Vasconcelos Florentino':{f:'GERENTE EXECUTIVO',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 99698-5896'},'Renata Leonel Dias Ajame':{f:'ASSIST EXECUTIVO SR',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 98259-9374'},'Ricardo Alexandre Ramos':{f:'ASSIST EXECUTIVO PL',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Ricardo Silva Nunes de Siqueira':{f:'ASSIST EXECUTIVO MASTER',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Rosemeire Aparecida Duque Prosperi':{f:'OPERADOR DE MESA PLENO',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Ruthe Ventura Cuesta':{f:'ASSIST EXECUTIVO SR',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Simone Shiroma':{f:'ASSIST EXECUTIVO SR',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 99549-6670'},'Sonayara Oliveira Lima':{f:'OPERADOR DE MESA JUNIOR',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 96654-2948'},'Stella Mitiko Ushizima':{f:'ASSIST EXECUTIVO MASTER',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 98292-0807'},'Tatiana Sanches Biscari Nagase':{f:'ASSIST EXECUTIVO SR',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 99251-1984'},'Tatyana Arashiro':{f:'ASSIST EXECUTIVO MASTER',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Thiago Bosisio Ferreira':{f:'GERENTE NACIONAL',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Thiago Pereira Gonzalez':{f:'ASSIST EXECUTIVO MASTER',u:'GESEQ - GN SERVICOS QUALIFICADOS'},'Vagner Junio da Silva':{f:'OPERADOR DE MESA SENIOR',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 98943-3619'},'Willian Abreu Canelada':{f:'ASSIST EXECUTIVO SR',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 99291-7965'},'Zeila Itokazu':{f:'OPERADOR DE MESA PLENO',u:'GESEQ - GN SERVICOS QUALIFICADOS',t:'(11) 99114-9319'},'Jose Romulo de Castro Vieira':{f:'SUPERINTENDENTE NACIONAL',u:'SUFES - SN GESTAO FUNDOS ESPECIAIS',t:'(61) 98246-7203'},'Viviana Machado dos Santos':{f:'ASSESSOR EXECUTIVO',u:'SUFES - SN GESTAO FUNDOS ESPECIAIS',t:'(21) 98633-5246'},'Guilherme Godoy de Medeiros':{f:'ASSIST EXECUTIVO MASTER',u:'SUFIN - SN FINANCAS, ADMINISTRACAO E RI'},'Gerrana Campos Favieiro':{f:'SECR DE VICE-PRESIDENCIA',u:'VIART - VP FUNDOS DE INVESTIMENTO',t:'(61) 99978-3720',d:1},'Luci Cleide Silva e Castro':{f:'SECR DE VICE-PRESIDENCIA',u:'VIART - VP FUNDOS DE INVESTIMENTO',t:'(11) 97485-3282',d:1},'Mario Erbolato Neto':{f:'CONSULTOR DE DIRIGENTE',u:'VIART - VP FUNDOS DE INVESTIMENTO',d:1},'Rodrigo Gomes Coelho':{f:'CONSULTOR DE DIRIGENTE',u:'VIART - VP FUNDOS DE INVESTIMENTO',t:'(61) 99901-1004',d:1},'Sergio Henrique Oliveira Bini':{f:'VICE PRESIDENTE',u:'VIART - VP FUNDOS DE INVESTIMENTO',d:1}};
 
 const LINKS_UTEIS = [
   { grupo: 'Evento', itens: [
@@ -910,8 +919,6 @@ const LINKS_UTEIS = [
     { nome: 'Uber', desc: 'Deslocamento de convidados e palestrantes', url: 'https://m.uber.com' },
   ] },
   { grupo: 'App do evento', itens: [
-    { nome: 'GitHub · viart-evento-2026', desc: 'Repositório do app', url: 'https://github.com/RodrigoCoelho1/viart-evento-2026' },
-    { nome: 'Vercel', desc: 'Painel de deploy do app', url: 'https://vercel.com/dashboard' },
     { nome: 'App publicado', desc: 'viart-evento-2026…vercel.app', url: 'https://viart-evento-2026-4353fa01-3ec0-4ec.vercel.app' },
   ] },
   { grupo: 'Ferramentas', itens: [
@@ -964,17 +971,17 @@ const SCHEDULE = [
   { time: '09h00 – 09h30', title: 'Abertura Institucional', desc: 'Boas-vindas e palavra do VP Sérgio Bini', pillar: 'Alinhar' },
   { time: '09h30 – 11h00', title: 'Report Planejamento VIART 1S-2026', desc: 'Resultados e direcionamentos 2026', pillar: 'Alinhar' },
   { time: '11h00 – 11h40', title: 'Programas VIART', desc: 'Comissão do Clima · Comissão da Diversidade · Escola VIART · INOVAVIART', pillar: 'Alinhar' },
-  { time: '11h40 – 12h15', title: 'Painel "Falando de Estratégia..."', desc: 'Q&A aberto e transparente: perguntas ao vivo dos funcionários direto à liderança', pillar: 'Conectar' },
+  { time: '11h40 – 12h15', title: 'Painel "Falando de Estratégia..."', desc: 'Perguntas dos funcionários respondidas ao vivo pela liderança', pillar: 'Conectar' },
   { time: '12h15 – 14h00', title: 'Almoço', desc: 'Integração entre equipes e momento de descontração', pillar: 'Conectar' },
   { time: '14h00 – 15h00', title: 'Histórias que Inspiram (Tema: Divertidamente)', desc: 'O que fizemos acontecer · entregas que nos dão orgulho', pillar: 'Conectar' },
-  { time: '15h00 – 17h30', title: 'Team Building', desc: 'Dinâmica de grupo experiencial: integração, colaboração e aprendizado com propósito', pillar: 'Executar' },
+  { time: '15h00 – 17h30', title: 'Team Building', desc: 'Dinâmica de grupo: integração, colaboração e aprendizado com propósito', pillar: 'Executar' },
   { time: '17h30 – 18h00', title: 'Encerramento', desc: 'Palavra final do VP Sérgio Bini e direcionamentos de 2026', pillar: 'Executar' },
   { time: '19h00', title: 'Confraternização (informal)', desc: 'Celebração da equipe e encerramento do dia · local a definir', pillar: null },
 ];
 
 const OBJETIVOS = [
   { title: 'Alinhamento Estratégico', desc: 'Apresentar o planejamento e os direcionamentos da VIART para 2026, garantindo que todos os funcionários tenham a mesma visão e informação.' },
-  { title: 'Mesma Voz para Todos', desc: 'Eliminar o filtro do repasse: cada funcionário recebe diretamente a mensagem da liderança, com transparência e clareza.' },
+  { title: 'Mesma Voz para Todos', desc: 'A equipe recebe diretamente a mensagem da liderança, com transparência e clareza.' },
   { title: 'Integração entre Equipes', desc: 'Aproximar times de diferentes áreas e cidades por meio de dinâmicas colaborativas que fortalecem "UM SÓ TIME QUE FAZ ACONTECER".' },
   { title: 'Pertencimento e Engajamento', desc: 'Celebrar a equipe, reconhecer conquistas e reforçar o senso de comunidade em um momento presencial e significativo.' },
 ];
@@ -982,13 +989,13 @@ const OBJETIVOS = [
 const ESTRATEGIA_STEPS = [
   { n: '1', time: '5 min', title: 'Abertura', desc: 'Mediador explica a regra do jogo e apresenta o painel de liderança.' },
   { n: '2', time: '5 min', title: 'Perguntas em grupos', desc: 'Cada grupo debate e elege 1 pergunta prioritária focada no planejamento.' },
-  { n: '3', time: '20 min', title: 'Painel ao vivo', desc: 'Mediador conduz as perguntas eleitas; liderança responde direto.' },
-  { n: '4', time: '5 min', title: 'Fechamento', desc: 'Cada líder deixa uma frase-síntese rumo a 2026 — gancho para o almoço.' },
+  { n: '3', time: '20 min', title: 'Painel ao vivo', desc: 'Mediador conduz as perguntas eleitas e a liderança responde ao vivo.' },
+  { n: '4', time: '5 min', title: 'Fechamento', desc: 'Cada líder deixa uma frase-síntese rumo a 2030.' },
 ];
 const ESTRATEGIA_INFO = [
   { title: 'Uma pergunta por grupo', desc: 'Cada mesa elege 1 pergunta focada no planejamento e leva direto à liderança.' },
-  { title: 'Papéis-chave', desc: 'Mediador firme no tempo · Curador prioriza as perguntas nos bastidores · Liderança que responde sem filtro.' },
-  { title: 'Garantias contra o silêncio', desc: 'Perguntas-semente prontas · gancho do Report da manhã · vozes de SP e Brasília/RJ garantidas.' },
+  { title: 'Papéis-chave', desc: 'Mediador firme no tempo · Curador prioriza as perguntas nos bastidores · Liderança presente para responder às perguntas.' },
+  { title: 'Para garantir a participação', desc: 'Perguntas-semente prontas · gancho do Report da manhã · vozes de SP e Brasília/RJ garantidas.' },
 ];
 
 const HISTORIAS_STEPS = [
@@ -1079,6 +1086,14 @@ const CHECKLIST_CATS = [
     ['Documentar lições aprendidas para futuros eventos', 'nao'],
     ['Compilar resultados e feedback para relatório final', 'nao'],
   ] },
+  { id: 'pend', title: 'Pendências do app · verificar antes do evento', items: [
+    ['Wi-Fi (rede e senha) do local — São Paulo', 'nao'],
+    ['Wi-Fi (rede e senha) do local — Brasília', 'nao'],
+    ['Local da confraternização às 19h', 'nao'],
+    ['Contatos dos prestadores (nome, serviço, status)', 'nao'],
+    ['Renovar código do Mentimeter (Chuva de Palavras) no dia', 'nao'],
+    ['Renovar código do Mentimeter (Q&A Falando de Estratégia) no dia', 'nao'],
+  ] },
 ];
 
 const BUDGET_GROUPS = [
@@ -1102,13 +1117,12 @@ const BUDGET_GROUPS = [
 ];
 
 const FOCAL = [
-  { city: 'São Paulo', name: 'Ponto focal a confirmar', contact: 'e-mail / ramal a definir' },
-  { city: 'Brasília', name: 'Ponto focal a confirmar', contact: 'e-mail / ramal a definir' },
+  { city: 'São Paulo', name: 'Luci Cleide Silva e Castro · Mario Erbolato Neto', contact: 'e-mail / ramal a definir' },
+  { city: 'Brasília', name: 'Gerrana Campos Favieiro · Rodrigo Gomes Coelho', contact: 'e-mail / ramal a definir' },
 ];
 
-const PAINEL = [
-  { name: 'Sérgio Bini', role: 'VP · Abertura e Encerramento', status: 'Confirmado', statusBg: '#E3ECF9', statusColor: '#0057A6' },
-  { name: 'Composição VP/DE do painel', role: 'Falando de Estratégia · 11h40–12h15', status: 'A confirmar', statusBg: '#FDECE3', statusColor: '#B4471F' },
+const PRESTADORES = [
+  { name: 'Prestador a definir', role: 'Serviço a definir', status: 'A confirmar', statusBg: '#FDECE3', statusColor: '#B4471F' },
 ];
 
 class Component extends DCLogic {
@@ -1477,14 +1491,14 @@ class Component extends DCLogic {
     const s = this.state;
 
     const cityData = s.city === 'sp'
-      ? { id: 'sp', name: 'São Paulo', date: '13 de Agosto', dateISO: '2026-08-13', venue: 'Edifício SEDES CAIXA · Auditório Térreo + 18º andar', address: 'Av. Paulista, 750 – Bela Vista, São Paulo - SP', count: 124, pct: '67% do total', bikes: 15, mapEmbedUrl: 'https://www.google.com/maps?q=Edifício+SEDES+CAIXA+Av+Paulista+750+São+Paulo&output=embed',
+      ? { id: 'sp', name: 'São Paulo', date: '13 de Agosto', dateISO: '2026-08-13', venue: 'Edifício SEDES CAIXA · Auditório Térreo + 18º andar', address: 'Av. Paulista, 750 – Bela Vista, São Paulo - SP', count: 123, pct: '67% do total', bikes: 15, mapEmbedUrl: 'https://www.google.com/maps?q=Edifício+SEDES+CAIXA+Av+Paulista+750+São+Paulo&output=embed',
           transporte: 'Metrô Brigadeiro (linha 2-Verde), a 400 m · Metrô Trianon-Masp, a 600 m', estacionamento: 'Estacionamento do prédio sem vagas para participantes — use os estacionamentos da Alameda Santos ou transporte por app',
           wifiRede: 'a confirmar', wifiSenha: 'a confirmar',
           almoco: 'No próprio prédio · 12h15 às 14h', confraternizacao: 'Local a definir · a partir das 19h',
           contatos: [
             { nome: 'Ponto focal São Paulo', papel: 'Organização do evento', tel: 'a confirmar' },
           ] }
-      : { id: 'bsb', name: 'Brasília', date: '20 de Agosto', dateISO: '2026-08-20', venue: 'Auditório Matriz II', address: 'SAUS Quadra 5, Lote 9/10, Brasília - DF, CEP 70070-050', count: 62, pct: 'Brasília: 57 + Rio de Janeiro: 5', bikes: 10, mapEmbedUrl: 'https://www.google.com/maps?q=Caixa+Econômica+Federal+Matriz+II+SAUS+Quadra+5+Brasília&output=embed',
+      : { id: 'bsb', name: 'Brasília', date: '20 de Agosto', dateISO: '2026-08-20', venue: 'Auditório Matriz II', address: 'SAUS Quadra 5, Lote 9/10, Brasília - DF, CEP 70070-050', count: 60, pct: '33% do total', bikes: 10, mapEmbedUrl: 'https://www.google.com/maps?q=Caixa+Econômica+Federal+Matriz+II+SAUS+Quadra+5+Brasília&output=embed',
           transporte: 'Estação Galeria dos Estados (metrô), a 900 m · diversas linhas de ônibus no Setor de Autarquias Sul', estacionamento: 'Estacionamento do edifício conforme disponibilidade — chegue com folga ou use transporte por app',
           wifiRede: 'a confirmar', wifiSenha: 'a confirmar',
           almoco: 'No próprio prédio · 12h15 às 14h', confraternizacao: 'Local a definir · a partir das 19h',
@@ -1570,23 +1584,27 @@ class Component extends DCLogic {
 
     const norm = (t) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const q = norm(s.nameQuery.trim());
-    const cidadeDe = (n) => gv('cd-' + n) || '';
-    const spCount = PARTICIPANTES.filter(n => cidadeDe(n) === 'sp').length;
-    const bsbCount = PARTICIPANTES.filter(n => cidadeDe(n) === 'bsb').length;
-    const semCidadeCount = PARTICIPANTES.length - spCount - bsbCount;
+    const cidadeDe = (n) => gv('cd-' + n) || PARTICIPANTES_CIDADE_AUTO[n] || '';
+    const infoDe = (n) => PARTICIPANTES_INFO[n] || {};
+    const attendsSP = (n) => cidadeDe(n) === 'sp' || infoDe(n).d;
+    const attendsBSB = (n) => cidadeDe(n) === 'bsb' || infoDe(n).d;
+    const spCount = PARTICIPANTES.filter(attendsSP).length;
+    const bsbCount = PARTICIPANTES.filter(attendsBSB).length;
+    const semCidadeCount = PARTICIPANTES.filter(n => !cidadeDe(n)).length;
     const presentesCount = PARTICIPANTES.filter(n => gv('ps-' + n)).length;
     const kitsCount = PARTICIPANTES.filter(n => gv('kit-' + n)).length;
     const participantes = PARTICIPANTES.filter(n => {
       if (q && !norm(n).includes(q)) return false;
-      const c = cidadeDe(n);
-      if (s.pessoaFiltro === 'sp') return c === 'sp';
-      if (s.pessoaFiltro === 'bsb') return c === 'bsb';
-      if (s.pessoaFiltro === 'sem') return !c;
+      if (s.pessoaFiltro === 'sp') return attendsSP(n);
+      if (s.pessoaFiltro === 'bsb') return attendsBSB(n);
+      if (s.pessoaFiltro === 'sem') return !cidadeDe(n);
+      if (s.pessoaUnidade && infoDe(n).u !== s.pessoaUnidade) return false;
       return true;
     }).map(n => {
       const p = !!gv('ps-' + n);
       const kit = !!gv('kit-' + n);
       const c = cidadeDe(n);
+      const info = infoDe(n);
       return {
         nome: n, toggle: this.togglePresente(n), mark: p ? '✓' : '',
         borderColor: p ? '#0057A6' : '#C9D6E8', checkBg: p ? '#0057A6' : 'transparent',
@@ -1596,8 +1614,14 @@ class Component extends DCLogic {
         kitBg: kit ? '#E3F3E8' : '#F2F5FA', kitColor: kit ? '#1E7A45' : '#8A8A90',
         spBg: c === 'sp' ? '#0057A6' : '#F2F5FA', spColor: c === 'sp' ? '#FFFFFF' : '#8A8A90',
         bsbBg: c === 'bsb' ? '#F39200' : '#F2F5FA', bsbColor: c === 'bsb' ? '#FFFFFF' : '#8A8A90',
+        funcao: info.f || '', celular: info.t || '', celularHref: info.t ? 'tel:' + info.t.replace(/\D/g, '') : '',
+        dual: !!info.d, hasSub: !!(info.f || info.t || info.d), stopProp: (e) => e.stopPropagation(),
       };
     });
+    const unidadesSet = [...new Set(Object.values(PARTICIPANTES_INFO).map(i => i.u).filter(Boolean))].sort();
+    const unidadesOpcoes = unidadesSet.map(u => ({ value: u, label: u }));
+    const onUnidadeChange = (e) => this.setState({ pessoaUnidade: e.target.value });
+    const dualCount = Object.values(PARTICIPANTES_INFO).filter(i => i.d).length;
     const pessoaFiltros = [
       { id: 'todos', label: 'Todos', n: PARTICIPANTES.length },
       { id: 'sp', label: 'São Paulo', n: spCount },
@@ -1814,12 +1838,12 @@ class Component extends DCLogic {
       participantes, nameQuery: s.nameQuery, onNameQuery: this.onNameQuery,
       participantesTotal: PARTICIPANTES.length, participantesFiltrados: participantes.length,
       presentesCount, presentesPct: Math.round(100 * presentesCount / PARTICIPANTES.length) + '%',
-      pessoaFiltros, spCount, bsbCount, semCidadeCount,
+      pessoaFiltros, spCount, bsbCount, semCidadeCount, unidadesOpcoes, onUnidadeChange, dualCount,
       limparPresencas: this.limparPresencas,
       budgetGroups, orcTotalFmt: brl(orcTotal), realTotalFmt: brl(realTotal),
       saldoFmt: brl(saldo), saldoColor: saldo < 0 ? '#FF8A7A' : '#8FD9A8',
       budgetTotalFmt: brl(orcTotal), printReport: this.printReport,
-      focal: FOCAL, painel: PAINEL,
+      focal: FOCAL, prestadores: PRESTADORES,
     };
   }
 }
