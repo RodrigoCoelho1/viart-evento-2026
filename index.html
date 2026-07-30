@@ -1196,25 +1196,52 @@
             </sc-if>
             <sc-if value="{{ showContatosPrest }}" hint-placeholder-val="{{ false }}">
             <div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ prestadores }}" as="p" hint-placeholder-count="2">
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                  <div>
+                    <div style="font-weight:700;font-size:14px">{{ p.name }}</div>
+                    <div style="font-size:12.5px;color:#6B6B70">{{ p.role }} · {{ p.cidade }} · {{ p.tel }}</div>
+                  </div>
+                  <div style="font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ p.statusBg }};color:{{ p.statusColor }};white-space:nowrap">{{ p.status }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin:22px 0 10px">Áreas de apoio internas</div>
             <div style="background:#F2F5FA;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;margin-bottom:14px">
               <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Modelo de agradecimento pós-evento (por e-mail)</div>
               <div style="font-size:13px;color:#333;line-height:1.7;white-space:pre-wrap;font-family:'Manrope',sans-serif">{{ agradecimentoModelo }}</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:10px">
-              <sc-for list="{{ prestadores }}" as="p" hint-placeholder-count="2">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+              <sc-for list="{{ areasApoio }}" as="a" hint-placeholder-count="2">
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
                     <div>
-                      <div style="font-weight:700;font-size:14px">{{ p.name }}</div>
-                      <div style="font-size:12.5px;color:#6B6B70">{{ p.role }} · {{ p.cidade }} · {{ p.tel }}</div>
+                      <div style="font-weight:700;font-size:14px">{{ a.area }}</div>
+                      <div style="font-size:12.5px;color:#6B6B70;margin-top:2px">{{ a.finalidade }}</div>
+                      <div style="font-size:12px;color:#8A8A90;margin-top:4px;font-style:italic">{{ a.obs }}</div>
                     </div>
-                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                      <div onClick="{{ p.copiarAgradecimento }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;white-space:nowrap">{{ p.agradecimentoLabel }}</div>
-                      <div style="font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ p.statusBg }};color:{{ p.statusColor }};white-space:nowrap">{{ p.status }}</div>
-                    </div>
+                    <div onClick="{{ a.copiarAgradecimento }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;white-space:nowrap">{{ a.agradecimentoLabel }}</div>
                   </div>
-                  <div style="margin-top:10px;padding-top:10px;border-top:1px solid #E8EFF9;font-size:12px;color:#6B6B70;line-height:1.6;white-space:pre-wrap">{{ p.agradecimentoTexto }}</div>
                 </div>
+              </sc-for>
+            </div>
+
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin:22px 0 10px">Contatos internos (CESER)</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ contatosCeser }}" as="c" hint-placeholder-count="2">
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                  <div style="font-weight:700;font-size:14px">{{ c.name }}</div>
+                  <div style="font-size:12.5px;color:#6B6B70">{{ c.matricula }} · {{ c.tel }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="background:#FDECE3;border:1px solid #F5CDBB;border-radius:12px;padding:14px 18px;margin-top:22px">
+              <div style="font-size:11px;font-weight:800;color:#B4471F;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Itens ainda sem contato registrado</div>
+              <sc-for list="{{ itensSemContato }}" as="item" hint-placeholder-count="3">
+                <div style="font-size:12.5px;color:#5A2E1D;line-height:1.9">• {{ item }}</div>
               </sc-for>
             </div>
             </div>
@@ -1462,8 +1489,28 @@ const ORGANIZACAO_CONTATOS = [
 ];
 
 const PRESTADORES = [
-  { name: 'Prestador a definir', role: 'Serviço a definir', tel: 'a definir', cidade: 'a definir', status: 'A confirmar', statusBg: '#FDECE3', statusColor: '#B4471F' },
+  { name: 'Polocícero Sena', role: 'Camisas', tel: '11 95291-1350', cidade: 'SP', status: 'Em contratação', statusBg: '#FDECC8', statusColor: '#8A5A00' },
+  { name: 'Buffet São Paulo', role: 'Buffet', tel: '11 97742-9356', cidade: 'SP', status: 'Contratado', statusBg: '#E3F3E9', statusColor: '#1E7A45' },
+  { name: 'Legalas', role: 'Dinâmica/Palestra Feedback (Team Building)', tel: '11 99209-3462', cidade: 'SP', status: 'Contratado', statusBg: '#E3F3E9', statusColor: '#1E7A45' },
+  { name: 'Cuca Mundi', role: 'Team Building (Bicicletas)', tel: '11 99975-5516', cidade: 'SP', status: 'Contratado', statusBg: '#E3F3E9', statusColor: '#1E7A45' },
 ];
+
+const AREAS_APOIO = [
+  { area: 'CESER SP', finalidade: 'Infraestrutura e pagamentos', obs: 'Responsável por acertos financeiros pós-evento' },
+  { area: 'CIAUS SP', finalidade: 'Áudio, vídeo, projeção e gravação', obs: 'Solicitação específica para o evento de SP' },
+  { area: 'CIAUS BSB', finalidade: 'Áudio, vídeo, projeção e gravação', obs: 'Solicitação específica para o evento de Brasília' },
+  { area: 'GEIMP', finalidade: 'Cobertura para Intranet', obs: 'Fotos e divulgação institucional' },
+  { area: 'GNP', finalidade: 'Apoio de fotografia/divulgação institucional', obs: 'Rodrigo ficou responsável pelo contato' },
+  { area: 'Asset', finalidade: 'Possível fornecimento de brindes', obs: 'Tratativas em andamento' },
+];
+
+const CONTATOS_CESER = [
+  { name: 'Jucelio Leonardo Ildefonso', matricula: 'C129844', tel: '(61) 3545-2396' },
+  { name: 'Rosania Farias Duraes', matricula: 'C128133', tel: '(61) 99247-1933' },
+  { name: 'Tatiana Bezerra de Albuquerque', matricula: 'C077060', tel: '(11) 2220-2380' },
+];
+
+const ITENS_SEM_CONTATO = ['CIAUS Brasília', 'CIAUS São Paulo', 'GEIMP', 'GNP', 'Buffet Brasília', 'Responsável da Asset pelos brindes'];
 
 class Component extends DCLogic {
   state = {
@@ -2618,14 +2665,15 @@ class Component extends DCLogic {
         'Em nome da equipe organizadora do Planejamento Estratégico VIART 2026, queremos agradecer imensamente pelo suporte prestado ([serviço prestado]). O evento em São Paulo e em Brasília só foi um sucesso graças ao cuidado e à dedicação de vocês.\n\n' +
         'Contamos com essa mesma parceria para os próximos encontros da VIART. Muito obrigado!\n\n' +
         'Equipe organizadora — Planejamento Estratégico VIART 2026',
-      prestadores: PRESTADORES.map(p => {
-        const texto = 'Olá, equipe ' + p.name + ',\n\n' +
-          'Em nome da equipe organizadora do Planejamento Estratégico VIART 2026, queremos agradecer imensamente pelo suporte prestado (' + p.role + '). O evento em São Paulo e em Brasília só foi um sucesso graças ao cuidado e à dedicação de vocês.\n\n' +
+      prestadores: PRESTADORES, organizacaoContatos: ORGANIZACAO_CONTATOS,
+      areasApoio: AREAS_APOIO.map(a => {
+        const texto = 'Olá, equipe ' + a.area + ',\n\n' +
+          'Em nome da equipe organizadora do Planejamento Estratégico VIART 2026, queremos agradecer imensamente pelo suporte prestado (' + a.finalidade + '). O evento em São Paulo e em Brasília só foi um sucesso graças ao cuidado e à dedicação de vocês.\n\n' +
           'Contamos com essa mesma parceria para os próximos encontros da VIART. Muito obrigado!\n\n' +
           'Equipe organizadora — Planejamento Estratégico VIART 2026';
-        const marca = 'agr-' + p.name;
-        return { ...p, agradecimentoTexto: texto, copiarAgradecimento: this.copiar(texto, marca), agradecimentoLabel: s.copiado === marca ? 'Copiado!' : 'Copiar agradecimento' };
-      }), organizacaoContatos: ORGANIZACAO_CONTATOS,
+        const marca = 'agr-' + a.area;
+        return { ...a, agradecimentoTexto: texto, copiarAgradecimento: this.copiar(texto, marca), agradecimentoLabel: s.copiado === marca ? 'Copiado!' : 'Copiar agradecimento' };
+      }), contatosCeser: CONTATOS_CESER, itensSemContato: ITENS_SEM_CONTATO,
       camisaStats, camisaFaltamCount, camisaFaltamAtivo, setCamisaFaltamFiltro: this.setCamisaFiltro('sem'),
       camisaModStats, camisaModFaltamCount, camisaModFaltamAtivo, setCamisaModFaltamFiltro: this.setCamisaModFiltro('sem'),
       camisaModFaltamAtivoBg: camisaModFaltamAtivo ? '#0057A6' : 'transparent',
