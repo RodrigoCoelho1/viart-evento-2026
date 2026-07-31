@@ -810,7 +810,7 @@
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:8px">
                 <sc-for list="{{ statusCounts }}" as="sc" hint-placeholder-count="4">
-                  <div style="display:flex;align-items:center;gap:7px;background:#0A3C6E;border-radius:999px;padding:5px 12px">
+                  <div onClick="{{ sc.onClick }}" style="cursor:pointer;display:flex;align-items:center;gap:7px;background:#0A3C6E;border-radius:999px;padding:5px 12px;outline:{{ sc.ring }};outline-offset:1px">
                     <div style="width:8px;height:8px;border-radius:999px;background:{{ sc.dot }}"></div>
                     <div style="font-size:12px;color:#DCE6F2">{{ sc.label }}</div>
                     <div style="font-size:12px;font-weight:800">{{ sc.n }}</div>
@@ -1429,51 +1429,51 @@ const CHECK_STATUS = [
 
 const CHECKLIST_CATS = [
   { id: 'etapa1', title: 'ETAPA 1 · Planejamento', items: [
-    ['Entregar briefing do evento', 'nao', '', '2026-08-05'],
-    ['Definir formato e dinâmica do evento', 'nao', '', '2026-07-31'],
-    ['Definir categorias e pessoas para reconhecimento', 'nao', '', '2026-07-31'],
-    ['Preparar NPS do evento', 'nao', '', '2026-07-31'],
+    ['Entregar briefing do evento', 'nao', '', '2026-08-05', 'briefing-evento'],
+    ['Definir formato e dinâmica do evento', 'nao', '', '2026-07-31', 'formato-dinamica'],
+    ['Definir categorias e pessoas para reconhecimento', 'nao', '', '2026-07-31', 'categorias-reconhecimento'],
+    ['Preparar NPS do evento', 'nao', '', '2026-07-31', 'nps-evento'],
   ] },
   { id: 'etapa2', title: 'ETAPA 2 · Organização', items: [
-    ['Preparar lista de participantes', 'nao', '', '2026-07-31'],
-    ['Identificar PCDs', 'nao', '', '2026-07-31'],
-    ['Providenciar camisetas', 'nao', '', '2026-08-11'],
-    ['Providenciar outros brindes', 'nao', '', '2026-07-31'],
-    ['Acionar GEIMP para cobrir evento na Intranet', 'nao', '', '2026-07-31'],
-    ['Entregar ppt do Report Planejamento VIART 2026', 'nao', '', '2026-08-07'],
-    ['Entregar ppt das 4 comissões (Clima, Diversidade, Escola VIART, INOVAVIART)', 'nao', '', '2026-08-07'],
-    ['Providenciar dinâmicas rápidas pós-almoço', 'nao', '', '2026-08-11'],
-    ['Criar gamificação com brindes para receber insights', 'nao', '', '2026-08-11'],
-    ['Entregar slide de créditos ao staff para Encerramento', 'nao', '', '2026-08-11'],
-    ['Providenciar Wi-Fi (rede e senha) de SP', 'nao', '', '2026-07-31'],
-    ['Providenciar Wi-Fi (rede e senha) de BSB', 'nao', '', '2026-07-31'],
-    ['Providenciar confraternização SP', 'nao', '', '2026-08-07'],
-    ['Providenciar confraternização BSB', 'nao', '', '2026-08-07'],
-    ['Informar contatos dos prestadores (nome, serviço, status)', 'nao', '', '2026-07-31'],
-    ['Providenciar Mentimeter', 'nao', '', '2026-07-31'],
-    ['Providenciar opções alimentares', 'nao', '', '2026-08-07'],
-    ['Providenciar CIAUS para suporte audiovisual', 'nao', '', '2026-07-31'],
+    ['Preparar lista de participantes', 'nao', '', '2026-07-31', 'lista-participantes'],
+    ['Identificar PCDs', 'nao', '', '2026-07-31', 'identificar-pcds'],
+    ['Providenciar camisetas', 'nao', '', '2026-08-11', 'camisetas'],
+    ['Providenciar outros brindes', 'nao', '', '2026-07-31', 'outros-brindes'],
+    ['Acionar GEIMP para cobrir evento na Intranet', 'nao', '', '2026-07-31', 'geimp-intranet'],
+    ['Entregar ppt do Report Planejamento VIART 2026', 'nao', '', '2026-08-07', 'ppt-report-planejamento'],
+    ['Entregar ppt das 4 comissões (Clima, Diversidade, Escola VIART, INOVAVIART)', 'nao', '', '2026-08-07', 'ppt-4-comissoes'],
+    ['Providenciar dinâmicas rápidas pós-almoço', 'nao', '', '2026-08-11', 'dinamicas-pos-almoco'],
+    ['Criar gamificação com brindes para receber insights', 'nao', '', '2026-08-11', 'gamificacao-brindes'],
+    ['Entregar slide de créditos ao staff para Encerramento', 'nao', '', '2026-08-11', 'slide-creditos'],
+    ['Providenciar Wi-Fi (rede e senha) de SP', 'nao', '', '2026-07-31', 'wifi-sp'],
+    ['Providenciar Wi-Fi (rede e senha) de BSB', 'nao', '', '2026-07-31', 'wifi-bsb'],
+    ['Providenciar confraternização SP', 'nao', '', '2026-08-07', 'confraternizacao-sp'],
+    ['Providenciar confraternização BSB', 'nao', '', '2026-08-07', 'confraternizacao-bsb'],
+    ['Informar contatos dos prestadores (nome, serviço, status)', 'nao', '', '2026-07-31', 'contatos-prestadores'],
+    ['Providenciar Mentimeter', 'nao', '', '2026-07-31', 'mentimeter'],
+    ['Providenciar opções alimentares', 'nao', '', '2026-08-07', 'opcoes-alimentares'],
+    ['Providenciar CIAUS para suporte audiovisual', 'nao', '', '2026-07-31', 'ciaus-audiovisual'],
   ] },
   { id: 'etapa3', title: 'ETAPA 3 · Comunicação', items: [
-    ['Entregar ppt do evento', 'nao', '', '2026-08-11'],
-    ['Divulgar App aos participantes', 'nao', '', '2026-08-07'],
+    ['Entregar ppt do evento', 'nao', '', '2026-08-11', 'ppt-evento'],
+    ['Divulgar App aos participantes', 'nao', '', '2026-08-07', 'divulgar-app'],
   ] },
   { id: 'etapa4', title: 'ETAPA 4 · Logística do Evento', items: [
-    ['Providenciar interatividade (códigos) das pessoas', 'nao', '', '2026-07-31'],
-    ['Imprimir QR Code do credenciamento', 'nao', '', '2026-08-13'],
-    ['Imprimir QR Code das mesas', 'nao', '', '2026-08-13'],
-    ['Definir a quantidade de mesas no app', 'nao', '', '2026-08-13'],
-    ['Averiguar layout, equipamentos e sinalização do evento', 'nao', '', '2026-08-13'],
-    ['Providenciar kit com itens de papelaria para organizadores', 'nao', '', '2026-08-13'],
-    ['Providenciar imagens de "Complemento" em BSB para divulgação', 'nao', '', '2026-08-20'],
-    ['Verificar adesão à confraternização', 'nao', '', '2026-08-13'],
+    ['Providenciar interatividade (códigos) das pessoas', 'nao', '', '2026-07-31', 'interatividade-codigos'],
+    ['Imprimir QR Code do credenciamento', 'nao', '', '2026-08-13', 'qr-credenciamento'],
+    ['Imprimir QR Code das mesas', 'nao', '', '2026-08-13', 'qr-mesas'],
+    ['Definir a quantidade de mesas no app', 'nao', '', '2026-08-13', 'quantidade-mesas'],
+    ['Averiguar layout, equipamentos e sinalização do evento', 'nao', '', '2026-08-13', 'layout-equipamentos'],
+    ['Providenciar kit com itens de papelaria para organizadores', 'nao', '', '2026-08-13', 'kit-papelaria'],
+    ['Providenciar imagens de "Complemento" em BSB para divulgação', 'nao', '', '2026-08-20', 'imagens-complemento-bsb'],
+    ['Verificar adesão à confraternização', 'nao', '', '2026-08-13', 'adesao-confraternizacao'],
   ] },
   { id: 'etapa5', title: 'ETAPA 5 · Encerramento do Projeto', items: [
-    ['Providenciar reunião de avaliação com stakeholders', 'nao', '', '2026-08-28'],
-    ['Enviar agradecimentos às áreas envolvidas', 'nao', '', '2026-08-28'],
-    ['Documentar lições aprendidas para futuros eventos', 'nao', '', '2026-08-28'],
-    ['Documentar resultados e feedback para relatório final', 'nao', '', '2026-08-28'],
-    ['Providenciar aftermovie c/imagens de BSB/SP', 'nao', '', '2026-08-28'],
+    ['Providenciar reunião de avaliação com stakeholders', 'nao', '', '2026-08-28', 'reuniao-avaliacao'],
+    ['Enviar agradecimentos às áreas envolvidas', 'nao', '', '2026-08-28', 'agradecimentos-areas'],
+    ['Documentar lições aprendidas para futuros eventos', 'nao', '', '2026-08-28', 'licoes-aprendidas'],
+    ['Documentar resultados e feedback para relatório final', 'nao', '', '2026-08-28', 'resultados-relatorio'],
+    ['Providenciar aftermovie c/imagens de BSB/SP', 'nao', '', '2026-08-28', 'aftermovie'],
   ] },
 ];
 
@@ -2003,6 +2003,7 @@ class Component extends DCLogic {
   updatePrazo = (id) => (e) => this.setCampos({ ['pz-' + id]: e.target.value });
   updateResp = (id) => (e) => this.setCampos({ ['rp-' + id]: e.target.value });
   setRespFiltro = (id) => () => this.setState({ respFiltro: id });
+  setStatusFiltro = (id) => () => this.setState(s => ({ statusFiltro: s.statusFiltro === id ? '' : id }));
   setPrazoValue = (key, iso) => () => this.setCampos({ ['pz-' + key]: iso });
   dropPrazo = (key, iso) => (e) => { e.preventDefault(); this.setCampos({ ['pz-' + key]: iso }); };
   preventDrag = (e) => e.preventDefault();
@@ -2106,7 +2107,7 @@ class Component extends DCLogic {
     const checklistCats = CHECKLIST_CATS.map(cat => {
       let catTotal = 0, catDone = 0;
       const items = cat.items.map((row, idx) => {
-        const key = 'chk-' + cat.id + '-' + idx;
+        const key = 'chk-' + (row[4] || (cat.id + '-' + idx));
         const st = statusById[statusOf(key, row[1])] || statusById.nao;
         counts[st.id] = (counts[st.id] || 0) + 1;
         if (st.id !== 'nc') { catTotal++; if (st.id === 'ok') catDone++; }
@@ -2123,6 +2124,7 @@ class Component extends DCLogic {
         const track = {
           key, toggle: this.cycleCheck(key, row[1]),
           dot: atrasada ? '#C0392B' : st.dot,
+          statusId: atrasada ? 'atraso' : st.id,
           statusLabel: atrasada ? 'Em atraso' : st.label,
           statusBg: atrasada ? '#FBE3E0' : st.bg,
           statusColor: atrasada ? '#B02D1C' : st.color,
@@ -2170,14 +2172,18 @@ class Component extends DCLogic {
     const respostasSet = new Set();
     checklistCats.forEach(cat => cat.items.forEach(it => { const r = (it.track.responsavel || '').trim(); if (r) respostasSet.add(r); }));
     const respFiltro = s.respFiltro || '';
+    const statusFiltro = s.statusFiltro || '';
     const checklistRespOpcoes = [{ id: '', label: 'Todos' }, ...Array.from(respostasSet).sort().map(r => ({ id: r, label: r }))].map(o => ({
       id: o.id, label: o.label,
       bg: respFiltro === o.id ? '#0057A6' : '#FFFFFF', color: respFiltro === o.id ? '#FFFFFF' : '#002855',
       onClick: this.setRespFiltro(o.id),
     }));
     const checklistCatsView = checklistCats
-      .map(cat => ({ ...cat, items: respFiltro ? cat.items.filter(it => (it.track.responsavel || '').trim() === respFiltro) : cat.items }))
-      .filter(cat => !respFiltro || cat.items.length > 0);
+      .map(cat => ({ ...cat, items: cat.items.filter(it =>
+        (!respFiltro || (it.track.responsavel || '').trim() === respFiltro) &&
+        (!statusFiltro || it.track.statusId === statusFiltro)
+      ) }))
+      .filter(cat => (!respFiltro && !statusFiltro) || cat.items.length > 0);
     const ganttRows = ganttSource.map(row => {
       const cells = ganttDays.map(d => ({
         bg: d.isToday ? '#FDECC8' : d.isWeekend ? '#F7F9FC' : '#FFFFFF', borderColor: d.isToday ? '#F39200' : '#F5F7FA',
@@ -2194,8 +2200,8 @@ class Component extends DCLogic {
     const checklistTotal = counts.ok + counts.and + counts.nao;
     const checklistDone = counts.ok;
     const checklistPct = checklistTotal ? Math.round(100 * checklistDone / checklistTotal) : 0;
-    const statusCounts = CHECK_STATUS.map(st => ({ label: st.label, n: counts[st.id] || 0, dot: st.dot }));
-    if (atrasadas) statusCounts.push({ label: 'Em atraso', n: atrasadas, dot: '#C0392B' });
+    const statusCounts = CHECK_STATUS.map(st => ({ id: st.id, label: st.label, n: counts[st.id] || 0, dot: st.dot }));
+    if (atrasadas) statusCounts.push({ id: 'atraso', label: 'Em atraso', n: atrasadas, dot: '#C0392B' });
 
     const norm = (t) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const q = norm(s.nameQuery.trim());
@@ -2639,7 +2645,10 @@ class Component extends DCLogic {
         .sort((a, b) => b.t - a.t),
       pwInput: s.pwInput, pwError: s.pwError, onPwChange: this.onPwChange, onPwKeyDown: this.onPwKeyDown,
       tryUnlock: this.tryUnlock, lockOrg: this.lockOrg,
-      checklistCats: checklistCatsView, checklistRespOpcoes, checklistTemFiltro: !!respFiltro, checklistPct, checklistDone, checklistTotal, statusCounts,
+      checklistCats: checklistCatsView, checklistRespOpcoes, checklistTemFiltro: !!respFiltro,
+      checklistPct, checklistDone, checklistTotal,
+      statusCounts: statusCounts.map(sc => ({ ...sc, active: statusFiltro === sc.id, onClick: this.setStatusFiltro(sc.id),
+        ring: statusFiltro === sc.id ? '2px solid #F39200' : '2px solid transparent' })),
       checklistBarWidth: checklistPct + '%',
       atrasadas,
       showChecklistLista: (s.checklistView || 'lista') === 'lista',
