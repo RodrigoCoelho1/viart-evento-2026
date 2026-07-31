@@ -966,19 +966,18 @@
                 </div>
                 <div style="display:flex;flex-direction:column">
                   <sc-for list="{{ cat.items }}" as="it" hint-placeholder-count="5">
-                    <div style="display:grid;grid-template-columns:minmax(180px,1fr) 160px 150px 120px;align-items:center;gap:14px;padding:11px 0;border-top:1px solid #E8EFF9">
-                      <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0">
+                    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:11px 0;border-top:1px solid #E8EFF9">
+                      <div style="flex:1 1 200px;min-width:160px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
                         <div style="font-size:13.5px;font-weight:600;color:{{ it.textColor }};line-height:1.4">{{ it.label }}</div>
                         <sc-if value="{{ it.hasObs }}" hint-placeholder-val="{{ false }}">
                           <div style="font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:#FDECE3;color:#B4471F;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap">{{ it.obs }}</div>
                         </sc-if>
                       </div>
-                      <input type="text" placeholder="Responsável" value="{{ it.track.responsavel }}" onChange="{{ it.track.onRespChange }}" style="width:100%;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:1px solid #DCE6F2;font-size:12px;font-family:'Manrope',sans-serif;background:#F7F9FC;color:#333"></input>
+                      <input type="text" placeholder="Responsável" value="{{ it.track.responsavel }}" onChange="{{ it.track.onRespChange }}" style="flex:0 1 150px;min-width:100px;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:1px solid #DCE6F2;font-size:12px;font-family:'Manrope',sans-serif;background:#F7F9FC;color:#333"></input>
                       <sc-if value="{{ it.track.showPrazo }}" hint-placeholder-val="{{ false }}">
-                        <input type="date" value="{{ it.track.prazoValue }}" onChange="{{ it.track.onPrazoChange }}" title="Data-marco" style="width:100%;box-sizing:border-box;padding:6px 8px;border-radius:8px;border:1px solid #C9D6E8;font-size:12px;font-weight:700;color:{{ it.track.prazoColor }};font-family:'Manrope',sans-serif;background:#FFFFFF"></input>
+                        <input type="date" value="{{ it.track.prazoValue }}" onChange="{{ it.track.onPrazoChange }}" title="Data-marco" style="flex:0 1 140px;min-width:100px;box-sizing:border-box;padding:6px 8px;border-radius:8px;border:1px solid #C9D6E8;font-size:12px;font-weight:700;color:{{ it.track.prazoColor }};font-family:'Manrope',sans-serif;background:#FFFFFF"></input>
                       </sc-if>
-                      <sc-if value="{{ it.track.hidePrazo }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
-                      <div onClick="{{ it.track.toggle }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:6px 0;border-radius:999px;background:{{ it.track.statusBg }};color:{{ it.track.statusColor }};white-space:nowrap;text-align:center">{{ it.track.statusLabel }}</div>
+                      <div onClick="{{ it.track.toggle }}" style="cursor:pointer;flex:0 0 auto;font-size:11px;font-weight:700;padding:6px 14px;border-radius:999px;background:{{ it.track.statusBg }};color:{{ it.track.statusColor }};white-space:nowrap;text-align:center">{{ it.track.statusLabel }}</div>
                     </div>
                   </sc-for>
                 </div>
