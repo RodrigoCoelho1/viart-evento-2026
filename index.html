@@ -1447,19 +1447,19 @@ const CHECKLIST_CATS = [
     ['Entregar slide de créditos ao staff para Encerramento', 'nao', '', '2026-08-11'],
     ['Providenciar Wi-Fi (rede e senha) de SP', 'nao', '', '2026-07-31'],
     ['Providenciar Wi-Fi (rede e senha) de BSB', 'nao', '', '2026-07-31'],
-    ['Providenciar local da confraternização às 19h', 'nao', '', '2026-08-07'],
-    ['Providenciar local da confraternização de BSB', 'nao', '', '2026-08-07'],
+    ['Providenciar confraternização SP', 'nao', '', '2026-08-07'],
+    ['Providenciar confraternização BSB', 'nao', '', '2026-08-07'],
     ['Informar contatos dos prestadores (nome, serviço, status)', 'nao', '', '2026-07-31'],
     ['Providenciar Mentimeter', 'nao', '', '2026-07-31'],
     ['Providenciar opções alimentares', 'nao', '', '2026-08-07'],
-    ['Acionar CIAUS para suporte audiovisual', 'nao', '', '2026-07-31'],
+    ['Providenciar CIAUS para suporte audiovisual', 'nao', '', '2026-07-31'],
   ] },
   { id: 'etapa3', title: 'ETAPA 3 · Comunicação', items: [
     ['Entregar ppt do evento', 'nao', '', '2026-08-11'],
     ['Divulgar App aos participantes', 'nao', '', '2026-08-07'],
   ] },
   { id: 'etapa4', title: 'ETAPA 4 · Logística do Evento', items: [
-    ['Providenciar interatividade (letras/números)', 'nao', '', '2026-07-31'],
+    ['Providenciar interatividade (códigos) das pessoas', 'nao', '', '2026-07-31'],
     ['Imprimir QR Code do credenciamento', 'nao', '', '2026-08-13'],
     ['Imprimir QR Code das mesas', 'nao', '', '2026-08-13'],
     ['Definir a quantidade de mesas no app', 'nao', '', '2026-08-13'],
@@ -1473,7 +1473,7 @@ const CHECKLIST_CATS = [
     ['Enviar agradecimentos às áreas envolvidas', 'nao', '', '2026-08-28'],
     ['Documentar lições aprendidas para futuros eventos', 'nao', '', '2026-08-28'],
     ['Documentar resultados e feedback para relatório final', 'nao', '', '2026-08-28'],
-    ['Divulgar aftermovie c/imagens de BSB/SP', 'nao', '', '2026-08-28'],
+    ['Providenciar aftermovie c/imagens de BSB/SP', 'nao', '', '2026-08-28'],
   ] },
 ];
 
@@ -2105,8 +2105,8 @@ class Component extends DCLogic {
     const statusOf = (id, def) => (typeof gv('st-' + id) === 'string' ? gv('st-' + id) : def);
     const checklistCats = CHECKLIST_CATS.map(cat => {
       let catTotal = 0, catDone = 0;
-      const items = cat.items.map((row) => {
-        const key = 'chk-' + row[0].toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 22);
+      const items = cat.items.map((row, idx) => {
+        const key = 'chk-' + cat.id + '-' + idx;
         const st = statusById[statusOf(key, row[1])] || statusById.nao;
         counts[st.id] = (counts[st.id] || 0) + 1;
         if (st.id !== 'nc') { catTotal++; if (st.id === 'ok') catDone++; }
