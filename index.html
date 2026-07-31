@@ -822,6 +822,7 @@
             <div style="display:flex;gap:8px;margin-bottom:16px">
               <div onClick="{{ setViewLista }}" style="cursor:pointer;padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ viewListaBg }};color:{{ viewListaColor }};border:1px solid #DCE6F2">Lista</div>
               <div onClick="{{ setViewGantt }}" style="cursor:pointer;padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ viewGanttBg }};color:{{ viewGanttColor }};border:1px solid #DCE6F2">Linha do tempo</div>
+              <div onClick="{{ setViewDiario }}" style="cursor:pointer;padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ viewDiarioBg }};color:{{ viewDiarioColor }};border:1px solid #DCE6F2">Diário de bordo</div>
             </div>
 
             <sc-if value="{{ showChecklistLista }}" hint-placeholder-val="{{ true }}">
@@ -886,6 +887,31 @@
                   </div>
                 </sc-for>
               </div>
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ showChecklistDiario }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Registre aqui comentários e novidades sobre o andamento do planejamento estratégico, para a equipe acompanhar.</div>
+
+            <div style="background:#F2F5FA;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;margin-bottom:20px;display:flex;flex-direction:column;gap:10px">
+              <input type="text" placeholder="Seu nome" value="{{ diarioNome }}" onChange="{{ onDiarioNomeChange }}" style="border:1px solid #DCE6F2;border-radius:8px;padding:9px 12px;font-size:13px;font-family:'Manrope',sans-serif;background:#FFFFFF" />
+              <textarea placeholder="Escreva a atualização…" value="{{ diarioTexto }}" onChange="{{ onDiarioTextoChange }}" rows="3" style="border:1px solid #DCE6F2;border-radius:8px;padding:9px 12px;font-size:13px;font-family:'Manrope',sans-serif;background:#FFFFFF;resize:vertical"></textarea>
+              <div onClick="{{ addDiarioEntry }}" style="cursor:pointer;align-self:flex-end;padding:9px 18px;border-radius:999px;font-size:12.5px;font-weight:700;background:#0057A6;color:#FFFFFF">Publicar</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ diarioEntries }}" as="e" hint-placeholder-count="3">
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+                    <div style="font-weight:700;font-size:13px">{{ e.autor }}</div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                      <div style="font-size:11.5px;color:#8A8A90">{{ e.quando }}</div>
+                      <div onClick="{{ e.remover }}" style="cursor:pointer;font-size:11px;font-weight:700;color:#B4471F">remover</div>
+                    </div>
+                  </div>
+                  <div style="margin-top:8px;font-size:13.5px;color:#333;line-height:1.6;white-space:pre-wrap">{{ e.texto }}</div>
+                </div>
+              </sc-for>
             </div>
             </sc-if>
 
@@ -1695,6 +1721,18 @@ class Component extends DCLogic {
   selectBSB = () => this.setState({ city: 'bsb' });
   setTab = (id) => () => this.setState({ activeTab: id });
   setOrgSubTab = (id) => () => this.setState({ orgSubTab: id });
+
+  onDiarioNomeChange = (e) => this.setState({ diarioNome: e.target.value });
+  onDiarioTextoChange = (e) => this.setState({ diarioTexto: e.target.value });
+  addDiarioEntry = () => {
+    const texto = (this.state.diarioTexto || '').trim();
+    if (!texto) return;
+    const autor = (this.state.diarioNome || '').trim() || 'Organização';
+    const key = 'db-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+    this.gravarCampos({ [key]: { autor, texto } });
+    this.setState({ diarioTexto: '' });
+  };
+  removerDiarioEntry = (key) => () => this.gravarCampos({ [key]: null });
 
   onPwChange = (e) => this.setState({ pwInput: e.target.value, pwError: '' });
   onPwKeyDown = (e) => { if (e.key === 'Enter') this.tryUnlock(); };
@@ -2581,6 +2619,14 @@ class Component extends DCLogic {
       showOrgOrcamento: s.orgSubTab === 'orcamento', showOrgContatos: s.orgSubTab === 'contatos',
       showOrgProgramacaoReal: s.orgSubTab === 'programacaoreal', scheduleReal,
       showOrgCompartilhar: s.orgSubTab === 'compartilhar',
+      diarioNome: s.diarioNome || '', diarioTexto: s.diarioTexto || '',
+      onDiarioNomeChange: this.onDiarioNomeChange, onDiarioTextoChange: this.onDiarioTextoChange,
+      addDiarioEntry: this.addDiarioEntry,
+      diarioEntries: Object.keys(s.sync).filter(k => k.startsWith('db-') && s.sync[k] && s.sync[k].v)
+        .map(k => ({ key: k, autor: s.sync[k].v.autor, texto: s.sync[k].v.texto, t: s.sync[k].t,
+          quando: new Date(s.sync[k].t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+          remover: this.removerDiarioEntry(k) }))
+        .sort((a, b) => b.t - a.t),
       pwInput: s.pwInput, pwError: s.pwError, onPwChange: this.onPwChange, onPwKeyDown: this.onPwKeyDown,
       tryUnlock: this.tryUnlock, lockOrg: this.lockOrg,
       checklistCats, checklistPct, checklistDone, checklistTotal, statusCounts,
@@ -2588,11 +2634,14 @@ class Component extends DCLogic {
       atrasadas,
       showChecklistLista: (s.checklistView || 'lista') === 'lista',
       showChecklistGantt: s.checklistView === 'gantt',
+      showChecklistDiario: s.checklistView === 'diario',
       viewListaBg: (s.checklistView || 'lista') === 'lista' ? '#0057A6' : '#FFFFFF',
       viewListaColor: (s.checklistView || 'lista') === 'lista' ? '#FFFFFF' : '#002855',
       viewGanttBg: s.checklistView === 'gantt' ? '#0057A6' : '#FFFFFF',
       viewGanttColor: s.checklistView === 'gantt' ? '#FFFFFF' : '#002855',
-      setViewLista: this.setChecklistView('lista'), setViewGantt: this.setChecklistView('gantt'),
+      viewDiarioBg: s.checklistView === 'diario' ? '#0057A6' : '#FFFFFF',
+      viewDiarioColor: s.checklistView === 'diario' ? '#FFFFFF' : '#002855',
+      setViewLista: this.setChecklistView('lista'), setViewGantt: this.setChecklistView('gantt'), setViewDiario: this.setChecklistView('diario'),
       ganttDays, ganttRows, ganttWidth,
       climaAtual, climaDias, climaDica, climaPronto, climaErro: s.climaErro,
       showCheckin: s.activeTab === 'checkin',
