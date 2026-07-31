@@ -798,7 +798,7 @@
             <sc-if value="{{ showOrgChecklist }}" hint-placeholder-val="{{ false }}">
             <div>
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Checklist de execução</div>
-            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Tarefas marcadas <b>SP</b> e <b>BSB</b> são acompanhadas nas duas cidades separadamente; <b>Geral</b> vale para as duas. Toque em uma linha para avançar o status: concluído → em andamento → não iniciado → não é o caso. O que você marcar aparece para toda a equipe.</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Toque na etiqueta de status para avançar: concluído → em andamento → não iniciado → não é o caso. Preencha o responsável e a data-marco de cada tarefa. O que você marcar aparece para toda a equipe.</div>
 
             <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px 20px;margin-bottom:18px">
               <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
@@ -826,6 +826,12 @@
             </div>
 
             <sc-if value="{{ showChecklistLista }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+              <div style="font-size:11.5px;font-weight:700;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;margin-right:2px">Responsável:</div>
+              <sc-for list="{{ checklistRespOpcoes }}" as="ro" hint-placeholder-count="1">
+                <div onClick="{{ ro.onClick }}" style="cursor:pointer;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;background:{{ ro.bg }};color:{{ ro.color }};border:1px solid #DCE6F2;white-space:nowrap">{{ ro.label }}</div>
+              </sc-for>
+            </div>
             <sc-for list="{{ checklistCats }}" as="cat" hint-placeholder-count="6">
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px;margin-bottom:12px">
                 <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px">
@@ -834,27 +840,19 @@
                 </div>
                 <div style="display:flex;flex-direction:column">
                   <sc-for list="{{ cat.items }}" as="it" hint-placeholder-count="5">
-                    <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;align-items:start;gap:14px;padding:10px 0;border-top:1px solid #E8EFF9">
-                      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
-                        <div style="font-size:13.5px;color:{{ it.textColor }};line-height:1.45">{{ it.label }}</div>
+                    <div style="display:grid;grid-template-columns:minmax(0,1fr) 150px 138px 116px;align-items:center;gap:14px;padding:11px 0;border-top:1px solid #E8EFF9">
+                      <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0">
+                        <div style="font-size:13.5px;font-weight:600;color:{{ it.textColor }};line-height:1.4">{{ it.label }}</div>
                         <sc-if value="{{ it.hasObs }}" hint-placeholder-val="{{ false }}">
                           <div style="font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:#FDECE3;color:#B4471F;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap">{{ it.obs }}</div>
                         </sc-if>
                       </div>
-                      <div style="display:flex;flex-direction:column;gap:6px">
-                        <sc-for list="{{ it.tracks }}" as="tk" hint-placeholder-count="1">
-                          <div onClick="{{ tk.toggle }}" style="cursor:pointer;display:grid;grid-template-columns:9px 40px 132px 112px;align-items:center;gap:5px">
-                            <div style="width:9px;height:9px;border-radius:999px;background:{{ tk.dot }}"></div>
-                            <div style="font-size:10px;font-weight:800;color:{{ tk.badgeColor }};text-transform:uppercase;letter-spacing:0.05em">{{ tk.badge }}</div>
-                            <div style="display:flex;justify-content:flex-end">
-                              <sc-if value="{{ tk.showPrazo }}" hint-placeholder-val="{{ false }}">
-                                <input type="date" value="{{ tk.prazoValue }}" onChange="{{ tk.onPrazoChange }}" onClick="{{ tk.stop }}" title="Data-marco" style="width:132px;box-sizing:border-box;padding:6px 8px;border-radius:8px;border:1px solid #C9D6E8;font-size:12px;font-weight:700;color:{{ tk.prazoColor }};font-family:'Manrope',sans-serif;background:#FFFFFF"></input>
-                              </sc-if>
-                            </div>
-                            <div style="font-size:11px;font-weight:700;padding:5px 0;border-radius:999px;background:{{ tk.statusBg }};color:{{ tk.statusColor }};white-space:nowrap;text-align:center">{{ tk.statusLabel }}</div>
-                          </div>
-                        </sc-for>
-                      </div>
+                      <input type="text" placeholder="Responsável" value="{{ it.track.responsavel }}" onChange="{{ it.track.onRespChange }}" style="width:100%;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:1px solid #DCE6F2;font-size:12px;font-family:'Manrope',sans-serif;background:#F7F9FC;color:#333"></input>
+                      <sc-if value="{{ it.track.showPrazo }}" hint-placeholder-val="{{ false }}">
+                        <input type="date" value="{{ it.track.prazoValue }}" onChange="{{ it.track.onPrazoChange }}" title="Data-marco" style="width:100%;box-sizing:border-box;padding:6px 8px;border-radius:8px;border:1px solid #C9D6E8;font-size:12px;font-weight:700;color:{{ it.track.prazoColor }};font-family:'Manrope',sans-serif;background:#FFFFFF"></input>
+                      </sc-if>
+                      <sc-if value="{{ it.track.hidePrazo }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+                      <div onClick="{{ it.track.toggle }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:6px 0;border-radius:999px;background:{{ it.track.statusBg }};color:{{ it.track.statusColor }};white-space:nowrap;text-align:center">{{ it.track.statusLabel }}</div>
                     </div>
                   </sc-for>
                 </div>
@@ -1431,46 +1429,51 @@ const CHECK_STATUS = [
 
 const CHECKLIST_CATS = [
   { id: 'etapa1', title: 'ETAPA 1 · Planejamento', items: [
-    ['Entregar briefing do evento', 'nao', '', '', '2026-08-05'],
-    ['Definir formato e dinâmica do evento', 'nao', '', '', '2026-07-31'],
-    ['Definir categorias de reconhecimento para os participantes', 'nao', 'Refletir sobre as categorias', '', '2026-07-31'],
-    ['Preparar pesquisa de feedback', 'nao', 'Aparecer automático pós cada dinâmica', '', '2026-07-31'],
+    ['Entregar briefing do evento', 'nao', '', '2026-08-05'],
+    ['Definir formato e dinâmica do evento', 'nao', '', '2026-07-31'],
+    ['Definir categorias e pessoas para reconhecimento', 'nao', '', '2026-07-31'],
+    ['Preparar NPS do evento', 'nao', '', '2026-07-31'],
   ] },
   { id: 'etapa2', title: 'ETAPA 2 · Organização', items: [
-    ['Preparar lista de participantes', 'nao', '', '', '2026-07-31'],
-    ['Verificar acessibilidade visual (equipe Cintia)', 'nao', '', '', '2026-07-31'],
-    ['Providenciar camisetas', 'nao', '', '', '2026-08-11'],
-    ['Providenciar outros brindes', 'nao', 'Asset com a Erika (contato do fornecedor)', '', '2026-07-31'],
-    ['Acionar GEIMP para cobrir evento na Intranet', 'nao', '', 'dupla', { sp: '2026-07-31', bsb: '2026-07-31' }],
-    ['Entregar ppt do Report Planejamento VIART 2026', 'nao', '', '', '2026-08-07'],
-    ['Entregar ppt das 4 comissões (Clima, Diversidade, Escola VIART, INOVAVIART)', 'nao', '', '', '2026-08-07'],
-    ['Providenciar dinâmicas rápidas pós-almoço', 'nao', '', '', '2026-08-11'],
-    ['Entregar slide de créditos ao staff para Encerramento', 'nao', '', '', '2026-08-11'],
-    ['Providenciar Wi-Fi (rede e senha) do local', 'nao', '', 'dupla', { sp: '2026-07-31', bsb: '2026-07-31' }],
-    ['Providenciar local da confraternização às 19h', 'nao', 'SP: Ver Ricardinho/Mário; Blue Pub. · BSB: Ver Bini; Riden', 'dupla', { sp: '2026-08-07', bsb: '2026-08-07' }],
-    ['Informar contatos dos prestadores (nome, serviço, status)', 'nao', '', '', '2026-07-31'],
-    ['Providenciar Mentimeter', 'nao', '', '', '2026-07-31'],
-    ['Providenciar opções alimentares', 'nao', '', 'dupla', { sp: '2026-08-07', bsb: '2026-08-07' }],
-    ['Acionar CIAUS para suporte audiovisual', 'nao', '', 'dupla', { sp: '2026-07-31', bsb: '2026-07-31' }],
+    ['Preparar lista de participantes', 'nao', '', '2026-07-31'],
+    ['Identificar PCDs', 'nao', '', '2026-07-31'],
+    ['Providenciar camisetas', 'nao', '', '2026-08-11'],
+    ['Providenciar outros brindes', 'nao', '', '2026-07-31'],
+    ['Acionar GEIMP para cobrir evento na Intranet', 'nao', '', '2026-07-31'],
+    ['Entregar ppt do Report Planejamento VIART 2026', 'nao', '', '2026-08-07'],
+    ['Entregar ppt das 4 comissões (Clima, Diversidade, Escola VIART, INOVAVIART)', 'nao', '', '2026-08-07'],
+    ['Providenciar dinâmicas rápidas pós-almoço', 'nao', '', '2026-08-11'],
+    ['Criar gamificação com brindes para receber insights', 'nao', '', '2026-08-11'],
+    ['Entregar slide de créditos ao staff para Encerramento', 'nao', '', '2026-08-11'],
+    ['Providenciar Wi-Fi (rede e senha) de SP', 'nao', '', '2026-07-31'],
+    ['Providenciar Wi-Fi (rede e senha) de BSB', 'nao', '', '2026-07-31'],
+    ['Providenciar local da confraternização às 19h', 'nao', '', '2026-08-07'],
+    ['Providenciar local da confraternização de BSB', 'nao', '', '2026-08-07'],
+    ['Informar contatos dos prestadores (nome, serviço, status)', 'nao', '', '2026-07-31'],
+    ['Providenciar Mentimeter', 'nao', '', '2026-07-31'],
+    ['Providenciar opções alimentares', 'nao', '', '2026-08-07'],
+    ['Acionar CIAUS para suporte audiovisual', 'nao', '', '2026-07-31'],
   ] },
   { id: 'etapa3', title: 'ETAPA 3 · Comunicação', items: [
-    ['Entregar apresentação do evento', 'nao', '', '', '2026-08-11'],
-    ['Divulgar App aos participantes', 'nao', '', '', '2026-08-07'],
+    ['Entregar ppt do evento', 'nao', '', '2026-08-11'],
+    ['Divulgar App aos participantes', 'nao', '', '2026-08-07'],
   ] },
   { id: 'etapa4', title: 'ETAPA 4 · Logística do Evento', items: [
-    ['Providenciar interatividade (letras/números)', 'nao', '', '', '2026-07-31'],
-    ['Imprimir QR do credenciamento', 'nao', '', 'dupla', { sp: '2026-08-13', bsb: '2026-08-20' }],
-    ['Averiguar layout, equipamentos e sinalização do evento', 'nao', '', 'dupla', { sp: '2026-08-13', bsb: '2026-08-20' }],
-    ['Providenciar kit com itens de papelaria para organizadores', 'nao', '', 'dupla', { sp: '2026-08-13', bsb: '2026-08-20' }],
-    ['Providenciar imagens de "Complemento" em BSB para divulgação', 'nao', '', '', '2026-08-20'],
-    ['Verificar participação na confraternização via App', 'nao', 'SP: Blue Pub — depende Ricardinho/Mário · BSB: Riden — depende Bini', 'dupla', { sp: '2026-08-13', bsb: '2026-08-20' }],
+    ['Providenciar interatividade (letras/números)', 'nao', '', '2026-07-31'],
+    ['Imprimir QR Code do credenciamento', 'nao', '', '2026-08-13'],
+    ['Imprimir QR Code das mesas', 'nao', '', '2026-08-13'],
+    ['Definir a quantidade de mesas no app', 'nao', '', '2026-08-13'],
+    ['Averiguar layout, equipamentos e sinalização do evento', 'nao', '', '2026-08-13'],
+    ['Providenciar kit com itens de papelaria para organizadores', 'nao', '', '2026-08-13'],
+    ['Providenciar imagens de "Complemento" em BSB para divulgação', 'nao', '', '2026-08-20'],
+    ['Verificar adesão à confraternização', 'nao', '', '2026-08-13'],
   ] },
   { id: 'etapa5', title: 'ETAPA 5 · Encerramento do Projeto', items: [
-    ['Providenciar reunião de avaliação com stakeholders', 'nao', '', '', '2026-08-28'],
-    ['Enviar agradecimentos às áreas envolvidas', 'nao', '', '', '2026-08-28'],
-    ['Documentar lições aprendidas para futuros eventos', 'nao', '', '', '2026-08-28'],
-    ['Documentar resultados e feedback para relatório final', 'nao', '', '', '2026-08-28'],
-    ['Divulgar aftermovie c/imagens de BSB/SP', 'nao', '', '', '2026-08-28'],
+    ['Providenciar reunião de avaliação com stakeholders', 'nao', '', '2026-08-28'],
+    ['Enviar agradecimentos às áreas envolvidas', 'nao', '', '2026-08-28'],
+    ['Documentar lições aprendidas para futuros eventos', 'nao', '', '2026-08-28'],
+    ['Documentar resultados e feedback para relatório final', 'nao', '', '2026-08-28'],
+    ['Divulgar aftermovie c/imagens de BSB/SP', 'nao', '', '2026-08-28'],
   ] },
 ];
 
@@ -1998,6 +2001,8 @@ class Component extends DCLogic {
   };
 
   updatePrazo = (id) => (e) => this.setCampos({ ['pz-' + id]: e.target.value });
+  updateResp = (id) => (e) => this.setCampos({ ['rp-' + id]: e.target.value });
+  setRespFiltro = (id) => () => this.setState({ respFiltro: id });
   setPrazoValue = (key, iso) => () => this.setCampos({ ['pz-' + key]: iso });
   dropPrazo = (key, iso) => (e) => { e.preventDefault(); this.setCampos({ ['pz-' + key]: iso }); };
   preventDrag = (e) => e.preventDefault();
@@ -2101,40 +2106,33 @@ class Component extends DCLogic {
     const checklistCats = CHECKLIST_CATS.map(cat => {
       let catTotal = 0, catDone = 0;
       const items = cat.items.map((row) => {
-        const base = 'chk-' + row[0].toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 22);
-        const dupla = row[3] === 'dupla';
-        const defs = dupla
-          ? [{ key: base + '-sp', badge: 'SP' }, { key: base + '-bsb', badge: 'BSB' }]
-          : [{ key: base, badge: 'Geral' }];
-        const tracks = defs.map(d => {
-          const st = statusById[statusOf(d.key, row[1])] || statusById.nao;
-          counts[st.id] = (counts[st.id] || 0) + 1;
-          if (st.id !== 'nc') { catTotal++; if (st.id === 'ok') catDone++; }
-          const pendente = st.id === 'and' || st.id === 'nao';
-          const rowDef = row[4];
-          const defaultPrazo = typeof rowDef === 'string' ? rowDef : (rowDef && rowDef[d.badge.toLowerCase()]) || '';
-          const prazo = gv('pz-' + d.key) || defaultPrazo;
-          let prazoColor = '#6B6B70', atrasada = false;
-          if (prazo) {
-            const dias = Math.round((new Date(prazo + 'T00:00:00') - hoje) / 86400000);
-            if (dias < 0) { prazoColor = '#C0392B'; if (pendente) { atrasadas++; atrasada = true; } }
-            else if (dias === 0) prazoColor = '#B4471F';
-            else prazoColor = '#1E7A45';
-          }
-          return {
-            key: d.key, badge: d.badge, badgeColor: dupla ? '#0057A6' : '#9A9AA0',
-            toggle: this.cycleCheck(d.key, row[1]),
-            dot: atrasada ? '#C0392B' : st.dot,
-            statusLabel: atrasada ? 'Em atraso' : st.label,
-            statusBg: atrasada ? '#FBE3E0' : st.bg,
-            statusColor: atrasada ? '#B02D1C' : st.color,
-            showPrazo: pendente, prazoValue: prazo, prazoColor,
-            onPrazoChange: this.updatePrazo(d.key), stop: this.stopEvt,
-          };
-        });
-        const allOk = tracks.every(t => t.statusLabel === 'Concluído' || t.statusLabel === 'Não é o caso');
+        const key = 'chk-' + row[0].toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 22);
+        const st = statusById[statusOf(key, row[1])] || statusById.nao;
+        counts[st.id] = (counts[st.id] || 0) + 1;
+        if (st.id !== 'nc') { catTotal++; if (st.id === 'ok') catDone++; }
+        const pendente = st.id === 'and' || st.id === 'nao';
+        const defaultPrazo = row[3] || '';
+        const prazo = gv('pz-' + key) || defaultPrazo;
+        let prazoColor = '#6B6B70', atrasada = false;
+        if (prazo) {
+          const dias = Math.round((new Date(prazo + 'T00:00:00') - hoje) / 86400000);
+          if (dias < 0) { prazoColor = '#C0392B'; if (pendente) { atrasadas++; atrasada = true; } }
+          else if (dias === 0) prazoColor = '#B4471F';
+          else prazoColor = '#1E7A45';
+        }
+        const track = {
+          key, toggle: this.cycleCheck(key, row[1]),
+          dot: atrasada ? '#C0392B' : st.dot,
+          statusLabel: atrasada ? 'Em atraso' : st.label,
+          statusBg: atrasada ? '#FBE3E0' : st.bg,
+          statusColor: atrasada ? '#B02D1C' : st.color,
+          showPrazo: pendente, hidePrazo: !pendente, prazoValue: prazo, prazoColor,
+          onPrazoChange: this.updatePrazo(key), stop: this.stopEvt,
+          responsavel: gv('rp-' + key) || '', onRespChange: this.updateResp(key),
+        };
+        const allOk = track.statusLabel === 'Concluído' || track.statusLabel === 'Não é o caso';
         return {
-          label: row[0], obs: row[2] || '', hasObs: !!row[2], tracks,
+          label: row[0], obs: row[2] || '', hasObs: !!row[2], track, tracks: [track],
           textColor: allOk ? '#8A8A8A' : '#002855',
         };
       });
@@ -2147,7 +2145,7 @@ class Component extends DCLogic {
     const ganttSource = [];
     checklistCats.filter(c => c.id !== 'pend').forEach(cat => cat.items.forEach(item => item.tracks.forEach(tr => {
       ganttSource.push({
-        key: tr.key, label: item.label + (tr.badge !== 'Geral' ? ' · ' + tr.badge : ''),
+        key: tr.key, label: item.label,
         prazoValue: tr.prazoValue, done: tr.statusLabel === 'Concluído' || tr.statusLabel === 'Não é o caso',
         color: tr.dot,
       });
@@ -2168,6 +2166,18 @@ class Component extends DCLogic {
       ganttDays.push({ iso, label: d.getDate() + ' ' + MESES[d.getMonth()], isToday, isWeekend, bg: isToday ? '#FDECC8' : isWeekend ? '#F7F9FC' : '#FFFFFF' });
     }
     const ganttWidth = 220 + totalDays * DW;
+
+    const respostasSet = new Set();
+    checklistCats.forEach(cat => cat.items.forEach(it => { const r = (it.track.responsavel || '').trim(); if (r) respostasSet.add(r); }));
+    const respFiltro = s.respFiltro || '';
+    const checklistRespOpcoes = [{ id: '', label: 'Todos' }, ...Array.from(respostasSet).sort().map(r => ({ id: r, label: r }))].map(o => ({
+      id: o.id, label: o.label,
+      bg: respFiltro === o.id ? '#0057A6' : '#FFFFFF', color: respFiltro === o.id ? '#FFFFFF' : '#002855',
+      onClick: this.setRespFiltro(o.id),
+    }));
+    const checklistCatsView = checklistCats
+      .map(cat => ({ ...cat, items: respFiltro ? cat.items.filter(it => (it.track.responsavel || '').trim() === respFiltro) : cat.items }))
+      .filter(cat => !respFiltro || cat.items.length > 0);
     const ganttRows = ganttSource.map(row => {
       const cells = ganttDays.map(d => ({
         bg: d.isToday ? '#FDECC8' : d.isWeekend ? '#F7F9FC' : '#FFFFFF', borderColor: d.isToday ? '#F39200' : '#F5F7FA',
@@ -2629,7 +2639,7 @@ class Component extends DCLogic {
         .sort((a, b) => b.t - a.t),
       pwInput: s.pwInput, pwError: s.pwError, onPwChange: this.onPwChange, onPwKeyDown: this.onPwKeyDown,
       tryUnlock: this.tryUnlock, lockOrg: this.lockOrg,
-      checklistCats, checklistPct, checklistDone, checklistTotal, statusCounts,
+      checklistCats: checklistCatsView, checklistRespOpcoes, checklistTemFiltro: !!respFiltro, checklistPct, checklistDone, checklistTotal, statusCounts,
       checklistBarWidth: checklistPct + '%',
       atrasadas,
       showChecklistLista: (s.checklistView || 'lista') === 'lista',
