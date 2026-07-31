@@ -684,8 +684,9 @@
               </div>
             </div>
 
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px">
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;display:flex;gap:18px;align-items:center">
+            <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Tarefas</div>
+            <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px">
+              <div style="flex:1 1 380px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;display:flex;gap:18px;align-items:center">
                 <div style="width:120px;height:120px;border-radius:999px;background:{{ statusDonutBg }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
                   <div style="width:76px;height:76px;border-radius:999px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center">
                     <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px;color:#0057A6">{{ checklistPct }}%</div>
@@ -704,7 +705,49 @@
                 </div>
               </div>
 
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;display:flex;gap:18px;align-items:center">
+              <div style="flex:1 1 380px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Checklist por área</div>
+                <sc-for list="{{ dashboardCats }}" as="dc" hint-placeholder-count="9">
+                  <div style="margin-bottom:10px">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;color:#4A4A50;margin-bottom:4px">
+                      <div>{{ dc.title }}</div>
+                      <div style="font-weight:700">{{ dc.progress }}</div>
+                    </div>
+                    <div style="height:7px;border-radius:999px;background:#EDF1F7;overflow:hidden">
+                      <div style="height:100%;width:{{ dc.catPct }}%;background:#0057A6;border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="flex:1 1 300px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Tarefas por responsável</div>
+                <sc-for list="{{ respTarefasStats }}" as="rt" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4A4A50;margin-bottom:8px">
+                    <div style="flex:1">{{ rt.nome }}</div>
+                    <div style="font-weight:700;color:#002855">{{ rt.done }}/{{ rt.total }}</div>
+                    <sc-if value="{{ rt.atraso }}" hint-placeholder-val="{{ false }}">
+                      <div style="font-size:10.5px;font-weight:800;color:#B02D1C;background:#FBE3E0;padding:2px 8px;border-radius:999px">{{ rt.atraso }} atraso</div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="flex:1 1 300px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Próximos prazos</div>
+                <sc-for list="{{ prazosProximosTop }}" as="pp" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4A4A50;margin-bottom:8px">
+                    <div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ pp.label }}</div>
+                    <div style="font-size:11px;color:#8A8A90;white-space:nowrap">{{ pp.dataFmt }}</div>
+                    <div style="font-size:11px;font-weight:700;color:{{ pp.diasColor }};white-space:nowrap">{{ pp.diasLabel }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Participantes</div>
+            <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px">
+              <div style="flex:1 1 380px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;display:flex;gap:18px;align-items:center">
                 <div style="width:120px;height:120px;border-radius:999px;background:{{ cidadeDonutBg }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
                   <div style="width:76px;height:76px;border-radius:999px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center">
                     <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px">{{ totalFuncionarios }}</div>
@@ -733,8 +776,8 @@
                 </div>
               </div>
 
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
-                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Participantes por área (top 6)</div>
+              <div style="flex:1 1 260px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Participantes por área</div>
                 <sc-for list="{{ areaBars }}" as="ab" hint-placeholder-count="6">
                   <div style="margin-bottom:9px">
                     <div style="display:flex;justify-content:space-between;font-size:12px;color:#4A4A50;margin-bottom:3px">
@@ -748,7 +791,66 @@
                 </sc-for>
               </div>
 
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+              <div style="flex:1 1 220px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Check-in por mesa</div>
+                <div style="display:flex;gap:20px">
+                  <div style="flex:1">
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#0057A6">{{ mesasSPComPresenca }}/{{ numMesas }}</div>
+                    <div style="font-size:11.5px;color:#6B6B70">mesas SP com presença</div>
+                  </div>
+                  <div style="flex:1">
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#F39200">{{ mesasBSBComPresenca }}/{{ numMesasBSB }}</div>
+                    <div style="font-size:11.5px;color:#6B6B70">mesas BSB com presença</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="flex:1 1 220px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Confraternização</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:#4A4A50;margin-bottom:6px">
+                  <div style="width:8px;height:8px;border-radius:999px;background:#1E7A45;flex-shrink:0"></div>
+                  <div style="flex:1">Vão</div><div style="font-weight:700">{{ confSimCount }}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:#4A4A50;margin-bottom:6px">
+                  <div style="width:8px;height:8px;border-radius:999px;background:#C0392B;flex-shrink:0"></div>
+                  <div style="flex:1">Não vão</div><div style="font-weight:700">{{ confNaoCount }}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:#4A4A50">
+                  <div style="width:8px;height:8px;border-radius:999px;background:#F39200;flex-shrink:0"></div>
+                  <div style="flex:1">Talvez</div><div style="font-weight:700">{{ confTalvezCount }}</div>
+                </div>
+              </div>
+
+              <div style="flex:1 1 220px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Camisetas por tamanho</div>
+                <sc-for list="{{ camisaSizeCountList }}" as="cz" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4A4A50;margin-bottom:6px">
+                    <div style="width:28px;font-weight:700;color:#002855">{{ cz.size }}</div>
+                    <div style="flex:1">{{ cz.n }}</div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ camisaFaltamCount }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:11.5px;color:#B4471F;margin-top:6px">{{ camisaFaltamCount }} sem tamanho definido</div>
+                </sc-if>
+              </div>
+
+              <div style="flex:1 1 220px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Camisetas por gênero</div>
+                <sc-for list="{{ camisaModCountList }}" as="cm" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4A4A50;margin-bottom:6px">
+                    <div style="flex:1">{{ cm.mod }}</div>
+                    <div style="font-weight:700;color:#002855">{{ cm.n }}</div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ camisaModFaltamCount }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:11.5px;color:#B4471F;margin-top:6px">{{ camisaModFaltamCount }} sem gênero definido</div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Programação</div>
+            <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px">
+              <div style="flex:1 1 300px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
                 <div style="font-weight:700;font-size:14px;margin-bottom:14px">Programação por pilar</div>
                 <div style="height:22px;border-radius:999px;overflow:hidden;display:flex;margin-bottom:14px">
                   <sc-for list="{{ pilarRows }}" as="pr" hint-placeholder-count="3">
@@ -763,22 +865,10 @@
                   </div>
                 </sc-for>
               </div>
+            </div>
 
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
-                <div style="font-weight:700;font-size:14px;margin-bottom:14px">Checklist por área</div>
-                <sc-for list="{{ dashboardCats }}" as="dc" hint-placeholder-count="9">
-                  <div style="margin-bottom:10px">
-                    <div style="display:flex;justify-content:space-between;font-size:12px;color:#4A4A50;margin-bottom:4px">
-                      <div>{{ dc.title }}</div>
-                      <div style="font-weight:700">{{ dc.progress }}</div>
-                    </div>
-                    <div style="height:7px;border-radius:999px;background:#EDF1F7;overflow:hidden">
-                      <div style="height:100%;width:{{ dc.catPct }}%;background:#0057A6;border-radius:999px"></div>
-                    </div>
-                  </div>
-                </sc-for>
-              </div>
-
+            <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Orçamento</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px">
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
                 <div style="font-weight:700;font-size:14px;margin-bottom:14px">Orçamento — orçado vs. comprometido</div>
                 <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
@@ -840,19 +930,18 @@
                 </div>
                 <div style="display:flex;flex-direction:column">
                   <sc-for list="{{ cat.items }}" as="it" hint-placeholder-count="5">
-                    <div style="display:grid;grid-template-columns:minmax(0,1fr) 150px 138px 116px;align-items:center;gap:14px;padding:11px 0;border-top:1px solid #E8EFF9">
-                      <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0">
+                    <div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;padding:11px 0;border-top:1px solid #E8EFF9">
+                      <div style="flex:4 1 220px;min-width:160px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
                         <div style="font-size:13.5px;font-weight:600;color:{{ it.textColor }};line-height:1.4">{{ it.label }}</div>
                         <sc-if value="{{ it.hasObs }}" hint-placeholder-val="{{ false }}">
                           <div style="font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:#FDECE3;color:#B4471F;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap">{{ it.obs }}</div>
                         </sc-if>
                       </div>
-                      <input type="text" placeholder="Responsável" value="{{ it.track.responsavel }}" onChange="{{ it.track.onRespChange }}" style="width:100%;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:1px solid #DCE6F2;font-size:12px;font-family:'Manrope',sans-serif;background:#F7F9FC;color:#333"></input>
+                      <input type="text" placeholder="Responsável" value="{{ it.track.responsavel }}" onChange="{{ it.track.onRespChange }}" style="flex:1 1 130px;min-width:110px;max-width:180px;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:1px solid #DCE6F2;font-size:12px;font-family:'Manrope',sans-serif;background:#F7F9FC;color:#333"></input>
                       <sc-if value="{{ it.track.showPrazo }}" hint-placeholder-val="{{ false }}">
-                        <input type="date" value="{{ it.track.prazoValue }}" onChange="{{ it.track.onPrazoChange }}" title="Data-marco" style="width:100%;box-sizing:border-box;padding:6px 8px;border-radius:8px;border:1px solid #C9D6E8;font-size:12px;font-weight:700;color:{{ it.track.prazoColor }};font-family:'Manrope',sans-serif;background:#FFFFFF"></input>
+                        <input type="date" value="{{ it.track.prazoValue }}" onChange="{{ it.track.onPrazoChange }}" title="Data-marco" style="flex:1 1 120px;min-width:110px;max-width:150px;box-sizing:border-box;padding:6px 8px;border-radius:8px;border:1px solid #C9D6E8;font-size:12px;font-weight:700;color:{{ it.track.prazoColor }};font-family:'Manrope',sans-serif;background:#FFFFFF"></input>
                       </sc-if>
-                      <sc-if value="{{ it.track.hidePrazo }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
-                      <div onClick="{{ it.track.toggle }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:6px 0;border-radius:999px;background:{{ it.track.statusBg }};color:{{ it.track.statusColor }};white-space:nowrap;text-align:center">{{ it.track.statusLabel }}</div>
+                      <div onClick="{{ it.track.toggle }}" style="cursor:pointer;flex:0 0 auto;font-size:11px;font-weight:700;padding:6px 14px;border-radius:999px;background:{{ it.track.statusBg }};color:{{ it.track.statusColor }};white-space:nowrap;text-align:center">{{ it.track.statusLabel }}</div>
                     </div>
                   </sc-for>
                 </div>
@@ -1005,7 +1094,6 @@
                   <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">organização + gestores</div>
                 </div>
               </div>
-              <div onClick="{{ limparPresencas }}" style="cursor:pointer;font-size:12.5px;font-weight:700;color:#A9C0DE;border:1px solid #0A3C6E;border-radius:999px;padding:8px 16px">Limpar presenças</div>
             </div>
 
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center">
@@ -1994,12 +2082,6 @@ class Component extends DCLogic {
     this.abrirPdf(corpo, estilo, 'Cartões de mesa · Credenciamento VIART 2026');
   };
 
-  limparPresencas = () => {
-    const pares = {};
-    PARTICIPANTES.forEach(n => { if (this.valor('ps-' + n)) pares['ps-' + n] = false; });
-    if (Object.keys(pares).length) this.setCampos(pares);
-  };
-
   updatePrazo = (id) => (e) => this.setCampos({ ['pz-' + id]: e.target.value });
   updateResp = (id) => (e) => this.setCampos({ ['rp-' + id]: e.target.value });
   setRespFiltro = (id) => () => this.setState({ respFiltro: id });
@@ -2605,7 +2687,7 @@ class Component extends DCLogic {
     // participantes por área (top unidades)
     const unidadeCount = {};
     Object.values(PARTICIPANTES_INFO).forEach(info => { if (info.u) { const k = info.u.split(' - ')[0]; unidadeCount[k] = (unidadeCount[k] || 0) + 1; } });
-    const areaRows = Object.entries(unidadeCount).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const areaRows = Object.entries(unidadeCount).sort((a, b) => b[1] - a[1]);
     const maxAreaN = Math.max(1, ...areaRows.map(r => r[1]));
     const areaBars = areaRows.map(([nome, n]) => ({ nome, n, barWidth: Math.round(100 * n / maxAreaN) + '%' }));
 
@@ -2615,6 +2697,40 @@ class Component extends DCLogic {
     const pilarTotalN = Object.values(pilarCount).reduce((a, b) => a + b, 0) || 1;
     const pilarColors = { Alinhar: '#0057A6', Conectar: '#F39200', Executar: '#002855' };
     const pilarRows = Object.entries(pilarCount).map(([nome, n]) => ({ nome, n, pct: Math.round(100 * n / pilarTotalN), color: pilarColors[nome] }));
+
+    // tarefas por responsável
+    const todasTracks = [];
+    checklistCats.forEach(cat => cat.items.forEach(it => todasTracks.push(it.track)));
+    const respMap = {};
+    todasTracks.forEach(tr => {
+      const nome = (tr.responsavel || '').trim();
+      if (!nome) return;
+      const r = respMap[nome] || (respMap[nome] = { nome, total: 0, done: 0, atraso: 0 });
+      r.total++;
+      if (tr.statusId === 'ok' || tr.statusId === 'nc') r.done++;
+      if (tr.statusId === 'atraso') r.atraso++;
+    });
+    const respTarefasStats = Object.values(respMap).sort((a, b) => b.atraso - a.atraso || (b.total - b.done) - (a.total - a.done)).slice(0, 8);
+
+    // próximos prazos
+    const prazosProximos = [];
+    checklistCats.forEach(cat => cat.items.forEach(it => {
+      if (it.track.showPrazo && it.track.prazoValue) {
+        const dias = Math.round((new Date(it.track.prazoValue + 'T00:00:00') - hoje) / 86400000);
+        prazosProximos.push({ key: it.track.key, label: it.label, prazoValue: it.track.prazoValue, dias });
+      }
+    }));
+    prazosProximos.sort((a, b) => a.dias - b.dias);
+    const prazosProximosTop = prazosProximos.slice(0, 6).map(p => ({
+      ...p,
+      dataFmt: new Date(p.prazoValue + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+      diasLabel: p.dias < 0 ? Math.abs(p.dias) + 'd atrasada' : p.dias === 0 ? 'hoje' : 'em ' + p.dias + 'd',
+      diasColor: p.dias < 0 ? '#C0392B' : p.dias <= 3 ? '#B4471F' : '#1E7A45',
+    }));
+
+    // check-in por mesa
+    const mesasSPComPresenca = mesaStats.filter(ms2 => mesaElegiveis.filter(n2 => mesaDeSP(n2) === ms2.nome && gv('ps-' + n2)).length > 0).length;
+    const mesasBSBComPresenca = mesaStatsBSB.filter(ms2 => mesaElegiveisBSB.filter(n2 => mesaDeBSB(n2) === ms2.nome && gv('ps-' + n2)).length > 0).length;
 
     return {
       spBg: s.city === 'sp' ? '#F39200' : 'transparent', spColor: s.city === 'sp' ? '#002855' : '#C9D6E8',
@@ -2647,8 +2763,11 @@ class Component extends DCLogic {
       tryUnlock: this.tryUnlock, lockOrg: this.lockOrg,
       checklistCats: checklistCatsView, checklistRespOpcoes, checklistTemFiltro: !!respFiltro,
       checklistPct, checklistDone, checklistTotal,
-      statusCounts: statusCounts.map(sc => ({ ...sc, active: statusFiltro === sc.id, onClick: this.setStatusFiltro(sc.id),
-        ring: statusFiltro === sc.id ? '2px solid #F39200' : '2px solid transparent' })),
+      statusCounts: [
+        { id: '', label: 'Todas', n: checklistTotal, dot: '#9A9AA0', ring: statusFiltro === '' ? '2px solid #F39200' : '2px solid transparent', onClick: this.setStatusFiltro('') },
+        ...statusCounts.map(sc => ({ ...sc, active: statusFiltro === sc.id, onClick: this.setStatusFiltro(sc.id),
+          ring: statusFiltro === sc.id ? '2px solid #F39200' : '2px solid transparent' })),
+      ],
       checklistBarWidth: checklistPct + '%',
       atrasadas,
       showChecklistLista: (s.checklistView || 'lista') === 'lista',
@@ -2716,7 +2835,6 @@ class Component extends DCLogic {
       presentesCount, presentesSP, presentesBSB, presentesPct: Math.round(100 * presentesCount / PARTICIPANTES.length) + '%',
       pessoaFiltros, spCount, bsbCount, spOnlyCount, bsbOnlyCount, semCidadeCount, unidadesOpcoes, onUnidadeChange, dualCount,
       pessoaUnidadeValue: s.pessoaUnidade || '',
-      limparPresencas: this.limparPresencas,
       presencaFiltroLabel: s.presencaFiltro === 'sim' ? 'só presentes' : (s.presencaFiltro === 'nao' ? 'só ausentes' : ''),
       presencaFiltroAtivo: !!s.presencaFiltro, onPresencaClick: this.setPresencaFiltro,
       presencaBoxBorder: s.presencaFiltro ? '2px solid #F39200' : '2px solid transparent',
@@ -2761,6 +2879,13 @@ class Component extends DCLogic {
       limparCamisaFiltro: () => this.setState({ camisaFiltro: '' }),
       dashboardCats, statusBars, cidadeBarSP, cidadeBarBSB, orcBarW, realBarW, presencaPct, kitPct,
       statusDonutBg, cidadeDonutBg, cidadeLegend, areaBars, pilarRows, diasProximoEvento, diasProximoLabel,
+      respTarefasStats, prazosProximosTop,
+      mesasSPComPresenca, numMesas, mesasBSBComPresenca, numMesasBSB,
+      camisaSizeCountList: Object.entries(camisaSizeCount).map(([size, n]) => ({ size, n })),
+      camisaFaltamCount,
+      camisaModCountList: Object.entries(camisaModCount).map(([mod, n]) => ({ mod, n })),
+      camisaModFaltamCount,
+      confSimCount: confraternizacaoSimCount, confNaoCount: confraternizacaoNaoCount, confTalvezCount: confraternizacaoTalvezCount,
       showContatosOrg: (s.contatosView || 'org') === 'org', showContatosPrest: s.contatosView === 'prest',
       viewOrgBg: (s.contatosView || 'org') === 'org' ? '#0057A6' : '#FFFFFF',
       viewOrgColor: (s.contatosView || 'org') === 'org' ? '#FFFFFF' : '#002855',
