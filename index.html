@@ -294,8 +294,8 @@
     </sc-if>
 
     <sc-if value="{{ showBrindes }}" hint-placeholder-val="{{ false }}">
-      <div style="max-width:720px">
-        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Jogo dos Brindes</div>
+      <div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Pontos & Brindes</div>
         <div style="font-size:14px;color:#6B6B70;margin-bottom:24px">Participe do evento, ganhe pontos e troque por brindes.</div>
 
         <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;margin-bottom:24px">
@@ -305,7 +305,7 @@
           </div>
           <sc-if value="{{ manualJogoAberto }}" hint-placeholder-val="{{ true }}">
           <div style="font-size:13px;color:#4A4A50;line-height:1.7">
-            Cada ação de participação no app vale <b>1 ponto</b>: confirmar presença, responder restrição alimentar, escolher camiseta, responder à confraternização, informar necessidade especial e avaliar o evento (nota geral e por painel) — total de 7 pontos possíveis.<br/><br/>
+            Cada ação de participação no app vale <b>1 ponto</b>: confirmar presença, responder restrição alimentar, escolher camiseta, responder à confraternização, informar necessidade especial e avaliar o evento (nota geral e por painel) — total de 7 pontos possíveis, mais 1 ponto por acerto no Detetive VIART abaixo.<br/><br/>
             Os pontos podem ser trocados por brindes extras no mercado abaixo. O preço de cada brinde em pontos é recalculado ao vivo, tipo uma bolsa de valores: se poucas pessoas estiverem pontuando, os preços sobem; se muita gente participar, os preços caem — assim o acesso aos melhores brindes fica equilibrado com o tamanho da "economia" de pontos do momento. É por ordem de chegada: quem resgatar primeiro garante o item, mesmo que outra pessoa tenha mais pontos — então, se um brinde te interessa, não deixe pra depois.
           </div>
           </sc-if>
@@ -338,6 +338,31 @@
             <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">
               <sc-for list="{{ crachaOpcoes }}" as="op" hint-placeholder-count="0">
                 <div onClick="{{ op.escolher }}" style="cursor:pointer;background:#F2F5FA;border-radius:10px;padding:12px 14px;font-size:13.5px;color:#002855">{{ op.nome }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ temNome }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;margin-bottom:24px">
+            <div style="font-weight:700;font-size:15px;margin-bottom:4px">Detetive VIART: quem é quem?</div>
+            <div style="font-size:12.5px;color:#6B6B70;margin-bottom:16px">Curiosidades da equipe, sem nome — adivinhe de quem é. Acerto vale 1 ponto, uma tentativa por pergunta. Novas perguntas liberam aos poucos, todo dia, até o evento.</div>
+            <sc-if value="{{ quizVazio }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:13px;color:#8A8A90">Nenhuma pergunta liberada ainda — volte amanhã.</div>
+            </sc-if>
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <sc-for list="{{ quizPerguntasView }}" as="q" hint-placeholder-count="3">
+                <div style="background:#F7F9FC;border:1px solid #DCE6F2;border-radius:12px;padding:14px 16px">
+                  <div style="font-size:13.5px;color:#002855;font-style:italic;margin-bottom:10px">"{{ q.texto }}" — quem é?</div>
+                  <div style="display:flex;flex-wrap:wrap;gap:8px">
+                    <sc-for list="{{ q.opcoes }}" as="op" hint-placeholder-count="4">
+                      <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;background:{{ op.bg }};color:#002855;border:1.5px solid {{ op.border }}">{{ op.nome }}</div>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ q.respondida }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:12px;font-weight:700;margin-top:8px;color:{{ q.resultColor }}">{{ q.resultLabel }}</div>
+                  </sc-if>
+                </div>
               </sc-for>
             </div>
           </div>
@@ -568,6 +593,7 @@
           <textarea placeholder="Qual necessidade? (opcional)" value="{{ pcdObs }}" onChange="{{ onPcdObs }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:18px;resize:vertical"></textarea>
 
           <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Curiosidade sobre você (para o jogo "quem é quem")</div>
+          <div style="font-size:11.5px;color:#8A8A90;margin-bottom:8px">Pode virar uma pergunta anônima no jogo, sem seu nome — só quem acertar descobre quem é.</div>
           <textarea placeholder="Ex: já competi em canoagem, toco viola caipira, já morei em 5 países…" value="{{ curiosidadeTexto }}" onChange="{{ onCuriosidadeTexto }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:18px;resize:vertical"></textarea>
 
           <div onClick="{{ cadastroSalvar }}" style="cursor:pointer;display:inline-block;background:{{ cadastroSalvarBg }};color:#fff;font-weight:700;padding:12px 24px;border-radius:10px;font-size:14px">Enviar cadastro</div>
@@ -611,10 +637,15 @@
               <sc-for list="{{ climaDias }}" as="d" hint-placeholder-count="3">
                 <div style="background:{{ d.destaque }};border:1px solid {{ d.borda }};border-radius:12px;padding:12px 10px;text-align:center">
                   <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em">{{ d.dia }}</div>
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;margin:8px 0 2px">{{ d.max }}</div>
-                  <div style="font-size:12px;color:#6B6B70">mín {{ d.min }}</div>
-                  <div style="font-size:11px;color:#4A4A50;margin-top:8px;line-height:1.35;min-height:28px">{{ d.desc }}</div>
-                  <div style="font-size:11px;font-weight:700;color:{{ d.chuvaColor }};margin-top:4px">chuva {{ d.chuva }}</div>
+                  <sc-if value="{{ d.pendente }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:12px;color:#9A9AA0;margin:18px 0">Previsão sai em breve</div>
+                  </sc-if>
+                  <sc-if value="{{ d.naoPendente }}" hint-placeholder-val="{{ true }}">
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;margin:8px 0 2px">{{ d.max }}</div>
+                    <div style="font-size:12px;color:#6B6B70">mín {{ d.min }}</div>
+                    <div style="font-size:11px;color:#4A4A50;margin-top:8px;line-height:1.35;min-height:28px">{{ d.desc }}</div>
+                    <div style="font-size:11px;font-weight:700;color:{{ d.chuvaColor }};margin-top:4px">chuva {{ d.chuva }}</div>
+                  </sc-if>
                 </div>
               </sc-for>
             </div>
@@ -1518,9 +1549,12 @@
             <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Coletadas no pré-cadastro, para o jogo "quem é quem".</div>
             <div style="display:flex;flex-direction:column;gap:10px">
               <sc-for list="{{ curiosidadesLista }}" as="cu" hint-placeholder-count="4">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
-                  <div style="font-weight:700;font-size:13.5px">{{ cu.nome }}</div>
-                  <div style="font-size:13px;color:#4A4A50;margin-top:4px;line-height:1.5">{{ cu.texto }}</div>
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+                  <div style="min-width:0">
+                    <div style="font-weight:700;font-size:13.5px">{{ cu.nome }}</div>
+                    <div style="font-size:13px;color:#4A4A50;margin-top:4px;line-height:1.5">{{ cu.texto }}</div>
+                  </div>
+                  <div onClick="{{ cu.excluir }}" style="cursor:pointer;flex-shrink:0;font-size:11px;font-weight:700;color:#B4471F;border:1px solid #F5CDBB;border-radius:999px;padding:6px 12px;white-space:nowrap">Excluir</div>
                 </div>
               </sc-for>
             </div>
@@ -1885,7 +1919,7 @@ const TABS_DEF = [
   { id: 'inicio', label: 'Início' },
   { id: 'info', label: 'Informações' },
   { id: 'programacao', label: 'Programação' },
-  { id: 'brindes', label: 'Jogo dos Brindes' },
+  { id: 'brindes', label: 'Pontos & Brindes' },
   { id: 'org', label: 'Organização' },
 ];
 
@@ -2005,9 +2039,10 @@ const MANUAL_SECOES = [
     'Destaque automático "AGORA" no item em andamento, no dia do evento.',
     'Ícone/cor por pilar do objetivo (Alinhar, Conectar, Executar).',
   ] },
-  { id: 'brindes', titulo: 'Jogo dos Brindes (público)', itens: [
+  { id: 'brindes', titulo: 'Pontos & Brindes (público)', itens: [
     'Identificação por nome (busca na lista de participantes).',
-    'Pontos por ação de participação: confirmar presença, restrição alimentar, camiseta, confraternização, necessidade especial, avaliação do evento.',
+    'Pontos por ação de participação: confirmar presença, restrição alimentar, camiseta, confraternização, necessidade especial, avaliação do evento, acertos no Detetive VIART.',
+    'Detetive VIART: adivinhe de quem é cada curiosidade cadastrada no pré-cadastro (sem nome exposto); acerto vale 1 ponto, uma tentativa por pergunta, novas perguntas liberam aos poucos até o evento.',
     'Mercado de brindes: preço em pontos varia conforme demanda (tipo bolsa de valores); resgate por ordem de chegada.',
   ] },
   { id: 'informacoes', titulo: 'Informações (público)', itens: [
@@ -2082,7 +2117,6 @@ const CHECKLIST_CATS = [
     ['Acionar GEIMP para cobrir evento na Intranet', 'nao', '', '2026-07-31', 'geimp-intranet'],
     ['Entregar ppt do Report Planejamento VIART 2026', 'nao', '', '2026-08-07', 'ppt-report-planejamento'],
     ['Entregar ppt das 4 comissões (Clima, Diversidade, Escola VIART, INOVAVIART)', 'nao', '', '2026-08-07', 'ppt-4-comissoes'],
-    ['Providenciar dinâmicas rápidas pós-almoço', 'nao', '', '2026-08-11', 'dinamicas-pos-almoco'],
     ['Criar gamificação com brindes para receber insights', 'nao', '', '2026-08-11', 'gamificacao-brindes'],
     ['Entregar slide de créditos ao staff para Encerramento', 'nao', '', '2026-08-11', 'slide-creditos'],
     ['Providenciar Wi-Fi (rede e senha) de SP', 'nao', '', '2026-07-31', 'wifi-sp'],
@@ -2241,10 +2275,12 @@ class Component extends DCLogic {
   componentDidMount() {
     try {
       const unlocked = localStorage.getItem('viart2026_org_unlocked') === '1';
+      const nomeJaSalvo = localStorage.getItem('viart2026_meu_nome') || localStorage.getItem('viart2026_dados_nome') || '';
       this.setState({
         orgUnlocked: unlocked,
-        meuNome: localStorage.getItem('viart2026_meu_nome') || '',
-        dadosNome: localStorage.getItem('viart2026_dados_nome') || '',
+        meuNome: nomeJaSalvo,
+        dadosNome: nomeJaSalvo,
+        ciNome: nomeJaSalvo,
         restricaoTipo: localStorage.getItem('viart2026_restricao_tipo') || '',
         restricaoObs: localStorage.getItem('viart2026_restricao_obs') || '',
       });
@@ -2438,8 +2474,28 @@ class Component extends DCLogic {
     });
     return n;
   };
+  pontosTotalDe = (nome) => this.calcularPontosFeitos(nome).length + this.contarAcertosQuiz(nome);
+  contarAcertosQuiz = (nome) => {
+    let n = 0;
+    Object.keys(this.state.sync).forEach(k => {
+      if (k.indexOf('quiz-' + nome + '-') === 0) { const v = this.state.sync[k].v; if (v && v.certo) n++; }
+    });
+    return n;
+  };
+  hashStr = (s) => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h; };
+  seededShuffle = (arr, seedStr) => {
+    let seed = this.hashStr(seedStr) >>> 0;
+    const rnd = () => { seed = (seed * 1103515245 + 12345) >>> 0; return seed / 4294967296; };
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  };
+  responderQuiz = (key, escolhida, correta) => () => {
+    if (this.valor(key)) return;
+    this.setCampos({ [key]: { resposta: escolhida, certo: escolhida === correta } });
+  };
   precoBrinde = (item) => {
-    const pontosPorPessoa = PARTICIPANTES.map(n => this.calcularPontosFeitos(n).length).filter(p => p > 0);
+    const pontosPorPessoa = PARTICIPANTES.map(n => this.pontosTotalDe(n)).filter(p => p > 0);
     const media = pontosPorPessoa.length ? (pontosPorPessoa.reduce((a, b) => a + b, 0) / pontosPorPessoa.length) : 3;
     return Math.max(1, Math.round(media * item.peso));
   };
@@ -2454,10 +2510,10 @@ class Component extends DCLogic {
     const estoqueTotal = cidade === 'sp' ? item.estoqueSP : item.estoqueBSB;
     if (this.valor('brinde-' + itemId + '-' + nome)) { this.setState({ brindeAviso: 'Você já resgatou esse item.' }); return; }
     if (this.contarResgates(itemId, cidade) >= estoqueTotal) { this.setState({ brindeAviso: 'Esse item já esgotou na sua cidade.' }); return; }
-    const feitos = this.calcularPontosFeitos(nome);
+    const pontosPessoa = this.pontosTotalDe(nome);
     let gastos = 0;
     BRINDES_MARKETPLACE.forEach(b => { if (this.valor('brinde-' + b.id + '-' + nome)) gastos += this.precoBrinde(b); });
-    if (feitos.length - gastos < custo) { this.setState({ brindeAviso: 'Pontos insuficientes para esse item.' }); return; }
+    if (pontosPessoa - gastos < custo) { this.setState({ brindeAviso: 'Pontos insuficientes para esse item.' }); return; }
     this.setState({ brindeAviso: '' });
     this.setCampos({ ['brinde-' + itemId + '-' + nome]: true }).then(() => {
       setTimeout(() => this.reconciliarResgate(itemId, cidade, nome, estoqueTotal), 700);
@@ -2510,10 +2566,10 @@ class Component extends DCLogic {
     const { ciNome, ciCodigo, city } = this.state;
     if (!ciNome) return this.setState({ ciErro: 'Escolha seu nome na lista.' });
     if (ciCodigo !== CODIGO_ENTRADA[city]) return this.setState({ ciErro: 'Código incorreto. Leia o QR do cartaz na entrada ou peça o código à equipe.' });
-    try { localStorage.setItem('viart2026_meu_nome', ciNome); } catch (e) {}
+    try { localStorage.setItem('viart2026_meu_nome', ciNome); localStorage.setItem('viart2026_dados_nome', ciNome); } catch (e) {}
     this.setState({ ciEnviando: true, ciErro: '' });
     this.setCampos({ ['ps-' + ciNome]: true, ['cd-' + ciNome]: city }).then(ok => {
-      this.setState({ ciEnviando: false, ciFeito: true, ciSalvoLocal: !ok, ciCodigo: '', meuNome: ciNome });
+      this.setState({ ciEnviando: false, ciFeito: true, ciSalvoLocal: !ok, ciCodigo: '', meuNome: ciNome, dadosNome: ciNome });
     });
   };
 
@@ -2531,17 +2587,22 @@ class Component extends DCLogic {
   };
   ciNovo = () => this.setState({ ciFeito: false, ciSalvoLocal: false, ciNome: '', ciQuery: '', ciCodigo: '', ciErro: '' });
   setMeuNome = (nome) => () => {
-    try { localStorage.setItem('viart2026_meu_nome', nome); } catch (e) {}
-    this.setState({ meuNome: nome, crachaQuery: '' });
+    try { localStorage.setItem('viart2026_meu_nome', nome); localStorage.setItem('viart2026_dados_nome', nome); } catch (e) {}
+    this.setState(s => ({ meuNome: nome, crachaQuery: '', dadosNome: nome,
+      restricaoTipo: this.valor('rt-' + nome) || '', restricaoObs: this.valor('ro-' + nome) || '',
+      pcdResposta: this.valor('pcd-' + nome) || '', pcdObs: this.valor('pcdo-' + nome) || '',
+      confraternizacaoResposta: this.valor('cf-' + nome) || '', curiosidadeTexto: this.valor('cur-' + nome) || '',
+      camisaTamanhoSel: this.valor('cs-' + nome) || '', camisaModelagemSel: this.valor('cm-' + nome) || '',
+    }));
   };
   limparMeuNome = () => {
     try { localStorage.setItem('viart2026_meu_nome', ''); } catch (e) {}
     this.setState({ meuNome: '' });
   };
   setDadosNome = (nome) => () => {
-    try { localStorage.setItem('viart2026_dados_nome', nome); } catch (e) {}
+    try { localStorage.setItem('viart2026_dados_nome', nome); localStorage.setItem('viart2026_meu_nome', nome); } catch (e) {}
     this.setState({
-      dadosNome: nome, dadosQuery: '',
+      dadosNome: nome, dadosQuery: '', meuNome: nome, crachaQuery: '',
       restricaoTipo: this.valor('rt-' + nome) || '', restricaoObs: this.valor('ro-' + nome) || '',
       pcdResposta: this.valor('pcd-' + nome) || '', pcdObs: this.valor('pcdo-' + nome) || '',
       confraternizacaoResposta: this.valor('cf-' + nome) || '',
@@ -2586,6 +2647,7 @@ class Component extends DCLogic {
   };
   onConfraternizacaoResposta = (e) => this.setState({ confraternizacaoResposta: e.target.value, cadastroFlash: false });
   onCuriosidadeTexto = (e) => this.setState({ curiosidadeTexto: e.target.value, cadastroFlash: false });
+  excluirCuriosidade = (nome) => () => this.setCampos({ ['cur-' + nome]: null });
   cadastroSalvar = () => {
     const nome = this.state.dadosNome;
     if (!nome) return;
@@ -3326,8 +3388,18 @@ class Component extends DCLogic {
             chuvaColor: chuva2 >= 50 ? '#0057A6' : '#9A9AA0',
             destaque: i === idxEvento ? '#F2F7FD' : '#FFFFFF',
             borda: i === idxEvento ? '#0057A6' : '#DCE6F2',
+            pendente: false, naoPendente: true,
           };
         });
+        if (idxEvento + 1 >= d.time.length) {
+          const diaSeguinte = new Date(cityData.dateISO + 'T12:00:00');
+          diaSeguinte.setDate(diaSeguinte.getDate() + 1);
+          climaDias.push({
+            dia: DIAS[diaSeguinte.getDay()] + ' ' + String(diaSeguinte.getDate()).padStart(2, '0') + '/' + String(diaSeguinte.getMonth() + 1).padStart(2, '0'),
+            max: '—', min: '—', desc: 'Previsão sai em breve', chuva: '', chuvaColor: '#9A9AA0',
+            destaque: '#F7F9FC', borda: '#DCE6F2', pendente: true, naoPendente: false,
+          });
+        }
       }
     }
 
@@ -3569,11 +3641,11 @@ class Component extends DCLogic {
       .slice(0, 8);
 
     const pontosFeitos = temNome ? this.calcularPontosFeitos(s.meuNome) : [];
-    const pontosPorPessoaGlobal = PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d).map(n => this.calcularPontosFeitos(n).length);
+    const pontosPorPessoaGlobal = PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d).map(n => this.pontosTotalDe(n));
     const pontosAtivosGlobal = pontosPorPessoaGlobal.filter(p => p > 0);
     const mediaPontosAtivosGlobal = pontosAtivosGlobal.length ? (pontosAtivosGlobal.reduce((a, b) => a + b, 0) / pontosAtivosGlobal.length) : 3;
     const pontosRankingView = PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d).map(n => {
-      const pts = this.calcularPontosFeitos(n).length;
+      const pts = this.pontosTotalDe(n);
       const resgatesArr = BRINDES_MARKETPLACE.filter(b => this.valor('brinde-' + b.id + '-' + n));
       return { nome: n, cidade: cidadeDe(n) === 'sp' ? 'SP' : 'BSB', pontos: pts, resgatesCount: resgatesArr.length, resgates: resgatesArr.map(b => b.nome).join(', ') || '—' };
     }).sort((a, b) => b.pontos - a.pontos);
@@ -3610,7 +3682,35 @@ class Component extends DCLogic {
       return { nome: b.nome, usado: usadoTotal, total: estoqueTotalItem, pct: estoqueTotalItem ? Math.round(100 * usadoTotal / estoqueTotalItem) : 0 };
     });
     const pontosAcoesView = PONTOS_ACOES.map(a => ({ label: a.label, feito: pontosFeitos.indexOf(a.key) !== -1, marca: pontosFeitos.indexOf(a.key) !== -1 ? '✓' : '○', cor: pontosFeitos.indexOf(a.key) !== -1 ? '#8FD9A8' : '#5E7DA6' }));
-    const pontosTotal = pontosFeitos.length;
+    const acertosQuizMeu = temNome ? this.contarAcertosQuiz(s.meuNome) : 0;
+    const pontosTotal = pontosFeitos.length + acertosQuizMeu;
+
+    const CAMPAIGN_START_QUIZ = '2026-08-05';
+    const curiosOrdenadas = PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d && this.valor('cur-' + n))
+      .map(n => ({ nome: n, texto: this.valor('cur-' + n), t: (this.state.sync['cur-' + n] || {}).t || 0 }))
+      .sort((a, b) => a.t - b.t);
+    const diasDesdeInicioQuiz = Math.max(0, Math.round((new Date(hojeISOAtual(new Date()) + 'T00:00:00') - new Date(CAMPAIGN_START_QUIZ + 'T00:00:00')) / 86400000));
+    const quizLiberadas = Math.min(curiosOrdenadas.length, (diasDesdeInicioQuiz + 1) * 3);
+    const quizPool = curiosOrdenadas.slice(0, quizLiberadas);
+    const quizPerguntasView = temNome ? quizPool.filter(q => q.nome !== s.meuNome).map(q => {
+      const key = 'quiz-' + s.meuNome + '-' + q.nome;
+      const respondida = this.valor(key);
+      const outros = quizPool.filter(o => o.nome !== q.nome).map(o => o.nome);
+      const poolDistratores = outros.length >= 3 ? outros : PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d && n !== q.nome && n !== s.meuNome);
+      const distratores = this.seededShuffle(poolDistratores, key + '-d').slice(0, 3);
+      const opcoes = this.seededShuffle([q.nome].concat(distratores), key + '-o');
+      return {
+        key, texto: q.texto, respondida: !!respondida,
+        resultLabel: respondida ? (respondida.certo ? 'Acertou! +1 ponto' : 'Não foi dessa vez.') : '',
+        resultColor: respondida ? (respondida.certo ? '#1E7A45' : '#B02D1C') : '#6B6B70',
+        opcoes: opcoes.map(op => ({
+          nome: op, onClick: this.responderQuiz(key, op, q.nome),
+          bg: !respondida ? '#FFFFFF' : (op === q.nome ? '#E3F3E8' : (op === respondida.resposta ? '#FBE3E0' : '#FFFFFF')),
+          border: !respondida ? '#C9D6E8' : (op === q.nome ? '#1E7A45' : (op === respondida.resposta ? '#C0392B' : '#DCE6F2')),
+        })),
+      };
+    }) : [];
+    const quizVazio = temNome && quizPerguntasView.length === 0;
     let pontosGastos = 0;
     if (temNome) BRINDES_MARKETPLACE.forEach(b => { if (this.valor('brinde-' + b.id + '-' + s.meuNome)) pontosGastos += this.precoBrinde(b); });
     const pontosDisponiveis = pontosTotal - pontosGastos;
@@ -3770,7 +3870,7 @@ class Component extends DCLogic {
           itens: sec.itens.map(txt => ({ n: ++n, txt })),
         }));
       })(),
-      curiosidadesLista: PARTICIPANTES.filter(n => gv('cur-' + n)).map(n => ({ nome: n, texto: gv('cur-' + n) })),
+      curiosidadesLista: PARTICIPANTES.filter(n => gv('cur-' + n)).map(n => ({ nome: n, texto: gv('cur-' + n), excluir: this.excluirCuriosidade(n) })),
       curiosidadesTotal: PARTICIPANTES.filter(n => gv('cur-' + n)).length,
       participantes, nameQuery: s.nameQuery, onNameQuery: this.onNameQuery,
       participantesTotal: PARTICIPANTES.length, participantesFiltrados: participantes.length,
@@ -3870,6 +3970,7 @@ class Component extends DCLogic {
       viewPrestColor: s.contatosView === 'prest' ? '#FFFFFF' : '#002855',
       setViewOrg: this.setContatosView('org'), setViewPrest: this.setContatosView('prest'),
       pontosAcoesView, pontosTotal, pontosGastos, pontosDisponiveis, brindesView, brindeAviso: s.brindeAviso || '',
+      quizPerguntasView, quizVazio,
       manualJogoAberto: s.manualJogoAberto === undefined ? true : s.manualJogoAberto,
       toggleManualJogo: this.toggleManualJogo, manualJogoToggleLabel: (s.manualJogoAberto === undefined || s.manualJogoAberto) ? 'Ocultar' : 'Ver regras',
       showOrgPontos: s.orgSubTab === 'pontos', pontosRankingView, mediaPontosGeral: Math.round(mediaPontosAtivosGlobal * 10) / 10,
