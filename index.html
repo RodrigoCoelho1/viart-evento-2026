@@ -1843,7 +1843,7 @@ const ORG_SUBTABS_DEF = [
 ];
 
 const CODIGO_ENTRADA = { sp: '1308', bsb: '2008' };
-const TEST_FORCAR_DIA_EVENTO = true; // TESTE: força hoje = dia do evento SP. Voltar para false antes de publicar.
+const TEST_FORCAR_DIA_EVENTO = false; // TESTE: força hoje = dia do evento SP. Voltar para false antes de publicar.
 const hojeISOAtual = (agora) => TEST_FORCAR_DIA_EVENTO ? '2026-08-13' : (agora.getFullYear() + '-' + String(agora.getMonth() + 1).padStart(2, '0') + '-' + String(agora.getDate()).padStart(2, '0'));
 
 const MESA_NOMES = ['Alinhamento','Conexão','Propósito','Pertencimento','Transparência','Integração','Colaboração','Legado','Reconhecimento','Confiança','Excelência','Transformação','União','Conquista','Superação','Impacto','Crescimento','Compromisso','Gratidão','Inovação','Coragem','Sinergia'];
