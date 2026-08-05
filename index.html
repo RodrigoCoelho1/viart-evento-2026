@@ -333,13 +333,9 @@
 
         <sc-if value="{{ crachaSemNome }}" hint-placeholder-val="{{ true }}">
           <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px);margin-bottom:24px">
-            <div style="font-weight:700;font-size:15px;margin-bottom:12px">Qual é o seu nome?</div>
-            <input placeholder="Digite as primeiras letras..." value="{{ crachaQuery }}" onChange="{{ onCrachaQuery }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif"></input>
-            <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">
-              <sc-for list="{{ crachaOpcoes }}" as="op" hint-placeholder-count="0">
-                <div onClick="{{ op.escolher }}" style="cursor:pointer;background:#F2F5FA;border-radius:10px;padding:12px 14px;font-size:13.5px;color:#002855">{{ op.nome }}</div>
-              </sc-for>
-            </div>
+            <div style="font-weight:700;font-size:15px;margin-bottom:8px">Complete seu pré-cadastro primeiro</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px;line-height:1.6">A identificação do app começa pelo pré-cadastro, na aba Informações. Depois disso seu nome fica reconhecido em todo o app, sem perguntar de novo.</div>
+            <div onClick="{{ goToPreCadastro }}" style="cursor:pointer;display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px">Ir para o pré-cadastro</div>
           </div>
         </sc-if>
 
@@ -511,8 +507,8 @@
           </sc-if>
         </div>
 
-        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 4px">Pré-cadastro</div>
-        <div style="font-size:13px;color:#6B6B70;margin-bottom:14px">Identifique-se uma vez para liberar restrição alimentar, camiseta e confraternização.</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 4px">Identificação</div>
+        <div style="font-size:13px;color:#6B6B70;margin-bottom:14px">Identifique-se para ter acesso a todas as funcionalidades desse app e participar do evento de Planejamento da VIART.</div>
         <sc-if value="{{ temDados }}" hint-placeholder-val="{{ false }}">
           <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px;max-width:520px">
             <div style="font-weight:700;font-size:14.5px;color:#002855">{{ dadosNome }}</div>
@@ -684,13 +680,9 @@
 
         <sc-if value="{{ crachaSemNome }}" hint-placeholder-val="{{ true }}">
           <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px);max-width:520px">
-            <div style="font-weight:700;font-size:15px;margin-bottom:12px">Qual é o seu nome?</div>
-            <input placeholder="Digite as primeiras letras..." value="{{ crachaQuery }}" onChange="{{ onCrachaQuery }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif"></input>
-            <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">
-              <sc-for list="{{ crachaOpcoes }}" as="op" hint-placeholder-count="0">
-                <div onClick="{{ op.escolher }}" style="cursor:pointer;background:#F2F5FA;border-radius:10px;padding:12px 14px;font-size:13.5px;color:#002855">{{ op.nome }}</div>
-              </sc-for>
-            </div>
+            <div style="font-weight:700;font-size:15px;margin-bottom:8px">Complete seu pré-cadastro primeiro</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px;line-height:1.6">A identificação do app começa pelo pré-cadastro, na aba Informações.</div>
+            <div onClick="{{ goToPreCadastro }}" style="cursor:pointer;display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px">Ir para o pré-cadastro</div>
           </div>
         </sc-if>
         </div>
@@ -2552,6 +2544,7 @@ class Component extends DCLogic {
 
   onNameQuery = (e) => this.setState({ nameQuery: e.target.value });
   setInfoSubTab = (id) => () => this.setState({ infoSubTab: id });
+  goToPreCadastro = () => this.setState({ activeTab: 'info', infoSubTab: 'antes' });
   toggleManual = () => this.setState(s => ({ manualAberto: !s.manualAberto }));
   toggleNpsPaineis = () => this.setState(s => ({ npsPaineisAberto: !s.npsPaineisAberto }));
   toggleManualJogo = () => this.setState(s => ({ manualJogoAberto: s.manualJogoAberto === undefined ? false : !s.manualJogoAberto }));
@@ -3811,7 +3804,7 @@ class Component extends DCLogic {
       mostrarContador: mostrarAgora && !ehDiaDoEvento,
       mapsUrl, uberUrl, confraMapsUrl, confraUberUrl, confraEndereco: cityData.confraternizacaoEndereco,
       crachaQuery: s.crachaQuery, onCrachaQuery: this.onCrachaQuery, crachaOpcoes,
-      temNome, crachaSemNome: !temNome, meuNome: s.meuNome, primeiroNome, limparMeuNome: this.limparMeuNome,
+      temNome, crachaSemNome: !temNome, meuNome: s.meuNome, primeiroNome, limparMeuNome: this.limparMeuNome, goToPreCadastro: this.goToPreCadastro,
       crachaLocal, jaCredenciado, aguardandoCredenciamento: temNome && !jaCredenciado, confirmarPresenca: this.confirmarPresenca,
       minhaMesa, temMesa: !!minhaMesa, mesasSP,
       temDados, dadosSemNome: !temDados, dadosNome: s.dadosNome, limparDadosNome: this.limparDadosNome,
