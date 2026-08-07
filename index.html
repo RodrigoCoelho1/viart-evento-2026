@@ -378,6 +378,9 @@
           <sc-for list="{{ brindesView }}" as="b" hint-placeholder-count="3">
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px">
               <image-slot id="{{ b.id }}" src="{{ b.foto }}" fit="{{ b.fit }}" shape="rounded" radius="12" placeholder="Foto do brinde" style="width:100%;aspect-ratio:4/3"></image-slot>
+              <sc-if value="{{ b.semFoto }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:11px;font-weight:700;color:#8A5A0B;background:#FDECC8;border-radius:8px;padding:6px 10px;text-align:center;margin-top:-6px">Foto chega em breve</div>
+              </sc-if>
               <div>
                 <div style="font-weight:700;font-size:14.5px">{{ b.nome }}</div>
                 <sc-if value="{{ b.desc }}" hint-placeholder-val="{{ false }}">
@@ -539,9 +542,12 @@
         <div style="background:#E8EFF9;border-radius:16px;padding:24px;margin:20px 0 28px">
           <div style="font-weight:700;font-size:15px;margin-bottom:4px">Complete seu cadastro</div>
           <div style="font-size:13px;color:#4A4A50;margin-bottom:18px">Essas respostas ajudam a organização a preparar o evento. Leva um minuto.</div>
+          <sc-if value="{{ cadastroTravado }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FDF1DC;border:1px solid #F39200;color:#8A5A0B;border-radius:10px;padding:12px 16px;font-size:13px;font-weight:700;margin-bottom:18px">Respostas travadas — o prazo para informar ou alterar ia até a véspera do evento da sua cidade.</div>
+          </sc-if>
 
           <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Restrição alimentar</div>
-          <select value="{{ restricaoTipo }}" onChange="{{ onRestricaoTipo }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF;margin-bottom:10px">
+          <select disabled="{{ cadastroTravado }}" value="{{ restricaoTipo }}" onChange="{{ onRestricaoTipo }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF;margin-bottom:10px">
             <option value="">Selecione...</option>
             <option value="Nenhuma">Nenhuma</option>
             <option value="Vegetariano">Vegetariano</option>
@@ -551,7 +557,7 @@
             <option value="Alergia alimentar">Alergia alimentar</option>
             <option value="Outra">Outra</option>
           </select>
-          <textarea placeholder="Detalhes (opcional)" value="{{ restricaoObs }}" onChange="{{ onRestricaoObs }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:18px;resize:vertical"></textarea>
+          <textarea disabled="{{ cadastroTravado }}" placeholder="Detalhes (opcional)" value="{{ restricaoObs }}" onChange="{{ onRestricaoObs }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:18px;resize:vertical"></textarea>
 
           <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Minha camiseta</div>
           <sc-if value="{{ camisaMostrarOk }}" hint-placeholder-val="{{ false }}">
@@ -564,7 +570,7 @@
           </sc-if>
           <sc-if value="{{ camisaMostrarForm }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">
-              <select value="{{ camisaTamanhoSel }}" onChange="{{ onCamisaTamanho }}" style="flex:1;min-width:130px;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF">
+              <select disabled="{{ cadastroTravado }}" value="{{ camisaTamanhoSel }}" onChange="{{ onCamisaTamanho }}" style="flex:1;min-width:130px;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF">
                 <option value="">Tamanho...</option>
                 <option value="P">P</option>
                 <option value="M">M</option>
@@ -572,7 +578,7 @@
                 <option value="GG">GG</option>
                 <option value="EGG">EGG</option>
               </select>
-              <select value="{{ camisaModelagemSel }}" onChange="{{ onCamisaModelagem }}" style="flex:1;min-width:130px;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF">
+              <select disabled="{{ cadastroTravado }}" value="{{ camisaModelagemSel }}" onChange="{{ onCamisaModelagem }}" style="flex:1;min-width:130px;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF">
                 <option value="">Modelagem...</option>
                 <option value="Feminina">Feminina</option>
                 <option value="Masculina">Masculina</option>
@@ -581,7 +587,7 @@
           </sc-if>
 
           <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Confraternização — pretende participar?</div>
-          <select value="{{ confraternizacaoResposta }}" onChange="{{ onConfraternizacaoResposta }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF;margin-bottom:18px">
+          <select disabled="{{ cadastroTravado }}" value="{{ confraternizacaoResposta }}" onChange="{{ onConfraternizacaoResposta }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF;margin-bottom:18px">
             <option value="">Selecione...</option>
             <option value="Sim">Sim, vou participar</option>
             <option value="Não">Não vou participar</option>
@@ -589,18 +595,23 @@
           </select>
 
           <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Necessidade especial</div>
-          <select value="{{ pcdResposta }}" onChange="{{ onPcdResposta }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF;margin-bottom:10px">
+          <select disabled="{{ cadastroTravado }}" value="{{ pcdResposta }}" onChange="{{ onPcdResposta }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF;margin-bottom:10px">
             <option value="">Selecione...</option>
             <option value="Não">Não</option>
             <option value="Sim">Sim</option>
           </select>
-          <textarea placeholder="Qual necessidade? (opcional)" value="{{ pcdObs }}" onChange="{{ onPcdObs }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:18px;resize:vertical"></textarea>
+          <textarea disabled="{{ cadastroTravado }}" placeholder="Qual necessidade? (opcional)" value="{{ pcdObs }}" onChange="{{ onPcdObs }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:18px;resize:vertical"></textarea>
 
           <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Curiosidade sobre você (para o jogo "quem é quem")</div>
           <div style="font-size:11.5px;color:#8A8A90;margin-bottom:8px">Pode virar uma pergunta anônima no jogo, sem seu nome — só quem acertar descobre quem é.</div>
           <textarea placeholder="Ex: já competi em canoagem, toco viola caipira, já morei em 5 países…" value="{{ curiosidadeTexto }}" onChange="{{ onCuriosidadeTexto }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:18px;resize:vertical"></textarea>
 
-          <div onClick="{{ cadastroSalvar }}" style="cursor:pointer;display:inline-block;background:{{ cadastroSalvarBg }};color:#fff;font-weight:700;padding:12px 24px;border-radius:10px;font-size:14px">Enviar cadastro</div>
+          <sc-if value="{{ cadastroTravado }}" hint-placeholder-val="{{ false }}">
+            <div style="display:inline-block;background:#EDEDED;color:#8A8A90;font-weight:700;padding:12px 24px;border-radius:10px;font-size:14px">Prazo encerrado</div>
+          </sc-if>
+          <sc-if value="{{ cadastroAberto }}" hint-placeholder-val="{{ true }}">
+            <div onClick="{{ cadastroSalvar }}" style="cursor:pointer;display:inline-block;background:{{ cadastroSalvarBg }};color:#fff;font-weight:700;padding:12px 24px;border-radius:10px;font-size:14px">Enviar cadastro</div>
+          </sc-if>
           <sc-if value="{{ cadastroSalvo }}" hint-placeholder-val="{{ false }}">
             <div style="font-size:12px;color:#1E7A45;font-weight:700;margin-top:10px">Cadastro atualizado para a organização!</div>
           </sc-if>
@@ -1459,6 +1470,33 @@
                 <div onClick="{{ limparConfFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
               </sc-if>
             </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;align-content:flex-start">
+              <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;width:100%">Restrição alimentar</div>
+              <sc-for list="{{ restricaoStats }}" as="rs" hint-placeholder-count="3">
+                <div style="display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:#FDECC8">
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#8A5A0B">{{ rs.n }}</div>
+                  <div style="font-size:11.5px;color:#8A5A0B">{{ rs.tipo }}</div>
+                </div>
+              </sc-for>
+              <div style="display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:#F2F5FA">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#8A8A90">{{ restricaoNenhumaCount }}</div>
+                <div style="font-size:11.5px;color:#8A8A90">nenhuma</div>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:#F2F5FA">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#8A8A90">{{ restricaoSemRespostaCount }}</div>
+                <div style="font-size:11.5px;color:#8A8A90">sem resposta</div>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
+              <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Necessidade especial · {{ pcdCount }}</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ pcdStats }}" as="pd" hint-placeholder-count="2">
+                  <div style="font-size:12.5px;color:#002855">{{ pd.nome }}{{ pd.obsSuffix }}</div>
+                </sc-for>
+              </div>
+            </div>
             </div>
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px;margin-bottom:16px;align-items:start">
@@ -1533,6 +1571,7 @@
                     <sc-if value="{{ p.dual }}" hint-placeholder-val="{{ false }}"><div style="font-size:10px;font-weight:800;padding:2px 6px;border-radius:5px;background:#FDECC8;color:#8A5A00">SP + BSB</div></sc-if>
                     <sc-if value="{{ p.celular }}" hint-placeholder-val="{{ false }}"><a href="{{ p.celularHref }}" onClick="{{ p.stopProp }}" style="font-size:11px;color:#0057A6;text-decoration:none">{{ p.celular }}</a></sc-if>
                     <sc-if value="{{ p.camisa }}" hint-placeholder-val="{{ false }}"><div style="font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;background:#E8EFF9;color:#0057A6">{{ p.camisa }}</div></sc-if>
+                    <sc-if value="{{ p.restricao }}" hint-placeholder-val="{{ false }}"><div style="font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;background:#FDECC8;color:#8A5A0B">{{ p.restricao }}{{ p.restricaoObsSuffix }}</div></sc-if>
                     <sc-if value="{{ p.pcdSim }}" hint-placeholder-val="{{ false }}"><div style="font-size:10px;font-weight:800;padding:2px 6px;border-radius:5px;background:#FBE3E0;color:#B02D1C">Necessidade especial{{ p.pcdObsSuffix }}</div></sc-if>
                     <sc-if value="{{ p.temCuriosidade }}" hint-placeholder-val="{{ false }}"><div style="font-size:10px;font-weight:800;padding:2px 6px;border-radius:5px;background:#E7EDFB;color:#0057A6">Curiosidade</div></sc-if>
                   </div>
@@ -1925,6 +1964,7 @@ const ORG_SUBTABS_DEF = [
 const CODIGO_ENTRADA = { sp: '1308', bsb: '2008' };
 const TEST_FORCAR_DIA_EVENTO = false; // TESTE: força hoje = dia do evento SP. Voltar para false antes de publicar.
 const hojeISOAtual = (agora) => TEST_FORCAR_DIA_EVENTO ? '2026-08-13' : (agora.getFullYear() + '-' + String(agora.getMonth() + 1).padStart(2, '0') + '-' + String(agora.getDate()).padStart(2, '0'));
+const DATA_EVENTO_CIDADE = { sp: '2026-08-13', bsb: '2026-08-20' };
 
 const MESA_NOMES = ['Alinhamento','Conexão','Propósito','Pertencimento','Transparência','Integração','Colaboração','Legado','Reconhecimento','Confiança','Excelência','Transformação','União','Conquista','Superação','Impacto','Crescimento','Compromisso','Gratidão','Inovação','Coragem','Sinergia'];
 const nomeMesa = (i) => {
@@ -2068,7 +2108,7 @@ const BRINDES_MARKETPLACE = [
   { id: 'maleta-churrasco', nome: 'Maleta de churrasco', desc: 'Maleta de alumínio estruturada com cantoneiras reforçadas e placa central lisa para personalização.', foto: 'maleta-churrasco.jpg', peso: 3.2, estoqueSP: 4, estoqueBSB: 0 },
   { id: 'kit-uau', nome: 'Kit UAU', desc: 'Kit completo com ecobag/sacochila de algodão CAIXA, nécessaire preta compacta CAIXA Cartões e camisa polo azul embalada individualmente.', foto: 'kit-uau.jpg', peso: 2.8, estoqueSP: 42, estoqueBSB: 0 },
   { id: 'carregador-gocase', nome: 'Carregador Gocase', desc: 'Power bank Gocase 10.000mAh na cor azul tiffany, com carregamento rápido, saídas USB-C e USB-A e lanterna integrada.', foto: 'carregador-gocase.jpg', peso: 2.8, estoqueSP: 2, estoqueBSB: 0 },
-  { id: 'power-bank', nome: 'Power bank', desc: '', foto: '', peso: 2.8, estoqueSP: 1, estoqueBSB: 0 },
+  { id: 'power-bank', nome: 'Power bank', desc: 'Carregador portátil para manter o celular ligado durante o dia inteiro de evento.', foto: '', peso: 2.8, estoqueSP: 1, estoqueBSB: 0 },
   { id: 'bolsa-cop30', nome: 'Bolsa COP 30', desc: 'Estojo rígido multiuso com zíper e alça transversal removível, estampa temática da fauna e flora do Pampa e chancela CAIXA.', foto: 'bolsa-cop30.jpg', peso: 1.8, estoqueSP: 6, estoqueBSB: 0 },
   { id: 'garrafinha', nome: 'Garrafinha', desc: 'Embalagem cartonada rígida na cor preta com ilustração minimalista em linha branca de uma garrafa térmica.', foto: 'garrafinha.jpg', peso: 1.6, estoqueSP: 3, estoqueBSB: 0 },
   { id: 'xicaras-pires', nome: 'Jogo de xícaras', desc: 'Embalagem decorativa preta com estampa geométrica em tons de roxo e dourado, com visor circular que exibe copos de dose dupla para café espresso.', foto: 'xicaras-pires.jpg', peso: 1.5, estoqueSP: 3, estoqueBSB: 0 },
@@ -2104,7 +2144,7 @@ const MANUAL_SECOES = [
   ] },
   { id: 'informacoes', titulo: 'Informações (público)', itens: [
     'Manual de instalação do app (adicionar à tela inicial, iPhone/Android).',
-    'Pré-cadastro único: restrição alimentar, tamanho/modelagem de camiseta, confraternização, necessidade especial, curiosidade pessoal (para o jogo "quem é quem").',
+    'Pré-cadastro único: restrição alimentar, tamanho/modelagem de camiseta, confraternização, necessidade especial, curiosidade pessoal (para o jogo "quem é quem"). Restrição, confraternização e necessidade especial podem ser informadas ou alteradas livremente até a véspera do evento da cidade da pessoa (travam no dia do evento). Camiseta é travada assim que informada uma vez — sem reedição — porque os kits já são produzidos com base nessa resposta.',
     'Lista "O que levar".',
     'Previsão do tempo da cidade, com destaque para o dia do evento.',
     'Credenciamento: confirmação de presença (check-in), com crachá digital e mesa. Só abre no dia certo de cada cidade.',
@@ -2508,6 +2548,13 @@ class Component extends DCLogic {
 
   valor = (k) => (this.state.sync[k] ? this.state.sync[k].v : undefined);
   cidadeDe = (n) => this.valor('cd-' + n) || PARTICIPANTES_CIDADE_AUTO[n] || '';
+  // Trava as respostas de identificação (restrição, camiseta, confraternização, necessidade especial)
+  // a partir do dia do evento da cidade da pessoa — pode informar/alterar livremente até a véspera.
+  respostasTravadas = (nome) => {
+    const c = this.cidadeDe(nome);
+    if (!c || !DATA_EVENTO_CIDADE[c]) return false;
+    return hojeISOAtual(new Date()) >= DATA_EVENTO_CIDADE[c];
+  };
   calcularPontosFeitos = (nome) => {
     const feitos = [];
     if (this.valor('ps-' + nome)) feitos.push('ps');
@@ -2719,13 +2766,13 @@ class Component extends DCLogic {
   excluirCuriosidade = (nome) => () => this.setCampos({ ['cur-' + nome]: null });
   cadastroSalvar = () => {
     const nome = this.state.dadosNome;
-    if (!nome) return;
+    if (!nome || this.respostasTravadas(nome)) return;
     const campos = {};
     if (this.state.restricaoTipo) { campos['rt-' + nome] = this.state.restricaoTipo; campos['ro-' + nome] = this.state.restricaoObs; }
     if (this.state.confraternizacaoResposta) campos['cf-' + nome] = this.state.confraternizacaoResposta;
     if (this.state.pcdResposta) { campos['pcd-' + nome] = this.state.pcdResposta; campos['pcdo-' + nome] = this.state.pcdObs; }
     if (this.state.curiosidadeTexto.trim()) campos['cur-' + nome] = this.state.curiosidadeTexto.trim();
-    if (this.state.camisaTamanhoSel && this.state.camisaModelagemSel) {
+    if (this.state.camisaTamanhoSel && this.state.camisaModelagemSel && !this.valor('cs-' + nome)) {
       campos['cs-' + nome] = this.state.camisaTamanhoSel; campos['cm-' + nome] = this.state.camisaModelagemSel;
     }
     if (Object.keys(campos).length) this.setCampos(campos);
@@ -2754,9 +2801,10 @@ class Component extends DCLogic {
   };
   onCamisaTamanho = (e) => this.setState({ camisaTamanhoSel: e.target.value, cadastroFlash: false });
   onCamisaModelagem = (e) => this.setState({ camisaModelagemSel: e.target.value, cadastroFlash: false });
-  camisaEditar = () => this.setState({ camisaEditando: true });
+  camisaEditar = () => {}; // camiseta travada assim que informada — sem reedição
   camisaSalvar = () => {
     if (!this.state.camisaTamanhoSel || !this.state.camisaModelagemSel || !this.state.dadosNome) return;
+    if (this.valor('cs-' + this.state.dadosNome)) return; // já informada — travada
     this.setCampos({
       ['cs-' + this.state.dadosNome]: this.state.camisaTamanhoSel,
       ['cm-' + this.state.dadosNome]: this.state.camisaModelagemSel,
@@ -3276,6 +3324,7 @@ class Component extends DCLogic {
         funcao: info.f || '', celular: info.t || '', celularHref: info.t ? 'tel:' + info.t.replace(/\D/g, '') : '',
         dual: !!info.d, camisa: (gv('cs-' + n) || info.cs) ? (gv('cs-' + n) || info.cs) + ' · ' + (gv('cm-' + n) || info.cm || '?') : '',
         restricao: (gv('rt-' + n) && gv('rt-' + n) !== 'Nenhuma') ? gv('rt-' + n) : '',
+        restricaoObsSuffix: gv('ro-' + n) ? ': ' + gv('ro-' + n) : '',
         mesa: mesaDe(n),
         area: info.u ? info.u.split(' - ')[0] : '',
         camisaTam: gv('cs-' + n) || info.cs || '—', camisaTamOnClick: info.cs ? (e) => e.stopPropagation() : this.cycleCamisaTamanhoP(n),
@@ -3335,6 +3384,17 @@ class Component extends DCLogic {
       color: s.camisaModFiltro === mod ? '#FFFFFF' : '#002855',
     }));
     const camisaModFaltamAtivo = s.camisaModFiltro === 'sem';
+    const RESTRICAO_TIPOS = ['Vegetariano', 'Vegano', 'Sem glúten', 'Sem lactose', 'Alergia alimentar', 'Outra'];
+    const restricaoCount = {}; RESTRICAO_TIPOS.forEach(t => restricaoCount[t] = 0);
+    let restricaoNenhumaCount = 0, restricaoSemRespostaCount = 0;
+    baseFiltrado.forEach(n => {
+      const rt = gv('rt-' + n);
+      if (!rt) { restricaoSemRespostaCount++; return; }
+      if (rt === 'Nenhuma') { restricaoNenhumaCount++; return; }
+      if (restricaoCount[rt] !== undefined) restricaoCount[rt]++;
+    });
+    const restricaoStats = RESTRICAO_TIPOS.map(t => ({ tipo: t, n: restricaoCount[t] })).filter(r => r.n > 0);
+    const pcdStats = baseFiltrado.filter(n => gv('pcd-' + n) === 'Sim').map(n => ({ nome: n, obsSuffix: gv('pcdo-' + n) ? ': ' + gv('pcdo-' + n) : '' }));
     const mesaStats = MESA_VALORES.slice(0, numMesas).map(nome => ({
       nome, n: mesaElegiveis.filter(n2 => mesaDeSP(n2) === nome).length, onClick: this.setMesaFiltro(nome),
       bg: s.mesaFiltro === nome ? '#0057A6' : 'transparent', color: s.mesaFiltro === nome ? '#FFFFFF' : '#002855',
@@ -3549,7 +3609,9 @@ class Component extends DCLogic {
     const camisaDaPlanilha = !!(camisaInfo.cs && camisaInfo.cm);
     const camisaMostrarOk = temDados && camisaTemDados && !s.camisaEditando;
     const camisaMostrarForm = temDados && (!camisaTemDados || s.camisaEditando);
-    const camisaPodeAlterar = camisaMostrarOk && !camisaDaPlanilha;
+    const cadastroTravado = temDados && this.respostasTravadas(s.dadosNome);
+    // Camiseta é travada assim que informada, sem prazo — os kits já são produzidos com base nisso.
+    const camisaPodeAlterar = false;
     const camisaSalvarBg = (s.camisaTamanhoSel && s.camisaModelagemSel) ? '#F39200' : '#C9D6E8';
 
     // --- o que levar ---
@@ -3859,7 +3921,7 @@ class Component extends DCLogic {
       const jaTem = temNome && !!this.valor('brinde-' + b.id + '-' + s.meuNome);
       const podeComprar = temNome && !!minhaCidadeId && mercadoAberto && !jaTem && restante > 0 && pontosDisponiveis >= custo;
       return {
-        id: b.id, nome: b.nome, desc: b.desc, foto: b.foto, fit: b.fit || 'contain', pontos: custo, restante, esgotado: restante <= 0, jaTem, podeComprar,
+        id: b.id, nome: b.nome, desc: b.desc, foto: b.foto, semFoto: !b.foto, fit: b.fit || 'contain', pontos: custo, restante, esgotado: restante <= 0, jaTem, podeComprar,
         resgatar: this.resgatarBrinde(b.id),
         statusLabel: jaTem ? 'Resgatado' : (restante <= 0 ? 'Esgotado' : (!mercadoAberto ? 'Abre às 12h45' : (podeComprar ? 'Resgatar' : 'Pontos insuficientes'))),
         statusBg: jaTem ? '#E3F3E8' : (podeComprar ? '#0057A6' : '#EDEDED'),
@@ -3967,7 +4029,7 @@ class Component extends DCLogic {
       pcdTrocarNome: this.pcdTrocarNome, pcdSalvar: this.pcdSalvar, pcdSalvarBg, pcdSalva,
       confraternizacaoResposta: s.confraternizacaoResposta, onConfraternizacaoResposta: this.onConfraternizacaoResposta,
       curiosidadeTexto: s.curiosidadeTexto, onCuriosidadeTexto: this.onCuriosidadeTexto,
-      cadastroSalvar: this.cadastroSalvar, cadastroSalvarBg: '#0057A6', cadastroSalvo: !!s.cadastroFlash,
+      cadastroSalvar: this.cadastroSalvar, cadastroSalvarBg: '#0057A6', cadastroSalvo: !!s.cadastroFlash, cadastroTravado, cadastroAberto: !cadastroTravado,
       npsNome: s.npsNome, onNpsNome: this.onNpsNome, onNpsFuncionou: this.onNpsFuncionou, onNpsMelhorar: this.onNpsMelhorar,
       npsFuncionou: s.npsFuncionou, npsMelhorar: s.npsMelhorar, npsEnviar: this.npsEnviar, npsErro: s.npsErro,
       npsEnviado: s.npsEnviado, npsNaoEnviado: !s.npsEnviado,
@@ -3996,6 +4058,7 @@ class Component extends DCLogic {
       showOrgQR: s.orgSubTab === 'cartazes', pdfCartazes: this.pdfCartazes, pdfMesas: this.pdfMesas, pdfNomesMesas: this.pdfNomesMesas,
       cartazes: CARTAZES.map(c => ({ ...c, qrBg: 'url("' + c.qr + '")' })),
       showOrgPessoas: s.orgSubTab === 'pessoas',
+      restricaoStats, restricaoNenhumaCount, restricaoSemRespostaCount, pcdStats, pcdCount: pcdStats.length,
       showOrgCuriosidades: s.orgSubTab === 'curiosidades',
       showOrgManual: s.orgSubTab === 'manual',
       manualSecoes: (() => {
