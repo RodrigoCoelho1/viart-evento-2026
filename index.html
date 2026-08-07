@@ -604,6 +604,9 @@
 
           <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Curiosidade sobre você (para o jogo "quem é quem")</div>
           <div style="font-size:11.5px;color:#8A8A90;margin-bottom:8px">Pode virar uma pergunta anônima no jogo, sem seu nome — só quem acertar descobre quem é.</div>
+          <sc-if value="{{ temCuriosidadeSalva }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px;color:#1E7A45;font-weight:700;margin-bottom:8px">Você já enviou uma curiosidade — por sigilo do jogo, ela não é reexibida aqui. Escreva algo abaixo só se quiser substituí-la.</div>
+          </sc-if>
           <textarea placeholder="Ex: já competi em canoagem, toco viola caipira, já morei em 5 países…" value="{{ curiosidadeTexto }}" onChange="{{ onCuriosidadeTexto }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:18px;resize:vertical"></textarea>
 
           <sc-if value="{{ cadastroTravado }}" hint-placeholder-val="{{ false }}">
@@ -2390,7 +2393,9 @@ class Component extends DCLogic {
         confraternizacaoResposta: nomeJaSalvo ? gv('cf-' + nomeJaSalvo) : '',
         pcdResposta: nomeJaSalvo ? gv('pcd-' + nomeJaSalvo) : '',
         pcdObs: nomeJaSalvo ? gv('pcdo-' + nomeJaSalvo) : '',
-        curiosidadeTexto: nomeJaSalvo ? gv('cur-' + nomeJaSalvo) : '',
+        // Curiosidade nunca é reexibida (nem para o próprio dono) — é o segredo do jogo "quem é quem";
+        // mostrar o texto de volta a quem estiver identificado como essa pessoa vazaria a resposta.
+        curiosidadeTexto: '',
         camisaTamanhoSel: nomeJaSalvo ? gv('cs-' + nomeJaSalvo) : '',
         camisaModelagemSel: nomeJaSalvo ? gv('cm-' + nomeJaSalvo) : '',
       });
@@ -2715,7 +2720,7 @@ class Component extends DCLogic {
     this.setState(s => ({ meuNome: nome, crachaQuery: '', dadosNome: nome,
       restricaoTipo: this.valor('rt-' + nome) || '', restricaoObs: this.valor('ro-' + nome) || '',
       pcdResposta: this.valor('pcd-' + nome) || '', pcdObs: this.valor('pcdo-' + nome) || '',
-      confraternizacaoResposta: this.valor('cf-' + nome) || '', curiosidadeTexto: this.valor('cur-' + nome) || '',
+      confraternizacaoResposta: this.valor('cf-' + nome) || '', curiosidadeTexto: '',
       camisaTamanhoSel: this.valor('cs-' + nome) || '', camisaModelagemSel: this.valor('cm-' + nome) || '',
     }));
   };
@@ -2730,7 +2735,7 @@ class Component extends DCLogic {
       restricaoTipo: this.valor('rt-' + nome) || '', restricaoObs: this.valor('ro-' + nome) || '',
       pcdResposta: this.valor('pcd-' + nome) || '', pcdObs: this.valor('pcdo-' + nome) || '',
       confraternizacaoResposta: this.valor('cf-' + nome) || '',
-      curiosidadeTexto: this.valor('cur-' + nome) || '',
+      curiosidadeTexto: '',
       camisaTamanhoSel: this.valor('cs-' + nome) || '', camisaModelagemSel: this.valor('cm-' + nome) || '',
     });
   };
@@ -4037,6 +4042,7 @@ class Component extends DCLogic {
       pcdTrocarNome: this.pcdTrocarNome, pcdSalvar: this.pcdSalvar, pcdSalvarBg, pcdSalva,
       confraternizacaoResposta: s.confraternizacaoResposta, onConfraternizacaoResposta: this.onConfraternizacaoResposta,
       curiosidadeTexto: s.curiosidadeTexto, onCuriosidadeTexto: this.onCuriosidadeTexto,
+      temCuriosidadeSalva: temDados && !!this.valor('cur-' + s.dadosNome),
       cadastroSalvar: this.cadastroSalvar, cadastroSalvarBg: '#0057A6', cadastroSalvo: !!s.cadastroFlash, cadastroTravado, cadastroAberto: !cadastroTravado,
       npsNome: s.npsNome, onNpsNome: this.onNpsNome, onNpsFuncionou: this.onNpsFuncionou, onNpsMelhorar: this.onNpsMelhorar,
       npsFuncionou: s.npsFuncionou, npsMelhorar: s.npsMelhorar, npsEnviar: this.npsEnviar, npsErro: s.npsErro,
