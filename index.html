@@ -1594,7 +1594,7 @@
             <div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0 4px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px">Curiosidades · {{ curiosidadesTotal }} respostas</div>
-              <div onClick="{{ toggleAccCuriosidades }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;white-space:nowrap">{{ accCuriosidadesLabel }}</div>
+              <div onClick="{{ toggleAccCuriosidades }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accCuriosidadesLabel }}</div>
             </div>
             <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Coletadas no pré-cadastro, para o jogo "quem é quem".</div>
             <sc-if value="{{ accCuriosidadesAberto }}" hint-placeholder-val="{{ false }}">
@@ -1647,7 +1647,7 @@
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Onde as pessoas estão ganhando pontos</div>
-              <div onClick="{{ toggleAccOrigem }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;white-space:nowrap">{{ accOrigemLabel }}</div>
+              <div onClick="{{ toggleAccOrigem }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accOrigemLabel }}</div>
             </div>
             <sc-if value="{{ accOrigemAberto }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
@@ -1667,7 +1667,7 @@
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Engajamento por cidade e área</div>
-              <div onClick="{{ toggleAccEngajamento }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;white-space:nowrap">{{ accEngajamentoLabel }}</div>
+              <div onClick="{{ toggleAccEngajamento }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accEngajamentoLabel }}</div>
             </div>
             <sc-if value="{{ accEngajamentoAberto }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px">
@@ -1692,7 +1692,7 @@
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Estoque de brindes em tempo real</div>
-              <div onClick="{{ toggleAccEstoque }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;white-space:nowrap">{{ accEstoqueLabel }}</div>
+              <div onClick="{{ toggleAccEstoque }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accEstoqueLabel }}</div>
             </div>
             <sc-if value="{{ accEstoqueAberto }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:12px">
@@ -1742,7 +1742,7 @@
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Lista nome a nome ({{ pontosRankingView.length }})</div>
-              <div onClick="{{ togglePontosLista }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;white-space:nowrap">{{ pontosListaToggleLabel }}</div>
+              <div onClick="{{ togglePontosLista }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ pontosListaToggleLabel }}</div>
             </div>
             <sc-if value="{{ pontosListaAberta }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:8px">
@@ -1896,7 +1896,7 @@
             <div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0 4px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px">Malas de brindes · BSB → SP</div>
-              <div onClick="{{ toggleAccMalas }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;white-space:nowrap">{{ accMalasLabel }}</div>
+              <div onClick="{{ toggleAccMalas }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accMalasLabel }}</div>
             </div>
             <div style="font-size:12.5px;color:#6B6B70;margin-bottom:16px">A maior parte dos brindes está em Brasília — essas malas viajam despachadas com quem já vai de BSB para SP, aproveitando os voos abaixo. Toque no status para avançar.</div>
             <sc-if value="{{ accMalasAberto }}" hint-placeholder-val="{{ false }}">
@@ -1927,10 +1927,10 @@
                   <sc-if value="{{ m.temItens }}" hint-placeholder-val="{{ false }}">
                     <div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #EEF2F8">
                       <sc-for list="{{ m.itens }}" as="it" hint-placeholder-count="5">
-                        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+                        <div style="display:grid;grid-template-columns:minmax(140px,1.4fr) minmax(100px,1fr) minmax(140px,1.2fr);align-items:baseline;gap:12px">
                           <div style="font-size:13px;color:#002855;font-weight:700">{{ it.nome }} ×{{ it.qtd }}</div>
                           <div style="font-size:11.5px;color:#6B6B70;white-space:nowrap">restam {{ it.restanteBSB }} em BSB</div>
-                          <div style="font-size:11.5px;font-weight:700;color:{{ it.spColor }};white-space:nowrap">{{ it.spLabel }}</div>
+                          <div style="font-size:11.5px;font-weight:700;color:{{ it.spColor }};white-space:nowrap;text-align:right">{{ it.spLabel }}</div>
                         </div>
                       </sc-for>
                     </div>
