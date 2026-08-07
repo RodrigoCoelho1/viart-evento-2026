@@ -2373,20 +2373,28 @@ class Component extends DCLogic {
     try {
       const unlocked = localStorage.getItem('viart2026_org_unlocked') === '1';
       const nomeJaSalvo = localStorage.getItem('viart2026_meu_nome') || localStorage.getItem('viart2026_dados_nome') || '';
+      let sync = {};
+      try { sync = JSON.parse(localStorage.getItem('viart2026_sync') || '{}'); } catch (e2) {}
+      if (!Object.keys(sync).length) sync = this.migrarAntigos();
+      const gv = (k) => (sync[k] && sync[k].v) || '';
       this.setState({
         orgUnlocked: unlocked,
         meuNome: nomeJaSalvo,
         dadosNome: nomeJaSalvo,
         ciNome: nomeJaSalvo,
-        restricaoTipo: localStorage.getItem('viart2026_restricao_tipo') || '',
-        restricaoObs: localStorage.getItem('viart2026_restricao_obs') || '',
+        sync,
+        // Rehidrata as respostas já salvas (sincronizadas) para o nome já identificado —
+        // sem isso, o formulário aparecia em branco a cada revisita mesmo com dados gravados.
+        restricaoTipo: (nomeJaSalvo && gv('rt-' + nomeJaSalvo)) || localStorage.getItem('viart2026_restricao_tipo') || '',
+        restricaoObs: (nomeJaSalvo && gv('ro-' + nomeJaSalvo)) || localStorage.getItem('viart2026_restricao_obs') || '',
+        confraternizacaoResposta: nomeJaSalvo ? gv('cf-' + nomeJaSalvo) : '',
+        pcdResposta: nomeJaSalvo ? gv('pcd-' + nomeJaSalvo) : '',
+        pcdObs: nomeJaSalvo ? gv('pcdo-' + nomeJaSalvo) : '',
+        curiosidadeTexto: nomeJaSalvo ? gv('cur-' + nomeJaSalvo) : '',
+        camisaTamanhoSel: nomeJaSalvo ? gv('cs-' + nomeJaSalvo) : '',
+        camisaModelagemSel: nomeJaSalvo ? gv('cm-' + nomeJaSalvo) : '',
       });
     } catch (e) {}
-
-    let sync = {};
-    try { sync = JSON.parse(localStorage.getItem('viart2026_sync') || '{}'); } catch (e) {}
-    if (!Object.keys(sync).length) sync = this.migrarAntigos();
-    this.setState({ sync });
 
     if (/[?&]checkin=1/.test(location.search)) {
       const par = new URLSearchParams(location.search);
