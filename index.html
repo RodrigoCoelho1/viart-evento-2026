@@ -101,6 +101,31 @@
           </div>
         </div>
 
+        <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:16px;padding:clamp(20px,3vw,26px);margin-bottom:20px">
+          <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:11px;color:#B4600A;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px">Aviso da organização</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:18px;margin-bottom:10px">Avisos</div>
+          <div style="font-size:13.5px;color:#4A4A50;line-height:1.7;margin-bottom:14px">
+            Esta área mantém você atualizado sobre as novidades do app e do evento.<br/><br/>
+            Por enquanto, as áreas interativas do app — credenciamento, cadastro e Pontos & Brindes — estão disponíveis apenas para os participantes do evento de São Paulo.<br/><br/>
+            Qualquer dúvida sobre o app ou sobre o evento, fale com a organização pelo Fale conosco.
+          </div>
+          <div onClick="{{ irParaFaleConosco }}" style="cursor:pointer;display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;font-size:13px">Ir para o Fale conosco</div>
+        </div>
+
+        <sc-if value="{{ temAtualizacoes }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-bottom:28px">
+          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px">Atualizações</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ atualizacoesView }}" as="nv" hint-placeholder-count="2">
+              <div style="background:#F7F9FC;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
+                <div style="font-size:11px;font-weight:800;color:#6B6B70;margin-bottom:4px">{{ nv.quando }}</div>
+                <div style="font-size:13.5px;color:#002855;line-height:1.6">{{ nv.texto }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
         <sc-if value="{{ ehDiaDoEvento }}" hint-placeholder-val="{{ false }}">
           <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:16px;padding:22px 24px;margin-bottom:28px">
             <div style="font-size:11px;font-weight:800;color:#B4600A;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px">{{ agoraLabel }}</div>
@@ -313,7 +338,11 @@
           </sc-if>
         </div>
 
-        <sc-if value="{{ temNome }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ bloqueadoBrindes }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FDF1DC;border:1px solid #F39200;color:#8A5A0B;border-radius:14px;padding:18px 20px;margin-bottom:24px;font-size:13.5px;line-height:1.6">Pontos & Brindes está disponível, por enquanto, apenas para participantes do evento de São Paulo. Dúvidas? Use o <span onClick="{{ irParaFaleConosco }}" style="cursor:pointer;font-weight:700;text-decoration:underline">Fale conosco</span>.</div>
+        </sc-if>
+
+        <sc-if value="{{ temNomeLiberado }}" hint-placeholder-val="{{ false }}">
           <div style="background:#002855;color:#F2F5FA;border-radius:16px;padding:20px 22px;margin-bottom:24px">
             <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;margin-bottom:16px">
               <div>
@@ -341,7 +370,7 @@
           </div>
         </sc-if>
 
-        <sc-if value="{{ temNome }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ temNomeLiberado }}" hint-placeholder-val="{{ false }}">
           <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;margin-bottom:24px">
             <div style="font-weight:700;font-size:15px;margin-bottom:4px">Detetive VIART: quem é quem?</div>
             <div style="font-size:12.5px;color:#6B6B70;margin-bottom:16px">Curiosidades da equipe, sem nome — adivinhe de quem é. Acerto vale 1 ponto, uma tentativa por pergunta. Novas perguntas liberam aos poucos, todo dia, até o evento.</div>
@@ -395,6 +424,40 @@
       </div>
     </sc-if>
 
+    <sc-if value="{{ showFaleConosco }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:560px">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Fale conosco</div>
+        <div style="font-size:14px;color:#6B6B70;margin-bottom:24px">Dúvidas sobre o app ou sobre o evento? Mande uma mensagem para a organização.</div>
+
+        <sc-if value="{{ fcEnviado }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#002855;color:#F2F5FA;border-radius:20px;padding:clamp(26px,4vw,34px);text-align:center;margin-bottom:14px">
+            <div style="font-size:44px;font-weight:800;color:#8FD9A8;line-height:1;margin-bottom:16px">✓</div>
+            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(19px,2.4vw,26px);line-height:1.2">Mensagem enviada</div>
+            <div style="font-size:13.5px;color:#DCE6F2;margin-top:10px;line-height:1.6">A organização vai ver sua mensagem na área restrita.</div>
+          </div>
+          <div onClick="{{ fcNova }}" style="cursor:pointer;text-align:center;font-size:12.5px;font-weight:700;color:#6B6B70;padding:10px">Enviar outra mensagem</div>
+        </sc-if>
+
+        <sc-if value="{{ fcFormVisivel }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px)">
+            <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Seu nome</div>
+            <input placeholder="Digite seu nome — ou busque na lista" value="{{ fcNome }}" onChange="{{ onFcNome }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif"></input>
+            <div style="display:flex;flex-direction:column;gap:6px;margin:6px 0 14px">
+              <sc-for list="{{ fcOpcoes }}" as="op" hint-placeholder-count="0">
+                <div onClick="{{ op.escolher }}" style="cursor:pointer;background:#F2F5FA;border-radius:10px;padding:10px 14px;font-size:13.5px;color:#002855">{{ op.nome }}</div>
+              </sc-for>
+            </div>
+            <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Mensagem</div>
+            <textarea placeholder="Escreva sua dúvida ou mensagem..." value="{{ fcMensagem }}" onChange="{{ onFcMensagem }}" rows="5" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:6px;resize:vertical"></textarea>
+            <sc-if value="{{ fcErro }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12.5px;color:#C0392B;font-weight:700;margin-top:6px">{{ fcErro }}</div>
+            </sc-if>
+            <div onClick="{{ fcEnviar }}" style="cursor:pointer;margin-top:14px;background:#F39200;color:#002855;font-weight:700;padding:13px 26px;border-radius:10px;font-size:14.5px;text-align:center">Enviar mensagem</div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ showCheckin }}" hint-placeholder-val="{{ false }}">
       <div style="max-width:560px">
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Credenciamento</div>
@@ -441,7 +504,13 @@
               </div>
             </sc-if>
 
-            <sc-if value="{{ ciTemNome }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ bloqueadoCheckin }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FDF1DC;border:1px solid #F39200;color:#8A5A0B;border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.6">Credenciamento disponível, por enquanto, apenas para participantes do evento de São Paulo. Qualquer dúvida, use o Fale conosco.
+                <div onClick="{{ ciTrocar }}" style="cursor:pointer;margin-top:10px;font-weight:700;text-decoration:underline;display:inline-block">trocar nome</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ ciTemNomeLiberado }}" hint-placeholder-val="{{ false }}">
               <div>
                 <div style="background:#F2F7FD;border:1px solid #C9D6E8;border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px">
                   <div>
@@ -538,7 +607,11 @@
           </div>
         </sc-if>
 
-        <sc-if value="{{ temDados }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ bloqueadoCadastro }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#FDF1DC;border:1px solid #F39200;color:#8A5A0B;border-radius:16px;padding:20px 22px;margin:20px 0 28px;font-size:13.5px;line-height:1.7">O cadastro (restrição alimentar, camiseta, confraternização, necessidade especial e curiosidade) está disponível, por enquanto, apenas para participantes do evento de São Paulo. Qualquer dúvida, use o Fale conosco.</div>
+        </sc-if>
+
+        <sc-if value="{{ temDadosLiberado }}" hint-placeholder-val="{{ false }}">
         <div style="background:#E8EFF9;border-radius:16px;padding:24px;margin:20px 0 28px">
           <div style="font-weight:700;font-size:15px;margin-bottom:4px">Complete seu cadastro</div>
           <div style="font-size:13px;color:#4A4A50;margin-bottom:18px">Essas respostas ajudam a organização a preparar o evento. Leva um minuto.</div>
@@ -680,7 +753,11 @@
 
         <sc-if value="{{ credenciamentoHabilitado }}" hint-placeholder-val="{{ false }}">
         <div>
-        <sc-if value="{{ temNome }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ bloqueadoBrindes }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FDF1DC;border:1px solid #F39200;color:#8A5A0B;border-radius:14px;padding:16px 18px;margin-bottom:14px;font-size:13.5px;line-height:1.6;max-width:420px">Credenciamento disponível, por enquanto, apenas para participantes do evento de São Paulo. Qualquer dúvida, use o Fale conosco.</div>
+        </sc-if>
+
+        <sc-if value="{{ temNomeLiberado }}" hint-placeholder-val="{{ false }}">
           <div style="max-width:420px">
             <div style="background:#002855;color:#F2F5FA;border-radius:20px;padding:clamp(24px,4vw,34px);text-align:center;margin-bottom:14px">
               <div style="font-size:11px;font-weight:800;color:#A9C0DE;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:14px">Planejamento VIART 2026</div>
@@ -820,6 +897,12 @@
 
             <sc-if value="{{ showOrgVisao }}" hint-placeholder-val="{{ true }}">
             <div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:18px 20px;margin-bottom:20px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px">Publicar atualização</div>
+              <div style="font-size:12px;color:#6B6B70;margin-bottom:12px">Aparece para todo mundo na aba Início, em Atualizações.</div>
+              <textarea placeholder="Escreva a novidade..." value="{{ novidadeTexto }}" onChange="{{ onNovidadeTexto }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:8px;border:1px solid #DCE6F2;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:10px;resize:vertical"></textarea>
+              <div onClick="{{ publicarNovidade }}" style="cursor:pointer;display:inline-block;padding:9px 18px;border-radius:999px;font-size:12.5px;font-weight:700;background:#0057A6;color:#FFFFFF">Publicar</div>
+            </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:28px">
               <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px">
                 <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px">{{ totalFuncionarios }}</div>
@@ -1125,6 +1208,30 @@
               </div>
             </div>
 
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ showOrgFaleConosco }}" hint-placeholder-val="{{ false }}">
+            <div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Fale conosco · {{ fcMensagensTotal }} mensagens</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Mensagens enviadas pelo app, mais recentes primeiro.</div>
+            <sc-if value="{{ fcSemMensagens }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:13px;color:#8A8A90">Nenhuma mensagem recebida ainda.</div>
+            </sc-if>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ fcMensagensView }}" as="m" hint-placeholder-count="3">
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+                    <div style="font-weight:700;font-size:13.5px;color:#002855">{{ m.nome }}</div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                      <div style="font-size:11px;color:#8A8A90">{{ m.quando }}</div>
+                      <div onClick="{{ m.excluir }}" style="cursor:pointer;font-size:11px;font-weight:700;color:#C0392B">excluir</div>
+                    </div>
+                  </div>
+                  <div style="font-size:13px;color:#4A4A50;line-height:1.55">{{ m.mensagem }}</div>
+                </div>
+              </sc-for>
+            </div>
             </div>
             </sc-if>
 
@@ -2042,6 +2149,7 @@ const ORG_SUBTABS_DEF = [
   { id: 'cartazes', label: 'QR Codes' },
   { id: 'orcamento', label: 'Orçamento' },
   { id: 'contatos', label: 'Contatos' },
+  { id: 'faleconosco', label: 'Fale conosco' },
   { id: 'programacaoreal', label: 'Programação real 🔒' },
   { id: 'manual', label: 'Manual do App' },
 ];
@@ -2086,11 +2194,16 @@ const CARTAZES = [
     qr: 'https://api.qrserver.com/v1/create-qr-code/?size=640x640&margin=10&data=' + encodeURIComponent(url) };
 });
 
+const ATUALIZACOES_INICIAIS = [
+  { quando: '07/08', texto: 'Nova área de Avisos e Atualizações na aba Início, e área de Fale conosco para dúvidas sobre o app ou o evento.' },
+];
+
 const TABS_DEF = [
   { id: 'inicio', label: 'Início' },
   { id: 'info', label: 'Informações' },
   { id: 'programacao', label: 'Programação' },
   { id: 'brindes', label: 'Pontos & Brindes' },
+  { id: 'faleconosco', label: 'Fale conosco' },
   { id: 'org', label: 'Organização' },
 ];
 
@@ -2196,8 +2309,8 @@ const BRINDES_MARKETPLACE = [
   { id: 'power-bank', nome: 'Power bank', desc: 'Carregador portátil para manter o celular ligado durante o dia inteiro de evento.', foto: '', peso: 2.8, estoqueSP: 1, estoqueBSB: 0 },
   { id: 'bolsa-cop30', nome: 'Bolsa COP 30', desc: 'Estojo rígido multiuso com zíper e alça transversal removível, estampa temática da fauna e flora do Pampa e chancela CAIXA.', foto: 'bolsa-cop30.jpg', peso: 1.8, estoqueSP: 6, estoqueBSB: 0 },
   { id: 'garrafinha', nome: 'Garrafinha', desc: 'Embalagem cartonada rígida na cor preta com ilustração minimalista em linha branca de uma garrafa térmica.', foto: 'garrafinha.jpg', peso: 1.6, estoqueSP: 3, estoqueBSB: 0 },
-  { id: 'xicaras-pires', nome: 'Jogo de xícaras', desc: 'Embalagem decorativa preta com estampa geométrica em tons de roxo e dourado, com visor circular que exibe copos de dose dupla para café espresso.', foto: 'xicaras-pires.jpg', peso: 1.5, estoqueSP: 3, estoqueBSB: 0 },
-  { id: 'xicara-2pecas', nome: 'Jogo de xícara (2 peças)', desc: 'Par de copos de vidro com parede dupla (isolamento térmico) personalizados CAIXA, acompanhados de caixa de apresentação exclusiva.', foto: 'xicara-2pecas.jpg', peso: 1.5, estoqueSP: 10, estoqueBSB: 0 },
+  { id: 'xicaras-pires', nome: 'Jogo de xícaras', desc: 'Embalagem decorativa preta com estampa geométrica em tons de roxo e dourado, com visor circular que exibe copos para café espresso.', foto: 'xicaras-pires.jpg?v=2', peso: 1.5, estoqueSP: 3, estoqueBSB: 0 },
+  { id: 'xicara-2pecas', nome: 'Jogo de xícara (2 peças)', desc: 'Par de copos de vidro com parede dupla (isolamento térmico) personalizados CAIXA, acompanhados de caixa de apresentação exclusiva.', foto: 'xicara-2pecas.jpg?v=2', peso: 1.5, estoqueSP: 10, estoqueBSB: 0 },
   { id: 'bone-caixa', nome: 'Boné CAIXA', desc: 'Boné azul marinho clássico, aba curvada, costuras pespontadas em tom contrastante e bordado oficial da CAIXA.', foto: 'bone-caixa.jpg', peso: 1.4, estoqueSP: 7, estoqueBSB: 0 },
   { id: 'necessaire', nome: 'Necessaire', desc: 'Nécessaire estruturada em tom coral/salmão, estampa inspirada na Caatinga e os dizeres "É da nossa natureza fazer acontecer - Caixa Brasil".', foto: 'necessaire.jpg', peso: 1.0, estoqueSP: 7, estoqueBSB: 0 },
   { id: 'mouse-pad', nome: 'Desk Pad', desc: 'Desk pad estendido em couro sintético preto de alta qualidade, com acabamento costurado nas bordas.', foto: 'mouse-pad.jpg', peso: 0.6, estoqueSP: 3, estoqueBSB: 0 },
@@ -2215,6 +2328,8 @@ const MANUAL_SECOES = [
     'Objetivos do evento.',
     'Contador de dias até o evento da sua cidade.',
     'Avaliação "Como foi o seu dia?" (NPS) — libera após o horário de encerramento; nota geral 0-10, nota por painel/momento do dia, e perguntas abertas.',
+    'Avisos: mural fixo explicando que o app mantém o time atualizado sobre novidades, que as áreas interativas estão liberadas por enquanto só para SP, e como usar o Fale conosco.',
+    'Atualizações: novidades publicadas pela organização (mais recentes primeiro).',
   ] },
   { id: 'programacao', titulo: 'Programação (público)', itens: [
     'Agenda completa do dia, por horário.',
@@ -2227,13 +2342,18 @@ const MANUAL_SECOES = [
     'Detetive VIART: adivinhe de quem é cada curiosidade cadastrada no pré-cadastro (sem nome exposto); acerto vale 1 ponto, uma tentativa por pergunta, novas perguntas liberam aos poucos até o evento.',
     'Mercado de brindes: preço em pontos é fixo por item, proporcional ao teto de pontos alcançável até o dia (não à participação dos outros); resgate por ordem de chegada; abre às 12h45 (horário do almoço) no dia do evento da cidade.',
     'Fora da contagem de pontos e do mercado de brindes: quem não tem cidade definida (licenças e afins) e quem está marcado como organização/dupla função SP+BSB (gestores).',
+    'Disponível, por enquanto, apenas para participantes do evento de São Paulo — quem está marcado como Brasília vê um aviso no lugar do mercado e do Detetive VIART.',
+  ] },
+  { id: 'faleconosco', titulo: 'Fale conosco (público)', itens: [
+    'Formulário simples: nome (opcional) e mensagem, para dúvidas sobre o app ou sobre o evento.',
+    'Mensagens ficam salvas na área restrita, em Organização → Fale conosco — sem restrição de cidade, disponível a todos.',
   ] },
   { id: 'informacoes', titulo: 'Informações (público)', itens: [
     'Manual de instalação do app (adicionar à tela inicial, iPhone/Android).',
-    'Pré-cadastro único: restrição alimentar, tamanho/modelagem de camiseta, confraternização, necessidade especial, curiosidade pessoal (para o jogo "quem é quem"). Restrição, confraternização e necessidade especial podem ser informadas ou alteradas livremente até a véspera do evento da cidade da pessoa (travam no dia do evento). Camiseta é travada assim que informada uma vez — sem reedição — porque os kits já são produzidos com base nessa resposta.',
+    'Pré-cadastro único: restrição alimentar, tamanho/modelagem de camiseta, confraternização, necessidade especial, curiosidade pessoal (para o jogo "quem é quem"). Restrição, confraternização e necessidade especial podem ser informadas ou alteradas livremente até a véspera do evento da cidade da pessoa (travam no dia do evento). Camiseta é travada assim que informada uma vez — sem reedição — porque os kits já são produzidos com base nessa resposta. Disponível, por enquanto, apenas para participantes marcados como São Paulo.',
     'Lista "O que levar".',
     'Previsão do tempo da cidade, com destaque para o dia do evento.',
-    'Credenciamento: confirmação de presença (check-in), com crachá digital e mesa. Só abre no dia certo de cada cidade.',
+    'Credenciamento: confirmação de presença (check-in), com crachá digital e mesa. Só abre no dia certo de cada cidade, e por enquanto só para participantes marcados como São Paulo.',
     'Wi-Fi do local.',
     'Foto da camiseta do evento.',
     'Contatos de emergência.',
@@ -2279,6 +2399,10 @@ const MANUAL_SECOES = [
     'Prestadores externos contratados (status, contato).',
     'Colegas Caixa envolvidos: áreas de apoio interno, pessoas que contribuíram, contatos CESER.',
     'Modelo de agradecimento pós-evento, com botão de copiar.',
+  ] },
+  { id: 'faleconosco-org', titulo: 'Organização · Fale conosco', itens: [
+    'Lista de mensagens recebidas pelo Fale conosco, mais recentes primeiro, com nome (ou "Anônimo") e horário.',
+    'Opção de excluir mensagens já tratadas.',
   ] },
   { id: 'programacaoreal', titulo: 'Organização · Programação real', itens: [
     'Ajuste da agenda em tempo real, visível ao público a partir do dia do evento — para registrar mudanças de horário que aconteceram de fato.',
@@ -2478,6 +2602,11 @@ class Component extends DCLogic {
     pendentes: 0,
     numMesas: '',
     numMesasBSB: '',
+    fcNome: '',
+    fcMensagem: '',
+    fcErro: '',
+    fcEnviado: false,
+    novidadeTexto: '',
   };
 
   componentDidMount() {
@@ -2493,6 +2622,7 @@ class Component extends DCLogic {
         meuNome: nomeJaSalvo,
         dadosNome: nomeJaSalvo,
         ciNome: nomeJaSalvo,
+        fcNome: nomeJaSalvo,
         sync,
         // Rehidrata as respostas já salvas (sincronizadas) para o nome já identificado —
         // sem isso, o formulário aparecia em branco a cada revisita mesmo com dados gravados.
@@ -2667,6 +2797,29 @@ class Component extends DCLogic {
     this.setState({ orgUnlocked: false });
   };
 
+  irParaFaleConosco = () => this.setState({ activeTab: 'faleconosco' });
+  onFcNome = (e) => this.setState({ fcNome: e.target.value, fcErro: '' });
+  onFcMensagem = (e) => this.setState({ fcMensagem: e.target.value, fcErro: '' });
+  fcEnviar = () => {
+    const nome = this.state.fcNome.trim();
+    const mensagem = this.state.fcMensagem.trim();
+    if (!mensagem) { this.setState({ fcErro: 'Escreva sua mensagem.' }); return; }
+    const key = 'fc-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+    this.gravarCampos({ [key]: { nome: nome || 'Anônimo', mensagem } });
+    this.setState({ fcEnviado: true, fcMensagem: '', fcErro: '' });
+  };
+  fcNova = () => this.setState({ fcEnviado: false, fcMensagem: '' });
+  fcEscolherNome = (nome) => () => this.setState({ fcNome: nome });
+  excluirFcMensagem = (key) => () => this.gravarCampos({ [key]: null });
+  onNovidadeTexto = (e) => this.setState({ novidadeTexto: e.target.value });
+  publicarNovidade = () => {
+    const texto = this.state.novidadeTexto.trim();
+    if (!texto) return;
+    const key = 'nv-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+    this.gravarCampos({ [key]: texto });
+    this.setState({ novidadeTexto: '' });
+  };
+
   valor = (k) => (this.state.sync[k] ? this.state.sync[k].v : undefined);
   cidadeDe = (n) => this.valor('cd-' + n) || PARTICIPANTES_CIDADE_AUTO[n] || '';
   // Trava as respostas de identificação (restrição, camiseta, confraternização, necessidade especial)
@@ -2735,6 +2888,7 @@ class Component extends DCLogic {
     if (!nome) return;
     const cidade = this.cidadeDe(nome);
     if (!cidade) { this.setState({ brindeAviso: 'Sua cidade ainda não foi definida — confirme presença primeiro.' }); return; }
+    if (cidade !== 'sp') { this.setState({ brindeAviso: 'Pontos & Brindes está disponível, por enquanto, apenas para participantes do evento de São Paulo.' }); return; }
     const DATA_EVENTO_MERCADO = { sp: '2026-08-13', bsb: '2026-08-20' };
     const agoraMercado = new Date();
     const minutosMercado = agoraMercado.getHours() * 60 + agoraMercado.getMinutes();
@@ -2802,6 +2956,7 @@ class Component extends DCLogic {
   ciConfirmar = () => {
     const { ciNome, ciCodigo, city } = this.state;
     if (!ciNome) return this.setState({ ciErro: 'Escolha seu nome na lista.' });
+    if (this.cidadeDe(ciNome) !== 'sp') return this.setState({ ciErro: 'Credenciamento disponível, por enquanto, apenas para participantes do evento de São Paulo.' });
     if (ciCodigo !== CODIGO_ENTRADA[city]) return this.setState({ ciErro: 'Código incorreto. Leia o QR do cartaz na entrada ou peça o código à equipe.' });
     try { localStorage.setItem('viart2026_meu_nome', ciNome); localStorage.setItem('viart2026_dados_nome', ciNome); } catch (e) {}
     this.setState({ ciEnviando: true, ciErro: '' });
@@ -2816,6 +2971,7 @@ class Component extends DCLogic {
   };
   confirmarPresenca = () => {
     if (!this.state.meuNome) return;
+    if (this.cidadeDe(this.state.meuNome) !== 'sp') return;
     const agora = new Date();
     const hojeISO = hojeISOAtual(agora);
     const cidadeHoje = hojeISO === '2026-08-13' ? 'sp' : (hojeISO === '2026-08-20' ? 'bsb' : '');
@@ -2888,6 +3044,7 @@ class Component extends DCLogic {
   cadastroSalvar = () => {
     const nome = this.state.dadosNome;
     if (!nome || this.respostasTravadas(nome)) return;
+    if (this.cidadeDe(nome) !== 'sp') return;
     const campos = {};
     if (this.state.restricaoTipo) { campos['rt-' + nome] = this.state.restricaoTipo; campos['ro-' + nome] = this.state.restricaoObs; }
     if (this.state.confraternizacaoResposta) campos['cf-' + nome] = this.state.confraternizacaoResposta;
@@ -3718,8 +3875,14 @@ class Component extends DCLogic {
     const dadosOpcoes = dq.length >= 2
       ? PARTICIPANTES.filter(n => norm(n).includes(dq)).slice(0, 8).map(n => ({ nome: n, escolher: this.setDadosNome(n) }))
       : [];
+    const fq = norm((s.fcNome || '').trim());
+    const fcOpcoes = (fq.length >= 2 && !PARTICIPANTES.some(n => norm(n) === fq))
+      ? PARTICIPANTES.filter(n => norm(n).includes(fq)).slice(0, 6).map(n => ({ nome: n, escolher: this.fcEscolherNome(n) }))
+      : [];
     const temNome = !!s.meuNome;
     const minhaCidadeId = temNome ? cidadeDe(s.meuNome) : '';
+    const bloqueadoBrindes = temNome && minhaCidadeId !== 'sp';
+    const temNomeLiberado = temNome && !bloqueadoBrindes;
     const minhaCidade = minhaCidadeId === 'sp' ? 'São Paulo' : (minhaCidadeId === 'bsb' ? 'Brasília' : '');
     const minhaData = minhaCidadeId === 'sp' ? '13 de agosto' : (minhaCidadeId === 'bsb' ? '20 de agosto' : '');
     const jaCredenciado = temNome && !!gv('ps-' + s.meuNome);
@@ -3739,6 +3902,8 @@ class Component extends DCLogic {
     const camisaMostrarOk = temDados && camisaTemDados && !s.camisaEditando;
     const camisaMostrarForm = temDados && (!camisaTemDados || s.camisaEditando);
     const cadastroTravado = temDados && this.respostasTravadas(s.dadosNome);
+    const bloqueadoCadastro = temDados && cidadeDe(s.dadosNome) !== 'sp';
+    const temDadosLiberado = temDados && !bloqueadoCadastro;
     // Camiseta é travada assim que informada, sem prazo — os kits já são produzidos com base nisso.
     const camisaPodeAlterar = false;
     const camisaSalvarBg = (s.camisaTamanhoSel && s.camisaModelagemSel) ? '#F39200' : '#C9D6E8';
@@ -4061,15 +4226,26 @@ class Component extends DCLogic {
       const usados = this.contarResgates(b.id, minhaCidadeId || 'sp');
       const restante = Math.max(0, estoqueTotal - usados);
       const jaTem = temNome && !!this.valor('brinde-' + b.id + '-' + s.meuNome);
-      const podeComprar = temNome && !!minhaCidadeId && mercadoAberto && !jaTem && restante > 0 && pontosDisponiveis >= custo;
+      const podeComprar = temNome && minhaCidadeId === 'sp' && mercadoAberto && !jaTem && restante > 0 && pontosDisponiveis >= custo;
       return {
         id: b.id, nome: b.nome, desc: b.desc, foto: b.foto, semFoto: !b.foto, fit: b.fit || 'contain', pontos: custo, restante, esgotado: restante <= 0, jaTem, podeComprar,
         resgatar: this.resgatarBrinde(b.id),
-        statusLabel: jaTem ? 'Resgatado' : (restante <= 0 ? 'Esgotado' : (!mercadoAberto ? 'Abre às 12h45' : (podeComprar ? 'Resgatar' : 'Pontos insuficientes'))),
+        statusLabel: jaTem ? 'Resgatado' : (restante <= 0 ? 'Esgotado' : (temNome && minhaCidadeId !== 'sp' ? 'Só p/ SP, por enquanto' : (!mercadoAberto ? 'Abre às 12h45' : (podeComprar ? 'Resgatar' : 'Pontos insuficientes')))),
         statusBg: jaTem ? '#E3F3E8' : (podeComprar ? '#0057A6' : '#EDEDED'),
         statusColor: jaTem ? '#1E7A45' : (podeComprar ? '#FFFFFF' : '#8A8A90'),
       };
     });
+
+    const atualizacoesView = Object.keys(s.sync).filter(k => k.startsWith('nv-') && s.sync[k] && s.sync[k].v)
+      .map(k => ({ key: k, texto: s.sync[k].v, t: s.sync[k].t,
+        quando: new Date(s.sync[k].t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) }))
+      .sort((a, b) => b.t - a.t)
+      .slice(0, 12);
+    const fcMensagensView = Object.keys(s.sync).filter(k => k.startsWith('fc-') && s.sync[k] && s.sync[k].v)
+      .map(k => ({ key: k, nome: s.sync[k].v.nome, mensagem: s.sync[k].v.mensagem, t: s.sync[k].t,
+        quando: new Date(s.sync[k].t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+        excluir: this.excluirFcMensagem(k) }))
+      .sort((a, b) => b.t - a.t);
 
     return {
       spBg: s.city === 'sp' ? '#F39200' : 'transparent', spColor: s.city === 'sp' ? '#002855' : '#C9D6E8',
@@ -4079,7 +4255,17 @@ class Component extends DCLogic {
       pdfBtnLabel: s.pdfGenerating ? 'Gerando PDF…' : 'Gerar relatório em PDF',
       showInicio: s.activeTab === 'inicio', showProgramacao: s.activeTab === 'programacao',
       showBrindes: s.activeTab === 'brindes',
+      showFaleConosco: s.activeTab === 'faleconosco',
       showInfo: s.activeTab === 'info', showOrg: s.activeTab === 'org',
+      temNomeLiberado, bloqueadoBrindes, temDadosLiberado, bloqueadoCadastro,
+      irParaFaleConosco: this.irParaFaleConosco,
+      fcNome: s.fcNome || '', onFcNome: this.onFcNome, fcOpcoes,
+      fcMensagem: s.fcMensagem || '', onFcMensagem: this.onFcMensagem,
+      fcErro: s.fcErro || '', fcEnviado: s.fcEnviado, fcFormVisivel: !s.fcEnviado, fcEnviar: this.fcEnviar, fcNova: this.fcNova,
+      atualizacoesView, temAtualizacoes: atualizacoesView.length > 0,
+      novidadeTexto: s.novidadeTexto || '', onNovidadeTexto: this.onNovidadeTexto, publicarNovidade: this.publicarNovidade,
+      showOrgFaleConosco: s.orgSubTab === 'faleconosco',
+      fcMensagensView, fcMensagensTotal: fcMensagensView.length, fcSemMensagens: fcMensagensView.length === 0,
       showInfoAntes: s.infoSubTab === 'antes', showInfoDurante: s.infoSubTab === 'durante',
       setInfoAntes: this.setInfoSubTab('antes'), setInfoDurante: this.setInfoSubTab('durante'),
       manualAberto: s.manualAberto, toggleManual: this.toggleManual, manualToggleLabel: s.manualAberto ? 'Ocultar passo a passo' : 'Ver passo a passo',
@@ -4132,6 +4318,8 @@ class Component extends DCLogic {
       showCheckin: s.activeTab === 'checkin',
       ciQuery: s.ciQuery, onCiQuery: this.onCiQuery, ciOpcoes,
       ciNome: s.ciNome, ciTemNome: !!s.ciNome, ciSemNome: !s.ciNome && !s.ciFeito,
+      bloqueadoCheckin: !!s.ciNome && cidadeDe(s.ciNome) !== 'sp',
+      ciTemNomeLiberado: !!s.ciNome && cidadeDe(s.ciNome) === 'sp',
       ciCodigo: s.ciCodigo, onCiCodigo: this.onCiCodigo, ciConfirmar: this.ciConfirmar,
       ciCodigoDoQR: s.ciCodigo === CODIGO_ENTRADA[s.city],
       ciPedirCodigo: s.ciCodigo !== CODIGO_ENTRADA[s.city],
