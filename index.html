@@ -1616,7 +1616,7 @@
             <sc-if value="{{ showOrgPontos }}" hint-placeholder-val="{{ false }}">
             <div>
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Gamificação</div>
-            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Pontuação de cada pessoa (7 ações possíveis) e o que já resgatou no mercado de brindes. Preço médio atual: {{ mediaPontosGeral }} pontos por pessoa ativa.</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Pontuação de cada pessoa (7 ações possíveis) e o que já resgatou no mercado de brindes. Preço médio atual: {{ mediaPontosGeral }} pontos por pessoa ativa. Fora da contagem: quem não tem cidade definida (licenças e afins) e quem está marcado como organização/dupla função SP+BSB.</div>
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px">
               <div style="background:#0A3C6E;color:#FFFFFF;border-radius:12px;padding:16px 18px">
@@ -1917,14 +1917,24 @@
             <div style="display:flex;flex-direction:column;gap:10px">
               <sc-for list="{{ malasView }}" as="m" hint-placeholder-count="5">
                 <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-                  <div style="flex:1;min-width:200px">
-                    <div style="font-weight:700;font-size:14px;color:#002855">{{ m.passageiro }}</div>
-                    <div style="font-size:12px;color:#6B6B70;margin-top:2px">Chega em SP · {{ m.data }} · {{ m.chegada }}</div>
-                    <sc-if value="{{ m.conteudo }}" hint-placeholder-val="{{ false }}">
-                      <div style="font-size:12px;color:#4A4A50;margin-top:6px;line-height:1.5">{{ m.conteudo }}</div>
-                    </sc-if>
+                  <div style="width:100%;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+                    <div>
+                      <div style="font-weight:700;font-size:14px;color:#002855">{{ m.passageiro }}</div>
+                      <div style="font-size:12px;color:#6B6B70;margin-top:2px">Chega em SP · {{ m.data }} · {{ m.chegada }}</div>
+                    </div>
+                    <div onClick="{{ m.ciclo }}" style="cursor:pointer;flex-shrink:0;font-size:12px;font-weight:700;padding:7px 14px;border-radius:999px;background:{{ m.statusBg }};color:{{ m.statusColor }}">{{ m.status }}</div>
                   </div>
-                  <div onClick="{{ m.ciclo }}" style="cursor:pointer;flex-shrink:0;font-size:12px;font-weight:700;padding:7px 14px;border-radius:999px;background:{{ m.statusBg }};color:{{ m.statusColor }}">{{ m.status }}</div>
+                  <sc-if value="{{ m.temItens }}" hint-placeholder-val="{{ false }}">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #EEF2F8">
+                      <sc-for list="{{ m.itens }}" as="it" hint-placeholder-count="5">
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+                          <div style="font-size:13px;color:#002855;font-weight:700">{{ it.nome }} ×{{ it.qtd }}</div>
+                          <div style="font-size:11.5px;color:#6B6B70;white-space:nowrap">restam {{ it.restanteBSB }} em BSB</div>
+                          <div style="font-size:11.5px;font-weight:700;color:{{ it.spColor }};white-space:nowrap">{{ it.spLabel }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
                 </div>
               </sc-for>
             </div>
@@ -2216,6 +2226,7 @@ const MANUAL_SECOES = [
     'Pontos por ação de participação: confirmar presença, restrição alimentar, camiseta, confraternização, necessidade especial, avaliação do evento, acertos no Detetive VIART.',
     'Detetive VIART: adivinhe de quem é cada curiosidade cadastrada no pré-cadastro (sem nome exposto); acerto vale 1 ponto, uma tentativa por pergunta, novas perguntas liberam aos poucos até o evento.',
     'Mercado de brindes: preço em pontos é fixo por item, proporcional ao teto de pontos alcançável até o dia (não à participação dos outros); resgate por ordem de chegada; abre às 12h45 (horário do almoço) no dia do evento da cidade.',
+    'Fora da contagem de pontos e do mercado de brindes: quem não tem cidade definida (licenças e afins) e quem está marcado como organização/dupla função SP+BSB (gestores).',
   ] },
   { id: 'informacoes', titulo: 'Informações (público)', itens: [
     'Manual de instalação do app (adicionar à tela inicial, iPhone/Android).',
@@ -2406,12 +2417,23 @@ const CONTATOS_CESER = [
 const ITENS_SEM_CONTATO = ['CIAUS Brasília', 'CIAUS São Paulo', 'GEIMP', 'GNP', 'Buffet Brasília', 'Responsável da Asset pelos brindes'];
 
 // Controle de malas com brindes despachadas de BSB para SP, aproveitando voos de quem já vai viajar.
+// Todo o estoque físico está hoje em BSB — BSB_ORIGEM_TOTAL é o total que chegou lá (SP + BSB somados
+// na distribuição original); cada mala tira uma fatia desse total para cobrir a meta de SP (estoqueSP).
+const BSB_ORIGEM_TOTAL = {
+  'moleskine-seguridade-10anos': 2, 'bloco-rapidex': 15, 'moleskine-seguridade-caneta': 11, 'garrafinha': 4,
+  'carregador-gocase': 3, 'xicaras-pires': 4, 'maleta-churrasco': 6, 'kit-uau': 60, 'moleskine-loterias': 198,
+  'mouse-pad': 4, 'moleskine-x': 204, 'necessaire': 10, 'bone-caixa': 10, 'bolsa-cop30': 9, 'xicara-2pecas': 15,
+  'mochila-caixa': 5, 'mochila-loterias': 5, 'mochila-seguridade': 6, 'canetas': 200, 'power-bank': 1,
+};
 const MALAS_BSB_SP = [
-  { id: 'troes', passageiro: 'Troes', data: '07/08/2026', chegada: '14h', conteudo: 'Mochila CAIXA Seguridade ×4 · Maleta de churrasco ×4 · Kit UAU ×42 (100% do estoque SP) · Moleskine Seguridade c/ caneta ×4 · Bolsa COP 30 ×1 — ≈23,0 kg · R$ 3.985 em valor' },
-  { id: 'romulo', passageiro: 'Rômulo', data: '12/08/2026', chegada: 'Final do dia' },
-  { id: 'rodrigo', passageiro: 'Rodrigo', data: '12/08/2026', chegada: '12h45' },
-  { id: 'gerrana', passageiro: 'Gerrana', data: '12/08/2026', chegada: '09h15' },
-  { id: 'bini', passageiro: 'Bini', data: '12/08/2026', chegada: '20h05' },
+  { id: 'troes', passageiro: 'Troes', data: '07/08/2026', chegada: '14h', conteudoItens: [
+    { id: 'mochila-seguridade', qtd: 4 }, { id: 'maleta-churrasco', qtd: 4 }, { id: 'kit-uau', qtd: 42 },
+    { id: 'moleskine-seguridade-caneta', qtd: 4 }, { id: 'bolsa-cop30', qtd: 1 },
+  ] },
+  { id: 'romulo', passageiro: 'Rômulo', data: '12/08/2026', chegada: 'Final do dia', conteudoItens: [] },
+  { id: 'rodrigo', passageiro: 'Rodrigo', data: '12/08/2026', chegada: '12h45', conteudoItens: [] },
+  { id: 'gerrana', passageiro: 'Gerrana', data: '12/08/2026', chegada: '09h15', conteudoItens: [] },
+  { id: 'bini', passageiro: 'Bini', data: '12/08/2026', chegada: '20h05', conteudoItens: [] },
 ];
 const MALA_STATUS_CICLO = ['Aguardando despacho', 'Despachada em BSB', 'Recebida em SP'];
 
@@ -4192,11 +4214,30 @@ class Component extends DCLogic {
       accMalasAberto: !!(s.orgAcc || {}).malas, toggleAccMalas: this.toggleAcc('malas'),
       accMalasLabel: (s.orgAcc || {}).malas ? 'Ocultar' : 'Ver malas',
       areaEngajamentoView,
-      malasView: MALAS_BSB_SP.map(m => {
-        const status = this.valor('mala-' + m.id) || MALA_STATUS_CICLO[0];
-        const cor = status === 'Recebida em SP' ? { bg: '#E3F3E9', color: '#1E7A45' } : (status === 'Despachada em BSB' ? { bg: '#FDECC8', color: '#8A5A00' } : { bg: '#F2F5FA', color: '#6B6B70' });
-        return { id: m.id, passageiro: m.passageiro, data: m.data, chegada: m.chegada, conteudo: m.conteudo || '', status, statusBg: cor.bg, statusColor: cor.color, ciclo: this.cycleMalaStatus(m.id) };
-      }),
+      malasView: (() => {
+        // Total já enviado de cada item, somando todas as malas — usado pra saber se a meta de SP já foi coberta.
+        const enviadoPorItem = {};
+        MALAS_BSB_SP.forEach(m => (m.conteudoItens || []).forEach(it => { enviadoPorItem[it.id] = (enviadoPorItem[it.id] || 0) + it.qtd; }));
+        return MALAS_BSB_SP.map(m => {
+          const status = this.valor('mala-' + m.id) || MALA_STATUS_CICLO[0];
+          const cor = status === 'Recebida em SP' ? { bg: '#E3F3E9', color: '#1E7A45' } : (status === 'Despachada em BSB' ? { bg: '#FDECC8', color: '#8A5A00' } : { bg: '#F2F5FA', color: '#6B6B70' });
+          const itens = (m.conteudoItens || []).map(it => {
+            const item = BRINDES_MARKETPLACE.find(b => b.id === it.id);
+            const nome = item ? item.nome : it.id;
+            const origemBSB = BSB_ORIGEM_TOTAL[it.id] || 0;
+            const totalEnviado = enviadoPorItem[it.id] || 0;
+            const restanteBSB = Math.max(0, origemBSB - totalEnviado);
+            const metaSP = item ? item.estoqueSP : 0;
+            const spOk = totalEnviado >= metaSP;
+            return {
+              nome, qtd: it.qtd, restanteBSB,
+              spLabel: spOk ? ('SP completo (' + totalEnviado + '/' + metaSP + ')') : ('Faltam ' + Math.max(0, metaSP - totalEnviado) + ' p/ SP (' + totalEnviado + '/' + metaSP + ')'),
+              spColor: spOk ? '#1E7A45' : '#B4471F',
+            };
+          });
+          return { id: m.id, passageiro: m.passageiro, data: m.data, chegada: m.chegada, itens, temItens: itens.length > 0, status, statusBg: cor.bg, statusColor: cor.color, ciclo: this.cycleMalaStatus(m.id) };
+        });
+      })(),
       malasRecebidasCount: MALAS_BSB_SP.filter(m => this.valor('mala-' + m.id) === 'Recebida em SP').length,
       malasDespachadasCount: MALAS_BSB_SP.filter(m => this.valor('mala-' + m.id) === 'Despachada em BSB').length,
       malasTotal: MALAS_BSB_SP.length,
