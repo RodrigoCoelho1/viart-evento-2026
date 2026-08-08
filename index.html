@@ -3711,6 +3711,9 @@ class Component extends DCLogic {
     const bsbOnlyCount = PARTICIPANTES.filter(n => cidadeDe(n) === 'bsb' && !infoDe(n).d).length;
     const baseFiltrado = PARTICIPANTES.filter(n => {
       if (q && !norm(n).includes(q)) return false;
+      // Organização + gestores (dupla função SP+BSB) ficam fora das contagens de presença/confraternização/
+      // camiseta/restrição por padrão — só entram quando o filtro "Organização + Gestores" está ativo.
+      if (s.pessoaFiltro !== 'ambas' && infoDe(n).d) return false;
       if (s.pessoaFiltro === 'sp') { if (!(cidadeDe(n) === 'sp' && !infoDe(n).d)) return false; }
       else if (s.pessoaFiltro === 'bsb') { if (!(cidadeDe(n) === 'bsb' && !infoDe(n).d)) return false; }
       else if (s.pessoaFiltro === 'ambas') { if (!infoDe(n).d) return false; }
@@ -3778,10 +3781,11 @@ class Component extends DCLogic {
     const presencaPreviaNaoCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Não').length;
     const presencaPreviaTalvezCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Talvez').length;
     const presencaPreviaSemRespostaCount = baseFiltrado.length - presencaPreviaSimCount - presencaPreviaNaoCount - presencaPreviaTalvezCount;
-    const confSPBSB = (val) => ({
-      sp: baseFiltrado.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'sp').length,
-      bsb: baseFiltrado.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'bsb').length,
-    });
+    const confSPBSB = (val) => {
+      const total = baseFiltrado.filter(n => gv('cf-' + n) === val).length;
+      const sp = baseFiltrado.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'sp').length;
+      return { sp, bsb: total - sp };
+    };
     const confraternizacaoSimRegiao = confSPBSB('Sim');
     const confraternizacaoNaoRegiao = confSPBSB('Não');
     const confraternizacaoTalvezRegiao = confSPBSB('Talvez');
@@ -3966,7 +3970,7 @@ class Component extends DCLogic {
       : [];
     const temNome = !!s.meuNome;
     const minhaCidadeId = temNome ? cidadeDe(s.meuNome) : '';
-    const bloqueadoBrindes = temNome && minhaCidadeId !== 'sp';
+    const bloqueadoBrindes = temNome && (minhaCidadeId !== 'sp' || infoDe(s.meuNome).d);
     const temNomeLiberado = temNome && !bloqueadoBrindes;
     const minhaCidade = minhaCidadeId === 'sp' ? 'São Paulo' : (minhaCidadeId === 'bsb' ? 'Brasília' : '');
     const minhaData = minhaCidadeId === 'sp' ? '13 de agosto' : (minhaCidadeId === 'bsb' ? '20 de agosto' : '');
@@ -3987,7 +3991,7 @@ class Component extends DCLogic {
     const camisaMostrarOk = temDados && camisaTemDados && !s.camisaEditando;
     const camisaMostrarForm = temDados && (!camisaTemDados || s.camisaEditando);
     const cadastroTravado = temDados && this.respostasTravadas(s.dadosNome);
-    const bloqueadoCadastro = temDados && cidadeDe(s.dadosNome) !== 'sp';
+    const bloqueadoCadastro = temDados && cidadeDe(s.dadosNome) !== 'sp' && !infoDe(s.dadosNome).d;
     const temDadosLiberado = temDados && !bloqueadoCadastro;
     // Camiseta é travada assim que informada, sem prazo — os kits já são produzidos com base nisso.
     const camisaPodeAlterar = false;
