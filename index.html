@@ -103,28 +103,38 @@
 
         <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:16px;padding:clamp(20px,3vw,26px);margin-bottom:20px">
           <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:11px;color:#B4600A;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px">Aviso da organização</div>
-          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:18px;margin-bottom:10px">Avisos</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:18px;margin-bottom:6px">Avisos</div>
+          <sc-if value="{{ ultimaAtualizacaoQuando }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px;font-weight:700;color:#B4600A;margin-bottom:10px">Última atualização: {{ ultimaAtualizacaoQuando }}</div>
+          </sc-if>
           <div style="font-size:13.5px;color:#4A4A50;line-height:1.7;margin-bottom:14px">
             Esta área mantém você atualizado sobre as novidades do app e do evento.<br/><br/>
-            Por enquanto, as áreas interativas do app — credenciamento, cadastro e Pontos & Brindes — estão disponíveis apenas para os participantes do evento de São Paulo.<br/><br/>
             Qualquer dúvida sobre o app ou sobre o evento, fale com a organização pelo Fale conosco.
           </div>
           <div onClick="{{ irParaFaleConosco }}" style="cursor:pointer;display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;font-size:13px">Ir para o Fale conosco</div>
-        </div>
 
-        <sc-if value="{{ temAtualizacoes }}" hint-placeholder-val="{{ false }}">
-        <div style="margin-bottom:28px">
-          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px">Atualizações</div>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <sc-for list="{{ atualizacoesView }}" as="nv" hint-placeholder-count="2">
-              <div style="background:#F7F9FC;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
-                <div style="font-size:11px;font-weight:800;color:#6B6B70;margin-bottom:4px">{{ nv.quando }}</div>
-                <div style="font-size:13.5px;color:#002855;line-height:1.6">{{ nv.texto }}</div>
+          <sc-if value="{{ temAtualizacoes }}" hint-placeholder-val="{{ false }}">
+          <div style="border-top:1px solid #FBE3C0;margin-top:18px;padding-top:16px">
+            <div onClick="{{ toggleAvisosAtualizacoes }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px">
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px">Atualizações <span style="color:#B4600A">({{ atualizacoesTotal }})</span></div>
+              <div style="font-size:12px;font-weight:700;color:#0057A6">{{ avisosAtualizacoesLabel }}</div>
+            </div>
+            <sc-if value="{{ avisosAtualizacoesAberto }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+                <sc-for list="{{ atualizacoesVisiveis }}" as="nv" hint-placeholder-count="2">
+                  <div style="background:#F7F9FC;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
+                    <div style="font-size:11px;font-weight:800;color:#6B6B70;margin-bottom:4px">{{ nv.quando }}</div>
+                    <div style="font-size:13.5px;color:#002855;line-height:1.6">{{ nv.texto }}</div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ atualizacoesTemMais }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ toggleHistoricoAtualizacoes }}" style="cursor:pointer;font-size:12px;font-weight:700;color:#0057A6;align-self:flex-start">{{ historicoToggleLabel }}</div>
+                </sc-if>
               </div>
-            </sc-for>
+            </sc-if>
           </div>
+          </sc-if>
         </div>
-        </sc-if>
 
         <sc-if value="{{ ehDiaDoEvento }}" hint-placeholder-val="{{ false }}">
           <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:16px;padding:22px 24px;margin-bottom:28px">
@@ -618,6 +628,14 @@
           <sc-if value="{{ cadastroTravado }}" hint-placeholder-val="{{ false }}">
             <div style="background:#FDF1DC;border:1px solid #F39200;color:#8A5A0B;border-radius:10px;padding:12px 16px;font-size:13px;font-weight:700;margin-bottom:18px">Respostas travadas — o prazo para informar ou alterar ia até a véspera do evento da sua cidade.</div>
           </sc-if>
+
+          <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Você pretende comparecer ao evento?</div>
+          <select disabled="{{ cadastroTravado }}" value="{{ presencaPreviaResposta }}" onChange="{{ onPresencaPrevia }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF;margin-bottom:18px">
+            <option value="">Selecione...</option>
+            <option value="Sim">Sim, vou comparecer</option>
+            <option value="Não">Não vou comparecer</option>
+            <option value="Talvez">Ainda não sei</option>
+          </select>
 
           <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Restrição alimentar</div>
           <select disabled="{{ cadastroTravado }}" value="{{ restricaoTipo }}" onChange="{{ onRestricaoTipo }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;background:#FFFFFF;margin-bottom:10px">
@@ -1568,6 +1586,29 @@
             </div>
 
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;align-content:flex-start">
+              <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;width:100%">Presença no evento</div>
+              <div onClick="{{ ppSimOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ ppSimBg }}">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ ppSimColor }}">{{ presencaPreviaSimCount }}</div>
+                <div style="font-size:11.5px;color:{{ ppSimColor }}">vão</div>
+              </div>
+              <div onClick="{{ ppNaoOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ ppNaoBg }}">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ ppNaoColor }}">{{ presencaPreviaNaoCount }}</div>
+                <div style="font-size:11.5px;color:{{ ppNaoColor }}">não vão</div>
+              </div>
+              <div onClick="{{ ppTalvezOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ ppTalvezBg }}">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ ppTalvezColor }}">{{ presencaPreviaTalvezCount }}</div>
+                <div style="font-size:11.5px;color:{{ ppTalvezColor }}">talvez</div>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:#F2F5FA">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#8A8A90">{{ presencaPreviaSemRespostaCount }}</div>
+                <div style="font-size:11.5px;color:#8A8A90">sem resposta</div>
+              </div>
+              <sc-if value="{{ ppFiltroAtivo }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ limparPPFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
+              </sc-if>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;align-content:flex-start">
               <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;width:100%">Confraternização</div>
               <div onClick="{{ confSimOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ confSimBg }}">
                 <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ confSimColor }}">{{ confraternizacaoSimCount }}</div>
@@ -1588,20 +1629,27 @@
 
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;align-content:flex-start">
               <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;width:100%">Restrição alimentar</div>
+              <div onClick="{{ setRestricaoQualquerFiltro }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ restricaoQualquerBg }}">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ restricaoQualquerColor }}">{{ restricaoQualquerCount }}</div>
+                <div style="font-size:11.5px;color:{{ restricaoQualquerColor }}">com restrição</div>
+              </div>
               <sc-for list="{{ restricaoStats }}" as="rs" hint-placeholder-count="3">
-                <div style="display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:#FDECC8">
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#8A5A0B">{{ rs.n }}</div>
-                  <div style="font-size:11.5px;color:#8A5A0B">{{ rs.tipo }}</div>
+                <div onClick="{{ rs.onClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ rs.bg }}">
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ rs.color }}">{{ rs.n }}</div>
+                  <div style="font-size:11.5px;color:{{ rs.color }}">{{ rs.tipo }}</div>
                 </div>
               </sc-for>
-              <div style="display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:#F2F5FA">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#8A8A90">{{ restricaoNenhumaCount }}</div>
-                <div style="font-size:11.5px;color:#8A8A90">nenhuma</div>
+              <div onClick="{{ setRestricaoNenhumaFiltro }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ restricaoNenhumaBg }}">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ restricaoNenhumaColor }}">{{ restricaoNenhumaCount }}</div>
+                <div style="font-size:11.5px;color:{{ restricaoNenhumaColor }}">nenhuma</div>
               </div>
-              <div style="display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:#F2F5FA">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#8A8A90">{{ restricaoSemRespostaCount }}</div>
-                <div style="font-size:11.5px;color:#8A8A90">sem resposta</div>
+              <div onClick="{{ setRestricaoSemRespostaFiltro }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ restricaoSemRespostaBg }}">
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ restricaoSemRespostaColor }}">{{ restricaoSemRespostaCount }}</div>
+                <div style="font-size:11.5px;color:{{ restricaoSemRespostaColor }}">sem resposta</div>
               </div>
+              <sc-if value="{{ restricaoFiltroAtivo }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ limparRestricaoFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
+              </sc-if>
             </div>
 
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
@@ -2195,7 +2243,8 @@ const CARTAZES = [
 });
 
 const ATUALIZACOES_INICIAIS = [
-  { quando: '07/08', texto: 'Nova área de Avisos e Atualizações na aba Início, e área de Fale conosco para dúvidas sobre o app ou o evento.' },
+  { quando: '07/08 17:09', texto: 'Novo campo no Cadastro: "Você pretende comparecer ao evento?" — ajuda a organização a ter uma ideia de quantas pessoas vão participar. Como qualquer atualização do app, responder vale ponto em Pontos & Brindes.' },
+  { quando: '07/08 09:15', texto: 'Por enquanto, as áreas interativas do app — credenciamento, cadastro e Pontos & Brindes — estão disponíveis apenas para os participantes do evento de São Paulo.' },
 ];
 
 const TABS_DEF = [
@@ -2289,6 +2338,7 @@ const PONTOS_ACOES = [
   { key: 'rt', label: 'Responder restrição alimentar' },
   { key: 'cs', label: 'Escolher tamanho da camiseta' },
   { key: 'cf', label: 'Responder à confraternização' },
+  { key: 'pp', label: 'Confirmar presença prevista no evento' },
   { key: 'pcd', label: 'Responder necessidade especial' },
   { key: 'npsNota', label: 'Avaliar o evento (nota geral)' },
   { key: 'npsPainel', label: 'Avaliar por momento do dia' },
@@ -2303,10 +2353,9 @@ const BRINDES_MARKETPLACE = [
   { id: 'mochila-seguridade', nome: 'Mochila CAIXA Seguridade', desc: 'Mochila executiva cinza mescla, compartimentos espaçosos, bolsos laterais em redinha e placa metálica personalizada com a marca.', foto: 'mochila-seguridade.jpg', peso: 4.8, estoqueSP: 4, estoqueBSB: 0 },
   { id: 'mochila-caixa', nome: 'Mochila CAIXA', desc: 'Modelo clássico de mochila cinza corporativa com acabamento texturizado e placa metálica discreta da CAIXA.', foto: 'mochila-caixa.jpg', peso: 3.6, estoqueSP: 3, estoqueBSB: 0 },
   { id: 'mochila-loterias', nome: 'Mochila CAIXA Loterias', desc: 'Mochila cinza estruturada de alta resistência com o logo oficial da CAIXA Loterias em destaque, amplo espaço interno e bolsos laterais telados.', foto: 'mochila-loterias.jpg', peso: 3.6, estoqueSP: 3, estoqueBSB: 0 },
-  { id: 'maleta-churrasco', nome: 'Maleta de churrasco', desc: 'Maleta de alumínio estruturada com cantoneiras reforçadas e placa central lisa para personalização.', foto: 'maleta-churrasco.jpg', peso: 3.2, estoqueSP: 4, estoqueBSB: 0 },
+  { id: 'maleta-churrasco', nome: 'Maleta de churrasco', desc: 'Maleta de alumínio estruturada com cantoneiras reforçadas e placa central lisa para personalização.', foto: 'maleta-churrasco.jpg?v=2', peso: 3.2, estoqueSP: 4, estoqueBSB: 0 },
   { id: 'kit-uau', nome: 'Kit UAU', desc: 'Kit completo com ecobag/sacochila de algodão CAIXA, nécessaire preta compacta CAIXA Cartões e camisa polo azul embalada individualmente.', foto: 'kit-uau.jpg', peso: 2.8, estoqueSP: 42, estoqueBSB: 0 },
   { id: 'carregador-gocase', nome: 'Carregador Gocase', desc: 'Power bank Gocase 10.000mAh na cor azul tiffany, com carregamento rápido, saídas USB-C e USB-A e lanterna integrada.', foto: 'carregador-gocase.jpg', peso: 2.8, estoqueSP: 2, estoqueBSB: 0 },
-  { id: 'power-bank', nome: 'Power bank', desc: 'Carregador portátil para manter o celular ligado durante o dia inteiro de evento.', foto: '', peso: 2.8, estoqueSP: 1, estoqueBSB: 0 },
   { id: 'bolsa-cop30', nome: 'Bolsa COP 30', desc: 'Estojo rígido multiuso com zíper e alça transversal removível, estampa temática da fauna e flora do Pampa e chancela CAIXA.', foto: 'bolsa-cop30.jpg', peso: 1.8, estoqueSP: 6, estoqueBSB: 0 },
   { id: 'garrafinha', nome: 'Garrafinha', desc: 'Embalagem cartonada rígida na cor preta com ilustração minimalista em linha branca de uma garrafa térmica.', foto: 'garrafinha.jpg', peso: 1.6, estoqueSP: 3, estoqueBSB: 0 },
   { id: 'xicaras-pires', nome: 'Jogo de xícaras', desc: 'Embalagem decorativa preta com estampa geométrica em tons de roxo e dourado, com visor circular que exibe copos para café espresso.', foto: 'xicaras-pires.jpg?v=2', peso: 1.5, estoqueSP: 3, estoqueBSB: 0 },
@@ -2320,6 +2369,8 @@ const BRINDES_MARKETPLACE = [
   { id: 'moleskine-x', nome: 'Moleskine X', desc: 'Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.', foto: 'moleskine-x.jpg', fit: 'contain', peso: 0.3, estoqueSP: 142, estoqueBSB: 0 },
   { id: 'bloco-rapidex', nome: 'Bloco Rapidex', desc: 'Caderno corporativo com capa em tons de azul e detalhes geométricos coloridos nas bordas, com a marca "Rapidex" em destaque.', foto: 'bloco-rapidex.jpg', peso: 0.6, estoqueSP: 10, estoqueBSB: 0 },
   { id: 'canetas', nome: 'Canetas', desc: 'Caneta CAIXA para o dia a dia.', foto: '', peso: 0.2, estoqueSP: 139, estoqueBSB: 0 },
+  { id: 'pasta-executiva', nome: 'Pasta executiva CAIXA Asset', desc: 'Pasta executiva em material sintético preto com fecho por trava metálica, bloco de anotações e caneta inclusos, e placa "CAIXA Asset" na capa.', foto: 'pasta-executiva.jpg', peso: 3.4, estoqueSP: 4, estoqueBSB: 0 },
+  { id: 'carregador-wireless', nome: 'Carregador Wireless CAIXA Asset', desc: 'Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca "CAIXA Asset" em destaque, com cabo e caixa individual.', foto: 'carregador-wireless.jpg', peso: 2.4, estoqueSP: 1, estoqueBSB: 0 },
 ];
 
 const MANUAL_SECOES = [
@@ -2571,6 +2622,8 @@ class Component extends DCLogic {
     pwError: '',
     sync: {},
     syncStatus: 'local',
+    avisosHistoricoAberto: false,
+    avisosAtualizacoesAberto: false,
     nameQuery: '',
     pessoaFiltro: 'todos',
     clima: null,
@@ -2584,6 +2637,7 @@ class Component extends DCLogic {
     pcdResposta: '',
     pcdObs: '',
     confraternizacaoResposta: '',
+    presencaPreviaResposta: '',
     curiosidadeTexto: '',
     npsNome: '', npsNota: null, npsFuncionou: '', npsMelhorar: '', npsErro: false, npsEnviado: false, npsPaineis: {},
     camisaTamanhoSel: '',
@@ -2629,6 +2683,7 @@ class Component extends DCLogic {
         restricaoTipo: (nomeJaSalvo && gv('rt-' + nomeJaSalvo)) || localStorage.getItem('viart2026_restricao_tipo') || '',
         restricaoObs: (nomeJaSalvo && gv('ro-' + nomeJaSalvo)) || localStorage.getItem('viart2026_restricao_obs') || '',
         confraternizacaoResposta: nomeJaSalvo ? gv('cf-' + nomeJaSalvo) : '',
+        presencaPreviaResposta: nomeJaSalvo ? gv('pp-' + nomeJaSalvo) : '',
         pcdResposta: nomeJaSalvo ? gv('pcd-' + nomeJaSalvo) : '',
         pcdObs: nomeJaSalvo ? gv('pcdo-' + nomeJaSalvo) : '',
         // Curiosidade nunca é reexibida (nem para o próprio dono) — é o segredo do jogo "quem é quem";
@@ -2812,6 +2867,8 @@ class Component extends DCLogic {
   fcEscolherNome = (nome) => () => this.setState({ fcNome: nome });
   excluirFcMensagem = (key) => () => this.gravarCampos({ [key]: null });
   onNovidadeTexto = (e) => this.setState({ novidadeTexto: e.target.value });
+  toggleHistoricoAtualizacoes = () => this.setState(s => ({ avisosHistoricoAberto: !s.avisosHistoricoAberto }));
+  toggleAvisosAtualizacoes = () => this.setState(s => ({ avisosAtualizacoesAberto: !s.avisosAtualizacoesAberto }));
   publicarNovidade = () => {
     const texto = this.state.novidadeTexto.trim();
     if (!texto) return;
@@ -2836,6 +2893,7 @@ class Component extends DCLogic {
     const info = PARTICIPANTES_INFO[nome] || {};
     if (this.valor('cs-' + nome) || info.cs) feitos.push('cs');
     if (this.valor('cf-' + nome)) feitos.push('cf');
+    if (this.valor('pp-' + nome)) feitos.push('pp');
     if (this.valor('pcd-' + nome)) feitos.push('pcd');
     const npsEntry = this.state.sync['nps-' + nome];
     if (npsEntry && npsEntry.v && typeof npsEntry.v.nota === 'number') feitos.push('npsNota');
@@ -2985,6 +3043,7 @@ class Component extends DCLogic {
       restricaoTipo: this.valor('rt-' + nome) || '', restricaoObs: this.valor('ro-' + nome) || '',
       pcdResposta: this.valor('pcd-' + nome) || '', pcdObs: this.valor('pcdo-' + nome) || '',
       confraternizacaoResposta: this.valor('cf-' + nome) || '', curiosidadeTexto: '',
+      presencaPreviaResposta: this.valor('pp-' + nome) || '',
       camisaTamanhoSel: this.valor('cs-' + nome) || '', camisaModelagemSel: this.valor('cm-' + nome) || '',
     }));
   };
@@ -2999,6 +3058,7 @@ class Component extends DCLogic {
       restricaoTipo: this.valor('rt-' + nome) || '', restricaoObs: this.valor('ro-' + nome) || '',
       pcdResposta: this.valor('pcd-' + nome) || '', pcdObs: this.valor('pcdo-' + nome) || '',
       confraternizacaoResposta: this.valor('cf-' + nome) || '',
+      presencaPreviaResposta: this.valor('pp-' + nome) || '',
       curiosidadeTexto: '',
       camisaTamanhoSel: this.valor('cs-' + nome) || '', camisaModelagemSel: this.valor('cm-' + nome) || '',
     });
@@ -3039,6 +3099,7 @@ class Component extends DCLogic {
     });
   };
   onConfraternizacaoResposta = (e) => this.setState({ confraternizacaoResposta: e.target.value, cadastroFlash: false });
+  onPresencaPrevia = (e) => this.setState({ presencaPreviaResposta: e.target.value, cadastroFlash: false });
   onCuriosidadeTexto = (e) => this.setState({ curiosidadeTexto: e.target.value, cadastroFlash: false });
   excluirCuriosidade = (nome) => () => this.setCampos({ ['cur-' + nome]: null });
   cadastroSalvar = () => {
@@ -3048,6 +3109,7 @@ class Component extends DCLogic {
     const campos = {};
     if (this.state.restricaoTipo) { campos['rt-' + nome] = this.state.restricaoTipo; campos['ro-' + nome] = this.state.restricaoObs; }
     if (this.state.confraternizacaoResposta) campos['cf-' + nome] = this.state.confraternizacaoResposta;
+    if (this.state.presencaPreviaResposta) campos['pp-' + nome] = this.state.presencaPreviaResposta;
     if (this.state.pcdResposta) { campos['pcd-' + nome] = this.state.pcdResposta; campos['pcdo-' + nome] = this.state.pcdObs; }
     if (this.state.curiosidadeTexto.trim()) campos['cur-' + nome] = this.state.curiosidadeTexto.trim();
     if (this.state.camisaTamanhoSel && this.state.camisaModelagemSel && !this.valor('cs-' + nome)) {
@@ -3108,15 +3170,17 @@ class Component extends DCLogic {
     this.setCampos({ ['cd-' + nome]: this.valor('cd-' + nome) === cidade ? '' : cidade });
   };
   setPessoaFiltro = (id) => () => this.setState({ pessoaFiltro: id });
+  setRestricaoFiltro = (v) => () => this.setState(s => ({ restricaoFiltro: s.restricaoFiltro === v ? '' : v }));
   setCamisaFiltro = (size) => () => this.setState(s => ({ camisaFiltro: s.camisaFiltro === size ? '' : size }));
   setCamisaModFiltro = (mod) => () => this.setState(s => ({ camisaModFiltro: s.camisaModFiltro === mod ? '' : mod }));
   setConfFiltro = (v) => () => this.setState(s => ({ confFiltro: s.confFiltro === v ? '' : v }));
+  setPPFiltro = (v) => () => this.setState(s => ({ ppFiltro: s.ppFiltro === v ? '' : v }));
   setMesaFiltro = (v) => () => this.setState(s => ({ mesaFiltro: s.mesaFiltro === v ? '' : v }));
   setPresencaFiltro = () => this.setState(s => ({ presencaFiltro: s.presencaFiltro === '' ? 'sim' : (s.presencaFiltro === 'sim' ? 'nao' : '') }));
   setKitFiltro = () => this.setState(s => ({ kitFiltro: s.kitFiltro === '' ? 'sim' : (s.kitFiltro === 'sim' ? 'nao' : '') }));
   limparTodosFiltros = () => this.setState({
     pessoaFiltro: 'todos', pessoaUnidade: '', nameQuery: '', camisaFiltro: '', camisaModFiltro: '',
-    confFiltro: '', mesaFiltro: '', presencaFiltro: '', kitFiltro: '',
+    confFiltro: '', mesaFiltro: '', presencaFiltro: '', kitFiltro: '', restricaoFiltro: '', ppFiltro: '',
   });
   onNumMesas = (e) => {
     const v = parseInt(e.target.value, 10);
@@ -3587,6 +3651,18 @@ class Component extends DCLogic {
         else if (cm !== s.camisaModFiltro) return false;
       }
       if (s.confFiltro && gv('cf-' + n) !== s.confFiltro) return false;
+      if (s.ppFiltro) {
+        const pp = gv('pp-' + n);
+        if (s.ppFiltro === 'sem_resposta') { if (pp) return false; }
+        else if (pp !== s.ppFiltro) return false;
+      }
+      if (s.restricaoFiltro) {
+        const rt = gv('rt-' + n);
+        if (s.restricaoFiltro === 'qualquer') { if (!rt || rt === 'Nenhuma') return false; }
+        else if (s.restricaoFiltro === 'nenhuma') { if (rt !== 'Nenhuma') return false; }
+        else if (s.restricaoFiltro === 'sem_resposta') { if (rt) return false; }
+        else if (rt !== s.restricaoFiltro) return false;
+      }
       if (s.mesaFiltro && mesaDe(n) !== s.mesaFiltro) return false;
       if (s.presencaFiltro === 'sim' && !gv('ps-' + n)) return false;
       if (s.presencaFiltro === 'nao' && gv('ps-' + n)) return false;
@@ -3679,7 +3755,12 @@ class Component extends DCLogic {
       if (rt === 'Nenhuma') { restricaoNenhumaCount++; return; }
       if (restricaoCount[rt] !== undefined) restricaoCount[rt]++;
     });
-    const restricaoStats = RESTRICAO_TIPOS.map(t => ({ tipo: t, n: restricaoCount[t] })).filter(r => r.n > 0);
+    const restricaoStats = RESTRICAO_TIPOS.map(t => ({
+      tipo: t, n: restricaoCount[t], onClick: this.setRestricaoFiltro(t),
+      bg: s.restricaoFiltro === t ? '#8A5A0B' : '#FDECC8',
+      color: s.restricaoFiltro === t ? '#FFFFFF' : '#8A5A0B',
+    })).filter(r => r.n > 0);
+    const restricaoQualquerCount = Object.values(restricaoCount).reduce((a, b) => a + b, 0);
     const pcdStats = baseFiltrado.filter(n => gv('pcd-' + n) === 'Sim').map(n => ({ nome: n, obsSuffix: gv('pcdo-' + n) ? ': ' + gv('pcdo-' + n) : '' }));
     const mesaStats = MESA_VALORES.slice(0, numMesas).map(nome => ({
       nome, n: mesaElegiveis.filter(n2 => mesaDeSP(n2) === nome).length, onClick: this.setMesaFiltro(nome),
@@ -3693,6 +3774,10 @@ class Component extends DCLogic {
     const confraternizacaoSimCount = baseFiltrado.filter(n => gv('cf-' + n) === 'Sim').length;
     const confraternizacaoNaoCount = baseFiltrado.filter(n => gv('cf-' + n) === 'Não').length;
     const confraternizacaoTalvezCount = baseFiltrado.filter(n => gv('cf-' + n) === 'Talvez').length;
+    const presencaPreviaSimCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Sim').length;
+    const presencaPreviaNaoCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Não').length;
+    const presencaPreviaTalvezCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Talvez').length;
+    const presencaPreviaSemRespostaCount = baseFiltrado.length - presencaPreviaSimCount - presencaPreviaNaoCount - presencaPreviaTalvezCount;
     const confSPBSB = (val) => ({
       sp: baseFiltrado.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'sp').length,
       bsb: baseFiltrado.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'bsb').length,
@@ -4239,8 +4324,13 @@ class Component extends DCLogic {
     const atualizacoesView = Object.keys(s.sync).filter(k => k.startsWith('nv-') && s.sync[k] && s.sync[k].v)
       .map(k => ({ key: k, texto: s.sync[k].v, t: s.sync[k].t,
         quando: new Date(s.sync[k].t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) }))
+      .concat(ATUALIZACOES_INICIAIS.map((a, i) => ({ key: 'seed-' + i, texto: a.texto, t: ATUALIZACOES_INICIAIS.length - i, quando: a.quando })))
       .sort((a, b) => b.t - a.t)
-      .slice(0, 12);
+      .slice(0, 100);
+    const atualizacoesVisiveis = s.avisosHistoricoAberto ? atualizacoesView : atualizacoesView.slice(0, 3);
+    const atualizacoesTemMais = atualizacoesView.length > 3;
+    const historicoToggleLabel = s.avisosHistoricoAberto ? 'Ver menos' : 'Ver histórico completo (' + atualizacoesView.length + ')';
+    const ultimaAtualizacaoQuando = atualizacoesView[0] ? atualizacoesView[0].quando : '';
     const fcMensagensView = Object.keys(s.sync).filter(k => k.startsWith('fc-') && s.sync[k] && s.sync[k].v)
       .map(k => ({ key: k, nome: s.sync[k].v.nome, mensagem: s.sync[k].v.mensagem, t: s.sync[k].t,
         quando: new Date(s.sync[k].t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
@@ -4262,7 +4352,11 @@ class Component extends DCLogic {
       fcNome: s.fcNome || '', onFcNome: this.onFcNome, fcOpcoes,
       fcMensagem: s.fcMensagem || '', onFcMensagem: this.onFcMensagem,
       fcErro: s.fcErro || '', fcEnviado: s.fcEnviado, fcFormVisivel: !s.fcEnviado, fcEnviar: this.fcEnviar, fcNova: this.fcNova,
-      atualizacoesView, temAtualizacoes: atualizacoesView.length > 0,
+      atualizacoesView, temAtualizacoes: atualizacoesView.length > 0, atualizacoesTotal: atualizacoesView.length,
+      atualizacoesVisiveis, atualizacoesTemMais, toggleHistoricoAtualizacoes: this.toggleHistoricoAtualizacoes,
+      historicoToggleLabel, ultimaAtualizacaoQuando,
+      avisosAtualizacoesAberto: s.avisosAtualizacoesAberto, toggleAvisosAtualizacoes: this.toggleAvisosAtualizacoes,
+      avisosAtualizacoesLabel: s.avisosAtualizacoesAberto ? 'Fechar' : 'Ver atualizações',
       novidadeTexto: s.novidadeTexto || '', onNovidadeTexto: this.onNovidadeTexto, publicarNovidade: this.publicarNovidade,
       showOrgFaleConosco: s.orgSubTab === 'faleconosco',
       fcMensagensView, fcMensagensTotal: fcMensagensView.length, fcSemMensagens: fcMensagensView.length === 0,
@@ -4358,6 +4452,7 @@ class Component extends DCLogic {
       pcdObs: s.pcdObs, onPcdObs: this.onPcdObs,
       pcdTrocarNome: this.pcdTrocarNome, pcdSalvar: this.pcdSalvar, pcdSalvarBg, pcdSalva,
       confraternizacaoResposta: s.confraternizacaoResposta, onConfraternizacaoResposta: this.onConfraternizacaoResposta,
+      presencaPreviaResposta: s.presencaPreviaResposta, onPresencaPrevia: this.onPresencaPrevia,
       curiosidadeTexto: s.curiosidadeTexto, onCuriosidadeTexto: this.onCuriosidadeTexto,
       temCuriosidadeSalva: temDados && !!this.valor('cur-' + s.dadosNome),
       cadastroSalvar: this.cadastroSalvar, cadastroSalvarBg: '#0057A6', cadastroSalvo: !!s.cadastroFlash, cadastroTravado, cadastroAberto: !cadastroTravado,
@@ -4390,6 +4485,17 @@ class Component extends DCLogic {
       cartazes: CARTAZES.map(c => ({ ...c, qrBg: 'url("' + c.qr + '")' })),
       showOrgPessoas: s.orgSubTab === 'pessoas',
       restricaoStats, restricaoNenhumaCount, restricaoSemRespostaCount, pcdStats, pcdCount: pcdStats.length,
+      restricaoQualquerCount, setRestricaoQualquerFiltro: this.setRestricaoFiltro('qualquer'),
+      restricaoQualquerBg: s.restricaoFiltro === 'qualquer' ? '#8A5A0B' : '#FDECC8',
+      restricaoQualquerColor: s.restricaoFiltro === 'qualquer' ? '#FFFFFF' : '#8A5A0B',
+      setRestricaoNenhumaFiltro: this.setRestricaoFiltro('nenhuma'),
+      restricaoNenhumaBg: s.restricaoFiltro === 'nenhuma' ? '#6B6B70' : '#F2F5FA',
+      restricaoNenhumaColor: s.restricaoFiltro === 'nenhuma' ? '#FFFFFF' : '#8A8A90',
+      setRestricaoSemRespostaFiltro: this.setRestricaoFiltro('sem_resposta'),
+      restricaoSemRespostaBg: s.restricaoFiltro === 'sem_resposta' ? '#6B6B70' : '#F2F5FA',
+      restricaoSemRespostaColor: s.restricaoFiltro === 'sem_resposta' ? '#FFFFFF' : '#8A8A90',
+      restricaoFiltroAtivo: !!s.restricaoFiltro,
+      limparRestricaoFiltro: () => this.setState({ restricaoFiltro: '' }),
       showOrgMalas: s.orgSubTab === 'pontos',
       accCuriosidadesAberto: !!(s.orgAcc || {}).curiosidades, toggleAccCuriosidades: this.toggleAcc('curiosidades'),
       accCuriosidadesLabel: (s.orgAcc || {}).curiosidades ? 'Ocultar' : 'Ver respostas',
@@ -4454,7 +4560,7 @@ class Component extends DCLogic {
       kitFiltroLabel: s.kitFiltro === 'sim' ? 'só com kit' : (s.kitFiltro === 'nao' ? 'só sem kit' : ''),
       kitFiltroAtivo: !!s.kitFiltro, onKitClick: this.setKitFiltro,
       kitBoxBorder: s.kitFiltro ? '2px solid #1E7A45' : '2px solid transparent',
-      algumFiltroAtivo: !!(s.pessoaUnidade || s.nameQuery || s.camisaFiltro || s.camisaModFiltro || s.confFiltro || s.mesaFiltro || s.presencaFiltro || s.kitFiltro || (s.pessoaFiltro && s.pessoaFiltro !== 'todos')),
+      algumFiltroAtivo: !!(s.ppFiltro || s.restricaoFiltro || s.pessoaUnidade || s.nameQuery || s.camisaFiltro || s.camisaModFiltro || s.confFiltro || s.mesaFiltro || s.presencaFiltro || s.kitFiltro || (s.pessoaFiltro && s.pessoaFiltro !== 'todos')),
       limparTodosFiltros: this.limparTodosFiltros,
       budgetLedger, orcTotalFmt: brl(orcTotal), realTotalFmt: brl(comprometidoTotal), pagoTotalFmt: brl(pagoTotal),
       saldoFmt: brl(saldo), saldoColor: saldo < 0 ? '#FF8A7A' : '#8FD9A8',
@@ -4508,6 +4614,11 @@ class Component extends DCLogic {
       confSimOnClick: this.setConfFiltro('Sim'), confSimBg: s.confFiltro === 'Sim' ? '#1E7A45' : 'transparent', confSimColor: s.confFiltro === 'Sim' ? '#FFFFFF' : '#1E7A45',
       confNaoOnClick: this.setConfFiltro('Não'), confNaoBg: s.confFiltro === 'Não' ? '#C0392B' : 'transparent', confNaoColor: s.confFiltro === 'Não' ? '#FFFFFF' : '#C0392B',
       confTalvezOnClick: this.setConfFiltro('Talvez'), confTalvezBg: s.confFiltro === 'Talvez' ? '#F39200' : 'transparent', confTalvezColor: s.confFiltro === 'Talvez' ? '#FFFFFF' : '#F39200',
+      presencaPreviaSimCount, presencaPreviaNaoCount, presencaPreviaTalvezCount, presencaPreviaSemRespostaCount,
+      ppFiltroAtivo: !!s.ppFiltro, limparPPFiltro: () => this.setState({ ppFiltro: '' }),
+      ppSimOnClick: this.setPPFiltro('Sim'), ppSimBg: s.ppFiltro === 'Sim' ? '#1E7A45' : 'transparent', ppSimColor: s.ppFiltro === 'Sim' ? '#FFFFFF' : '#1E7A45',
+      ppNaoOnClick: this.setPPFiltro('Não'), ppNaoBg: s.ppFiltro === 'Não' ? '#C0392B' : 'transparent', ppNaoColor: s.ppFiltro === 'Não' ? '#FFFFFF' : '#C0392B',
+      ppTalvezOnClick: this.setPPFiltro('Talvez'), ppTalvezBg: s.ppFiltro === 'Talvez' ? '#F39200' : 'transparent', ppTalvezColor: s.ppFiltro === 'Talvez' ? '#FFFFFF' : '#F39200',
       camisaFiltroAtivo: !!s.camisaFiltro,
       camisaFaltamAtivoBg: camisaFaltamAtivo ? '#C0392B' : 'transparent',
       camisaFaltamAtivoColor: camisaFaltamAtivo ? '#FFFFFF' : '#C0392B',
