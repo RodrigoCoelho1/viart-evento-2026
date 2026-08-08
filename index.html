@@ -1010,7 +1010,7 @@
               <div style="flex:1 1 380px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;display:flex;gap:18px;align-items:center">
                 <div style="width:120px;height:120px;border-radius:999px;background:{{ cidadeDonutBg }};flex-shrink:0;display:flex;align-items:center;justify-content:center">
                   <div style="width:76px;height:76px;border-radius:999px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center">
-                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px">{{ totalFuncionarios }}</div>
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px">{{ gruposTotal }}</div>
                     <div style="font-size:9px;color:#6B6B70">pessoas</div>
                   </div>
                 </div>
@@ -1075,11 +1075,12 @@
 
               <div style="flex:1 1 220px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
                 <div style="font-weight:700;font-size:14px;margin-bottom:2px">Confraternização</div>
-                <div style="font-size:10.5px;color:#8A8A90;margin-bottom:10px">de {{ participantesElegiveis }} participantes SP+BSB</div>
+                <div style="font-size:10.5px;color:#8A8A90;margin-bottom:10px">de {{ participantesCatering }} pessoas (inclui organização + gestores)</div>
                 <div style="display:flex;align-items:flex-end;gap:18px;height:60px;margin-bottom:8px">
                   <sc-for list="{{ confBars }}" as="cb" hint-placeholder-count="3">
                     <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%">
                       <div style="width:100%;max-width:36px;display:flex;flex-direction:column;border-radius:4px;overflow:hidden">
+                        <div style="height:{{ cb.orgPx }}px;background:#8A5A0B"></div>
                         <div style="height:{{ cb.bsbPx }}px;background:#F39200"></div>
                         <div style="height:{{ cb.spPx }}px;background:#0057A6"></div>
                       </div>
@@ -1097,6 +1098,7 @@
                 <div style="display:flex;gap:12px;font-size:10.5px;color:#8A8A90;margin-top:10px;justify-content:center">
                   <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;border-radius:999px;background:#0057A6"></div>SP</div>
                   <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;border-radius:999px;background:#F39200"></div>BSB</div>
+                  <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;border-radius:999px;background:#8A5A0B"></div>Org.+Gestores</div>
                 </div>
               </div>
 
@@ -3747,6 +3749,7 @@ class Component extends DCLogic {
     const spOnlyCount = PARTICIPANTES.filter(n => cidadeDe(n) === 'sp' && !infoDe(n).d).length;
     const bsbOnlyCount = PARTICIPANTES.filter(n => cidadeDe(n) === 'bsb' && !infoDe(n).d).length;
     const participantesElegiveis = spOnlyCount + bsbOnlyCount;
+    const participantesCatering = spOnlyCount + bsbOnlyCount + dualCount;
     const gruposTotal = spOnlyCount + bsbOnlyCount + dualCount + semCidadeCount;
     const baseFiltrado = PARTICIPANTES.filter(n => {
       if (q && !norm(n).includes(q)) return false;
@@ -3763,6 +3766,15 @@ class Component extends DCLogic {
       if (s.presencaFiltro === 'nao' && gv('ps-' + n)) return false;
       if (s.kitFiltro === 'sim' && !gv('kit-' + n)) return false;
       if (s.kitFiltro === 'nao' && gv('kit-' + n)) return false;
+      return true;
+    });
+    // Restrição alimentar e necessidade especial contam pra todo mundo que vai comer no evento —
+    // inclui organização + gestores (não participam das dinâmicas, mas participam do almoço/coffee).
+    // Só quem não tem cidade (licenças e afins) fica fora, porque nem vai estar no evento.
+    const baseCatering = PARTICIPANTES.filter(n => {
+      if (q && !norm(n).includes(q)) return false;
+      if (!cidadeDe(n) && !infoDe(n).d) return false;
+      if (s.pessoaUnidade && infoDe(n).u !== s.pessoaUnidade) return false;
       return true;
     });
     const camisaSizeCount = { P: 0, M: 0, G: 0, GG: 0, EGG: 0 };
@@ -3792,7 +3804,7 @@ class Component extends DCLogic {
     const RESTRICAO_TIPOS = ['Vegetariano', 'Vegano', 'Sem glúten', 'Sem lactose', 'Alergia alimentar', 'Outra'];
     const restricaoCount = {}; RESTRICAO_TIPOS.forEach(t => restricaoCount[t] = 0);
     let restricaoNenhumaCount = 0, restricaoSemRespostaCount = 0;
-    baseFiltrado.forEach(n => {
+    baseCatering.forEach(n => {
       const rt = gv('rt-' + n);
       if (!rt) { restricaoSemRespostaCount++; return; }
       if (rt === 'Nenhuma') { restricaoNenhumaCount++; return; }
@@ -3804,7 +3816,7 @@ class Component extends DCLogic {
       color: s.restricaoFiltro === t ? '#FFFFFF' : '#8A5A0B',
     })).filter(r => r.n > 0);
     const restricaoQualquerCount = Object.values(restricaoCount).reduce((a, b) => a + b, 0);
-    const pcdStats = baseFiltrado.filter(n => gv('pcd-' + n) === 'Sim').map(n => ({ nome: n, obsSuffix: gv('pcdo-' + n) ? ': ' + gv('pcdo-' + n) : '' }));
+    const pcdStats = baseCatering.filter(n => gv('pcd-' + n) === 'Sim').map(n => ({ nome: n, obsSuffix: gv('pcdo-' + n) ? ': ' + gv('pcdo-' + n) : '' }));
     const mesaStats = MESA_VALORES.slice(0, numMesas).map(nome => ({
       nome, n: mesaElegiveis.filter(n2 => mesaDeSP(n2) === nome).length, onClick: this.setMesaFiltro(nome),
       bg: s.mesaFiltro === nome ? '#0057A6' : 'transparent', color: s.mesaFiltro === nome ? '#FFFFFF' : '#002855',
@@ -3814,37 +3826,40 @@ class Component extends DCLogic {
       bg: s.mesaFiltro === nome ? '#F39200' : 'transparent', color: s.mesaFiltro === nome ? '#FFFFFF' : '#002855',
     }));
     const mesaFiltroAtivo = !!s.mesaFiltro;
-    const confraternizacaoSimCount = baseFiltrado.filter(n => gv('cf-' + n) === 'Sim').length;
-    const confraternizacaoNaoCount = baseFiltrado.filter(n => gv('cf-' + n) === 'Não').length;
-    const confraternizacaoTalvezCount = baseFiltrado.filter(n => gv('cf-' + n) === 'Talvez').length;
+    const confraternizacaoSimCount = baseCatering.filter(n => gv('cf-' + n) === 'Sim').length;
+    const confraternizacaoNaoCount = baseCatering.filter(n => gv('cf-' + n) === 'Não').length;
+    const confraternizacaoTalvezCount = baseCatering.filter(n => gv('cf-' + n) === 'Talvez').length;
     const presencaPreviaSimCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Sim').length;
     const presencaPreviaNaoCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Não').length;
     const presencaPreviaTalvezCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Talvez').length;
     const presencaPreviaSemRespostaCount = baseFiltrado.length - presencaPreviaSimCount - presencaPreviaNaoCount - presencaPreviaTalvezCount;
     const confSPBSB = (val) => {
-      const total = baseFiltrado.filter(n => gv('cf-' + n) === val).length;
-      const sp = baseFiltrado.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'sp').length;
-      return { sp, bsb: total - sp };
+      const sp = baseCatering.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'sp').length;
+      const bsb = baseCatering.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'bsb').length;
+      const org = baseCatering.filter(n => gv('cf-' + n) === val && infoDe(n).d).length;
+      return { sp, bsb, org };
     };
     const confraternizacaoSimRegiao = confSPBSB('Sim');
     const confraternizacaoNaoRegiao = confSPBSB('Não');
     const confraternizacaoTalvezRegiao = confSPBSB('Talvez');
     const confMaxTotal = Math.max(1, confraternizacaoSimCount, confraternizacaoNaoCount, confraternizacaoTalvezCount);
-    const confColHeight = (sp, bsb) => {
-      const total = sp + bsb;
+    const confColHeight = (sp, bsb, org) => {
+      const total = sp + bsb + org;
       const totalPx = Math.round(60 * total / confMaxTotal);
       const spPx = total ? Math.round(totalPx * sp / total) : 0;
-      return { totalPx, spPx, bsbPx: totalPx - spPx };
+      const bsbPx = total ? Math.round(totalPx * bsb / total) : 0;
+      const orgPx = totalPx - spPx - bsbPx;
+      return { totalPx, spPx, bsbPx, orgPx };
     };
-    const confBarRow = (nome, dot, sp, bsb) => {
-      const total = sp + bsb;
-      const h = confColHeight(sp, bsb);
-      return { nome, dot, sp, bsb, total, ...h };
+    const confBarRow = (nome, dot, sp, bsb, org) => {
+      const total = sp + bsb + org;
+      const h = confColHeight(sp, bsb, org);
+      return { nome, dot, sp, bsb, org, total, ...h };
     };
     const confBars = [
-      confBarRow('Vão', '#1E7A45', confraternizacaoSimRegiao.sp, confraternizacaoSimRegiao.bsb),
-      confBarRow('Não vão', '#C0392B', confraternizacaoNaoRegiao.sp, confraternizacaoNaoRegiao.bsb),
-      confBarRow('Talvez', '#F39200', confraternizacaoTalvezRegiao.sp, confraternizacaoTalvezRegiao.bsb),
+      confBarRow('Vão', '#1E7A45', confraternizacaoSimRegiao.sp, confraternizacaoSimRegiao.bsb, confraternizacaoSimRegiao.org),
+      confBarRow('Não vão', '#C0392B', confraternizacaoNaoRegiao.sp, confraternizacaoNaoRegiao.bsb, confraternizacaoNaoRegiao.org),
+      confBarRow('Talvez', '#F39200', confraternizacaoTalvezRegiao.sp, confraternizacaoTalvezRegiao.bsb, confraternizacaoTalvezRegiao.org),
     ];
     const camisaSizeMaxTotal = Math.max(1, ...Object.values(camisaSizeCount));
     const camisaModMaxTotal = Math.max(1, ...Object.values(camisaModCount));
@@ -3872,7 +3887,7 @@ class Component extends DCLogic {
       sp: camisaSizeCountSP[size], bsb: camisaSizeCountBSB[size],
     });
     const pessoaFiltros = [
-      { id: 'todos', label: 'Todos', n: PARTICIPANTES.length - semCidadeCount },
+      { id: 'todos', label: 'Todos', n: gruposTotal },
       { id: 'sp', label: 'São Paulo', n: spOnlyCount },
       { id: 'bsb', label: 'Brasília', n: bsbOnlyCount },
       { id: 'ambas', label: 'Organização + Gestores', n: dualCount },
@@ -4596,7 +4611,7 @@ class Component extends DCLogic {
       participantesTotal: PARTICIPANTES.length, participantesFiltrados: participantes.length,
       totalFuncionarios: PARTICIPANTES.length - semCidadeCount,
       presentesCount, presentesSP, presentesBSB, presentesPct: Math.round(100 * presentesCount / PARTICIPANTES.length) + '%',
-      pessoaFiltros, spCount, bsbCount, spOnlyCount, bsbOnlyCount, semCidadeCount, unidadesOpcoes, onUnidadeChange, dualCount, participantesElegiveis,
+      pessoaFiltros, spCount, bsbCount, spOnlyCount, bsbOnlyCount, semCidadeCount, unidadesOpcoes, onUnidadeChange, dualCount, participantesElegiveis, participantesCatering, gruposTotal,
       pessoaUnidadeValue: s.pessoaUnidade || '',
       presencaFiltroLabel: s.presencaFiltro === 'sim' ? 'só presentes' : (s.presencaFiltro === 'nao' ? 'só ausentes' : ''),
       presencaFiltroAtivo: !!s.presencaFiltro, onPresencaClick: this.setPresencaFiltro,
