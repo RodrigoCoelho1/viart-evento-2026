@@ -1144,6 +1144,18 @@
                 </div>
               </div>
 
+              <div style="flex:1 1 260px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:2px">Engajamento no app</div>
+                <div style="font-size:10.5px;color:#8A8A90;margin-bottom:12px">quem já se identificou (respondeu algo no cadastro)</div>
+                <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px">
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px;color:#1E7A45">{{ identificadosPct }}%</div>
+                  <div style="font-size:11.5px;color:#6B6B70">{{ identificadosCount }} já se identificaram · {{ faltamIdentificarCount }} faltam</div>
+                </div>
+                <div style="height:10px;border-radius:999px;background:#EDF1F7;overflow:hidden;display:flex">
+                  <div style="height:100%;background:#1E7A45;width:{{ identificadosPct }}%"></div>
+                </div>
+              </div>
+
               <div style="flex:1 1 300px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
                 <div style="font-weight:700;font-size:14px;margin-bottom:14px">Camisetas por tamanho — SP vs BSB</div>
                 <sc-for list="{{ camisaSizeCountList }}" as="cz" hint-placeholder-count="5">
@@ -2407,28 +2419,28 @@ const PONTOS_ACOES = [
 // pontuação média de quem já participou (tipo bolsa de valores): poucas pessoas pontuando = preços sobem;
 // muita gente pontuando = preços caem, mantendo o acesso equilibrado.
 const BRINDES_MARKETPLACE = [
-  { id: 'mochila-seguridade', nome: 'Mochila CAIXA Seguridade', desc: 'Mochila executiva cinza mescla, compartimentos espaçosos, bolsos laterais em redinha e placa metálica personalizada com a marca.', foto: 'mochila-seguridade.jpg', peso: 4.8, estoqueSP: 4, estoqueBSB: 0 },
-  { id: 'mochila-caixa', nome: 'Mochila CAIXA', desc: 'Modelo clássico de mochila cinza corporativa com acabamento texturizado e placa metálica discreta da CAIXA.', foto: 'mochila-caixa.jpg', peso: 3.6, estoqueSP: 3, estoqueBSB: 0 },
-  { id: 'mochila-loterias', nome: 'Mochila CAIXA Loterias', desc: 'Mochila cinza estruturada de alta resistência com o logo oficial da CAIXA Loterias em destaque, amplo espaço interno e bolsos laterais telados.', foto: 'mochila-loterias.jpg', peso: 3.6, estoqueSP: 3, estoqueBSB: 0 },
-  { id: 'maleta-churrasco', nome: 'Maleta de churrasco', desc: 'Maleta de alumínio estruturada com cantoneiras reforçadas e placa central lisa para personalização.', foto: 'maleta-churrasco.jpg?v=2', peso: 3.2, estoqueSP: 4, estoqueBSB: 0 },
-  { id: 'kit-uau', nome: 'Kit UAU', desc: 'Kit completo com ecobag/sacochila de algodão CAIXA, nécessaire preta compacta CAIXA Cartões e camisa polo azul embalada individualmente.', foto: 'kit-uau.jpg', peso: 2.8, estoqueSP: 42, estoqueBSB: 0 },
-  { id: 'carregador-gocase', nome: 'Carregador Gocase', desc: 'Power bank Gocase 10.000mAh na cor azul tiffany, com carregamento rápido, saídas USB-C e USB-A e lanterna integrada.', foto: 'carregador-gocase.jpg', peso: 2.8, estoqueSP: 2, estoqueBSB: 0 },
-  { id: 'bolsa-cop30', nome: 'Bolsa COP 30', desc: 'Estojo rígido multiuso com zíper e alça transversal removível, estampa temática da fauna e flora do Pampa e chancela CAIXA.', foto: 'bolsa-cop30.jpg', peso: 1.8, estoqueSP: 6, estoqueBSB: 0 },
-  { id: 'garrafinha', nome: 'Garrafinha', desc: 'Embalagem cartonada rígida na cor preta com ilustração minimalista em linha branca de uma garrafa térmica.', foto: 'garrafinha.jpg', peso: 1.6, estoqueSP: 3, estoqueBSB: 0 },
-  { id: 'xicaras-pires', nome: 'Jogo de xícaras', desc: 'Embalagem decorativa preta com estampa geométrica em tons de roxo e dourado, com visor circular que exibe copos para café espresso.', foto: 'xicaras-pires.jpg?v=2', peso: 1.5, estoqueSP: 3, estoqueBSB: 0 },
-  { id: 'xicara-2pecas', nome: 'Jogo de xícara (2 peças)', desc: 'Par de copos de vidro com parede dupla (isolamento térmico) personalizados CAIXA, acompanhados de caixa de apresentação exclusiva.', foto: 'xicara-2pecas.jpg?v=2', peso: 1.5, estoqueSP: 10, estoqueBSB: 0 },
-  { id: 'bone-caixa', nome: 'Boné CAIXA', desc: 'Boné azul marinho clássico, aba curvada, costuras pespontadas em tom contrastante e bordado oficial da CAIXA.', foto: 'bone-caixa.jpg', peso: 1.4, estoqueSP: 7, estoqueBSB: 0 },
-  { id: 'necessaire', nome: 'Necessaire', desc: 'Nécessaire estruturada em tom coral/salmão, estampa inspirada na Caatinga e os dizeres "É da nossa natureza fazer acontecer - Caixa Brasil".', foto: 'necessaire.jpg', peso: 1.0, estoqueSP: 7, estoqueBSB: 0 },
-  { id: 'mouse-pad', nome: 'Desk Pad', desc: 'Desk pad estendido em couro sintético preto de alta qualidade, com acabamento costurado nas bordas.', foto: 'mouse-pad.jpg', peso: 0.6, estoqueSP: 3, estoqueBSB: 0 },
-  { id: 'moleskine-seguridade-caneta', nome: 'Moleskine Seguridade c/ caneta', desc: 'Caderno executivo azul com elástico vertical na cor azul royal, caneta metálica encaixada na lateral e estampa da CAIXA Seguridade.', foto: 'moleskine-seguridade-caneta.jpg', peso: 0.3, estoqueSP: 8, estoqueBSB: 0 },
-  { id: 'moleskine-caneta-asset', nome: 'Moleskine com caneta CAIXA Asset', desc: 'Kit em caixa preta com caderno executivo preto e caneta esferográfica metálica preta, ambos com a marca "CAIXA Asset".', foto: 'moleskine-caneta-asset.jpg', peso: 0.35, estoqueSP: 2, estoqueBSB: 0 },
-  { id: 'moleskine-seguridade-10anos', nome: 'Moleskine CAIXA Seguridade', desc: 'Caderno especial comemorativo de 10 Anos da CAIXA Seguridade, com design degradê em tons de azul e rosa, fechamento em elástico e caneta metálica inclusa.', foto: 'moleskine-seguridade-10anos.jpg', peso: 0.3, estoqueSP: 1, estoqueBSB: 0 },
-  { id: 'moleskine-loterias', nome: 'Moleskine CAIXA Loterias', desc: 'Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.', foto: 'moleskine-loterias.jpg', fit: 'contain', peso: 0.3, estoqueSP: 138, estoqueBSB: 0 },
-  { id: 'moleskine-x', nome: 'Moleskine X', desc: 'Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.', foto: 'moleskine-x.jpg', fit: 'contain', peso: 0.3, estoqueSP: 142, estoqueBSB: 0 },
-  { id: 'bloco-rapidex', nome: 'Bloco Rapidex', desc: 'Caderno corporativo com capa em tons de azul e detalhes geométricos coloridos nas bordas, com a marca "Rapidex" em destaque.', foto: 'bloco-rapidex.jpg', peso: 0.6, estoqueSP: 10, estoqueBSB: 0 },
-  { id: 'canetas', nome: 'Canetas', desc: 'Caneta CAIXA para o dia a dia.', foto: '', peso: 0.2, estoqueSP: 139, estoqueBSB: 0 },
-  { id: 'pasta-executiva', nome: 'Pasta executiva CAIXA Asset', desc: 'Pasta executiva em material sintético preto com fecho por trava metálica, bloco de anotações e caneta inclusos, e placa "CAIXA Asset" na capa.', foto: 'pasta-executiva.jpg', peso: 3.4, estoqueSP: 2, estoqueBSB: 0 },
-  { id: 'carregador-wireless', nome: 'Carregador Wireless CAIXA Asset', desc: 'Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca "CAIXA Asset" em destaque, com cabo e caixa individual.', foto: 'carregador-wireless.jpg', peso: 2.4, estoqueSP: 1, estoqueBSB: 0 },
+  { id: 'mochila-seguridade', nome: 'Mochila CAIXA Seguridade', desc: 'Mochila executiva cinza mescla, compartimentos espaçosos, bolsos laterais em redinha e placa metálica personalizada com a marca.', foto: 'mochila-seguridade.jpg', peso: 4.8, estoqueTotal: 4 },
+  { id: 'mochila-caixa', nome: 'Mochila CAIXA', desc: 'Modelo clássico de mochila cinza corporativa com acabamento texturizado e placa metálica discreta da CAIXA.', foto: 'mochila-caixa.jpg', peso: 3.6, estoqueTotal: 3 },
+  { id: 'mochila-loterias', nome: 'Mochila CAIXA Loterias', desc: 'Mochila cinza estruturada de alta resistência com o logo oficial da CAIXA Loterias em destaque, amplo espaço interno e bolsos laterais telados.', foto: 'mochila-loterias.jpg', peso: 3.6, estoqueTotal: 3 },
+  { id: 'maleta-churrasco', nome: 'Maleta de churrasco', desc: 'Maleta de alumínio estruturada com cantoneiras reforçadas e placa central lisa para personalização.', foto: 'maleta-churrasco.jpg?v=2', peso: 3.2, estoqueTotal: 4 },
+  { id: 'kit-uau', nome: 'Kit UAU', desc: 'Kit completo com ecobag/sacochila de algodão CAIXA, nécessaire preta compacta CAIXA Cartões e camisa polo azul embalada individualmente.', foto: 'kit-uau.jpg', peso: 2.8, estoqueTotal: 42 },
+  { id: 'carregador-gocase', nome: 'Carregador Gocase', desc: 'Power bank Gocase 10.000mAh na cor azul tiffany, com carregamento rápido, saídas USB-C e USB-A e lanterna integrada.', foto: 'carregador-gocase.jpg', peso: 2.8, estoqueTotal: 2 },
+  { id: 'bolsa-cop30', nome: 'Bolsa COP 30', desc: 'Estojo rígido multiuso com zíper e alça transversal removível, estampa temática da fauna e flora do Pampa e chancela CAIXA.', foto: 'bolsa-cop30.jpg', peso: 1.8, estoqueTotal: 6 },
+  { id: 'garrafinha', nome: 'Garrafinha', desc: 'Embalagem cartonada rígida na cor preta com ilustração minimalista em linha branca de uma garrafa térmica.', foto: 'garrafinha.jpg', peso: 1.6, estoqueTotal: 3 },
+  { id: 'xicaras-pires', nome: 'Jogo de xícaras', desc: 'Embalagem decorativa preta com estampa geométrica em tons de roxo e dourado, com visor circular que exibe copos para café espresso.', foto: 'xicaras-pires.jpg?v=2', peso: 1.5, estoqueTotal: 3 },
+  { id: 'xicara-2pecas', nome: 'Jogo de xícara (2 peças)', desc: 'Par de copos de vidro com parede dupla (isolamento térmico) personalizados CAIXA, acompanhados de caixa de apresentação exclusiva.', foto: 'xicara-2pecas.jpg?v=2', peso: 1.5, estoqueTotal: 10 },
+  { id: 'bone-caixa', nome: 'Boné CAIXA', desc: 'Boné azul marinho clássico, aba curvada, costuras pespontadas em tom contrastante e bordado oficial da CAIXA.', foto: 'bone-caixa.jpg', peso: 1.4, estoqueTotal: 7 },
+  { id: 'necessaire', nome: 'Necessaire', desc: 'Nécessaire estruturada em tom coral/salmão, estampa inspirada na Caatinga e os dizeres "É da nossa natureza fazer acontecer - Caixa Brasil".', foto: 'necessaire.jpg', peso: 1.0, estoqueTotal: 7 },
+  { id: 'mouse-pad', nome: 'Desk Pad', desc: 'Desk pad estendido em couro sintético preto de alta qualidade, com acabamento costurado nas bordas.', foto: 'mouse-pad.jpg', peso: 0.6, estoqueTotal: 3 },
+  { id: 'moleskine-seguridade-caneta', nome: 'Moleskine Seguridade c/ caneta', desc: 'Caderno executivo azul com elástico vertical na cor azul royal, caneta metálica encaixada na lateral e estampa da CAIXA Seguridade.', foto: 'moleskine-seguridade-caneta.jpg', peso: 0.3, estoqueTotal: 8 },
+  { id: 'moleskine-caneta-asset', nome: 'Moleskine com caneta CAIXA Asset', desc: 'Kit em caixa preta com caderno executivo preto e caneta esferográfica metálica preta, ambos com a marca "CAIXA Asset".', foto: 'moleskine-caneta-asset.jpg', peso: 0.35, estoqueTotal: 2 },
+  { id: 'moleskine-seguridade-10anos', nome: 'Moleskine CAIXA Seguridade', desc: 'Caderno especial comemorativo de 10 Anos da CAIXA Seguridade, com design degradê em tons de azul e rosa, fechamento em elástico e caneta metálica inclusa.', foto: 'moleskine-seguridade-10anos.jpg', peso: 0.3, estoqueTotal: 1 },
+  { id: 'moleskine-loterias', nome: 'Moleskine CAIXA Loterias', desc: 'Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.', foto: 'moleskine-loterias.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 138 },
+  { id: 'moleskine-x', nome: 'Moleskine X', desc: 'Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.', foto: 'moleskine-x.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 142 },
+  { id: 'bloco-rapidex', nome: 'Bloco Rapidex', desc: 'Caderno corporativo com capa em tons de azul e detalhes geométricos coloridos nas bordas, com a marca "Rapidex" em destaque.', foto: 'bloco-rapidex.jpg', peso: 0.6, estoqueTotal: 10 },
+  { id: 'canetas', nome: 'Canetas', desc: 'Caneta CAIXA para o dia a dia.', foto: '', peso: 0.2, estoqueTotal: 139 },
+  { id: 'pasta-executiva', nome: 'Pasta executiva CAIXA Asset', desc: 'Pasta executiva em material sintético preto com fecho por trava metálica, bloco de anotações e caneta inclusos, e placa "CAIXA Asset" na capa.', foto: 'pasta-executiva.jpg', peso: 3.4, estoqueTotal: 2 },
+  { id: 'carregador-wireless', nome: 'Carregador Wireless CAIXA Asset', desc: 'Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca "CAIXA Asset" em destaque, com cabo e caixa individual.', foto: 'carregador-wireless.jpg', peso: 2.4, estoqueTotal: 1 },
 ];
 
 const MANUAL_SECOES = [
@@ -2957,6 +2969,25 @@ class Component extends DCLogic {
 
   valor = (k) => (this.state.sync[k] ? this.state.sync[k].v : undefined);
   cidadeDe = (n) => this.valor('cd-' + n) || PARTICIPANTES_CIDADE_AUTO[n] || '';
+  // Proporção de pessoas SP x BSB, recalculada sempre a partir da cidade atual de cada um —
+  // qualquer correção de alocação (SP/BSB) já reflete automaticamente no estoque dividido por cidade.
+  contagemCidades = () => {
+    let sp = 0, bsb = 0;
+    PARTICIPANTES.forEach(n => {
+      const info = PARTICIPANTES_INFO[n] || {};
+      if (info.d) return;
+      const c = this.cidadeDe(n);
+      if (c === 'sp') sp++; else if (c === 'bsb') bsb++;
+    });
+    return { sp, bsb };
+  };
+  splitEstoque = (total) => {
+    const { sp, bsb } = this.contagemCidades();
+    const totalPessoas = sp + bsb;
+    if (!totalPessoas) return { sp: total, bsb: 0 };
+    const qtdBSB = Math.round(total * bsb / totalPessoas);
+    return { sp: total - qtdBSB, bsb: qtdBSB };
+  };
   // Trava as respostas de identificação (restrição, camiseta, confraternização, necessidade especial)
   // a partir do dia do evento da cidade da pessoa — pode informar/alterar livremente até a véspera.
   respostasTravadas = (nome) => {
@@ -3033,7 +3064,8 @@ class Component extends DCLogic {
     const item = BRINDES_MARKETPLACE.find(b => b.id === itemId);
     if (!item) return;
     const custo = this.precoBrinde(item);
-    const estoqueTotal = cidade === 'sp' ? item.estoqueSP : item.estoqueBSB;
+    const { sp: estSP, bsb: estBSB } = this.splitEstoque(item.estoqueTotal);
+    const estoqueTotal = cidade === 'sp' ? estSP : estBSB;
     if (this.valor('brinde-' + itemId + '-' + nome)) { this.setState({ brindeAviso: 'Você já resgatou esse item.' }); return; }
     if (this.contarResgates(itemId, cidade) >= estoqueTotal) { this.setState({ brindeAviso: 'Esse item já esgotou na sua cidade.' }); return; }
     const pontosPessoa = this.pontosTotalDe(nome);
@@ -3790,6 +3822,14 @@ class Component extends DCLogic {
     const participantesElegiveis = spOnlyCount + bsbOnlyCount;
     const participantesCatering = spOnlyCount + bsbOnlyCount + dualCount;
     const gruposTotal = spOnlyCount + bsbOnlyCount + dualCount + semCidadeCount;
+    // "Identificado" = respondeu ao menos um campo do cadastro (restrição, presença, confraternização,
+    // necessidade especial ou camiseta) — mostra quem já interagiu com o app x quem ainda falta.
+    const baseIdentificacao = PARTICIPANTES.filter(n => cidadeDe(n) || infoDe(n).d);
+    const identificadosCount = baseIdentificacao.filter(n =>
+      gv('rt-' + n) || gv('cf-' + n) || gv('pp-' + n) || gv('pcd-' + n) || gv('cs-' + n) || infoDe(n).cs
+    ).length;
+    const faltamIdentificarCount = baseIdentificacao.length - identificadosCount;
+    const identificadosPct = baseIdentificacao.length ? Math.round(100 * identificadosCount / baseIdentificacao.length) : 0;
     const baseFiltrado = PARTICIPANTES.filter(n => {
       if (q && !norm(n).includes(q)) return false;
       // Organização + gestores (dupla função SP+BSB) ficam fora das contagens de presença/confraternização/
@@ -4323,9 +4363,10 @@ class Component extends DCLogic {
       const grp = gruposMapBrindes[g];
       const usadoSPItem = this.contarResgates(b.id, 'sp');
       const usadoBSBItem = this.contarResgates(b.id, 'bsb');
-      grp.totalSP += b.estoqueSP; grp.usadoSP += usadoSPItem;
-      grp.totalBSB += b.estoqueBSB; grp.usadoBSB += usadoBSBItem;
-      grp.total += b.estoqueSP + b.estoqueBSB;
+      const { sp: estSP, bsb: estBSB } = this.splitEstoque(b.estoqueTotal);
+      grp.totalSP += estSP; grp.usadoSP += usadoSPItem;
+      grp.totalBSB += estBSB; grp.usadoBSB += usadoBSBItem;
+      grp.total += estSP + estBSB;
       grp.usado += usadoSPItem + usadoBSBItem;
       if (grp.precoRef === null) grp.precoRef = this.precoBrinde(b);
       const prefItem = 'brinde-' + b.id + '-';
@@ -4405,7 +4446,8 @@ class Component extends DCLogic {
     const mercadoAberto = !!minhaCidadeId && hojeISOAtual(new Date()) === DATA_EVENTO_MERCADO[minhaCidadeId] && minutosAgoraMercado >= 765;
     const brindesView = BRINDES_MARKETPLACE.map(b => {
       const custo = this.precoBrinde(b);
-      const estoqueTotal = minhaCidadeId === 'bsb' ? b.estoqueBSB : b.estoqueSP;
+      const { sp: estSP, bsb: estBSB } = this.splitEstoque(b.estoqueTotal);
+      const estoqueTotal = minhaCidadeId === 'bsb' ? estBSB : estSP;
       const usados = this.contarResgates(b.id, minhaCidadeId || 'sp');
       const restante = Math.max(0, estoqueTotal - usados);
       const jaTem = temNome && !!this.valor('brinde-' + b.id + '-' + s.meuNome);
@@ -4619,7 +4661,7 @@ class Component extends DCLogic {
             const origemBSB = BSB_ORIGEM_TOTAL[it.id] || 0;
             const totalEnviado = enviadoPorItem[it.id] || 0;
             const restanteBSB = Math.max(0, origemBSB - totalEnviado);
-            const metaSP = item ? item.estoqueSP : 0;
+            const metaSP = item ? this.splitEstoque(item.estoqueTotal).sp : 0;
             const spOk = totalEnviado >= metaSP;
             return {
               nome, qtd: it.qtd, restanteBSB,
@@ -4651,6 +4693,7 @@ class Component extends DCLogic {
       totalFuncionarios: gruposTotal,
       presentesCount, presentesSP, presentesBSB, presentesPct: Math.round(100 * presentesCount / PARTICIPANTES.length) + '%',
       pessoaFiltros, spCount, bsbCount, spOnlyCount, bsbOnlyCount, semCidadeCount, unidadesOpcoes, onUnidadeChange, dualCount, participantesElegiveis, participantesCatering, gruposTotal,
+      identificadosCount, faltamIdentificarCount, identificadosPct,
       pessoaUnidadeValue: s.pessoaUnidade || '',
       presencaFiltroLabel: s.presencaFiltro === 'sim' ? 'só presentes' : (s.presencaFiltro === 'nao' ? 'só ausentes' : ''),
       presencaFiltroAtivo: !!s.presencaFiltro, onPresencaClick: this.setPresencaFiltro,
