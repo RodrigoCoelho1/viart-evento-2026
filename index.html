@@ -43,6 +43,16 @@
 
 <div style="min-height:100vh;background:#F2F5FA;padding-bottom:60px">
 
+  <sc-if value="{{ mostrarPopupAviso }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(0,20,45,0.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div style="background:#FFFFFF;border-radius:16px;padding:28px 26px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+        <div style="display:inline-block;background:#FDF1DC;color:#8A5A0B;border-radius:999px;padding:5px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px">Aviso importante</div>
+        <div style="font-size:16px;font-weight:600;color:#002855;line-height:1.5;margin-bottom:22px;white-space:pre-wrap">{{ popupAvisoTexto2 }}</div>
+        <div onClick="{{ fecharPopupAviso }}" style="cursor:pointer;text-align:center;padding:12px;border-radius:10px;font-size:14px;font-weight:700;background:#0057A6;color:#FFFFFF">Entendi</div>
+      </div>
+    </div>
+  </sc-if>
+
   <div style="position:sticky;top:0;z-index:50;background:#002855;box-shadow:0 4px 18px rgba(0,0,0,0.25)">
     <div style="max-width:1180px;margin:0 auto;padding:16px clamp(16px,4vw,36px) 8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px">
       <div style="display:flex;align-items:center;gap:18px">
@@ -920,6 +930,18 @@
               <div style="font-size:12px;color:#6B6B70;margin-bottom:12px">Aparece para todo mundo na aba Início, em Atualizações.</div>
               <textarea placeholder="Escreva a novidade..." value="{{ novidadeTexto }}" onChange="{{ onNovidadeTexto }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:8px;border:1px solid #DCE6F2;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:10px;resize:vertical"></textarea>
               <div onClick="{{ publicarNovidade }}" style="cursor:pointer;display:inline-block;padding:9px 18px;border-radius:999px;font-size:12.5px;font-weight:700;background:#0057A6;color:#FFFFFF">Publicar</div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #F39200;border-radius:14px;padding:18px 20px;margin-bottom:20px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px">Pop-up de aviso urgente</div>
+              <div style="font-size:12px;color:#6B6B70;margin-bottom:12px">Interrompe a tela de quem estiver com o app aberto (ou assim que abrir), até a pessoa clicar em "Entendi".</div>
+              <textarea placeholder="Escreva o aviso urgente..." value="{{ popupAvisoTextoInput }}" onChange="{{ onPopupAvisoTexto }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:8px;border:1px solid #DCE6F2;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:10px;resize:vertical"></textarea>
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <div onClick="{{ publicarPopupAviso }}" style="cursor:pointer;display:inline-block;padding:9px 18px;border-radius:999px;font-size:12.5px;font-weight:700;background:#F39200;color:#002855">Disparar pop-up</div>
+                <sc-if value="{{ temPopupAvisoAtivo }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ retirarPopupAviso }}" style="cursor:pointer;display:inline-block;padding:9px 18px;border-radius:999px;font-size:12.5px;font-weight:700;background:#F2F5FA;color:#6B6B70;border:1px solid #DCE6F2">Retirar pop-up atual</div>
+                </sc-if>
+              </div>
             </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:28px">
               <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px">
@@ -2733,6 +2755,8 @@ class Component extends DCLogic {
     fcErro: '',
     fcEnviado: false,
     novidadeTexto: '',
+    popupAvisoTextoInput: '',
+    popupAvisoFechado: false,
   };
 
   componentDidMount() {
@@ -2957,6 +2981,22 @@ class Component extends DCLogic {
   fcEscolherNome = (nome) => () => this.setState({ fcNome: nome });
   excluirFcMensagem = (key) => () => this.gravarCampos({ [key]: null });
   onNovidadeTexto = (e) => this.setState({ novidadeTexto: e.target.value });
+  onPopupAvisoTexto = (e) => this.setState({ popupAvisoTextoInput: e.target.value });
+  publicarPopupAviso = () => {
+    const texto = this.state.popupAvisoTextoInput.trim();
+    if (!texto) return;
+    this.setCampos({ 'popup-urgente': texto });
+    this.setState({ popupAvisoTextoInput: '', popupAvisoFechado: false });
+    try { localStorage.removeItem('viart2026_popup_visto'); } catch (e) {}
+  };
+  retirarPopupAviso = () => {
+    this.setCampos({ 'popup-urgente': null });
+  };
+  fecharPopupAviso = () => {
+    const entry = this.state.sync['popup-urgente'];
+    try { localStorage.setItem('viart2026_popup_visto', String(entry ? entry.t : Date.now())); } catch (e) {}
+    this.setState({ popupAvisoFechado: true });
+  };
   toggleHistoricoAtualizacoes = () => this.setState(s => ({ avisosHistoricoAberto: !s.avisosHistoricoAberto }));
   toggleAvisosAtualizacoes = () => this.setState(s => ({ avisosAtualizacoesAberto: !s.avisosAtualizacoesAberto }));
   publicarNovidade = () => {
@@ -3822,11 +3862,11 @@ class Component extends DCLogic {
     const participantesElegiveis = spOnlyCount + bsbOnlyCount;
     const participantesCatering = spOnlyCount + bsbOnlyCount + dualCount;
     const gruposTotal = spOnlyCount + bsbOnlyCount + dualCount + semCidadeCount;
-    // "Identificado" = respondeu ao menos um campo do cadastro (restrição, presença, confraternização,
-    // necessidade especial ou camiseta) — mostra quem já interagiu com o app x quem ainda falta.
+    // "Identificado" = respondeu ao menos um campo do cadastro DENTRO DO APP (não conta o tamanho de
+    // camiseta pré-cadastrado na planilha original — só o que a própria pessoa preencheu).
     const baseIdentificacao = PARTICIPANTES.filter(n => cidadeDe(n) || infoDe(n).d);
     const identificadosCount = baseIdentificacao.filter(n =>
-      gv('rt-' + n) || gv('cf-' + n) || gv('pp-' + n) || gv('pcd-' + n) || gv('cs-' + n) || infoDe(n).cs
+      gv('rt-' + n) || gv('cf-' + n) || gv('pp-' + n) || gv('pcd-' + n) || gv('cs-' + n)
     ).length;
     const faltamIdentificarCount = baseIdentificacao.length - identificadosCount;
     const identificadosPct = baseIdentificacao.length ? Math.round(100 * identificadosCount / baseIdentificacao.length) : 0;
@@ -4498,6 +4538,12 @@ class Component extends DCLogic {
       avisosAtualizacoesAberto: s.avisosAtualizacoesAberto, toggleAvisosAtualizacoes: this.toggleAvisosAtualizacoes,
       avisosAtualizacoesLabel: s.avisosAtualizacoesAberto ? 'Fechar' : 'Ver atualizações',
       novidadeTexto: s.novidadeTexto || '', onNovidadeTexto: this.onNovidadeTexto, publicarNovidade: this.publicarNovidade,
+      popupAvisoTextoInput: s.popupAvisoTextoInput || '', onPopupAvisoTexto: this.onPopupAvisoTexto,
+      publicarPopupAviso: this.publicarPopupAviso, retirarPopupAviso: this.retirarPopupAviso, fecharPopupAviso: this.fecharPopupAviso,
+      temPopupAvisoAtivo: !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v),
+      popupAvisoTexto2: (s.sync['popup-urgente'] && s.sync['popup-urgente'].v) || '',
+      mostrarPopupAviso: !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
+        String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || '')),
       showOrgFaleConosco: s.orgSubTab === 'faleconosco',
       fcMensagensView, fcMensagensTotal: fcMensagensView.length, fcSemMensagens: fcMensagensView.length === 0,
       showInfoAntes: s.infoSubTab === 'antes', showInfoDurante: s.infoSubTab === 'durante',
