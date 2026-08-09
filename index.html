@@ -2855,7 +2855,25 @@ class Component extends DCLogic {
       if (!r || typeof r.t !== 'number') return;
       if (!sync[k] || r.t > sync[k].t) { sync[k] = r; mudou = true; }
     });
-    if (mudou) { this.gravarLocal(sync); this.setState({ sync }); }
+    if (mudou) {
+      this.gravarLocal(sync);
+      const gv = (k) => (sync[k] && sync[k].v) || '';
+      // Reidrata os campos do formulário com o que acabou de chegar do servidor —
+      // sem isso, uma resposta salva em outro momento/dispositivo só aparecia marcada
+      // depois de reselecionar o nome manualmente.
+      const nome = this.state.dadosNome || this.state.meuNome;
+      const extra = nome ? {
+        restricaoTipo: gv('rt-' + nome) || this.state.restricaoTipo,
+        restricaoObs: gv('ro-' + nome) || this.state.restricaoObs,
+        confraternizacaoResposta: gv('cf-' + nome) || this.state.confraternizacaoResposta,
+        presencaPreviaResposta: gv('pp-' + nome) || this.state.presencaPreviaResposta,
+        pcdResposta: gv('pcd-' + nome) || this.state.pcdResposta,
+        pcdObs: gv('pcdo-' + nome) || this.state.pcdObs,
+        camisaTamanhoSel: gv('cs-' + nome) || this.state.camisaTamanhoSel,
+        camisaModelagemSel: gv('cm-' + nome) || this.state.camisaModelagemSel,
+      } : {};
+      this.setState({ sync, ...extra });
+    }
   };
 
   fetchClima = () => {
@@ -4630,7 +4648,7 @@ class Component extends DCLogic {
       curiosidadesTotal: PARTICIPANTES.filter(n => gv('cur-' + n)).length,
       participantes, nameQuery: s.nameQuery, onNameQuery: this.onNameQuery,
       participantesTotal: PARTICIPANTES.length, participantesFiltrados: participantes.length,
-      totalFuncionarios: PARTICIPANTES.length - semCidadeCount,
+      totalFuncionarios: gruposTotal,
       presentesCount, presentesSP, presentesBSB, presentesPct: Math.round(100 * presentesCount / PARTICIPANTES.length) + '%',
       pessoaFiltros, spCount, bsbCount, spOnlyCount, bsbOnlyCount, semCidadeCount, unidadesOpcoes, onUnidadeChange, dualCount, participantesElegiveis, participantesCatering, gruposTotal,
       pessoaUnidadeValue: s.pessoaUnidade || '',
