@@ -59,6 +59,13 @@
         <div style="display:inline-block;background:#E8EFF9;color:#0057A6;border-radius:999px;padding:5px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px">Novidades no app</div>
         <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:22px">
           <div style="display:flex;gap:12px">
+            <div style="font-size:22px;line-height:1">🚨</div>
+            <div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Alerta de restrição e necessidade especial</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">A organização agora recebe um aviso assim que alguém marca restrição alimentar ou necessidade especial no Cadastro.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px">
             <div style="font-size:22px;line-height:1">💼</div>
             <div>
               <div style="font-weight:800;font-size:14.5px;color:#002855">Nova área Wallet</div>
@@ -101,6 +108,20 @@
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <div onClick="{{ irParaFaleConoscoOrg }}" style="cursor:pointer;flex:1;text-align:center;padding:12px;border-radius:10px;font-size:14px;font-weight:700;background:#0057A6;color:#FFFFFF;white-space:nowrap">Ver mensagens</div>
           <div onClick="{{ fecharPopupFc }}" style="cursor:pointer;padding:12px 18px;border-radius:10px;font-size:14px;font-weight:700;background:#F2F5FA;color:#6B6B70">Depois</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ mostrarPopupRestPcd }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(0,20,45,0.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div style="background:#FFFFFF;border-radius:16px;padding:28px 26px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+        <div style="display:inline-block;background:#FDF1DC;color:#8A5A0B;border-radius:999px;padding:5px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px">Só para a organização</div>
+        <div style="font-weight:800;font-size:16px;color:#002855;margin-bottom:6px">{{ restPcdNaoLidosCount }} novo(s) registro(s) de restrição/necessidade especial</div>
+        <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-bottom:22px">{{ restPcdNaoLidosResumo }}</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <div onClick="{{ irParaParticipantesOrg }}" style="cursor:pointer;flex:1;text-align:center;padding:12px;border-radius:10px;font-size:14px;font-weight:700;background:#0057A6;color:#FFFFFF;white-space:nowrap">Ver em Participantes</div>
+          <div onClick="{{ fecharPopupRestPcd }}" style="cursor:pointer;padding:12px 18px;border-radius:10px;font-size:14px;font-weight:700;background:#F2F5FA;color:#6B6B70">Depois</div>
         </div>
       </div>
     </div>
@@ -753,6 +774,27 @@
                   <b>Aviso do Google Play Protect?</b> Pode aparecer "App de risco bloqueado" — é uma checagem automática do Android para apps novos, não é um vírus. Toque em "Instalar assim mesmo" e depois em "Entendi" para continuar.
                 </div>
               </div>
+              <div>
+                <div style="font-weight:700;font-size:14.5px;margin-bottom:10px">Android (Samsung Internet)</div>
+                <ol style="font-size:13px;color:#DCE6F2;line-height:1.7;padding-left:20px;margin:0">
+                  <li>Abra o link do evento no <b>Samsung Internet</b>.</li>
+                  <li>Toque no menu de <b>três linhas</b>, no canto inferior direito.</li>
+                  <li>Toque em <b>"Adicionar página a"</b>.</li>
+                  <li>Escolha <b>"Tela inicial"</b> (não "Favoritos").</li>
+                  <li>Confirme tocando em <b>"Adicionar"</b>.</li>
+                  <li>Pronto! O ícone VIART 2026 aparece na tela inicial, como um app.</li>
+                </ol>
+              </div>
+              <div>
+                <div style="font-weight:700;font-size:14.5px;margin-bottom:10px">Android (Edge)</div>
+                <ol style="font-size:13px;color:#DCE6F2;line-height:1.7;padding-left:20px;margin:0">
+                  <li>Abra o link do evento no <b>Edge</b>.</li>
+                  <li>Toque no menu de <b>três pontinhos</b>, na barra inferior.</li>
+                  <li>Procure por <b>"Adicionar à tela inicial"</b> ou <b>"Instalar aplicativo"</b>.</li>
+                  <li>Confirme tocando em <b>"Instalar"</b> / <b>"Adicionar"</b>.</li>
+                  <li>Pronto! O ícone VIART 2026 aparece na tela inicial, como um app.</li>
+                </ol>
+              </div>
             </div>
           </sc-if>
         </div>
@@ -1134,7 +1176,7 @@
                   </sc-if>
                   <div style="min-width:0">
                     <div style="font-weight:700;font-size:13.5px">{{ ct.nome }}</div>
-                    <div style="font-size:13.5px;font-weight:700;color:#0057A6;margin-top:8px">{{ ct.tel }}</div>
+                    <div style="font-size:13.5px;font-weight:700;color:#0057A6;margin-top:8px;white-space:nowrap">{{ ct.tel }}</div>
                   </div>
                 </div>
               </sc-for>
@@ -1791,11 +1833,7 @@
               </div>
             </div>
 
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px">
-              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Engajamento por cidade e área</div>
-              <div onClick="{{ toggleAccEngajamento }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accEngajamentoLabel }}</div>
-            </div>
-            <sc-if value="{{ accEngajamentoAberto }}" hint-placeholder-val="{{ false }}">
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;margin:0 0 10px">Engajamento por cidade e área</div>
             <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:16px">
               <div style="flex:1 1 220px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
                 <div style="font-weight:700;font-size:13px;margin-bottom:2px">Engajamento · Pontos & Brindes</div>
@@ -1894,13 +1932,10 @@
               </div>
             </div>
             </div>
-            </sc-if>
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Estoque de brindes em tempo real</div>
-              <div onClick="{{ toggleAccEstoque }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accEstoqueLabel }}</div>
             </div>
-            <sc-if value="{{ accEstoqueAberto }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:12px">
               <div style="background:#0A3C6E;color:#FFFFFF;border-radius:12px;padding:16px 18px">
                 <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px">{{ brindesDashResumo.totalRestante }}/{{ brindesDashResumo.totalGeral }}</div>
@@ -1957,7 +1992,7 @@
                 </div>
               </sc-for>
             </div>
-            </sc-if>
+            </div>
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Lista nome a nome ({{ pontosRankingView.length }})</div>
@@ -2203,30 +2238,52 @@
               </div>
               <div style="flex:1 1 260px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
                 <div style="font-weight:700;font-size:14px;margin-bottom:14px">Distribuição das notas</div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#4A4A50;margin-bottom:6px">
-                  <div style="width:8px;height:8px;border-radius:999px;background:#1E7A45;flex-shrink:0"></div>
-                  <div style="flex:1">Promotores (9-10)</div><div style="font-weight:700">{{ npsPromotores }}</div>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#4A4A50;margin-bottom:6px">
-                  <div style="width:8px;height:8px;border-radius:999px;background:#F39200;flex-shrink:0"></div>
-                  <div style="flex:1">Neutros (7-8)</div><div style="font-weight:700">{{ npsNeutros }}</div>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#4A4A50">
-                  <div style="width:8px;height:8px;border-radius:999px;background:#C0392B;flex-shrink:0"></div>
-                  <div style="flex:1">Detratores (0-6)</div><div style="font-weight:700">{{ npsDetratores }}</div>
+                <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+                  <div style="position:relative;flex-shrink:0;width:130px;height:130px">
+                    <svg viewBox="0 0 130 130" width="130" height="130" style="transform:rotate(-90deg)">
+                      <circle cx="65" cy="65" r="49" fill="none" stroke="#EDEFF3" stroke-width="18"></circle>
+                      <sc-for list="{{ npsDistChart }}" as="nd" hint-placeholder-count="3">
+                        <circle cx="65" cy="65" r="49" fill="none" stroke="{{ nd.cor }}" stroke-width="18" stroke-dasharray="{{ nd.dashArray }}" stroke-dashoffset="{{ nd.dashOffset }}"></circle>
+                      </sc-for>
+                    </svg>
+                    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+                      <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px;color:#002855">{{ npsTotal }}</div>
+                      <div style="font-size:10px;color:#8A8A90">respostas</div>
+                    </div>
+                  </div>
+                  <div style="flex:1;min-width:160px;display:flex;flex-direction:column;gap:8px">
+                    <sc-for list="{{ npsDistChart }}" as="nd" hint-placeholder-count="3">
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <div style="width:10px;height:10px;border-radius:3px;background:{{ nd.cor }};flex-shrink:0"></div>
+                        <div style="flex:1;font-size:12px;color:#4A4A50">{{ nd.nome }}</div>
+                        <div style="font-size:12px;font-weight:800;color:#002855">{{ nd.n }}</div>
+                        <div style="font-size:11px;color:#8A8A90;width:34px;text-align:right">{{ nd.pctLabel }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
                 </div>
               </div>
-              <div style="flex:1 1 260px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+              <div style="flex:1 1 620px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
                 <div style="font-weight:700;font-size:14px;margin-bottom:14px">Por momento do dia</div>
                 <sc-if value="{{ npsPainelStatsVazio }}" hint-placeholder-val="{{ false }}">
                   <div style="font-size:12.5px;color:#8A8A90">Nenhuma avaliação por painel ainda.</div>
                 </sc-if>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
                 <sc-for list="{{ npsPainelStats }}" as="np" hint-placeholder-count="6">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:#4A4A50;margin-bottom:6px;gap:8px">
-                    <div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ np.title }}</div>
-                    <div style="font-weight:700;color:#002855;white-space:nowrap">{{ np.media }} · {{ np.n }}</div>
+                  <div style="background:#F7F9FC;border-radius:10px;padding:12px 14px">
+                    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px">
+                      <div style="font-size:12px;font-weight:700;color:#002855;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ np.title }}">{{ np.title }}</div>
+                      <div style="font-size:11px;font-weight:800;color:{{ np.nColor }};white-space:nowrap;flex-shrink:0">{{ np.n }} resp.</div>
+                    </div>
+                    <div style="display:flex;gap:14px">
+                      <div><div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#B4471F">{{ np.min }}</div><div style="font-size:9.5px;color:#8A8A90">mín</div></div>
+                      <div><div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#0057A6">{{ np.mediana }}</div><div style="font-size:9.5px;color:#8A8A90">mediana</div></div>
+                      <div><div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#1E7A45">{{ np.max }}</div><div style="font-size:9.5px;color:#8A8A90">máx</div></div>
+                    </div>
+                    <div style="font-size:10px;color:#8A8A90;margin-top:6px">média {{ np.media }}</div>
                   </div>
                 </sc-for>
+                </div>
               </div>
               <div style="flex:1 1 320px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
                 <div style="font-weight:700;font-size:14px;margin-bottom:14px">Comentários recentes</div>
@@ -2423,6 +2480,8 @@ const CARTAZES = [
 });
 
 const ATUALIZACOES_INICIAIS = [
+  { quando: '10/08 19:20', texto: 'Alerta imediato para a organização: quando alguém marca uma restrição alimentar ou necessidade especial no Cadastro, um pop-up avisa a organização na próxima vez que abrir o app.' },
+  { quando: '10/08 19:20', texto: 'Manual de instalação do app ganhou passo a passo também para Samsung Internet e Edge no Android, além de Chrome.' },
   { quando: '10/08 17:40', texto: 'Nova área Wallet, na aba Informações: guarde print ou PDF da passagem de ida, da passagem de volta e o endereço do hotel — 3 cards, salvos só no seu aparelho, com botões diretos de Uber e Google Maps até o hotel.' },
   { quando: '10/08 17:40', texto: 'Check-in online das companhias aéreas (Gol, LATAM e Azul) agora tem link direto na aba Informações.' },
   { quando: '10/08 17:40', texto: 'Contatos de emergência agora mostram a foto de cada contato.' },
@@ -2530,7 +2589,8 @@ const BRINDES_MARKETPLACE = [
   { id: 'moleskine-loterias', nome: 'Moleskine CAIXA Loterias', desc: 'Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.', foto: 'moleskine-loterias.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 198 },
   { id: 'moleskine-x', nome: 'Moleskine X', desc: 'Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.', foto: 'moleskine-x.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 204 },
   { id: 'bloco-rapidex', nome: 'Bloco Rapidex', desc: 'Caderno corporativo com capa em tons de azul e detalhes geométricos coloridos nas bordas, com a marca "Rapidex" em destaque.', foto: 'bloco-rapidex.jpg', peso: 0.6, estoqueTotal: 10 },
-  { id: 'canetas', nome: 'Canetas', desc: 'Caneta CAIXA para o dia a dia.', foto: '', peso: 0.2, estoqueTotal: 139 },
+  { id: 'caneta-tipo1', nome: 'Caneta CAIXA Tipo 1', desc: 'Caneta esferográfica metálica azul, com clipe prateado e a marca CAIXA Asset gravada no corpo.', foto: 'caneta-caixa-tipo1.jpg', peso: 0.2, estoqueTotal: 96, fit: 'contain' },
+  { id: 'caneta-tipo2', nome: 'Caneta CAIXA Tipo 2', desc: 'Caneta esferográfica metálica azul marinho, com acabamentos prateados e estojo de veludo com a marca CAIXA.', foto: 'caneta-caixa-tipo2.jpg', peso: 0.2, estoqueTotal: 70, fit: 'contain' },
   { id: 'pasta-executiva', nome: 'Pasta executiva CAIXA Asset', desc: 'Pasta executiva em material sintético preto com fecho por trava metálica, bloco de anotações e caneta inclusos, e placa "CAIXA Asset" na capa.', foto: 'pasta-executiva.jpg', peso: 3.4, estoqueTotal: 2 },
   { id: 'carregador-wireless', nome: 'Carregador Wireless CAIXA Asset', desc: 'Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca "CAIXA Asset" em destaque, com cabo e caixa individual.', foto: 'carregador-wireless.jpg', peso: 3.0, estoqueTotal: 1 },
 ];
@@ -3235,12 +3295,16 @@ class Component extends DCLogic {
     this.setCampos({ 'popup-urgente': null });
   };
   fecharPopupNovidades = () => {
-    try { localStorage.setItem('viart2026_popup_novidades_v3_visto', '1'); } catch (e) {}
+    try { localStorage.setItem('viart2026_popup_novidades_v4_visto', '1'); } catch (e) {}
     this.setState({ popupNovidadesFechado: true });
   };
   fecharPopupFc = () => {
     try { localStorage.setItem('viart2026_fc_ultima_vista', String(this._fcUltimaMsgT || 0)); } catch (e) {}
     this.setState({ popupFcFechado: true });
+  };
+  fecharPopupRestPcd = () => {
+    try { localStorage.setItem('viart2026_restpcd_ultima_vista', String(this._restPcdUltimoT || 0)); } catch (e) {}
+    this.setState({ popupRestPcdFechado: true });
   };
   fecharPopupAviso = () => {
     const entry = this.state.sync['popup-urgente'];
@@ -3576,7 +3640,6 @@ class Component extends DCLogic {
   onKitResposta = (e) => {
     const nome = this.state.dadosNome;
     if (!nome) return;
-    if (new Date() < new Date('2026-08-12T08:00:00')) return;
     this.setCampos({ ['kit-' + nome]: e.target.value === 'Sim' });
   };
   togglePresente = (nome) => () => this.setCampos({ ['ps-' + nome]: !this.valor('ps-' + nome) });
@@ -4734,9 +4797,30 @@ class Component extends DCLogic {
     const npsPainelStats = NPS_PAINEIS_DEFS.map((b, i) => {
       const notas = npsRaw.filter(r => r.paineis && (r.paineis[i] || r.paineis[i] === 0)).map(r => r.paineis[i]);
       const media = notas.length ? Math.round(10 * notas.reduce((a, v) => a + v, 0) / notas.length) / 10 : null;
-      return { title: b.title, media: media === null ? '—' : media, n: notas.length };
+      const sorted = [...notas].sort((a, b2) => a - b2);
+      const mediana = sorted.length ? (sorted.length % 2 ? sorted[(sorted.length - 1) / 2] : Math.round(10 * (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2) / 10) : null;
+      return { title: b.title, media: media === null ? '—' : media, n: notas.length,
+        min: sorted.length ? sorted[0] : '—', max: sorted.length ? sorted[sorted.length - 1] : '—', mediana: mediana === null ? '—' : mediana,
+        nColor: notas.length <= 2 ? '#B4471F' : (notas.length <= 5 ? '#8A5A0B' : '#1E7A45') };
     }).filter(p => p.n > 0);
     const npsPainelStatsVazio = npsPainelStats.length === 0;
+    const NPS_DIST_R = 60, NPS_DIST_CIRC = 2 * Math.PI * NPS_DIST_R;
+    const npsDistDefs = [
+      { id: 'prom', nome: 'Promotores (9-10)', n: npsPromotores, cor: '#1E7A45' },
+      { id: 'neu', nome: 'Neutros (7-8)', n: npsNeutros, cor: '#F39200' },
+      { id: 'det', nome: 'Detratores (0-6)', n: npsDetratores, cor: '#C0392B' },
+    ];
+    let npsDistAcc = 0;
+    const npsDistChart = npsDistDefs.map(d => {
+      const pct = npsTotal ? Math.round(100 * d.n / npsTotal) : 0;
+      const len = npsTotal ? NPS_DIST_CIRC * d.n / npsTotal : 0;
+      const seg = { nome: d.nome, n: d.n, cor: d.cor, pctLabel: pct + '%',
+        dashArray: len.toFixed(1) + ' ' + (NPS_DIST_CIRC - len).toFixed(1),
+        dashOffset: (-npsDistAcc).toFixed(1) };
+      npsDistAcc += len;
+      return seg;
+    });
+    const npsPainelChart = npsPainelStats.map(p => ({ ...p, barPct: p.media === '—' ? 0 : Math.round(100 * p.media / 10) }));
     const npsComentarios = Object.entries(s.sync)
       .filter(([k, v]) => k.startsWith('nps-') && v && v.v && (v.v.funcionou || v.v.melhorar))
       .map(([k, v]) => ({ nome: k.slice(4), nota: v.v.nota, funcionou: v.v.funcionou, melhorar: v.v.melhorar, ts: v.t }))
@@ -4977,7 +5061,22 @@ class Component extends DCLogic {
     const fcUltimaVista = Number(localStorage.getItem('viart2026_fc_ultima_vista') || '0');
     const fcNaoLidas = fcMensagensView.filter(m => m.t > fcUltimaVista);
     const souGestor = (s.meuNome && infoDe(s.meuNome).tipo === 'gestor') || (s.dadosNome && infoDe(s.dadosNome).tipo === 'gestor');
-    const mostrarPopupFc = s.orgUnlocked && !s.popupFcFechado && fcNaoLidas.length > 0 && !souGestor;
+    const mostrarPopupAviso = !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
+      String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || ''));
+    const mostrarPopupNovidades = !s.popupNovidadesFechado && !mostrarPopupAviso && (localStorage.getItem('viart2026_popup_novidades_v4_visto') || '') !== '1';
+    const mostrarPopupFc = s.orgUnlocked && !s.popupFcFechado && fcNaoLidas.length > 0 && !souGestor && !mostrarPopupAviso && !mostrarPopupNovidades;
+
+    const restPcdView = Object.keys(s.sync).filter(k => (k.indexOf('rt-') === 0 && s.sync[k] && s.sync[k].v && s.sync[k].v !== 'Nenhuma') || (k.indexOf('pcd-') === 0 && s.sync[k] && s.sync[k].v === 'Sim'))
+      .map(k => {
+        const isPcd = k.indexOf('pcd-') === 0;
+        const nome = k.slice(isPcd ? 4 : 3);
+        return { key: k, nome, t: s.sync[k].t, tipo: isPcd ? 'Necessidade especial' : 'Restrição: ' + s.sync[k].v };
+      }).sort((a, b) => b.t - a.t);
+    const restPcdUltimoT = restPcdView.length ? Math.max.apply(null, restPcdView.map(a => a.t)) : 0;
+    this._restPcdUltimoT = restPcdUltimoT;
+    const restPcdUltimaVista = Number(localStorage.getItem('viart2026_restpcd_ultima_vista') || '0');
+    const restPcdNaoLidos = restPcdView.filter(a => a.t > restPcdUltimaVista);
+    const mostrarPopupRestPcd = s.orgUnlocked && !s.popupRestPcdFechado && restPcdNaoLidos.length > 0 && !souGestor && !mostrarPopupAviso && !mostrarPopupNovidades && !mostrarPopupFc;
 
     return {
       spBg: s.city === 'sp' ? '#F39200' : 'transparent', spColor: s.city === 'sp' ? '#002855' : '#C9D6E8',
@@ -5012,14 +5111,16 @@ class Component extends DCLogic {
       publicarPopupAviso: this.publicarPopupAviso, retirarPopupAviso: this.retirarPopupAviso, fecharPopupAviso: this.fecharPopupAviso,
       temPopupAvisoAtivo: !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v),
       popupAvisoTexto2: (s.sync['popup-urgente'] && s.sync['popup-urgente'].v) || '',
-      mostrarPopupAviso: !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
-        String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || '')),
-      mostrarPopupNovidades: !s.popupNovidadesFechado && !(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
-        String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || '')) && (localStorage.getItem('viart2026_popup_novidades_v3_visto') || '') !== '1',
+      mostrarPopupAviso,
+      mostrarPopupNovidades,
       fecharPopupNovidades: this.fecharPopupNovidades,
       showOrgFaleConosco: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'faleconosco',
       fcMensagensView, fcMensagensTotal: fcMensagensView.length, fcSemMensagens: fcMensagensView.length === 0,
       mostrarPopupFc, fcNaoLidasCount: fcNaoLidas.length, fcNaoLidasNomes: fcNaoLidas.slice(0, 3).map(m => m.nome).join(', '),
+      mostrarPopupRestPcd, restPcdNaoLidosCount: restPcdNaoLidos.length,
+      restPcdNaoLidosResumo: restPcdNaoLidos.slice(0, 4).map(a => a.nome + ' (' + a.tipo + ')').join(', '),
+      fecharPopupRestPcd: this.fecharPopupRestPcd,
+      irParaParticipantesOrg: () => { this.fecharPopupRestPcd(); this.setState({ activeTab: 'org', orgSubTab: 'pessoas', orgPessoasSub: 'participantes' }); },
       fecharPopupFc: this.fecharPopupFc, irParaFaleConoscoOrg: () => { this.fecharPopupFc(); this.setState({ activeTab: 'org', orgSubTab: 'faleconosco' }); },
       showInfoAntes: s.infoSubTab === 'antes', showInfoDurante: s.infoSubTab === 'durante',
       setInfoAntes: this.setInfoSubTab('antes'), setInfoDurante: this.setInfoSubTab('durante'),
@@ -5113,9 +5214,9 @@ class Component extends DCLogic {
       meuKitColor: temDados && gv('kit-' + s.dadosNome) ? '#1E7A45' : '#8A8A90',
       meuKitResposta: temDados ? (gv('kit-' + s.dadosNome) === true ? 'Sim' : (gv('kit-' + s.dadosNome) === false ? 'Não' : '')) : '',
       onKitResposta: this.onKitResposta,
-      kitPerguntaBloqueada: new Date() < new Date('2026-08-12T08:00:00'),
-      kitPerguntaBg: new Date() < new Date('2026-08-12T08:00:00') ? '#F2F5FA' : '#FFFFFF',
-      kitPerguntaColor: new Date() < new Date('2026-08-12T08:00:00') ? '#8A8A90' : '#002855',
+      kitPerguntaBloqueada: false,
+      kitPerguntaBg: '#FFFFFF',
+      kitPerguntaColor: '#002855',
       dadosQuery: s.dadosQuery, onDadosQuery: this.onDadosQuery, dadosOpcoes,
       camisaMostrarOk, camisaMostrarForm, camisaTamanhoAtual, camisaModelagemAtual, camisaPodeAlterar,
       camisaTamanhoSel: s.camisaTamanhoSel, onCamisaTamanho: this.onCamisaTamanho,
@@ -5342,6 +5443,7 @@ class Component extends DCLogic {
       showOrgPontos: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'pontos', pontosRankingView, mediaPontosGeral: Math.round(mediaPontosAtivosGlobal * 10) / 10,
       showOrgFotos: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'fotos',
       showOrgNps: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'nps', npsPainelStats, npsPainelStatsVazio, npsSemComentarios: npsComentarios.length === 0,
+      npsDistChart, npsPainelChart,
       engajamentoDash, engajCidadeDonutBg, engajCidadeChart, brindesDashView, brindesDashResumo, origemPontosView,
       pontosListaAberta: s.pontosListaAberta, togglePontosLista: this.togglePontosLista,
       pontosListaToggleLabel: s.pontosListaAberta ? 'Ocultar' : 'Ver lista',
