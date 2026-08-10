@@ -1275,9 +1275,13 @@
               <sc-for list="{{ fcMensagensView }}" as="m" hint-placeholder-count="3">
                 <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
                   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
-                    <div style="font-weight:700;font-size:13.5px;color:#002855">{{ m.nome }}</div>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <div style="font-weight:700;font-size:13.5px;color:#002855">{{ m.nome }}</div>
+                      <div onClick="{{ m.toggleTratado }}" style="cursor:pointer;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:{{ m.tratadoColor }};color:#FFFFFF">{{ m.tratadoLabel }}</div>
+                    </div>
                     <div style="display:flex;align-items:center;gap:10px">
                       <div style="font-size:11px;color:#8A8A90">{{ m.quando }}</div>
+                      <div onClick="{{ m.arquivar }}" style="cursor:pointer;font-size:11px;font-weight:700;color:#0057A6">arquivar</div>
                       <div onClick="{{ m.excluir }}" style="cursor:pointer;font-size:11px;font-weight:700;color:#C0392B">excluir</div>
                     </div>
                   </div>
@@ -1285,6 +1289,29 @@
                 </div>
               </sc-for>
             </div>
+
+            <sc-if value="{{ fcTemArquivadas }}" hint-placeholder-val="{{ false }}">
+              <div style="font-weight:700;font-size:14px;margin:22px 0 4px;color:#6B6B70">Arquivadas ({{ fcArquivadasView.length }})</div>
+              <div style="font-size:12px;color:#8A8A90;margin-bottom:12px">Mensagens já tratadas — ficam guardadas aqui, nunca somem sozinhas.</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ fcArquivadasView }}" as="m" hint-placeholder-count="1">
+                  <div style="background:#F7F9FC;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <div style="font-weight:700;font-size:13.5px;color:#6B6B70">{{ m.nome }}</div>
+                        <div onClick="{{ m.toggleTratado }}" style="cursor:pointer;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:{{ m.tratadoColor }};color:#FFFFFF">{{ m.tratadoLabel }}</div>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:10px">
+                        <div style="font-size:11px;color:#8A8A90">{{ m.quando }}</div>
+                        <div onClick="{{ m.desarquivar }}" style="cursor:pointer;font-size:11px;font-weight:700;color:#0057A6">reabrir</div>
+                        <div onClick="{{ m.excluir }}" style="cursor:pointer;font-size:11px;font-weight:700;color:#C0392B">excluir</div>
+                      </div>
+                    </div>
+                    <div style="font-size:13px;color:#6B6B70;line-height:1.55">{{ m.mensagem }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
             </div>
             </sc-if>
 
@@ -1533,7 +1560,7 @@
 
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;min-width:0">
               <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Unidade / área</div>
-              <div style="display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto">
+              <div style="display:flex;flex-direction:column;gap:6px;max-height:440px;overflow-y:auto">
                 <sc-for list="{{ unidadeChart }}" as="uc" hint-placeholder-count="8">
                   <div onClick="{{ uc.onClick }}" style="cursor:pointer;background:{{ uc.rowBg }};border-radius:8px;padding:6px 8px">
                     <div style="display:flex;justify-content:space-between;gap:8px;font-size:11.5px;margin-bottom:4px">
@@ -3281,7 +3308,10 @@ class Component extends DCLogic {
   };
   fcNova = () => this.setState({ fcEnviado: false, fcMensagem: '' });
   fcEscolherNome = (nome) => () => this.setState({ fcNome: nome });
-  excluirFcMensagem = (key) => () => this.gravarCampos({ [key]: null });
+  excluirFcMensagem = (key) => () => { if (window.confirm('Excluir esta mensagem definitivamente? Não é possível desfazer.')) this.gravarCampos({ [key]: null }); };
+  arquivarFcMensagem = (key, v) => () => this.gravarCampos({ [key]: { ...v, arquivada: true } });
+  desarquivarFcMensagem = (key, v) => () => this.gravarCampos({ [key]: { ...v, arquivada: false } });
+  toggleFcTratado = (key, v) => () => this.gravarCampos({ [key]: { ...v, tratado: !v.tratado } });
   onNovidadeTexto = (e) => this.setState({ novidadeTexto: e.target.value });
   onPopupAvisoTexto = (e) => this.setState({ popupAvisoTextoInput: e.target.value });
   publicarPopupAviso = () => {
@@ -5051,9 +5081,18 @@ class Component extends DCLogic {
     const atualizacoesTemMais = atualizacoesView.length > 3;
     const historicoToggleLabel = s.avisosHistoricoAberto ? 'Ver menos' : 'Ver histórico completo (' + atualizacoesView.length + ')';
     const ultimaAtualizacaoQuando = atualizacoesView[0] ? atualizacoesView[0].quando : '';
-    const fcMensagensView = Object.keys(s.sync).filter(k => k.startsWith('fc-') && s.sync[k] && s.sync[k].v)
-      .map(k => ({ key: k, nome: s.sync[k].v.nome, mensagem: s.sync[k].v.mensagem, t: s.sync[k].t,
+    const fcMensagensView = Object.keys(s.sync).filter(k => k.startsWith('fc-') && s.sync[k] && s.sync[k].v && !s.sync[k].v.arquivada)
+      .map(k => ({ key: k, nome: s.sync[k].v.nome, mensagem: s.sync[k].v.mensagem, t: s.sync[k].t, tratado: !!s.sync[k].v.tratado,
         quando: new Date(s.sync[k].t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+        arquivar: this.arquivarFcMensagem(k, s.sync[k].v), toggleTratado: this.toggleFcTratado(k, s.sync[k].v),
+        tratadoLabel: s.sync[k].v.tratado ? '✓ tratado' : 'marcar como tratado', tratadoColor: s.sync[k].v.tratado ? '#1E7A45' : '#B4471F',
+        excluir: this.excluirFcMensagem(k) }))
+      .sort((a, b) => b.t - a.t);
+    const fcArquivadasView = Object.keys(s.sync).filter(k => k.startsWith('fc-') && s.sync[k] && s.sync[k].v && s.sync[k].v.arquivada)
+      .map(k => ({ key: k, nome: s.sync[k].v.nome, mensagem: s.sync[k].v.mensagem, t: s.sync[k].t, tratado: !!s.sync[k].v.tratado,
+        quando: new Date(s.sync[k].t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+        desarquivar: this.desarquivarFcMensagem(k, s.sync[k].v), toggleTratado: this.toggleFcTratado(k, s.sync[k].v),
+        tratadoLabel: s.sync[k].v.tratado ? '✓ tratado' : 'marcar como tratado', tratadoColor: s.sync[k].v.tratado ? '#1E7A45' : '#B4471F',
         excluir: this.excluirFcMensagem(k) }))
       .sort((a, b) => b.t - a.t);
     const fcUltimaMsgT = fcMensagensView.length ? Math.max.apply(null, fcMensagensView.map(m => m.t)) : 0;
@@ -5116,6 +5155,7 @@ class Component extends DCLogic {
       fecharPopupNovidades: this.fecharPopupNovidades,
       showOrgFaleConosco: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'faleconosco',
       fcMensagensView, fcMensagensTotal: fcMensagensView.length, fcSemMensagens: fcMensagensView.length === 0,
+      fcArquivadasView, fcTemArquivadas: fcArquivadasView.length > 0,
       mostrarPopupFc, fcNaoLidasCount: fcNaoLidas.length, fcNaoLidasNomes: fcNaoLidas.slice(0, 3).map(m => m.nome).join(', '),
       mostrarPopupRestPcd, restPcdNaoLidosCount: restPcdNaoLidos.length,
       restPcdNaoLidosResumo: restPcdNaoLidos.slice(0, 4).map(a => a.nome + ' (' + a.tipo + ')').join(', '),
