@@ -53,6 +53,31 @@
     </div>
   </sc-if>
 
+  <sc-if value="{{ mostrarPopupNovidades }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(0,20,45,0.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div style="background:#FFFFFF;border-radius:16px;padding:28px 26px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+        <div style="display:inline-block;background:#E8EFF9;color:#0057A6;border-radius:999px;padding:5px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px">Novidades no app</div>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:22px">
+          <div style="display:flex;gap:12px">
+            <div style="font-size:22px;line-height:1">📸</div>
+            <div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Mural de fotos</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Poste fotos do evento, curta e comente as dos colegas. Toda interação vale ponto — pra quem posta e pra quem curte ou comenta.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px">
+            <div style="font-size:22px;line-height:1">✅</div>
+            <div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Confirmação de presença</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Já dá pra confirmar presença — por enquanto, restrito ao evento de São Paulo.</div>
+            </div>
+          </div>
+        </div>
+        <div onClick="{{ fecharPopupNovidades }}" style="cursor:pointer;text-align:center;padding:12px;border-radius:10px;font-size:14px;font-weight:700;background:#0057A6;color:#FFFFFF">Entendi</div>
+      </div>
+    </div>
+  </sc-if>
+
   <div style="position:sticky;top:0;z-index:50;background:#002855;box-shadow:0 4px 18px rgba(0,0,0,0.25)">
     <div style="max-width:1180px;margin:0 auto;padding:16px clamp(16px,4vw,36px) 8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px">
       <div style="display:flex;align-items:center;gap:18px">
@@ -109,6 +134,14 @@
               <div style="font-size:13px;color:#A9C0DE;margin-top:2px">funcionários · 2 cidades · 2 dias</div>
             </div>
           </div>
+        </div>
+
+        <div onClick="{{ irParaFotos }}" style="cursor:pointer;background:#002855;border-radius:16px;padding:clamp(20px,3.5vw,28px);margin-bottom:20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px">
+          <div style="max-width:520px">
+            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(17px,1.8vw,21px);color:#F2F5FA">📸 Chegou o Mural de Fotos!</div>
+            <div style="font-size:13.5px;color:#C9D6E8;margin-top:8px;line-height:1.6">Tira uma foto do evento, posta no app e mostra o que está rolando. Curtiu a foto de alguém? Comentou? Toda interação vale ponto — pra quem posta e pra quem curte ou comenta.</div>
+          </div>
+          <div style="background:#F39200;color:#002855;font-weight:800;padding:11px 20px;border-radius:10px;font-size:13px;white-space:nowrap">Ver o mural →</div>
         </div>
 
         <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:16px;padding:clamp(20px,3vw,26px);margin-bottom:20px">
@@ -438,6 +471,98 @@
                 <div style="font-size:12.5px;color:#6B6B70;margin-top:6px">{{ b.pontos }} pontos · {{ b.restante }} restantes</div>
               </div>
               <div onClick="{{ b.resgatar }}" style="cursor:pointer;text-align:center;background:{{ b.statusBg }};color:{{ b.statusColor }};font-weight:700;padding:10px;border-radius:10px;font-size:13px">{{ b.statusLabel }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showFotos }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Mural de fotos</div>
+        <div style="font-size:14px;color:#6B6B70;margin-bottom:24px">Poste fotos do evento, curta e comente as dos colegas. Toda interação vale 1 ponto: postar, curtir, comentar, e também receber curtida ou comentário de outra pessoa.</div>
+
+        <sc-if value="{{ crachaSemNome }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px);margin-bottom:24px">
+            <div style="font-weight:700;font-size:15px;margin-bottom:8px">Complete sua identificação primeiro</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px;line-height:1.6">A identificação do app fica na aba Informações. Depois disso seu nome fica reconhecido em todo o app, sem perguntar de novo.</div>
+            <div onClick="{{ goToPreCadastro }}" style="cursor:pointer;display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px">Ir para a identificação</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ temNome }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#002855;border-radius:16px;padding:18px 20px;margin-bottom:22px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+            <div>
+              <div style="font-size:11px;font-weight:800;color:#A9C0DE;text-transform:uppercase;letter-spacing:0.06em">{{ meuNome }}</div>
+              <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#F2F5FA;margin-top:2px">{{ meusPontosFotos }} <span style="font-size:13px;font-weight:600;color:#A9C0DE">pontos de fotos</span></div>
+            </div>
+            <sc-if value="{{ fotoSemRascunho }}" hint-placeholder-val="{{ true }}">
+              <label style="cursor:pointer;background:#F39200;color:#002855;font-weight:800;padding:11px 20px;border-radius:10px;font-size:13.5px;white-space:nowrap">
+                Postar foto
+                <input type="file" accept="image/*" onChange="{{ onFotoArquivo }}" style="display:none">
+              </label>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ fotoRascunhoAtivo }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:16px;padding:18px;margin-bottom:22px;display:flex;gap:16px;flex-wrap:wrap">
+            <sc-if value="{{ fotoRascunhoImagem }}" hint-placeholder-val="{{ false }}">
+              <img src="{{ fotoRascunhoImagem }}" style="width:120px;height:120px;object-fit:cover;border-radius:12px;flex-shrink:0">
+            </sc-if>
+            <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:10px">
+              <input value="{{ fotoRascunhoLegenda }}" onChange="{{ onFotoLegendaInput }}" placeholder="Legenda (opcional)" style="border:1px solid #DCE6F2;border-radius:10px;padding:10px 12px;font-size:13.5px;font-family:'Manrope',sans-serif;color:#002855">
+              <sc-if value="{{ fotoErro }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12.5px;color:#B4471F;font-weight:700">{{ fotoErro }}</div>
+              </sc-if>
+              <div style="display:flex;gap:10px">
+                <div onClick="{{ publicarFoto }}" style="cursor:pointer;background:#0057A6;color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;font-size:13px">{{ publicarFotoLabel }}</div>
+                <div onClick="{{ cancelarFotoRascunho }}" style="cursor:pointer;color:#6B6B70;font-weight:700;padding:10px 12px;font-size:13px">Cancelar</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ fotosCarregando }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:13px;color:#8A8A90">Carregando fotos…</div>
+        </sc-if>
+
+        <sc-if value="{{ fotosVazias }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#F7F9FC;border:1px solid #DCE6F2;border-radius:16px;padding:30px;text-align:center;color:#8A8A90;font-size:13.5px">Nenhuma foto postada ainda. Seja o primeiro!</div>
+        </sc-if>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
+          <sc-for list="{{ fotosView }}" as="f" hint-placeholder-count="3">
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;overflow:hidden;display:flex;flex-direction:column">
+              <sc-if value="{{ f.imagem }}" hint-placeholder-val="{{ false }}">
+                <img src="{{ f.imagem }}" style="width:100%;aspect-ratio:4/3;object-fit:cover">
+              </sc-if>
+              <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;flex:1">
+                <div>
+                  <div style="font-weight:700;font-size:13.5px;color:#002855">{{ f.autor }}</div>
+                  <sc-if value="{{ f.legenda }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:12.5px;color:#4A4A50;margin-top:2px;line-height:1.5">{{ f.legenda }}</div>
+                  </sc-if>
+                  <div style="font-size:11px;color:#A6A29A;margin-top:4px">{{ f.quando }}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:16px">
+                  <div onClick="{{ f.onCurtir }}" style="cursor:pointer;display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:{{ f.curtidaCor }}">{{ f.curtidaMarca }} {{ f.curtidasCount }}</div>
+                  <div style="font-size:13px;color:#6B6B70">💬 {{ f.comentariosCount }}</div>
+                </div>
+                <sc-if value="{{ f.temComentarios }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <sc-for list="{{ f.comentariosView }}" as="c" hint-placeholder-count="2">
+                      <div style="font-size:12px;color:#4A4A50;line-height:1.5"><b>{{ c.nome }}</b> {{ c.texto }}</div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ temNome }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:8px;margin-top:auto">
+                    <input value="{{ f.comentarioInput }}" onChange="{{ f.onComentarioInput }}" placeholder="Comentar…" style="flex:1;min-width:0;border:1px solid #DCE6F2;border-radius:999px;padding:8px 14px;font-size:12.5px;font-family:'Manrope',sans-serif;color:#002855">
+                    <div onClick="{{ f.enviarComentario }}" style="cursor:pointer;font-size:12.5px;font-weight:700;color:#0057A6;white-space:nowrap;padding:8px 4px">Enviar</div>
+                  </div>
+                </sc-if>
+              </div>
             </div>
           </sc-for>
         </div>
@@ -2188,6 +2313,30 @@
             </div>
             </sc-if>
 
+            <sc-if value="{{ showOrgFotos }}" hint-placeholder-val="{{ false }}">
+            <div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Mural de fotos · moderação</div>
+            <div style="font-size:12.5px;color:#6B6B70;margin-bottom:16px">Fotos aparecem direto no mural, sem aprovação prévia. Use "Remover" para tirar do ar qualquer foto inadequada — a ação também remove os pontos que ela gerou.</div>
+            <sc-if value="{{ fotosVazias }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:13px;color:#8A8A90">Nenhuma foto postada ainda.</div>
+            </sc-if>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ fotosView }}" as="f" hint-placeholder-count="4">
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:14px">
+                  <sc-if value="{{ f.imagem }}" hint-placeholder-val="{{ false }}">
+                    <img src="{{ f.imagem }}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0">
+                  </sc-if>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-weight:700;font-size:13px;color:#002855">{{ f.autor }}</div>
+                    <div style="font-size:11.5px;color:#8A8A90">{{ f.quando }} · ❤️ {{ f.curtidasCount }} · 💬 {{ f.comentariosCount }}</div>
+                  </div>
+                  <div onClick="{{ f.onExcluir }}" style="cursor:pointer;flex-shrink:0;font-size:12px;font-weight:700;color:#B4471F;border:1px solid #F5CDBB;border-radius:8px;padding:7px 12px">Remover</div>
+                </div>
+              </sc-for>
+            </div>
+            </div>
+            </sc-if>
+
             <sc-if value="{{ showOrgProgramacaoReal }}" hint-placeholder-val="{{ false }}">
             <div>
             <div style="display:flex;align-items:center;gap:10px;margin:12px 0 12px">
@@ -2285,6 +2434,7 @@ const ORG_SUBTABS_DEF = [
   { id: 'checklist', label: 'Checklist' },
   { id: 'pessoas', label: 'Participantes' },
   { id: 'pontos', label: 'Gamificação' },
+  { id: 'fotos', label: 'Fotos' },
   { id: 'cartazes', label: 'QR Codes' },
   { id: 'orcamento', label: 'Orçamento' },
   { id: 'contatos', label: 'Contatos' },
@@ -2334,6 +2484,7 @@ const CARTAZES = [
 });
 
 const ATUALIZACOES_INICIAIS = [
+  { quando: '09/08 22:26', texto: 'Nova aba Fotos: poste fotos do evento, curta e comente as dos colegas. Postar, curtir, comentar e receber curtida ou comentário — cada um vale 1 ponto (contador próprio, na própria aba Fotos).' },
   { quando: '07/08 17:09', texto: 'Novo campo no Cadastro: "Você pretende comparecer ao evento?" — ajuda a organização a ter uma ideia de quantas pessoas vão participar. Como qualquer atualização do app, responder vale ponto em Pontos & Brindes.' },
   { quando: '07/08 09:15', texto: 'Por enquanto, as áreas interativas do app — credenciamento, cadastro e Pontos & Brindes — estão disponíveis apenas para os participantes do evento de São Paulo.' },
 ];
@@ -2343,6 +2494,7 @@ const TABS_DEF = [
   { id: 'info', label: 'Informações' },
   { id: 'programacao', label: 'Programação' },
   { id: 'brindes', label: 'Pontos & Brindes' },
+  { id: 'fotos', label: 'Fotos' },
   { id: 'faleconosco', label: 'Fale conosco' },
   { id: 'org', label: 'Organização' },
 ];
@@ -2473,11 +2625,20 @@ const MANUAL_SECOES = [
     'Avaliação "Como foi o seu dia?" (NPS) — libera após o horário de encerramento; nota geral 0-10, nota por painel/momento do dia, e perguntas abertas.',
     'Avisos: mural fixo explicando que o app mantém o time atualizado sobre novidades, que as áreas interativas estão liberadas por enquanto só para SP, e como usar o Fale conosco.',
     'Atualizações: novidades publicadas pela organização (mais recentes primeiro).',
+    'Banner "Chegou o Mural de Fotos!": leva direto para a aba Fotos.',
+    'Pop-up de novidades: aparece uma vez por pessoa anunciando o Mural de Fotos e a confirmação de presença; some ao clicar "Entendi" e não volta a aparecer (não é a mesma coisa que o pop-up de aviso urgente, controlado pela organização).',
   ] },
   { id: 'programacao', titulo: 'Programação (público)', itens: [
     'Agenda completa do dia, por horário.',
     'Destaque automático "AGORA" no item em andamento, no dia do evento.',
     'Ícone/cor por pilar do objetivo (Alinhar, Conectar, Executar).',
+  ] },
+  { id: 'fotos', titulo: 'Fotos (público)', itens: [
+    'Mural de fotos do evento: qualquer pessoa identificada posta uma foto (com legenda opcional), direto no ar, sem aprovação prévia.',
+    'Curtida e comentário em fotos de outras pessoas — não dá para curtir/comentar a própria foto.',
+    'Pontos: postar uma foto, curtir ou comentar (dado ou recebido) vale 1 ponto cada — ficam num contador próprio ("pontos de fotos"), separado do saldo do Mercado de Brindes.',
+    'Compressão automática da imagem no navegador antes de subir, para manter o mural leve.',
+    'Disponível para SP e BSB (sem a restrição de "só SP" que vale para Pontos & Brindes e Credenciamento).',
   ] },
   { id: 'brindes', titulo: 'Pontos & Brindes (público)', itens: [
     'Identificação por nome (busca na lista de participantes).',
@@ -2493,7 +2654,7 @@ const MANUAL_SECOES = [
   ] },
   { id: 'informacoes', titulo: 'Informações (público)', itens: [
     'Manual de instalação do app (adicionar à tela inicial, iPhone/Android).',
-    'Pré-cadastro único: restrição alimentar, tamanho/modelagem de camiseta, confraternização, necessidade especial, curiosidade pessoal (para o jogo "quem é quem"). Restrição, confraternização e necessidade especial podem ser informadas ou alteradas livremente até a véspera do evento da cidade da pessoa (travam no dia do evento). Camiseta é travada assim que informada uma vez — sem reedição — porque os kits já são produzidos com base nessa resposta. Disponível, por enquanto, apenas para participantes marcados como São Paulo.',
+    'Pré-cadastro único: intenção de comparecer, restrição alimentar, tamanho/modelagem de camiseta, confraternização, necessidade especial, curiosidade pessoal (para o jogo "quem é quem"). A resposta de "pretende comparecer" grava na hora, ao escolher — as demais salvam ao clicar em Salvar cadastro. Restrição, confraternização e necessidade especial podem ser informadas ou alteradas livremente até a véspera do evento da cidade da pessoa (travam no dia do evento). Camiseta é travada assim que informada uma vez — sem reedição — porque os kits já são produzidos com base nessa resposta. Disponível, por enquanto, apenas para participantes marcados como São Paulo.',
     'Lista "O que levar".',
     'Previsão do tempo da cidade, com destaque para o dia do evento.',
     'Credenciamento: confirmação de presença (check-in), com crachá digital e mesa. Só abre no dia certo de cada cidade, e por enquanto só para participantes marcados como São Paulo.',
@@ -2529,6 +2690,7 @@ const MANUAL_SECOES = [
     'Quem mais/menos pontuou, quem mais resgatou brindes.',
     'Comparação SP x BSB (pontos e resgates).',
     'Consumo do estoque de brindes por item.',
+    'Subaba Fotos: lista de todas as fotos postadas, com "Remover" para moderação — some do mural e deixa de contar pontos.',
   ] },
   { id: 'qrcodes', titulo: 'Organização · QR Codes', itens: [
     'Geração de PDF: cartazes de credenciamento por cidade (A4).',
@@ -2757,6 +2919,13 @@ class Component extends DCLogic {
     novidadeTexto: '',
     popupAvisoTextoInput: '',
     popupAvisoFechado: false,
+    popupNovidadesFechado: false,
+    fotos: [],
+    fotosCarregando: true,
+    fotoRascunho: null,
+    fotoEnviando: false,
+    fotoErro: '',
+    fotoComentarioInputs: {},
   };
 
   componentDidMount() {
@@ -2802,11 +2971,13 @@ class Component extends DCLogic {
 
     this.fetchClima();
     this.puxarEstado();
+    this.puxarFotos();
     window.addEventListener('online', this.reenviarPendentes);
     this._sync = setInterval(() => {
       if (this._pendentes) this.reenviarPendentes();
       const s = this.state;
       if (s.activeTab === 'org' && s.orgUnlocked && document.visibilityState === 'visible') this.puxarEstado();
+      if (s.activeTab === 'fotos' && document.visibilityState === 'visible') this.puxarFotos();
     }, 20000);
   }
 
@@ -2880,6 +3051,99 @@ class Component extends DCLogic {
       if (j && j.ok) { this.mesclar(j.campos); this.setState({ syncStatus: 'online' }); }
       else this.setState({ syncStatus: 'local' });
     }).catch(() => this.setState({ syncStatus: 'local' }));
+  };
+
+  puxarFotos = () => {
+    fetch('/api/fotos').then(r => r.json()).then(j => {
+      if (j && j.ok) this.setState({ fotos: j.fotos || [], fotosCarregando: false });
+      else this.setState({ fotosCarregando: false });
+    }).catch(() => this.setState({ fotosCarregando: false }));
+  };
+  onFotoArquivo = (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1080;
+        const escala = Math.min(1, MAX / Math.max(img.width, img.height));
+        const w = Math.round(img.width * escala), h = Math.round(img.height * escala);
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        this.setState({ fotoRascunho: { imagem: canvas.toDataURL('image/jpeg', 0.72), legenda: '' }, fotoErro: '' });
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  onFotoLegendaInput = (e) => this.setState(s => ({ fotoRascunho: { ...s.fotoRascunho, legenda: e.target.value } }));
+  cancelarFotoRascunho = () => this.setState({ fotoRascunho: null, fotoErro: '' });
+  publicarFoto = () => {
+    const nome = this.state.meuNome;
+    const rascunho = this.state.fotoRascunho;
+    if (!nome || !rascunho) return;
+    this.setState({ fotoEnviando: true, fotoErro: '' });
+    fetch('/api/fotos', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'post', autor: nome, imagem: rascunho.imagem, legenda: rascunho.legenda || '' }),
+    }).then(r => r.json()).then(j => {
+      if (j && j.ok) this.setState({ fotos: j.fotos, fotoRascunho: null, fotoEnviando: false });
+      else this.setState({ fotoEnviando: false, fotoErro: 'Não foi possível publicar. Tente de novo.' });
+    }).catch(() => this.setState({ fotoEnviando: false, fotoErro: 'Sem conexão. Tente de novo.' }));
+  };
+  curtirFoto = (fotoId) => () => {
+    const nome = this.state.meuNome;
+    if (!nome) return;
+    this.setState(s => ({
+      fotos: s.fotos.map(f => {
+        if (f.id !== fotoId || f.autor === nome) return f;
+        const curtidas = f.curtidas.indexOf(nome) === -1 ? f.curtidas.concat([nome]) : f.curtidas.filter(n => n !== nome);
+        return { ...f, curtidas };
+      }),
+    }));
+    fetch('/api/fotos', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'curtir', fotoId, nome }),
+    }).then(r => r.json()).then(j => { if (j && j.ok) this.setState({ fotos: j.fotos }); }).catch(() => {});
+  };
+  onFotoComentarioInput = (fotoId) => (e) => {
+    this.setState(s => ({ fotoComentarioInputs: { ...s.fotoComentarioInputs, [fotoId]: e.target.value } }));
+  };
+  enviarComentarioFoto = (fotoId) => () => {
+    const nome = this.state.meuNome;
+    const texto = (this.state.fotoComentarioInputs[fotoId] || '').trim();
+    if (!nome || !texto) return;
+    this.setState(s => ({ fotoComentarioInputs: { ...s.fotoComentarioInputs, [fotoId]: '' } }));
+    fetch('/api/fotos', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'comentar', fotoId, nome, texto }),
+    }).then(r => r.json()).then(j => { if (j && j.ok) this.setState({ fotos: j.fotos }); }).catch(() => {});
+  };
+  excluirFoto = (fotoId) => () => {
+    if (!window.confirm('Remover esta foto do mural?')) return;
+    fetch('/api/fotos', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'excluir', fotoId }),
+    }).then(r => r.json()).then(j => { if (j && j.ok) this.setState({ fotos: j.fotos }); }).catch(() => {});
+  };
+  pontosFotosDe = (nome) => {
+    let pts = 0;
+    (this.state.fotos || []).forEach(f => {
+      if (f.autor === nome) {
+        // pontos de quem postou: pela foto em si e por cada curtida/comentário recebido de outra pessoa
+        pts += 1;
+        pts += (f.curtidas || []).filter(n => n !== nome).length;
+        pts += (f.comentarios || []).filter(c => c.nome !== nome).length;
+      } else {
+        // pontos de quem interage: curtir ou comentar em foto de outra pessoa também vale ponto
+        if ((f.curtidas || []).indexOf(nome) !== -1) pts += 1;
+        pts += (f.comentarios || []).filter(c => c.nome === nome).length;
+      }
+    });
+    return pts;
   };
 
   mesclar = (remoto) => {
@@ -2967,6 +3231,7 @@ class Component extends DCLogic {
   };
 
   irParaFaleConosco = () => this.setState({ activeTab: 'faleconosco' });
+  irParaFotos = () => this.setState({ activeTab: 'fotos' });
   onFcNome = (e) => this.setState({ fcNome: e.target.value, fcErro: '' });
   onFcMensagem = (e) => this.setState({ fcMensagem: e.target.value, fcErro: '' });
   fcEnviar = () => {
@@ -2991,6 +3256,10 @@ class Component extends DCLogic {
   };
   retirarPopupAviso = () => {
     this.setCampos({ 'popup-urgente': null });
+  };
+  fecharPopupNovidades = () => {
+    try { localStorage.setItem('viart2026_popup_novidades_v1_visto', '1'); } catch (e) {}
+    this.setState({ popupNovidadesFechado: true });
   };
   fecharPopupAviso = () => {
     const entry = this.state.sync['popup-urgente'];
@@ -3249,7 +3518,14 @@ class Component extends DCLogic {
     });
   };
   onConfraternizacaoResposta = (e) => this.setState({ confraternizacaoResposta: e.target.value, cadastroFlash: false });
-  onPresencaPrevia = (e) => this.setState({ presencaPreviaResposta: e.target.value, cadastroFlash: false });
+  onPresencaPrevia = (e) => {
+    const valor = e.target.value;
+    this.setState({ presencaPreviaResposta: valor, cadastroFlash: false });
+    // Grava na hora (não depende do botão Salvar cadastro) para não perder a resposta
+    // quando a pessoa troca de nome/reidentifica antes de salvar o resto do formulário.
+    const nome = this.state.dadosNome || this.state.meuNome;
+    if (nome && valor) this.setCampos({ ['pp-' + nome]: valor });
+  };
   onCuriosidadeTexto = (e) => this.setState({ curiosidadeTexto: e.target.value, cadastroFlash: false });
   excluirCuriosidade = (nome) => () => this.setCampos({ ['cur-' + nome]: null });
   cadastroSalvar = () => {
@@ -4143,6 +4419,25 @@ class Component extends DCLogic {
       ? PARTICIPANTES.filter(n => norm(n).includes(fq)).slice(0, 6).map(n => ({ nome: n, escolher: this.fcEscolherNome(n) }))
       : [];
     const temNome = !!s.meuNome;
+    const fotosOrdenadas = (s.fotos || []).slice().sort((a, b) => b.criadoEm - a.criadoEm);
+    const fotosView = fotosOrdenadas.map(f => {
+      const jaCurtiu = temNome && f.curtidas.indexOf(s.meuNome) !== -1;
+      return {
+        id: f.id, imagem: f.imagem, legenda: f.legenda, autor: f.autor,
+        quando: new Date(f.criadoEm).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+        curtidasCount: f.curtidas.length, comentariosCount: f.comentarios.length,
+        curtidaMarca: jaCurtiu ? '❤️' : '🤍', curtidaCor: jaCurtiu ? '#B4471F' : '#6B6B70',
+        onCurtir: this.curtirFoto(f.id),
+        comentariosView: f.comentarios.map(c => ({ nome: c.nome, texto: c.texto })),
+        temComentarios: f.comentarios.length > 0,
+        comentarioInput: s.fotoComentarioInputs[f.id] || '',
+        onComentarioInput: this.onFotoComentarioInput(f.id),
+        enviarComentario: this.enviarComentarioFoto(f.id),
+        podeExcluir: s.orgUnlocked,
+        onExcluir: this.excluirFoto(f.id),
+      };
+    });
+    const meusPontosFotos = temNome ? this.pontosFotosDe(s.meuNome) : 0;
     const minhaCidadeId = temNome ? cidadeDe(s.meuNome) : '';
     const bloqueadoBrindes = temNome && (minhaCidadeId !== 'sp' || infoDe(s.meuNome).d);
     const temNomeLiberado = temNome && !bloqueadoBrindes;
@@ -4525,6 +4820,14 @@ class Component extends DCLogic {
       pdfBtnLabel: s.pdfGenerating ? 'Gerando PDF…' : 'Gerar relatório em PDF',
       showInicio: s.activeTab === 'inicio', showProgramacao: s.activeTab === 'programacao',
       showBrindes: s.activeTab === 'brindes',
+      showFotos: s.activeTab === 'fotos', fotosView, meusPontosFotos,
+      fotosCarregando: s.fotosCarregando, fotosVazias: !s.fotosCarregando && fotosView.length === 0,
+      fotoRascunhoAtivo: !!s.fotoRascunho, fotoSemRascunho: !s.fotoRascunho,
+      fotoRascunhoImagem: s.fotoRascunho ? s.fotoRascunho.imagem : '',
+      fotoRascunhoLegenda: s.fotoRascunho ? s.fotoRascunho.legenda : '',
+      onFotoArquivo: this.onFotoArquivo, onFotoLegendaInput: this.onFotoLegendaInput,
+      publicarFoto: this.publicarFoto, cancelarFotoRascunho: this.cancelarFotoRascunho,
+      publicarFotoLabel: s.fotoEnviando ? 'Publicando…' : 'Publicar', fotoErro: s.fotoErro,
       showFaleConosco: s.activeTab === 'faleconosco',
       showInfo: s.activeTab === 'info', showOrg: s.activeTab === 'org',
       temNomeLiberado, bloqueadoBrindes, temDadosLiberado, bloqueadoCadastro,
@@ -4544,6 +4847,9 @@ class Component extends DCLogic {
       popupAvisoTexto2: (s.sync['popup-urgente'] && s.sync['popup-urgente'].v) || '',
       mostrarPopupAviso: !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
         String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || '')),
+      mostrarPopupNovidades: !s.popupNovidadesFechado && !(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
+        String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || '')) && (localStorage.getItem('viart2026_popup_novidades_v1_visto') || '') !== '1',
+      fecharPopupNovidades: this.fecharPopupNovidades,
       showOrgFaleConosco: s.orgSubTab === 'faleconosco',
       fcMensagensView, fcMensagensTotal: fcMensagensView.length, fcSemMensagens: fcMensagensView.length === 0,
       showInfoAntes: s.infoSubTab === 'antes', showInfoDurante: s.infoSubTab === 'durante',
@@ -4842,6 +5148,7 @@ class Component extends DCLogic {
       manualJogoAberto: s.manualJogoAberto === undefined ? true : s.manualJogoAberto,
       toggleManualJogo: this.toggleManualJogo, manualJogoToggleLabel: (s.manualJogoAberto === undefined || s.manualJogoAberto) ? 'Ocultar' : 'Ver regras',
       showOrgPontos: s.orgSubTab === 'pontos', pontosRankingView, mediaPontosGeral: Math.round(mediaPontosAtivosGlobal * 10) / 10,
+      showOrgFotos: s.orgSubTab === 'fotos',
       engajamentoDash, brindesDashView, brindesDashResumo, origemPontosView,
       pontosListaAberta: s.pontosListaAberta, togglePontosLista: this.togglePontosLista,
       pontosListaToggleLabel: s.pontosListaAberta ? 'Ocultar' : 'Ver lista',
