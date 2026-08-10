@@ -507,9 +507,7 @@
 
         <sc-if value="{{ fotoRascunhoAtivo }}" hint-placeholder-val="{{ false }}">
           <div style="background:#FFFFFF;border:2px solid #F39200;border-radius:16px;padding:18px;margin-bottom:22px;display:flex;gap:16px;flex-wrap:wrap">
-            <sc-if value="{{ fotoRascunhoImagem }}" hint-placeholder-val="{{ false }}">
-              <img src="{{ fotoRascunhoImagem }}" style="width:120px;height:120px;object-fit:cover;border-radius:12px;flex-shrink:0">
-            </sc-if>
+            <image-slot id="foto-rascunho-preview" src="{{ fotoRascunhoImagem }}" fit="cover" shape="rounded" radius="12" placeholder="Pré-visualização" style="width:120px;height:120px;flex-shrink:0"></image-slot>
             <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:10px">
               <input value="{{ fotoRascunhoLegenda }}" onChange="{{ onFotoLegendaInput }}" placeholder="Legenda (opcional)" style="border:1px solid #DCE6F2;border-radius:10px;padding:10px 12px;font-size:13.5px;font-family:'Manrope',sans-serif;color:#002855">
               <sc-if value="{{ fotoErro }}" hint-placeholder-val="{{ false }}">
@@ -532,11 +530,9 @@
         </sc-if>
 
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
-          <sc-for list="{{ fotosView }}" as="f" hint-placeholder-count="3">
+          <sc-for list="{{ fotosView }}" as="f" hint-placeholder-count="0">
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;overflow:hidden;display:flex;flex-direction:column">
-              <sc-if value="{{ f.imagem }}" hint-placeholder-val="{{ false }}">
-                <img src="{{ f.imagem }}" style="width:100%;aspect-ratio:4/3;object-fit:cover">
-              </sc-if>
+              <image-slot id="{{ f.id }}" src="{{ f.imagem }}" fit="cover" placeholder="Foto do mural" style="width:100%;aspect-ratio:4/3"></image-slot>
               <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;flex:1">
                 <div>
                   <div style="font-weight:700;font-size:13.5px;color:#002855">{{ f.autor }}</div>
@@ -1272,36 +1268,6 @@
                 </div>
               </div>
 
-              <div style="flex:1 1 220px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
-                <div style="font-weight:700;font-size:14px;margin-bottom:2px">Engajamento · Pontos & Brindes</div>
-                <div style="font-size:10.5px;color:#8A8A90;margin-bottom:12px">resumo — detalhes na aba Pontos & Brindes</div>
-                <div style="display:flex;flex-direction:column;gap:8px">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline">
-                    <div style="font-size:12px;color:#4A4A50">Pontos distribuídos</div>
-                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#0057A6">{{ engajamentoDash.totalPontos }}</div>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:baseline">
-                    <div style="font-size:12px;color:#4A4A50">Participação ativa</div>
-                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#1E7A45">{{ engajamentoDash.participacaoPct }}%</div>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
-                    <div style="font-size:12px;color:#4A4A50">Mais pontos</div>
-                    <div style="font-size:12.5px;font-weight:700;color:#002855;text-align:right">{{ engajamentoDash.maisPontosNome }} · {{ engajamentoDash.maisPontosValor }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div style="flex:1 1 260px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
-                <div style="font-weight:700;font-size:14px;margin-bottom:2px">Engajamento no app</div>
-                <div style="font-size:10.5px;color:#8A8A90;margin-bottom:12px">quem já se identificou (respondeu algo no cadastro)</div>
-                <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px">
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px;color:#1E7A45">{{ identificadosPct }}%</div>
-                  <div style="font-size:11.5px;color:#6B6B70">{{ identificadosCount }} já se identificaram · {{ faltamIdentificarCount }} faltam</div>
-                </div>
-                <div style="height:10px;border-radius:999px;background:#EDF1F7;overflow:hidden;display:flex">
-                  <div style="height:100%;background:#1E7A45;width:{{ identificadosPct }}%"></div>
-                </div>
-              </div>
 
               <div style="flex:1 1 300px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
                 <div style="font-weight:700;font-size:14px;margin-bottom:14px">Camisetas por tamanho — SP vs BSB</div>
@@ -1509,7 +1475,6 @@
               <div onClick="{{ setViewLista }}" style="cursor:pointer;padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ viewListaBg }};color:{{ viewListaColor }};border:1px solid #DCE6F2">Lista</div>
               <div onClick="{{ setViewGantt }}" style="cursor:pointer;padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ viewGanttBg }};color:{{ viewGanttColor }};border:1px solid #DCE6F2">Linha do tempo</div>
               <div onClick="{{ setViewDiario }}" style="cursor:pointer;padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ viewDiarioBg }};color:{{ viewDiarioColor }};border:1px solid #DCE6F2">Diário de bordo</div>
-              <div onClick="{{ setViewBrindes }}" style="cursor:pointer;padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ viewBrindesBg }};color:{{ viewBrindesColor }};border:1px solid #DCE6F2">Brindes</div>
             </div>
 
             <sc-if value="{{ showChecklistLista }}" hint-placeholder-val="{{ true }}">
@@ -1602,58 +1567,6 @@
             </div>
             </sc-if>
 
-            <sc-if value="{{ showChecklistBrindes }}" hint-placeholder-val="{{ false }}">
-            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Controle de quantidades confirmadas/pendentes por área de origem. Referência: {{ totalParticipantesEvento }} participantes (13/08 SP + 20/08 BSB). Toque na etiqueta de status para avançar.</div>
-
-            <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px">
-              <div style="flex:1 1 200px;background:#0A3C6E;color:#FFFFFF;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ brindesConfirmadosTotal }}</div>
-                <div style="font-size:11.5px;color:#A9C0DE">itens confirmados (soma)</div>
-              </div>
-              <div style="flex:1 1 200px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#1E7A45">{{ brindesItensGarantidos }}</div>
-                <div style="font-size:11.5px;color:#6B6B70">itens que cobrem os {{ totalParticipantesEvento }} sozinhos</div>
-              </div>
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px">
-              <sc-for list="{{ brindesRows }}" as="b" hint-placeholder-count="6">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px">
-                  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
-                    <div style="min-width:0">
-                      <div style="font-weight:700;font-size:13.5px">{{ b.item }}</div>
-                      <div style="font-size:12px;color:#6B6B70;margin-top:2px">{{ b.area }} · {{ b.contato }}</div>
-                    </div>
-                    <div onClick="{{ b.toggleStatus }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:6px 14px;border-radius:999px;background:{{ b.statusBg }};color:{{ b.statusColor }};white-space:nowrap">{{ b.statusLabel }}</div>
-                  </div>
-                  <div style="display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap">
-                    <div style="font-size:11.5px;font-weight:700;color:#6B6B70">Quantidade prevista:</div>
-                    <input type="number" min="0" placeholder="definir" value="{{ b.qtdValue }}" onChange="{{ b.onQtdChange }}" style="width:90px;box-sizing:border-box;padding:6px 10px;border-radius:8px;border:1px solid #DCE6F2;font-size:12.5px;font-weight:700;font-family:'Manrope',sans-serif;background:#F7F9FC;color:#002855"></input>
-                    <sc-if value="{{ b.hasQtdTexto }}" hint-placeholder-val="{{ false }}">
-                      <div style="font-size:11.5px;color:#8A8A90;font-style:italic">{{ b.qtdTexto }}</div>
-                    </sc-if>
-                    <sc-if value="{{ b.cobreTodos }}" hint-placeholder-val="{{ false }}">
-                      <div style="font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:#E3F3E9;color:#1E7A45;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap">{{ b.cobreLabel }}</div>
-                    </sc-if>
-                  </div>
-                  <sc-if value="{{ b.hasLogistica }}" hint-placeholder-val="{{ false }}">
-                    <div style="font-size:12px;color:#6B6B70;margin-top:8px">Retirada: {{ b.logistica }}</div>
-                  </sc-if>
-                  <sc-if value="{{ b.hasObs }}" hint-placeholder-val="{{ false }}">
-                    <div style="font-size:12px;color:#8A8A90;margin-top:4px;font-style:italic">{{ b.obs }}</div>
-                  </sc-if>
-                </div>
-              </sc-for>
-            </div>
-
-            <div style="background:#FDECC8;border:1px solid #F5DCA0;border-radius:12px;padding:14px 18px">
-              <div style="font-size:11px;font-weight:800;color:#8A5A00;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Pendências</div>
-              <sc-for list="{{ brindesPendencias }}" as="pnd" hint-placeholder-count="4">
-                <div style="font-size:12.5px;color:#5A4419;line-height:1.9">• {{ pnd }}</div>
-              </sc-for>
-            </div>
-            </sc-if>
-
             </div>
             </sc-if>
 
@@ -1717,198 +1630,267 @@
             <sc-if value="{{ showOrgPessoas }}" hint-placeholder-val="{{ false }}">
             <div>
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Participantes · {{ participantesTotal }} nomes</div>
-            <div style="background:#002855;color:#F2F5FA;border-radius:14px;padding:18px 20px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between">
-              <div style="display:flex;gap:26px;align-items:baseline">
-                <div onClick="{{ onPresencaClick }}" style="cursor:pointer;border:{{ presencaBoxBorder }};border-radius:10px;padding:4px 8px;margin:-4px -8px">
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#F39200">{{ presentesCount }}</div>
-                  <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">presenças · SP {{ presentesSP }} · BSB {{ presentesBSB }}</div>
-                  <sc-if value="{{ presencaFiltroAtivo }}" hint-placeholder-val="{{ false }}">
-                    <div style="font-size:10.5px;color:#F39200;font-weight:700;margin-top:2px">filtro: {{ presencaFiltroLabel }}</div>
-                  </sc-if>
+
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin-bottom:16px;align-items:stretch">
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;min-width:0">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+                <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em">Grupos · {{ gruposTotal }} pessoas no total</div>
+                <sc-if value="{{ grupoFiltroAtivo }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ verTodosGrupos }}" style="cursor:pointer;font-size:12px;font-weight:700;color:#0057A6">Ver todos os grupos</div>
+                </sc-if>
+              </div>
+              <div style="display:flex;gap:26px;flex-wrap:wrap;align-items:center">
+                <div style="position:relative;flex-shrink:0;width:160px;height:160px">
+                  <svg viewBox="0 0 160 160" width="160" height="160" style="transform:rotate(-90deg)">
+                    <circle cx="80" cy="80" r="60" fill="none" stroke="#EDEFF3" stroke-width="24"></circle>
+                    <sc-for list="{{ gruposChart }}" as="g" hint-placeholder-count="4">
+                      <circle onClick="{{ g.onClick }}" cx="80" cy="80" r="60" fill="none" stroke="{{ g.cor }}" stroke-width="24" stroke-dasharray="{{ g.dashArray }}" stroke-dashoffset="{{ g.dashOffset }}" opacity="{{ g.opacity }}" style="cursor:pointer;transition:opacity 0.2s"></circle>
+                    </sc-for>
+                  </svg>
+                  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px;color:#002855">{{ gruposTotal }}</div>
+                    <div style="font-size:10.5px;color:#8A8A90">pessoas</div>
+                  </div>
                 </div>
-                <div>
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ presentesPct }}</div>
-                  <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">da lista</div>
-                </div>
-                <div onClick="{{ onKitClick }}" style="cursor:pointer;border:{{ kitBoxBorder }};border-radius:10px;padding:4px 8px;margin:-4px -8px">
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ kitsCount }}</div>
-                  <div style="font-size:11.5px;color:#A9C0DE;margin-top:2px">camisetas entregues</div>
-                  <sc-if value="{{ kitFiltroAtivo }}" hint-placeholder-val="{{ false }}">
-                    <div style="font-size:10.5px;color:#1E7A45;font-weight:700;margin-top:2px">filtro: {{ kitFiltroLabel }}</div>
-                  </sc-if>
+                <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:8px">
+                  <sc-for list="{{ gruposChart }}" as="g" hint-placeholder-count="4">
+                    <div onClick="{{ g.onClick }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;background:{{ g.rowBg }};border:1px solid {{ g.rowBorder }};border-radius:10px;padding:9px 12px">
+                      <div style="width:10px;height:10px;border-radius:3px;background:{{ g.cor }};flex-shrink:0"></div>
+                      <div style="flex:1;font-size:13px;font-weight:700;color:{{ g.textColor }}">{{ g.nome }}</div>
+                      <div style="font-size:13px;font-weight:800;color:{{ g.textColor }}">{{ g.n }}</div>
+                      <div style="font-size:11.5px;color:{{ g.textColor }};width:36px;text-align:right">{{ g.pctLabel }}</div>
+                    </div>
+                  </sc-for>
                 </div>
               </div>
             </div>
 
-            <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Grupos · {{ gruposTotal }} pessoas no total</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px">
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 16px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px;color:#0057A6">{{ spOnlyCount }}</div>
-                <div style="font-size:11.5px;color:#6B6B70;margin-top:2px">São Paulo · participa das dinâmicas</div>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 16px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px;color:#F39200">{{ bsbOnlyCount }}</div>
-                <div style="font-size:11.5px;color:#6B6B70;margin-top:2px">Brasília · participa das dinâmicas</div>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 16px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px;color:#8A5A0B">{{ dualCount }}</div>
-                <div style="font-size:11.5px;color:#6B6B70;margin-top:2px">Organização + Gestores · fora das dinâmicas</div>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 16px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px;color:#8A8A90">{{ semCidadeCount }}</div>
-                <div style="font-size:11.5px;color:#6B6B70;margin-top:2px">Licenças e afins · fora das dinâmicas</div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Unidade / área</div>
+              <div style="display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto">
+                <sc-for list="{{ unidadeChart }}" as="uc" hint-placeholder-count="8">
+                  <div onClick="{{ uc.onClick }}" style="cursor:pointer;background:{{ uc.rowBg }};border-radius:8px;padding:6px 8px">
+                    <div style="display:flex;justify-content:space-between;gap:8px;font-size:11.5px;margin-bottom:4px">
+                      <div style="font-weight:700;color:{{ uc.textColor }}">{{ uc.nome }}</div>
+                      <div style="font-weight:700;color:{{ uc.textColor }};white-space:nowrap">{{ uc.n }} · {{ uc.pctLabel }}</div>
+                    </div>
+                    <div style="background:#EDEFF3;border-radius:999px;height:7px;overflow:hidden">
+                      <div style="width:{{ uc.barPct }}%;height:100%;background:{{ uc.cor }};border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
               </div>
             </div>
 
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center">
-              <sc-for list="{{ pessoaFiltros }}" as="pf" hint-placeholder-count="4">
-                <div onClick="{{ pf.onClick }}" style="cursor:pointer;padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ pf.bg }};color:{{ pf.color }};border:1px solid #DCE6F2">{{ pf.label }}</div>
-              </sc-for>
-              <sc-if value="{{ algumFiltroAtivo }}" hint-placeholder-val="{{ false }}">
-                <div onClick="{{ limparTodosFiltros }}" style="cursor:pointer;padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:700;background:#FBE3E0;color:#B02D1C;border:1px solid #F3B8AE">Limpar todos os filtros</div>
-              </sc-if>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Buscar</div>
+              <input placeholder="Buscar nome..." value="{{ nameQuery }}" onChange="{{ onNameQuery }}" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:8px"></input>
+              <div style="font-size:11px;color:#6B6B70">{{ participantesFiltrados }} nome(s) exibido(s)</div>
+            </div>
             </div>
 
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-bottom:16px">
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;align-content:flex-start">
-              <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;width:100%">Camisetas por tamanho</div>
-              <sc-for list="{{ camisaStats }}" as="cs" hint-placeholder-count="5">
-                <div onClick="{{ cs.onClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ cs.bg }}">
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ cs.color }}">{{ cs.n }}</div>
-                  <div style="font-size:11.5px;color:{{ cs.color }}">{{ cs.size }}</div>
-                </div>
-              </sc-for>
-              <div onClick="{{ setCamisaFaltamFiltro }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ camisaFaltamAtivoBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ camisaFaltamAtivoColor }}">{{ camisaFaltamCount }}</div>
-                <div style="font-size:11.5px;color:{{ camisaFaltamAtivoColor }}">sem tamanho</div>
+            <sc-if value="{{ algumFiltroAtivo }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#F2F5FA;border:1px solid #DCE6F2;border-radius:10px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                <div style="font-size:12.5px;color:#4A4A50"><b>Filtrando por:</b> {{ filtrosAtivosResumo }}</div>
+                <div onClick="{{ limparTodosFiltros }}" style="cursor:pointer;font-size:12px;font-weight:700;color:#B02D1C;white-space:nowrap">Limpar tudo</div>
               </div>
-              <sc-if value="{{ camisaFiltroAtivo }}" hint-placeholder-val="{{ false }}">
-                <div onClick="{{ limparCamisaFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
-              </sc-if>
-              <div style="width:100%;height:1px;background:#E8EFF9;margin:2px 0"></div>
-              <sc-for list="{{ camisaModStats }}" as="cm" hint-placeholder-count="2">
-                <div onClick="{{ cm.onClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ cm.bg }}">
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ cm.color }}">{{ cm.n }}</div>
-                  <div style="font-size:11.5px;color:{{ cm.color }}">{{ cm.label }}</div>
-                </div>
-              </sc-for>
-              <div onClick="{{ setCamisaModFaltamFiltro }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ camisaModFaltamAtivoBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ camisaModFaltamAtivoColor }}">{{ camisaModFaltamCount }}</div>
-                <div style="font-size:11.5px;color:{{ camisaModFaltamAtivoColor }}">sem sexo</div>
-              </div>
-              <sc-if value="{{ camisaModFiltroAtivo }}" hint-placeholder-val="{{ false }}">
-                <div onClick="{{ limparCamisaModFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
-              </sc-if>
-            </div>
+            </sc-if>
 
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;align-content:flex-start">
-              <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;width:100%">Presença no evento</div>
-              <div onClick="{{ ppSimOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ ppSimBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ ppSimColor }}">{{ presencaPreviaSimCount }}</div>
-                <div style="font-size:11.5px;color:{{ ppSimColor }}">vão</div>
-              </div>
-              <div onClick="{{ ppNaoOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ ppNaoBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ ppNaoColor }}">{{ presencaPreviaNaoCount }}</div>
-                <div style="font-size:11.5px;color:{{ ppNaoColor }}">não vão</div>
-              </div>
-              <div onClick="{{ ppTalvezOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ ppTalvezBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ ppTalvezColor }}">{{ presencaPreviaTalvezCount }}</div>
-                <div style="font-size:11.5px;color:{{ ppTalvezColor }}">talvez</div>
-              </div>
-              <div style="display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:#F2F5FA">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#8A8A90">{{ presencaPreviaSemRespostaCount }}</div>
-                <div style="font-size:11.5px;color:#8A8A90">sem resposta</div>
+            <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Respostas da Identificação</div>
+            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:16px">
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Presença no evento</div>
+              <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+                <sc-for list="{{ ppChart }}" as="pc" hint-placeholder-count="4">
+                  <div onClick="{{ pc.onClick }}" style="cursor:pointer;background:{{ pc.rowBg }};border-radius:8px;padding:6px 8px">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+                      <div style="font-weight:700;color:{{ pc.textColor }}">{{ pc.nome }}</div>
+                      <div style="font-weight:700;color:{{ pc.textColor }}">{{ pc.n }} · {{ pc.pctLabel }}</div>
+                    </div>
+                    <div style="background:#EDEFF3;border-radius:999px;height:8px;overflow:hidden">
+                      <div style="width:{{ pc.barPct }}%;height:100%;background:{{ pc.cor }};border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
               </div>
               <sc-if value="{{ ppFiltroAtivo }}" hint-placeholder-val="{{ false }}">
                 <div onClick="{{ limparPPFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
               </sc-if>
             </div>
 
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;align-content:flex-start">
-              <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;width:100%">Confraternização</div>
-              <div onClick="{{ confSimOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ confSimBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ confSimColor }}">{{ confraternizacaoSimCount }}</div>
-                <div style="font-size:11.5px;color:{{ confSimColor }}">vão</div>
-              </div>
-              <div onClick="{{ confNaoOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ confNaoBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ confNaoColor }}">{{ confraternizacaoNaoCount }}</div>
-                <div style="font-size:11.5px;color:{{ confNaoColor }}">não vão</div>
-              </div>
-              <div onClick="{{ confTalvezOnClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ confTalvezBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ confTalvezColor }}">{{ confraternizacaoTalvezCount }}</div>
-                <div style="font-size:11.5px;color:{{ confTalvezColor }}">talvez</div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Confraternização</div>
+              <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+                <sc-for list="{{ confChart }}" as="cc" hint-placeholder-count="4">
+                  <div onClick="{{ cc.onClick }}" style="cursor:pointer;background:{{ cc.rowBg }};border-radius:8px;padding:6px 8px">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+                      <div style="font-weight:700;color:{{ cc.textColor }}">{{ cc.nome }}</div>
+                      <div style="font-weight:700;color:{{ cc.textColor }}">{{ cc.n }} · {{ cc.pctLabel }}</div>
+                    </div>
+                    <div style="background:#EDEFF3;border-radius:999px;height:8px;overflow:hidden">
+                      <div style="width:{{ cc.barPct }}%;height:100%;background:{{ cc.cor }};border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
               </div>
               <sc-if value="{{ confFiltroAtivo }}" hint-placeholder-val="{{ false }}">
                 <div onClick="{{ limparConfFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
               </sc-if>
             </div>
 
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;align-content:flex-start">
-              <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;width:100%">Restrição alimentar</div>
-              <div onClick="{{ setRestricaoQualquerFiltro }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ restricaoQualquerBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ restricaoQualquerColor }}">{{ restricaoQualquerCount }}</div>
-                <div style="font-size:11.5px;color:{{ restricaoQualquerColor }}">com restrição</div>
-              </div>
-              <sc-for list="{{ restricaoStats }}" as="rs" hint-placeholder-count="3">
-                <div onClick="{{ rs.onClick }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ rs.bg }}">
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ rs.color }}">{{ rs.n }}</div>
-                  <div style="font-size:11.5px;color:{{ rs.color }}">{{ rs.tipo }}</div>
-                </div>
-              </sc-for>
-              <div onClick="{{ setRestricaoNenhumaFiltro }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ restricaoNenhumaBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ restricaoNenhumaColor }}">{{ restricaoNenhumaCount }}</div>
-                <div style="font-size:11.5px;color:{{ restricaoNenhumaColor }}">nenhuma</div>
-              </div>
-              <div onClick="{{ setRestricaoSemRespostaFiltro }}" style="cursor:pointer;display:flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:999px;background:{{ restricaoSemRespostaBg }}">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:{{ restricaoSemRespostaColor }}">{{ restricaoSemRespostaCount }}</div>
-                <div style="font-size:11.5px;color:{{ restricaoSemRespostaColor }}">sem resposta</div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Restrição alimentar</div>
+              <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+                <sc-for list="{{ restricaoChart }}" as="rc" hint-placeholder-count="5">
+                  <div onClick="{{ rc.onClick }}" style="cursor:pointer;background:{{ rc.rowBg }};border-radius:8px;padding:6px 8px">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+                      <div style="font-weight:700;color:{{ rc.textColor }}">{{ rc.nome }}</div>
+                      <div style="font-weight:700;color:{{ rc.textColor }}">{{ rc.n }} · {{ rc.pctLabel }}</div>
+                    </div>
+                    <div style="background:#EDEFF3;border-radius:999px;height:8px;overflow:hidden">
+                      <div style="width:{{ rc.barPct }}%;height:100%;background:{{ rc.cor }};border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
               </div>
               <sc-if value="{{ restricaoFiltroAtivo }}" hint-placeholder-val="{{ false }}">
                 <div onClick="{{ limparRestricaoFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
               </sc-if>
             </div>
 
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
-              <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Necessidade especial · {{ pcdCount }}</div>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <sc-for list="{{ pcdStats }}" as="pd" hint-placeholder-count="2">
-                  <div style="font-size:12.5px;color:#002855">{{ pd.nome }}{{ pd.obsSuffix }}</div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Necessidade especial</div>
+              <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+                <sc-for list="{{ pcdChart }}" as="pd" hint-placeholder-count="3">
+                  <div onClick="{{ pd.onClick }}" style="cursor:pointer;background:{{ pd.rowBg }};border-radius:8px;padding:6px 8px">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+                      <div style="font-weight:700;color:{{ pd.textColor }}">{{ pd.nome }}</div>
+                      <div style="font-weight:700;color:{{ pd.textColor }}">{{ pd.n }} · {{ pd.pctLabel }}</div>
+                    </div>
+                    <div style="background:#EDEFF3;border-radius:999px;height:8px;overflow:hidden">
+                      <div style="width:{{ pd.barPct }}%;height:100%;background:{{ pd.cor }};border-radius:999px"></div>
+                    </div>
+                  </div>
                 </sc-for>
               </div>
+              <sc-if value="{{ pcdFiltroAtivo }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ limparPcdFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
+              </sc-if>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Presença confirmada (check-in) · {{ presentesPct }}</div>
+              <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+                <sc-for list="{{ presencaChart }}" as="pc2" hint-placeholder-count="2">
+                  <div onClick="{{ pc2.onClick }}" style="cursor:pointer;background:{{ pc2.rowBg }};border-radius:8px;padding:6px 8px">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+                      <div style="font-weight:700;color:{{ pc2.textColor }}">{{ pc2.nome }}</div>
+                      <div style="font-weight:700;color:{{ pc2.textColor }}">{{ pc2.n }} · {{ pc2.pctLabel }}</div>
+                    </div>
+                    <div style="background:#EDEFF3;border-radius:999px;height:8px;overflow:hidden">
+                      <div style="width:{{ pc2.barPct }}%;height:100%;background:{{ pc2.cor }};border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="font-size:11px;color:#8A8A90;width:100%">SP {{ presentesSP }} · BSB {{ presentesBSB }} · de {{ participantesTotal }}</div>
+              <sc-if value="{{ presencaFiltroAtivo }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ limparPresencaFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
+              </sc-if>
             </div>
             </div>
 
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px;margin-bottom:16px;align-items:start">
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px">
-                <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em">Mesa · São Paulo</div>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <span style="font-size:12px;color:#6B6B70">Nº de mesas</span>
-                  <input type="number" min="1" max="{{ maxMesas }}" value="{{ numMesas }}" onChange="{{ onNumMesas }}" style="width:48px;box-sizing:border-box;padding:4px 6px;border-radius:8px;border:1px solid #C9D6E8;font-size:12.5px;font-weight:700;color:#002855;font-family:'Manrope',sans-serif"></input>
-                  <span style="font-size:11px;color:#8A8A90">~{{ mediaPorMesa }}/mesa</span>
+            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:16px">
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Camisetas por tamanho</div>
+              <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+                <sc-for list="{{ camisaTamanhoChart }}" as="ct" hint-placeholder-count="6">
+                  <div onClick="{{ ct.onClick }}" style="cursor:pointer;background:{{ ct.rowBg }};border-radius:8px;padding:6px 8px">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+                      <div style="font-weight:700;color:{{ ct.textColor }}">{{ ct.nome }}</div>
+                      <div style="font-weight:700;color:{{ ct.textColor }}">{{ ct.n }} · {{ ct.pctLabel }}</div>
+                    </div>
+                    <div style="background:#EDEFF3;border-radius:999px;height:8px;overflow:hidden">
+                      <div style="width:{{ ct.barPct }}%;height:100%;background:{{ ct.cor }};border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ camisaFiltroAtivo }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ limparCamisaFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
+              </sc-if>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Modelagem</div>
+              <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+                <sc-for list="{{ camisaModChart }}" as="cm2" hint-placeholder-count="3">
+                  <div onClick="{{ cm2.onClick }}" style="cursor:pointer;background:{{ cm2.rowBg }};border-radius:8px;padding:6px 8px">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+                      <div style="font-weight:700;color:{{ cm2.textColor }}">{{ cm2.nome }}</div>
+                      <div style="font-weight:700;color:{{ cm2.textColor }}">{{ cm2.n }} · {{ cm2.pctLabel }}</div>
+                    </div>
+                    <div style="background:#EDEFF3;border-radius:999px;height:8px;overflow:hidden">
+                      <div style="width:{{ cm2.barPct }}%;height:100%;background:{{ cm2.cor }};border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ camisaModFiltroAtivo }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ limparCamisaModFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
+              </sc-if>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Entrega</div>
+              <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+                <sc-for list="{{ camisaEntregaChart }}" as="ce" hint-placeholder-count="2">
+                  <div onClick="{{ ce.onClick }}" style="cursor:pointer;background:{{ ce.rowBg }};border-radius:8px;padding:6px 8px">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+                      <div style="font-weight:700;color:{{ ce.textColor }}">{{ ce.nome }}</div>
+                      <div style="font-weight:700;color:{{ ce.textColor }}">{{ ce.n }} · {{ ce.pctLabel }}</div>
+                    </div>
+                    <div style="background:#EDEFF3;border-radius:999px;height:8px;overflow:hidden">
+                      <div style="width:{{ ce.barPct }}%;height:100%;background:{{ ce.cor }};border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ kitFiltroAtivo }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ limparKitFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
+              </sc-if>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;min-width:0">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+                <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em">Distribuição por mesa · SP</div>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span style="font-size:11px;color:#6B6B70">Nº mesas</span>
+                  <input type="number" min="1" max="{{ maxMesas }}" value="{{ numMesas }}" onChange="{{ onNumMesas }}" style="width:40px;box-sizing:border-box;padding:3px 5px;border-radius:8px;border:1px solid #C9D6E8;font-size:11.5px;font-weight:700;color:#002855;font-family:'Manrope',sans-serif"></input>
+                  <span style="font-size:10.5px;color:#8A8A90">~{{ mediaPorMesa }}/mesa</span>
                 </div>
               </div>
-              <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
                 <sc-for list="{{ mesaStats }}" as="ms" hint-placeholder-count="7">
-                  <div onClick="{{ ms.onClick }}" style="cursor:pointer;padding:6px 13px;border-radius:999px;font-size:12px;font-weight:700;background:{{ ms.bg }};color:{{ ms.color }};border:1px solid #DCE6F2">{{ ms.nome }} · {{ ms.n }}</div>
+                  <div onClick="{{ ms.onClick }}" style="cursor:pointer;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:700;background:{{ ms.bg }};color:{{ ms.color }};border:1px solid #DCE6F2">{{ ms.nome }} · {{ ms.n }}</div>
                 </sc-for>
               </div>
             </div>
 
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px">
-                <div style="font-size:12px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em">Mesa · Brasília</div>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <span style="font-size:12px;color:#6B6B70">Nº de mesas</span>
-                  <input type="number" min="1" max="{{ maxMesas }}" value="{{ numMesasBSB }}" onChange="{{ onNumMesasBSB }}" style="width:48px;box-sizing:border-box;padding:4px 6px;border-radius:8px;border:1px solid #C9D6E8;font-size:12.5px;font-weight:700;color:#002855;font-family:'Manrope',sans-serif"></input>
-                  <span style="font-size:11px;color:#8A8A90">~{{ mediaPorMesaBSB }}/mesa</span>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;min-width:0">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+                <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em">Distribuição por mesa · BSB</div>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span style="font-size:11px;color:#6B6B70">Nº mesas</span>
+                  <input type="number" min="1" max="{{ maxMesas }}" value="{{ numMesasBSB }}" onChange="{{ onNumMesasBSB }}" style="width:40px;box-sizing:border-box;padding:3px 5px;border-radius:8px;border:1px solid #C9D6E8;font-size:11.5px;font-weight:700;color:#002855;font-family:'Manrope',sans-serif"></input>
+                  <span style="font-size:10.5px;color:#8A8A90">~{{ mediaPorMesaBSB }}/mesa</span>
                 </div>
               </div>
-              <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
                 <sc-for list="{{ mesaStatsBSB }}" as="ms" hint-placeholder-count="7">
-                  <div onClick="{{ ms.onClick }}" style="cursor:pointer;padding:6px 13px;border-radius:999px;font-size:12px;font-weight:700;background:{{ ms.bg }};color:{{ ms.color }};border:1px solid #DCE6F2">{{ ms.nome }} · {{ ms.n }}</div>
+                  <div onClick="{{ ms.onClick }}" style="cursor:pointer;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:700;background:{{ ms.bg }};color:{{ ms.color }};border:1px solid #DCE6F2">{{ ms.nome }} · {{ ms.n }}</div>
                 </sc-for>
               </div>
+            </div>
             </div>
             </div>
 
@@ -1917,15 +1899,6 @@
                 <div onClick="{{ limparMesaFiltro }}" style="cursor:pointer;display:inline-block;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro de mesa</div>
               </div>
             </sc-if>
-
-            <select value="{{ pessoaUnidadeValue }}" onChange="{{ onUnidadeChange }}" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;color:#002855;margin-bottom:10px;background:#fff">
-              <option value="">Todas as áreas</option>
-              <sc-for list="{{ unidadesOpcoes }}" as="u" hint-placeholder-count="12">
-                <option value="{{ u.value }}">{{ u.label }}</option>
-              </sc-for>
-            </select>
-            <input placeholder="Buscar nome..." value="{{ nameQuery }}" onChange="{{ onNameQuery }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:6px"></input>
-            <div style="font-size:11.5px;color:#6B6B70;margin-bottom:14px">{{ participantesFiltrados }} nome(s) exibido(s)</div>
 
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px">
               <sc-for list="{{ participantes }}" as="p" hint-placeholder-count="12">
@@ -1961,33 +1934,9 @@
             </div>
             </sc-if>
 
-            <sc-if value="{{ showOrgCuriosidades }}" hint-placeholder-val="{{ false }}">
-            <div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0 4px">
-              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px">Curiosidades · {{ curiosidadesTotal }} respostas</div>
-              <div onClick="{{ toggleAccCuriosidades }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accCuriosidadesLabel }}</div>
-            </div>
-            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Coletadas no pré-cadastro, para o jogo "quem é quem".</div>
-            <sc-if value="{{ accCuriosidadesAberto }}" hint-placeholder-val="{{ false }}">
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <sc-for list="{{ curiosidadesLista }}" as="cu" hint-placeholder-count="4">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-                  <div style="min-width:0">
-                    <div style="font-weight:700;font-size:13.5px">{{ cu.nome }}</div>
-                    <div style="font-size:13px;color:#4A4A50;margin-top:4px;line-height:1.5">{{ cu.texto }}</div>
-                  </div>
-                  <div onClick="{{ cu.excluir }}" style="cursor:pointer;flex-shrink:0;font-size:11px;font-weight:700;color:#B4471F;border:1px solid #F5CDBB;border-radius:999px;padding:6px 12px;white-space:nowrap">Excluir</div>
-                </div>
-              </sc-for>
-            </div>
-            </sc-if>
-            </div>
-            </sc-if>
-
             <sc-if value="{{ showOrgPontos }}" hint-placeholder-val="{{ false }}">
             <div>
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Gamificação</div>
-            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Pontuação de cada pessoa (7 ações possíveis) e o que já resgatou no mercado de brindes. Preço médio atual: {{ mediaPontosGeral }} pontos por pessoa ativa. Fora da contagem: quem não tem cidade definida (licenças e afins) e quem está marcado como organização/dupla função SP+BSB.</div>
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px">
               <div style="background:#0A3C6E;color:#FFFFFF;border-radius:12px;padding:16px 18px">
@@ -2017,47 +1966,107 @@
             </div>
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px">
-              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Onde as pessoas estão ganhando pontos</div>
-              <div onClick="{{ toggleAccOrigem }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accOrigemLabel }}</div>
-            </div>
-            <sc-if value="{{ accOrigemAberto }}" hint-placeholder-val="{{ false }}">
-            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-              <sc-for list="{{ origemPontosView }}" as="op" hint-placeholder-count="8">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:12px 16px">
-                  <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px">
-                    <div style="font-weight:700">{{ op.label }}</div>
-                    <div style="color:#6B6B70">{{ op.count }} pessoas · {{ op.pct }}%</div>
-                  </div>
-                  <div style="height:6px;border-radius:999px;background:#EDF1F7;overflow:hidden">
-                    <div style="height:100%;width:{{ op.pct }}%;background:#1E7A45;border-radius:999px"></div>
-                  </div>
-                </div>
-              </sc-for>
-            </div>
-            </sc-if>
-
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Engajamento por cidade e área</div>
               <div onClick="{{ toggleAccEngajamento }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accEngajamentoLabel }}</div>
             </div>
             <sc-if value="{{ accEngajamentoAberto }}" hint-placeholder-val="{{ false }}">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px">
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-size:11px;font-weight:800;color:#0057A6;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">São Paulo</div>
-                <div style="font-size:13px;color:#4A4A50;line-height:1.8">Total: <b>{{ engajamentoDash.totalSP }}</b> pontos · Média: <b>{{ engajamentoDash.mediaSP }}</b> · Resgates: <b>{{ engajamentoDash.resgatesSP }}</b></div>
+            <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:16px">
+              <div style="flex:1 1 220px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
+                <div style="font-weight:700;font-size:13px;margin-bottom:2px">Engajamento · Pontos & Brindes</div>
+                <div style="font-size:10.5px;color:#8A8A90;margin-bottom:10px">resumo — detalhes na aba Pontos & Brindes</div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline">
+                    <div style="font-size:11.5px;color:#4A4A50">Pontos distribuídos</div>
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#0057A6">{{ engajamentoDash.totalPontos }}</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline">
+                    <div style="font-size:11.5px;color:#4A4A50">Participação ativa</div>
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#1E7A45">{{ engajamentoDash.participacaoPct }}%</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+                    <div style="font-size:11.5px;color:#4A4A50">Mais pontos</div>
+                    <div style="font-size:12px;font-weight:700;color:#002855;text-align:right">{{ engajamentoDash.maisPontosNome }} · {{ engajamentoDash.maisPontosValor }}</div>
+                  </div>
+                </div>
               </div>
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-size:11px;font-weight:800;color:#F39200;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Brasília</div>
-                <div style="font-size:13px;color:#4A4A50;line-height:1.8">Total: <b>{{ engajamentoDash.totalBSB }}</b> pontos · Média: <b>{{ engajamentoDash.mediaBSB }}</b> · Resgates: <b>{{ engajamentoDash.resgatesBSB }}</b></div>
+
+              <div style="flex:1 1 260px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
+                <div style="font-weight:700;font-size:13px;margin-bottom:2px">Engajamento no app</div>
+                <div style="font-size:10.5px;color:#8A8A90;margin-bottom:10px">quem já se identificou (respondeu algo no cadastro)</div>
+                <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px">
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#1E7A45">{{ identificadosPct }}%</div>
+                  <div style="font-size:11.5px;color:#6B6B70">{{ identificadosCount }} já se identificaram · {{ faltamIdentificarCount }} faltam</div>
+                </div>
+                <div style="height:10px;border-radius:999px;background:#EDF1F7;overflow:hidden;display:flex">
+                  <div style="height:100%;background:#1E7A45;width:{{ identificadosPct }}%"></div>
+                </div>
               </div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-              <sc-for list="{{ areaEngajamentoView }}" as="ae" hint-placeholder-count="6">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-                  <div style="font-weight:700;font-size:12.5px">{{ ae.area }}</div>
-                  <div style="font-size:12px;color:#6B6B70">{{ ae.pessoas }} pessoas · média {{ ae.media }} pts · {{ ae.participacaoPct }}% participaram</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px;align-items:stretch">
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em">Por cidade</div>
+              <div style="display:flex;justify-content:center">
+                <div style="position:relative;flex-shrink:0;width:130px;height:130px;border-radius:999px;background:{{ engajCidadeDonutBg }}">
+                  <div style="position:absolute;inset:15px;border-radius:999px;background:#F7F9FC;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:19px;color:#002855">{{ engajamentoDash.totalPontos }}</div>
+                    <div style="font-size:10px;color:#8A8A90">pontos</div>
+                  </div>
                 </div>
-              </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ engajCidadeChart }}" as="ec" hint-placeholder-count="2">
+                  <div style="background:#F7F9FC;border-radius:10px;padding:10px 12px">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                      <div style="width:9px;height:9px;border-radius:3px;background:{{ ec.cor }};flex-shrink:0"></div>
+                      <div style="font-size:10.5px;font-weight:800;color:{{ ec.cor }};text-transform:uppercase;letter-spacing:0.06em">{{ ec.nome }}</div>
+                    </div>
+                    <div style="font-size:11.5px;color:#4A4A50;line-height:1.6">Total: <b>{{ ec.total }}</b> · {{ ec.totalPct }}% · Média: <b>{{ ec.media }}</b> · Resgates: <b>{{ ec.resgates }}</b> · {{ ec.resgatesPct }}%</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em">Por área</div>
+              <div style="display:flex;justify-content:center">
+                <div style="position:relative;flex-shrink:0;width:130px;height:130px">
+                  <svg viewBox="0 0 100 100" width="130" height="130" style="flex-shrink:0;transform:rotate(-90deg)">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#EDEFF3" stroke-width="16"></circle>
+                    <sc-for list="{{ areaEngajamentoChart }}" as="ap" hint-placeholder-count="6">
+                      <circle cx="50" cy="50" r="40" fill="none" stroke="{{ ap.cor }}" stroke-width="16" stroke-dasharray="{{ ap.dashArray }}" stroke-dashoffset="{{ ap.dashOffset }}"></circle>
+                    </sc-for>
+                  </svg>
+                  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:19px;color:#002855">{{ engajamentoDash.totalPontos }}</div>
+                    <div style="font-size:10px;color:#8A8A90">pontos</div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto">
+                <sc-for list="{{ areaEngajamentoChart }}" as="ap" hint-placeholder-count="6">
+                  <div style="background:#F7F9FC;border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                    <div style="width:9px;height:9px;border-radius:3px;background:{{ ap.cor }};flex-shrink:0"></div>
+                    <div style="font-weight:700;font-size:11.5px;flex:1;min-width:50px">{{ ap.area }}</div>
+                    <div style="font-size:10.5px;color:#6B6B70">{{ ap.pessoas }} · {{ ap.pct }}% · {{ ap.media }} pts · {{ ap.participacaoPct }}%</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em">Onde as pessoas ganham pontos</div>
+              <div style="display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto">
+                <sc-for list="{{ origemPontosView }}" as="op" hint-placeholder-count="8">
+                  <div style="background:#F7F9FC;border-radius:10px;padding:9px 12px">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:11.5px;margin-bottom:5px">
+                      <div style="font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ op.label }}</div>
+                      <div style="color:#6B6B70;flex-shrink:0;white-space:nowrap">{{ op.count }} · {{ op.pct }}%</div>
+                    </div>
+                    <div style="height:5px;border-radius:999px;background:#EDF1F7;overflow:hidden">
+                      <div style="height:100%;width:{{ op.pct }}%;background:#1E7A45;border-radius:999px"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
             </div>
             </sc-if>
 
@@ -2091,21 +2100,34 @@
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+            <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px;align-items:start">
               <sc-for list="{{ brindesDashView }}" as="cm" hint-placeholder-count="16">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:12px 16px">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:12.5px;margin-bottom:6px;flex-wrap:wrap">
-                    <div style="font-weight:700">{{ cm.nome }}</div>
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:12px 14px;min-width:0">
+                  <div onClick="{{ cm.toggleAberto }}" style="cursor:pointer;display:flex;flex-direction:column;gap:3px;font-size:12px;margin-bottom:6px">
+                    <div style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ cm.nome }}</div>
+                    <sc-if value="{{ cm.temItens }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size:10.5px;font-weight:700;color:#0057A6">{{ cm.verDetalhesLabel }}</span>
+                    </sc-if>
                     <sc-if value="{{ cm.statusLabel }}" hint-placeholder-val="{{ false }}">
-                      <div style="font-size:11px;font-weight:700;color:{{ cm.statusColor }}">{{ cm.statusLabel }}</div>
+                      <div style="font-size:10.5px;font-weight:700;color:{{ cm.statusColor }}">{{ cm.statusLabel }}</div>
                     </sc-if>
                   </div>
-                  <div style="display:flex;justify-content:space-between;font-size:12px;color:#6B6B70;margin-bottom:6px;flex-wrap:wrap;gap:8px">
-                    <div>{{ cm.restante }} restantes de {{ cm.total }} · {{ cm.pct }}% · SP {{ cm.restanteSP }}/{{ cm.totalSP }} · BSB {{ cm.restanteBSB }}/{{ cm.totalBSB }}</div>
-                    <div><b style="color:#002855">{{ cm.preco }}</b> pontos agora</div>
-                  </div>
+                  <div style="font-size:11px;color:#6B6B70;margin-bottom:4px">{{ cm.restante }} restantes de {{ cm.total }} · {{ cm.pct }}%</div>
+                  <div style="font-size:11px;color:#6B6B70;margin-bottom:6px">SP {{ cm.restanteSP }}/{{ cm.totalSP }} · BSB {{ cm.restanteBSB }}/{{ cm.totalBSB }}</div>
+                  <div style="font-size:11.5px;margin-bottom:6px"><b style="color:#002855">{{ cm.preco }}</b> pontos agora</div>
                   <div style="height:6px;border-radius:999px;background:#EDF1F7;overflow:hidden">
                     <div style="height:100%;width:{{ cm.pct }}%;background:{{ cm.barColor }};border-radius:999px"></div>
                   </div>
+                  <sc-if value="{{ cm.aberto }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:10px;padding-top:10px;border-top:1px solid #EDF1F7;display:flex;flex-direction:column;gap:8px">
+                      <sc-for list="{{ cm.itensView }}" as="it" hint-placeholder-count="4">
+                        <div style="font-size:11px;color:#4A4A50">
+                          <div style="font-weight:700;color:#002855;margin-bottom:2px">{{ it.nome }}</div>
+                          <div>{{ it.restante }}/{{ it.total }} · SP {{ it.restanteSP }}/{{ it.totalSP }} · BSB {{ it.restanteBSB }}/{{ it.totalBSB }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
                 </div>
               </sc-for>
             </div>
@@ -2116,15 +2138,15 @@
               <div onClick="{{ togglePontosLista }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ pontosListaToggleLabel }}</div>
             </div>
             <sc-if value="{{ pontosListaAberta }}" hint-placeholder-val="{{ false }}">
-            <div style="display:flex;flex-direction:column;gap:8px">
-              <sc-for list="{{ pontosRankingView }}" as="pr" hint-placeholder-count="8">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-                  <div style="min-width:0">
-                    <div style="font-weight:700;font-size:13.5px">{{ pr.nome }}</div>
-                    <div style="font-size:11.5px;color:#6B6B70;margin-top:2px">{{ pr.cidade }} · pontos de: {{ pr.origens }}</div>
-                    <div style="font-size:11.5px;color:#6B6B70;margin-top:2px">resgatou: {{ pr.resgates }}</div>
+            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+              <sc-for list="{{ pontosRankingView }}" as="pr" hint-placeholder-count="10">
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:10px;padding:10px 12px;min-width:0">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-bottom:3px">
+                    <div style="font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ pr.nome }}</div>
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:14px;color:#0057A6;flex-shrink:0">{{ pr.pontos }}</div>
                   </div>
-                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:18px;color:#0057A6;flex-shrink:0">{{ pr.pontos }}</div>
+                  <div style="font-size:10.5px;color:#6B6B70;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ pr.origens }}">{{ pr.cidade }} · {{ pr.origens }}</div>
+                  <div style="font-size:10.5px;color:#6B6B70;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ pr.resgates }}">resgatou: {{ pr.resgates }}</div>
                 </div>
               </sc-for>
             </div>
@@ -2266,10 +2288,9 @@
             <sc-if value="{{ showOrgMalas }}" hint-placeholder-val="{{ false }}">
             <div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0 4px">
-              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px">Malas de brindes · BSB → SP</div>
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Malas de brindes · BSB → SP</div>
               <div onClick="{{ toggleAccMalas }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accMalasLabel }}</div>
             </div>
-            <div style="font-size:12.5px;color:#6B6B70;margin-bottom:16px">A maior parte dos brindes está em Brasília — essas malas viajam despachadas com quem já vai de BSB para SP, aproveitando os voos abaixo. Toque no status para avançar.</div>
             <sc-if value="{{ accMalasAberto }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px">
               <div style="background:#0A3C6E;color:#FFFFFF;border-radius:12px;padding:16px 18px">
@@ -2285,9 +2306,9 @@
                 <div style="font-size:11.5px;color:#6B6B70">recebidas em SP</div>
               </div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start">
               <sc-for list="{{ malasView }}" as="m" hint-placeholder-count="5">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px;display:flex;flex-direction:column;gap:10px;min-width:0">
                   <div style="width:100%;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
                     <div>
                       <div style="font-weight:700;font-size:14px;color:#002855">{{ m.passageiro }}</div>
@@ -2296,16 +2317,39 @@
                     <div onClick="{{ m.ciclo }}" style="cursor:pointer;flex-shrink:0;font-size:12px;font-weight:700;padding:7px 14px;border-radius:999px;background:{{ m.statusBg }};color:{{ m.statusColor }}">{{ m.status }}</div>
                   </div>
                   <sc-if value="{{ m.temItens }}" hint-placeholder-val="{{ false }}">
-                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #EEF2F8">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;padding-top:10px;border-top:1px solid #EEF2F8">
                       <sc-for list="{{ m.itens }}" as="it" hint-placeholder-count="5">
-                        <div style="display:grid;grid-template-columns:minmax(140px,1.4fr) minmax(100px,1fr) minmax(140px,1.2fr);align-items:baseline;gap:12px">
-                          <div style="font-size:13px;color:#002855;font-weight:700">{{ it.nome }} ×{{ it.qtd }}</div>
-                          <div style="font-size:11.5px;color:#6B6B70;white-space:nowrap">restam {{ it.restanteBSB }} em BSB</div>
-                          <div style="font-size:11.5px;font-weight:700;color:{{ it.spColor }};white-space:nowrap;text-align:right">{{ it.spLabel }}</div>
+                        <div style="display:flex;flex-direction:column;gap:2px">
+                          <div style="font-size:12.5px;color:#002855;font-weight:700">{{ it.nome }} ×{{ it.qtd }}</div>
+                          <div style="font-size:11px;color:#6B6B70">restam {{ it.restanteBSB }} em BSB</div>
+                          <div style="font-size:11px;font-weight:700;color:{{ it.spColor }}">{{ it.spLabel }}</div>
                         </div>
                       </sc-for>
                     </div>
                   </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            </sc-if>
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ showOrgCuriosidades }}" hint-placeholder-val="{{ false }}">
+            <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0 4px">
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Curiosidades · {{ curiosidadesTotal }} respostas</div>
+              <div onClick="{{ toggleAccCuriosidades }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accCuriosidadesLabel }}</div>
+            </div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Coletadas no pré-cadastro, para o jogo "quem é quem".</div>
+            <sc-if value="{{ accCuriosidadesAberto }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ curiosidadesLista }}" as="cu" hint-placeholder-count="4">
+                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+                  <div style="min-width:0">
+                    <div style="font-weight:700;font-size:13.5px">{{ cu.nome }}</div>
+                    <div style="font-size:13px;color:#4A4A50;margin-top:4px;line-height:1.5">{{ cu.texto }}</div>
+                  </div>
+                  <div onClick="{{ cu.excluir }}" style="cursor:pointer;flex-shrink:0;font-size:11px;font-weight:700;color:#B4471F;border:1px solid #F5CDBB;border-radius:999px;padding:6px 12px;white-space:nowrap">Excluir</div>
                 </div>
               </sc-for>
             </div>
@@ -2321,11 +2365,9 @@
               <div style="font-size:13px;color:#8A8A90">Nenhuma foto postada ainda.</div>
             </sc-if>
             <div style="display:flex;flex-direction:column;gap:10px">
-              <sc-for list="{{ fotosView }}" as="f" hint-placeholder-count="4">
+              <sc-for list="{{ fotosView }}" as="f" hint-placeholder-count="0">
                 <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:14px">
-                  <sc-if value="{{ f.imagem }}" hint-placeholder-val="{{ false }}">
-                    <img src="{{ f.imagem }}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0">
-                  </sc-if>
+                  <image-slot id="mod-{{ f.id }}" src="{{ f.imagem }}" fit="cover" shape="rounded" radius="8" placeholder="Foto" style="width:56px;height:56px;flex-shrink:0"></image-slot>
                   <div style="flex:1;min-width:0">
                     <div style="font-weight:700;font-size:13px;color:#002855">{{ f.autor }}</div>
                     <div style="font-size:11.5px;color:#8A8A90">{{ f.quando }} · ❤️ {{ f.curtidasCount }} · 💬 {{ f.comentariosCount }}</div>
@@ -2484,6 +2526,7 @@ const CARTAZES = [
 });
 
 const ATUALIZACOES_INICIAIS = [
+  { quando: '10/08 12:00', texto: 'Novos brindes no Marketplace de Brindes: Copo CAIXA Térmico (360ml). Também atualizamos a foto da Garrafinha.' },
   { quando: '09/08 22:26', texto: 'Nova aba Fotos: poste fotos do evento, curta e comente as dos colegas. Postar, curtir, comentar e receber curtida ou comentário — cada um vale 1 ponto (contador próprio, na própria aba Fotos).' },
   { quando: '07/08 17:09', texto: 'Novo campo no Cadastro: "Você pretende comparecer ao evento?" — ajuda a organização a ter uma ideia de quantas pessoas vão participar. Como qualquer atualização do app, responder vale ponto em Pontos & Brindes.' },
   { quando: '07/08 09:15', texto: 'Por enquanto, as áreas interativas do app — credenciamento, cadastro e Pontos & Brindes — estão disponíveis apenas para os participantes do evento de São Paulo.' },
@@ -2546,35 +2589,6 @@ const CHECK_STATUS = [
   { id: 'nc', label: 'Não é o caso', bg: '#F7F7F8', color: '#9A9AA0', dot: '#DCDCE2' },
 ];
 
-const TOTAL_PARTICIPANTES_EVENTO = 187;
-const BRINDES_ITENS = [
-  { key: 'asset-canetas', area: 'Asset', contato: 'Luan Augusto Silveira da Costa (via Erika Zamberlan)', item: 'Canetas', qtdDefault: 200, status: 'confirmado', logistica: 'Lu (SP) combina retirada direto com o Luan', obs: 'Cobre os 187 sozinho' },
-  { key: 'gepoc-moleskines', area: 'GEPOC', contato: 'Angelica Rodrigues Lima Lucena', item: 'Moleskines', qtdDefault: 200, status: 'confirmado', logistica: 'Equipe da Angelica entrega na Matriz I, 21º andar — Gerrana recebe', obs: 'Cobre os 187 sozinho' },
-  { key: 'gepoc-xicaras', area: 'GEPOC', contato: 'Angelica Rodrigues Lima Lucena', item: 'Conjuntinhos de xícara de vidro', qtdDefault: 10, status: 'confirmado', logistica: 'Mesma entrega (Matriz I)', obs: 'Extra — dá pra sorteio' },
-  { key: 'loterias-moleskines', area: 'Loterias', contato: 'Otavio Campos Mariz Maia', item: 'Moleskines', qtdDefault: null, qtdTexto: 'Bastante — Otavio acredita cobrir os 187', status: 'qtd_pendente', logistica: 'Retirada na 512 Norte (BSB) — Rodrigo já disse que manda alguém, falta combinar dia/hora', obs: 'Redundante com o da GEPOC — sobra vira reserva/sorteio' },
-  { key: 'dicar-bolsas', area: 'DICAR / Caixa Cartões', contato: 'Larissa Barros Mendes', item: 'Bolsas térmicas (lancheirinhas CCH)', qtdDefault: 60, status: 'confirmado', logistica: 'Gerrana retira — local a confirmar (Larissa perguntou se é no MZ1)', obs: '' },
-  { key: 'dicar-camisas', area: 'DICAR / Caixa Cartões', contato: 'Larissa Barros Mendes', item: 'Camisas CCH', qtdDefault: 60, status: 'confirmado', logistica: 'Dentro das ecobags, mesma retirada da Gerrana', obs: '30 M + 30 G/GG/P' },
-  { key: 'dicar-garrafas', area: 'DICAR / Caixa Cartões', contato: 'Larissa Barros Mendes', item: 'Garrafas de alumínio VISA', qtdDefault: 0, status: 'descartado', logistica: '', obs: 'Larissa confirmou que não têm mais' },
-  { key: 'sumps02', area: 'SUMPS02', contato: 'Samantha Pereira Sobreira', item: 'Brindes', qtdDefault: null, status: 'confirmado', logistica: '', obs: 'Confirmado — brindes enviados' },
-  { key: 'geeve', area: 'GEEVE', contato: 'Celmar Batista da Silva', item: '—', qtdDefault: null, status: 'nao_enviado', logistica: '', obs: 'Pediu e-mail formal p/"gepoc" — rascunho pronto, Rodrigo ainda não enviou' },
-  { key: 'gemac05', area: 'GEMAC05', contato: 'Bruno Aerre de Sousa', item: '—', qtdDefault: null, status: 'sem_retorno', logistica: '', obs: 'Nunca respondeu' },
-  { key: 'seguridade', area: 'Seguridade', contato: 'Fernando Humberto Menguini', item: '—', qtdDefault: null, status: 'lead_novo', logistica: '', obs: 'Indicado pela Angelica (GEPOC) como possível ponto focal — ainda não contatado' },
-];
-const BRINDES_STATUS = {
-  confirmado: { label: 'Confirmado', bg: '#E3F3E9', color: '#1E7A45' },
-  qtd_pendente: { label: 'Qtd. pendente', bg: '#FDECC8', color: '#8A5A00' },
-  descartado: { label: 'Descartado', bg: '#F1F1F3', color: '#6B6B70' },
-  sem_retorno: { label: 'Sem retorno', bg: '#FDECE3', color: '#B4471F' },
-  nao_enviado: { label: 'Não enviado', bg: '#FDECE3', color: '#B4471F' },
-  lead_novo: { label: 'Lead novo', bg: '#E7EDFB', color: '#0057A6' },
-};
-const BRINDES_STATUS_ORDER = ['confirmado', 'qtd_pendente', 'sem_retorno', 'nao_enviado', 'lead_novo', 'descartado'];
-const BRINDES_PENDENCIAS = [
-  'Combinar dia/hora de retirada dos moleskines da Loterias (Otavio, 512 Norte, BSB).',
-  'Confirmar com a Larissa se a retirada da DICAR é no MZ1.',
-  'Gerrana está coordenando as retiradas — acompanhar.',
-  '(Opcional, baixa prioridade) Fechar ou descartar de vez: Celmar/GEEVE, Bruno/GEMAC05, Fernando Menguini/Seguridade.',
-];
 
 const PONTOS_ACOES = [
   { key: 'ps', label: 'Confirmar presença no credenciamento' },
@@ -2593,28 +2607,29 @@ const PONTOS_ACOES = [
 // pontuação média de quem já participou (tipo bolsa de valores): poucas pessoas pontuando = preços sobem;
 // muita gente pontuando = preços caem, mantendo o acesso equilibrado.
 const BRINDES_MARKETPLACE = [
-  { id: 'mochila-seguridade', nome: 'Mochila CAIXA Seguridade', desc: 'Mochila executiva cinza mescla, compartimentos espaçosos, bolsos laterais em redinha e placa metálica personalizada com a marca.', foto: 'mochila-seguridade.jpg', peso: 4.8, estoqueTotal: 4 },
-  { id: 'mochila-caixa', nome: 'Mochila CAIXA', desc: 'Modelo clássico de mochila cinza corporativa com acabamento texturizado e placa metálica discreta da CAIXA.', foto: 'mochila-caixa.jpg', peso: 3.6, estoqueTotal: 3 },
-  { id: 'mochila-loterias', nome: 'Mochila CAIXA Loterias', desc: 'Mochila cinza estruturada de alta resistência com o logo oficial da CAIXA Loterias em destaque, amplo espaço interno e bolsos laterais telados.', foto: 'mochila-loterias.jpg', peso: 3.6, estoqueTotal: 3 },
-  { id: 'maleta-churrasco', nome: 'Maleta de churrasco', desc: 'Maleta de alumínio estruturada com cantoneiras reforçadas e placa central lisa para personalização.', foto: 'maleta-churrasco.jpg?v=2', peso: 3.2, estoqueTotal: 4 },
-  { id: 'kit-uau', nome: 'Kit UAU', desc: 'Kit completo com ecobag/sacochila de algodão CAIXA, nécessaire preta compacta CAIXA Cartões e camisa polo azul embalada individualmente.', foto: 'kit-uau.jpg', peso: 2.8, estoqueTotal: 42 },
-  { id: 'carregador-gocase', nome: 'Carregador Gocase', desc: 'Power bank Gocase 10.000mAh na cor azul tiffany, com carregamento rápido, saídas USB-C e USB-A e lanterna integrada.', foto: 'carregador-gocase.jpg', peso: 2.8, estoqueTotal: 2 },
-  { id: 'bolsa-cop30', nome: 'Bolsa COP 30', desc: 'Estojo rígido multiuso com zíper e alça transversal removível, estampa temática da fauna e flora do Pampa e chancela CAIXA.', foto: 'bolsa-cop30.jpg', peso: 1.8, estoqueTotal: 6 },
-  { id: 'garrafinha', nome: 'Garrafinha', desc: 'Embalagem cartonada rígida na cor preta com ilustração minimalista em linha branca de uma garrafa térmica.', foto: 'garrafinha.jpg', peso: 1.6, estoqueTotal: 3 },
-  { id: 'xicaras-pires', nome: 'Jogo de xícaras', desc: 'Embalagem decorativa preta com estampa geométrica em tons de roxo e dourado, com visor circular que exibe copos para café espresso.', foto: 'xicaras-pires.jpg?v=2', peso: 1.5, estoqueTotal: 3 },
-  { id: 'xicara-2pecas', nome: 'Jogo de xícara (2 peças)', desc: 'Par de copos de vidro com parede dupla (isolamento térmico) personalizados CAIXA, acompanhados de caixa de apresentação exclusiva.', foto: 'xicara-2pecas.jpg?v=2', peso: 1.5, estoqueTotal: 10 },
-  { id: 'bone-caixa', nome: 'Boné CAIXA', desc: 'Boné azul marinho clássico, aba curvada, costuras pespontadas em tom contrastante e bordado oficial da CAIXA.', foto: 'bone-caixa.jpg', peso: 1.4, estoqueTotal: 7 },
-  { id: 'necessaire', nome: 'Necessaire', desc: 'Nécessaire estruturada em tom coral/salmão, estampa inspirada na Caatinga e os dizeres "É da nossa natureza fazer acontecer - Caixa Brasil".', foto: 'necessaire.jpg', peso: 1.0, estoqueTotal: 7 },
-  { id: 'mouse-pad', nome: 'Desk Pad', desc: 'Desk pad estendido em couro sintético preto de alta qualidade, com acabamento costurado nas bordas.', foto: 'mouse-pad.jpg', peso: 0.6, estoqueTotal: 3 },
+  { id: 'mochila-seguridade', nome: 'Mochila CAIXA Seguridade', desc: 'Mochila executiva cinza mescla, compartimentos espaçosos, bolsos laterais em redinha e placa metálica personalizada com a marca.', foto: 'mochila-seguridade.jpg', peso: 4.8, estoqueTotal: 2 },
+  { id: 'mochila-caixa', nome: 'Mochila CAIXA', desc: 'Modelo clássico de mochila cinza corporativa com acabamento texturizado e placa metálica discreta da CAIXA.', foto: 'mochila-caixa.jpg', peso: 3.6, estoqueTotal: 5 },
+  { id: 'mochila-loterias', nome: 'Mochila CAIXA Loterias', desc: 'Mochila cinza estruturada de alta resistência com o logo oficial da CAIXA Loterias em destaque, amplo espaço interno e bolsos laterais telados.', foto: 'mochila-loterias.jpg', peso: 3.6, estoqueTotal: 9 },
+  { id: 'maleta-churrasco', nome: 'Maleta de churrasco', desc: 'Maleta de alumínio estruturada com cantoneiras reforçadas e placa central lisa para personalização.', foto: 'maleta-churrasco.jpg?v=2', peso: 5.6, estoqueTotal: 6 },
+  { id: 'kit-uau', nome: 'Kit UAU', desc: 'Kit completo com ecobag/sacochila de algodão CAIXA, nécessaire preta compacta CAIXA Cartões e camisa polo azul embalada individualmente.', foto: 'kit-uau.jpg', peso: 2.8, estoqueTotal: 59 },
+  { id: 'carregador-gocase', nome: 'Carregador Gocase', desc: 'Power bank Gocase 10.000mAh na cor azul tiffany, com carregamento rápido, saídas USB-C e USB-A e lanterna integrada.', foto: 'carregador-gocase.jpg', peso: 3.4, estoqueTotal: 3, fit: 'cover' },
+  { id: 'bolsa-cop30', nome: 'Bolsa COP 30', desc: 'Estojo rígido multiuso com zíper e alça transversal removível, estampa temática da fauna e flora do Pampa e chancela CAIXA.', foto: 'bolsa-cop30.jpg', peso: 1.8, estoqueTotal: 8 },
+  { id: 'garrafinha', nome: 'Garrafinha', desc: 'Garrafa térmica branca com ilustração infantil colorida (sol, nuvens e casinhas) e a marca CAIXA Residencial.', foto: 'garrafinha.jpg', peso: 3.4, estoqueTotal: 4, fit: 'cover' },
+  { id: 'xicaras-pires', nome: 'Jogo de xícaras Tipo 1', desc: 'Embalagem decorativa preta com estampa geométrica em tons de roxo e dourado, com visor circular que exibe copos para café espresso.', foto: 'xicaras-pires.jpg?v=2', peso: 3.2, estoqueTotal: 4 },
+  { id: 'xicara-2pecas', nome: 'Jogo de xícaras Tipo 2', desc: 'Par de copos de vidro com parede dupla (isolamento térmico) personalizados CAIXA, acompanhados de caixa de apresentação exclusiva.', foto: 'xicara-2pecas.jpg?v=2', peso: 3.2, estoqueTotal: 10 },
+  { id: 'bone-caixa', nome: 'Boné CAIXA', desc: 'Boné azul marinho clássico, aba curvada, costuras pespontadas em tom contrastante e bordado oficial da CAIXA.', foto: 'bone-caixa.jpg', peso: 1.4, estoqueTotal: 6, fit: 'cover' },
+  { id: 'necessaire', nome: 'Necessaire', desc: 'Nécessaire estruturada em tom coral/salmão, estampa inspirada na Caatinga e os dizeres "É da nossa natureza fazer acontecer - Caixa Brasil".', foto: 'necessaire.jpg', peso: 1.0, estoqueTotal: 6 },
+  { id: 'mouse-pad', nome: 'Desk Pad', desc: 'Desk pad estendido em couro sintético preto de alta qualidade, com acabamento costurado nas bordas.', foto: 'mouse-pad.jpg', peso: 0.6, estoqueTotal: 4, fit: 'cover' },
+  { id: 'copo-caixa', nome: 'Copo CAIXA Térmico', desc: 'Copo térmico de aço inox 360ml, tampa com abertura para canudo e a marca CAIXA impressa no corpo azul marinho.', foto: 'copo-caixa.jpg', peso: 3.2, estoqueTotal: 5, fit: 'cover' },
   { id: 'moleskine-seguridade-caneta', nome: 'Moleskine Seguridade c/ caneta', desc: 'Caderno executivo azul com elástico vertical na cor azul royal, caneta metálica encaixada na lateral e estampa da CAIXA Seguridade.', foto: 'moleskine-seguridade-caneta.jpg', peso: 0.3, estoqueTotal: 8 },
   { id: 'moleskine-caneta-asset', nome: 'Moleskine com caneta CAIXA Asset', desc: 'Kit em caixa preta com caderno executivo preto e caneta esferográfica metálica preta, ambos com a marca "CAIXA Asset".', foto: 'moleskine-caneta-asset.jpg', peso: 0.35, estoqueTotal: 2 },
-  { id: 'moleskine-seguridade-10anos', nome: 'Moleskine CAIXA Seguridade', desc: 'Caderno especial comemorativo de 10 Anos da CAIXA Seguridade, com design degradê em tons de azul e rosa, fechamento em elástico e caneta metálica inclusa.', foto: 'moleskine-seguridade-10anos.jpg', peso: 0.3, estoqueTotal: 1 },
-  { id: 'moleskine-loterias', nome: 'Moleskine CAIXA Loterias', desc: 'Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.', foto: 'moleskine-loterias.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 138 },
-  { id: 'moleskine-x', nome: 'Moleskine X', desc: 'Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.', foto: 'moleskine-x.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 142 },
+  { id: 'moleskine-seguridade-10anos', nome: 'Moleskine CAIXA Seguridade', desc: 'Caderno especial comemorativo de 10 Anos da CAIXA Seguridade, com design degradê em tons de azul e rosa, fechamento em elástico e caneta metálica inclusa.', foto: 'moleskine-seguridade-10anos.jpg', peso: 0.3, estoqueTotal: 2 },
+  { id: 'moleskine-loterias', nome: 'Moleskine CAIXA Loterias', desc: 'Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.', foto: 'moleskine-loterias.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 198 },
+  { id: 'moleskine-x', nome: 'Moleskine X', desc: 'Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.', foto: 'moleskine-x.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 204 },
   { id: 'bloco-rapidex', nome: 'Bloco Rapidex', desc: 'Caderno corporativo com capa em tons de azul e detalhes geométricos coloridos nas bordas, com a marca "Rapidex" em destaque.', foto: 'bloco-rapidex.jpg', peso: 0.6, estoqueTotal: 10 },
   { id: 'canetas', nome: 'Canetas', desc: 'Caneta CAIXA para o dia a dia.', foto: '', peso: 0.2, estoqueTotal: 139 },
   { id: 'pasta-executiva', nome: 'Pasta executiva CAIXA Asset', desc: 'Pasta executiva em material sintético preto com fecho por trava metálica, bloco de anotações e caneta inclusos, e placa "CAIXA Asset" na capa.', foto: 'pasta-executiva.jpg', peso: 3.4, estoqueTotal: 2 },
-  { id: 'carregador-wireless', nome: 'Carregador Wireless CAIXA Asset', desc: 'Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca "CAIXA Asset" em destaque, com cabo e caixa individual.', foto: 'carregador-wireless.jpg', peso: 2.4, estoqueTotal: 1 },
+  { id: 'carregador-wireless', nome: 'Carregador Wireless CAIXA Asset', desc: 'Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca "CAIXA Asset" em destaque, com cabo e caixa individual.', foto: 'carregador-wireless.jpg', peso: 3.0, estoqueTotal: 1 },
 ];
 
 const MANUAL_SECOES = [
@@ -2850,9 +2865,9 @@ const ITENS_SEM_CONTATO = ['CIAUS Brasília', 'CIAUS São Paulo', 'GEIMP', 'GNP'
 // na distribuição original); cada mala tira uma fatia desse total para cobrir a meta de SP (estoqueSP).
 const BSB_ORIGEM_TOTAL = {
   'moleskine-seguridade-10anos': 2, 'bloco-rapidex': 15, 'moleskine-seguridade-caneta': 11, 'garrafinha': 4,
-  'carregador-gocase': 3, 'xicaras-pires': 4, 'maleta-churrasco': 6, 'kit-uau': 60, 'moleskine-loterias': 198,
-  'mouse-pad': 4, 'moleskine-x': 204, 'necessaire': 10, 'bone-caixa': 10, 'bolsa-cop30': 9, 'xicara-2pecas': 15,
-  'mochila-caixa': 5, 'mochila-loterias': 5, 'mochila-seguridade': 6, 'canetas': 200, 'power-bank': 1,
+  'carregador-gocase': 3, 'xicaras-pires': 4, 'maleta-churrasco': 6, 'kit-uau': 59, 'moleskine-loterias': 198,
+  'mouse-pad': 4, 'moleskine-x': 204, 'necessaire': 6, 'bone-caixa': 10, 'bolsa-cop30': 8, 'xicara-2pecas': 15,
+  'mochila-caixa': 5, 'mochila-loterias': 9, 'mochila-seguridade': 2, 'canetas': 200, 'power-bank': 1,
 };
 const MALAS_BSB_SP = [
   { id: 'troes', passageiro: 'Troes', data: '07/08/2026', chegada: '14h', conteudoItens: [
@@ -2882,6 +2897,7 @@ class Component extends DCLogic {
     avisosAtualizacoesAberto: false,
     nameQuery: '',
     pessoaFiltro: 'todos',
+    maisFiltrosAberto: false,
     clima: null,
     climaErro: false,
     meuNome: '',
@@ -3329,6 +3345,12 @@ class Component extends DCLogic {
     return n;
   };
   pontosTotalDe = (nome) => this.calcularPontosFeitos(nome).length + this.contarAcertosQuiz(nome);
+  temAcaoRealDe = (nome) => {
+    if (this.valor('ps-' + nome) || this.valor('rt-' + nome) || this.valor('cs-' + nome) || this.valor('cf-' + nome) || this.valor('pp-' + nome) || this.valor('pcd-' + nome)) return true;
+    const npsEntry = this.state.sync['nps-' + nome];
+    if (npsEntry && npsEntry.v && (typeof npsEntry.v.nota === 'number' || (npsEntry.v.paineis && Object.keys(npsEntry.v.paineis).length))) return true;
+    return this.contarAcertosQuiz(nome) > 0;
+  };
   contarAcertosQuiz = (nome) => {
     let n = 0;
     Object.keys(this.state.sync).forEach(k => {
@@ -3596,17 +3618,19 @@ class Component extends DCLogic {
     this.setCampos({ ['cd-' + nome]: this.valor('cd-' + nome) === cidade ? '' : cidade });
   };
   setPessoaFiltro = (id) => () => this.setState({ pessoaFiltro: id });
+  toggleMaisFiltros = () => this.setState(s => ({ maisFiltrosAberto: !s.maisFiltrosAberto }));
   setRestricaoFiltro = (v) => () => this.setState(s => ({ restricaoFiltro: s.restricaoFiltro === v ? '' : v }));
   setCamisaFiltro = (size) => () => this.setState(s => ({ camisaFiltro: s.camisaFiltro === size ? '' : size }));
   setCamisaModFiltro = (mod) => () => this.setState(s => ({ camisaModFiltro: s.camisaModFiltro === mod ? '' : mod }));
   setConfFiltro = (v) => () => this.setState(s => ({ confFiltro: s.confFiltro === v ? '' : v }));
   setPPFiltro = (v) => () => this.setState(s => ({ ppFiltro: s.ppFiltro === v ? '' : v }));
   setMesaFiltro = (v) => () => this.setState(s => ({ mesaFiltro: s.mesaFiltro === v ? '' : v }));
-  setPresencaFiltro = () => this.setState(s => ({ presencaFiltro: s.presencaFiltro === '' ? 'sim' : (s.presencaFiltro === 'sim' ? 'nao' : '') }));
-  setKitFiltro = () => this.setState(s => ({ kitFiltro: s.kitFiltro === '' ? 'sim' : (s.kitFiltro === 'sim' ? 'nao' : '') }));
+  setPresencaFiltro = (v) => () => this.setState(s => ({ presencaFiltro: s.presencaFiltro === v ? '' : v }));
+  setKitFiltro = (v) => () => this.setState(s => ({ kitFiltro: s.kitFiltro === v ? '' : v }));
+  setPcdFiltro = (v) => () => this.setState(s => ({ pcdFiltro: s.pcdFiltro === v ? '' : v }));
   limparTodosFiltros = () => this.setState({
     pessoaFiltro: 'todos', pessoaUnidade: '', nameQuery: '', camisaFiltro: '', camisaModFiltro: '',
-    confFiltro: '', mesaFiltro: '', presencaFiltro: '', kitFiltro: '', restricaoFiltro: '', ppFiltro: '',
+    confFiltro: '', mesaFiltro: '', presencaFiltro: '', kitFiltro: '', restricaoFiltro: '', ppFiltro: '', pcdFiltro: '',
   });
   onNumMesas = (e) => {
     const v = parseInt(e.target.value, 10);
@@ -3722,12 +3746,6 @@ class Component extends DCLogic {
   preventDrag = (e) => e.preventDefault();
   dragStartNoop = (e) => { try { e.dataTransfer.setData('text/plain', '1'); } catch (err) {} };
   setChecklistView = (v) => () => this.setState({ checklistView: v });
-  updateBrindeQtd = (key) => (e) => this.setCampos({ ['brqtd-' + key]: e.target.value === '' ? '' : Number(e.target.value) });
-  cycleBrindeStatus = (key, def) => () => {
-    const cur = this.valor('brst-' + key) || def;
-    const idx = BRINDES_STATUS_ORDER.indexOf(cur);
-    this.setCampos({ ['brst-' + key]: BRINDES_STATUS_ORDER[(idx + 1) % BRINDES_STATUS_ORDER.length] });
-  };
   clearPrazo = (key) => (e) => { e.stopPropagation(); this.setCampos({ ['pz-' + key]: '' }); };
   setContatosView = (v) => () => this.setState({ contatosView: v });
   toggleAcc = (key) => () => this.setState(s => ({ orgAcc: { ...(s.orgAcc || {}), [key]: !(s.orgAcc || {})[key] } }));
@@ -3930,26 +3948,6 @@ class Component extends DCLogic {
     }
     const ganttWidth = 220 + totalDays * DW;
 
-    const brindesRows = BRINDES_ITENS.map(b => {
-      const qtdRaw = gv('brqtd-' + b.key);
-      const qtd = (qtdRaw === undefined || qtdRaw === '') ? b.qtdDefault : Number(qtdRaw);
-      const statusId = this.valor('brst-' + b.key) || b.status;
-      const st = BRINDES_STATUS[statusId];
-      const cobre = qtd !== null && qtd !== undefined && qtd >= TOTAL_PARTICIPANTES_EVENTO;
-      return {
-        key: b.key, area: b.area, contato: b.contato, item: b.item,
-        qtdValue: qtd === null || qtd === undefined ? '' : qtd,
-        qtdTexto: b.qtdTexto || '', hasQtdTexto: !!b.qtdTexto && (qtd === null || qtd === undefined),
-        onQtdChange: this.updateBrindeQtd(b.key),
-        statusLabel: st.label, statusBg: st.bg, statusColor: st.color, toggleStatus: this.cycleBrindeStatus(b.key, b.status),
-        logistica: b.logistica, hasLogistica: !!b.logistica, obs: b.obs, hasObs: !!b.obs,
-        cobreTodos: cobre, cobreLabel: cobre ? 'Cobre os ' + TOTAL_PARTICIPANTES_EVENTO + ' sozinho' : '',
-      };
-    });
-    const brindesConfirmadosTotal = brindesRows.filter(r => r.statusLabel === 'Confirmado' && typeof r.qtdValue === 'number').reduce((a, r) => a + r.qtdValue, 0);
-    const brindesItensGarantidos = brindesRows.filter(r => r.cobreTodos).length;
-    const brindesPendencias = BRINDES_PENDENCIAS;
-
     const respostasSet = new Set();
     checklistCats.forEach(cat => cat.items.forEach(it => { const r = (it.track.responsavel || '').trim(); if (r) respostasSet.add(r); }));
     const respFiltro = s.respFiltro || '';
@@ -4055,7 +4053,7 @@ class Component extends DCLogic {
     cityData.count = cityData.id === 'sp' ? spOnlyCountHero : bsbOnlyCountHero;
     cityData.pct = Math.round(100 * cityData.count / (spOnlyCountHero + bsbOnlyCountHero)) + '% do total';
     const semCidadeCount = PARTICIPANTES.filter(n => !cidadeDe(n) && !infoDe(n).d).length;
-    const presentesCount = PARTICIPANTES.filter(n => gv('ps-' + n)).length;
+    const presentesCount = PARTICIPANTES.filter(n => gv('ps-' + n) && (cidadeDe(n) || infoDe(n).d)).length;
     const presentesSP = PARTICIPANTES.filter(n => gv('ps-' + n) && cidadeDe(n) === 'sp').length;
     const presentesBSB = PARTICIPANTES.filter(n => gv('ps-' + n) && cidadeDe(n) === 'bsb').length;
     const kitsCount = PARTICIPANTES.filter(n => gv('kit-' + n)).length;
@@ -4076,7 +4074,11 @@ class Component extends DCLogic {
         if (s.camisaModFiltro === 'sem') { if (cm) return false; }
         else if (cm !== s.camisaModFiltro) return false;
       }
-      if (s.confFiltro && gv('cf-' + n) !== s.confFiltro) return false;
+      if (s.confFiltro) {
+        const cf = gv('cf-' + n);
+        if (s.confFiltro === 'sem_resposta') { if (cf) return false; }
+        else if (cf !== s.confFiltro) return false;
+      }
       if (s.ppFiltro) {
         const pp = gv('pp-' + n);
         if (s.ppFiltro === 'sem_resposta') { if (pp) return false; }
@@ -4088,6 +4090,11 @@ class Component extends DCLogic {
         else if (s.restricaoFiltro === 'nenhuma') { if (rt !== 'Nenhuma') return false; }
         else if (s.restricaoFiltro === 'sem_resposta') { if (rt) return false; }
         else if (rt !== s.restricaoFiltro) return false;
+      }
+      if (s.pcdFiltro) {
+        const pv = gv('pcd-' + n);
+        if (s.pcdFiltro === 'sem_resposta') { if (pv) return false; }
+        else if (pv !== s.pcdFiltro) return false;
       }
       if (s.mesaFiltro && mesaDe(n) !== s.mesaFiltro) return false;
       if (s.presencaFiltro === 'sim' && !gv('ps-' + n)) return false;
@@ -4176,7 +4183,7 @@ class Component extends DCLogic {
     let camisaFaltamCount = 0;
     const camisaModCount = { Feminina: 0, Masculina: 0 };
     let camisaModFaltamCount = 0;
-    baseFiltrado.forEach(n => {
+    baseCatering.forEach(n => {
       const cs = gv('cs-' + n) || infoDe(n).cs || '';
       if (cs && camisaSizeCount[cs] !== undefined) camisaSizeCount[cs]++;
       else camisaFaltamCount++;
@@ -4228,6 +4235,83 @@ class Component extends DCLogic {
     const presencaPreviaNaoCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Não').length;
     const presencaPreviaTalvezCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Talvez').length;
     const presencaPreviaSemRespostaCount = baseFiltrado.length - presencaPreviaSimCount - presencaPreviaNaoCount - presencaPreviaTalvezCount;
+    const confraternizacaoSemRespostaCount = baseCatering.length - confraternizacaoSimCount - confraternizacaoNaoCount - confraternizacaoTalvezCount;
+    const barChart = (defs, activeVal, onClickFor) => {
+      const total = defs.reduce((a, d) => a + d.n, 0) || 1;
+      const max = Math.max(1, ...defs.map(d => d.n));
+      return defs.map(d => {
+        const ativo = activeVal === d.id;
+        return {
+          id: d.id, nome: d.nome, n: d.n, cor: d.cor, onClick: onClickFor(d.id),
+          pctLabel: Math.round(100 * d.n / total) + '%',
+          barPct: Math.max(2, Math.round(100 * d.n / max)),
+          rowBg: ativo ? d.tint : 'transparent', textColor: ativo ? d.cor : '#002855',
+        };
+      });
+    };
+    const ppChart = barChart([
+      { id: 'Sim', nome: 'Vão', n: presencaPreviaSimCount, cor: '#1E7A45', tint: '#E7F5EC' },
+      { id: 'Não', nome: 'Não vão', n: presencaPreviaNaoCount, cor: '#C0392B', tint: '#FBEAE8' },
+      { id: 'Talvez', nome: 'Talvez', n: presencaPreviaTalvezCount, cor: '#F39200', tint: '#FDECC8' },
+      { id: 'sem_resposta', nome: 'Sem resposta', n: presencaPreviaSemRespostaCount, cor: '#8A8A90', tint: '#F0F0F1' },
+    ], s.ppFiltro, (id) => this.setPPFiltro(id));
+    const confChart = barChart([
+      { id: 'Sim', nome: 'Vão', n: confraternizacaoSimCount, cor: '#1E7A45', tint: '#E7F5EC' },
+      { id: 'Não', nome: 'Não vão', n: confraternizacaoNaoCount, cor: '#C0392B', tint: '#FBEAE8' },
+      { id: 'Talvez', nome: 'Talvez', n: confraternizacaoTalvezCount, cor: '#F39200', tint: '#FDECC8' },
+      { id: 'sem_resposta', nome: 'Sem resposta', n: confraternizacaoSemRespostaCount, cor: '#8A8A90', tint: '#F0F0F1' },
+    ], s.confFiltro, (id) => this.setConfFiltro(id));
+    const restricaoDefs = [
+      { id: 'qualquer', nome: 'Com restrição', n: restricaoQualquerCount, cor: '#8A5A0B', tint: '#FDECC8' },
+      ...restricaoStats.map(r => ({ id: r.tipo, nome: r.tipo, n: r.n, cor: '#8A5A0B', tint: '#FDECC8' })),
+      { id: 'nenhuma', nome: 'Nenhuma', n: restricaoNenhumaCount, cor: '#8A8A90', tint: '#F0F0F1' },
+      { id: 'sem_resposta', nome: 'Sem resposta', n: restricaoSemRespostaCount, cor: '#8A8A90', tint: '#F0F0F1' },
+    ];
+    const restricaoChart = barChart(restricaoDefs, s.restricaoFiltro, (id) => this.setRestricaoFiltro(id));
+    const pcdSimCount = baseCatering.filter(n => gv('pcd-' + n) === 'Sim').length;
+    const pcdNaoCount = baseCatering.filter(n => gv('pcd-' + n) === 'Não').length;
+    const pcdSemRespostaCount = baseCatering.length - pcdSimCount - pcdNaoCount;
+    const pcdChart = barChart([
+      { id: 'Sim', nome: 'Precisa de apoio', n: pcdSimCount, cor: '#B02D1C', tint: '#FBE3E0' },
+      { id: 'Não', nome: 'Não precisa', n: pcdNaoCount, cor: '#1E7A45', tint: '#E7F5EC' },
+      { id: 'sem_resposta', nome: 'Sem resposta', n: pcdSemRespostaCount, cor: '#8A8A90', tint: '#F0F0F1' },
+    ], s.pcdFiltro, (id) => this.setPcdFiltro(id));
+    const presencaChart = barChart([
+      { id: 'sim', nome: 'Confirmado', n: presentesCount, cor: '#0057A6', tint: '#E8EFF9' },
+      { id: 'nao', nome: 'Pendente', n: participantesCatering - presentesCount, cor: '#8A8A90', tint: '#F0F0F1' },
+    ], s.presencaFiltro, (id) => this.setPresencaFiltro(id));
+    const camisaTamanhoChart = barChart([
+      { id: 'P', nome: 'P', n: camisaSizeCount.P, cor: '#0057A6', tint: '#E8EFF9' },
+      { id: 'M', nome: 'M', n: camisaSizeCount.M, cor: '#0057A6', tint: '#E8EFF9' },
+      { id: 'G', nome: 'G', n: camisaSizeCount.G, cor: '#0057A6', tint: '#E8EFF9' },
+      { id: 'GG', nome: 'GG', n: camisaSizeCount.GG, cor: '#0057A6', tint: '#E8EFF9' },
+      { id: 'EGG', nome: 'EGG', n: camisaSizeCount.EGG, cor: '#0057A6', tint: '#E8EFF9' },
+      { id: 'sem', nome: 'Sem tamanho', n: camisaFaltamCount, cor: '#C0392B', tint: '#FBEAE8' },
+    ], s.camisaFiltro, (id) => this.setCamisaFiltro(id));
+    const camisaModChart = barChart([
+      { id: 'Feminina', nome: 'Feminina', n: camisaModCount.Feminina, cor: '#0057A6', tint: '#E8EFF9' },
+      { id: 'Masculina', nome: 'Masculina', n: camisaModCount.Masculina, cor: '#0057A6', tint: '#E8EFF9' },
+      { id: 'sem', nome: 'Sem sexo', n: camisaModFaltamCount, cor: '#C0392B', tint: '#FBEAE8' },
+    ], s.camisaModFiltro, (id) => this.setCamisaModFiltro(id));
+    const kitsCountFiltrado = baseCatering.filter(n => gv('kit-' + n)).length;
+    const camisaEntregaChart = barChart([
+      { id: 'sim', nome: 'Entregue', n: kitsCountFiltrado, cor: '#1E7A45', tint: '#E7F5EC' },
+      { id: 'nao', nome: 'Pendente', n: baseCatering.length - kitsCountFiltrado, cor: '#C0392B', tint: '#FBEAE8' },
+    ], s.kitFiltro, (id) => this.setKitFiltro(id));
+    const unidadeBaseFilter = (n) => {
+      if (q && !norm(n).includes(q)) return false;
+      if (s.pessoaFiltro !== 'ambas' && infoDe(n).d) return false;
+      if (s.pessoaFiltro !== 'sem' && s.pessoaFiltro !== 'ambas' && !cidadeDe(n) && !infoDe(n).d) return false;
+      if (s.pessoaFiltro === 'sp') { if (!(cidadeDe(n) === 'sp' && !infoDe(n).d)) return false; }
+      else if (s.pessoaFiltro === 'bsb') { if (!(cidadeDe(n) === 'bsb' && !infoDe(n).d)) return false; }
+      else if (s.pessoaFiltro === 'ambas') { if (!infoDe(n).d) return false; }
+      else if (s.pessoaFiltro === 'sem') { if (cidadeDe(n) || infoDe(n).d) return false; }
+      return true;
+    };
+    const unidadeCountMap = {};
+    PARTICIPANTES.filter(unidadeBaseFilter).forEach(n => { const u = infoDe(n).u; if (u) unidadeCountMap[u] = (unidadeCountMap[u] || 0) + 1; });
+    const unidadeChartDefs = unidadesSet.map(u => ({ id: u, nome: u, n: unidadeCountMap[u] || 0, cor: '#0057A6', tint: '#E7F0FA' }));
+    const unidadeChart = barChart(unidadeChartDefs, s.pessoaUnidade, (id) => () => this.setState(st => ({ pessoaUnidade: st.pessoaUnidade === id ? '' : id })));
     const confSPBSB = (val) => {
       const sp = baseCatering.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'sp').length;
       const bsb = baseCatering.filter(n => gv('cf-' + n) === val && cidadeDe(n) === 'bsb').length;
@@ -4292,6 +4376,51 @@ class Component extends DCLogic {
       bg: s.pessoaFiltro === x.id ? '#0057A6' : '#FFFFFF',
       color: s.pessoaFiltro === x.id ? '#FFFFFF' : '#002855',
     }));
+
+    const tintMap = { sp: '#E7F0FA', bsb: '#FDECC8', ambas: '#FBEFDD', sem: '#F0F0F1' };
+    const gruposDefs = [
+      { id: 'sp', nome: 'São Paulo · participa das dinâmicas', n: spOnlyCount, cor: '#0057A6' },
+      { id: 'bsb', nome: 'Brasília · participa das dinâmicas', n: bsbOnlyCount, cor: '#F39200' },
+      { id: 'ambas', nome: 'Organização + Gestores · fora das dinâmicas', n: dualCount, cor: '#8A5A0B' },
+      { id: 'sem', nome: 'Licenças e afins · fora das dinâmicas', n: semCidadeCount, cor: '#8A8A90' },
+    ];
+    const grupoFiltroAtivo = !!(s.pessoaFiltro && s.pessoaFiltro !== 'todos');
+    const gruposSum = (spOnlyCount + bsbOnlyCount + dualCount + semCidadeCount) || 1;
+    const DONUT_R = 60, DONUT_CIRC = 2 * Math.PI * DONUT_R;
+    let donutAcc = 0;
+    const gruposChart = gruposDefs.map(g => {
+      const ativo = s.pessoaFiltro === g.id;
+      const pct = Math.round(100 * g.n / gruposSum);
+      const len = DONUT_CIRC * g.n / gruposSum;
+      const seg = {
+        id: g.id, nome: g.nome, n: g.n, cor: g.cor, onClick: this.setPessoaFiltro(g.id),
+        pctLabel: pct + '%',
+        dashArray: len.toFixed(1) + ' ' + (DONUT_CIRC - len).toFixed(1),
+        dashOffset: (-donutAcc).toFixed(1),
+        opacity: !grupoFiltroAtivo || ativo ? 1 : 0.3,
+        rowBg: ativo ? tintMap[g.id] : '#FFFFFF',
+        rowBorder: ativo ? g.cor : '#DCE6F2',
+        textColor: ativo ? g.cor : '#002855',
+      };
+      donutAcc += len;
+      return seg;
+    });
+    const verTodosGrupos = this.setPessoaFiltro('todos');
+    const nomeGrupoMap = { sp: 'São Paulo', bsb: 'Brasília', ambas: 'Organização + Gestores', sem: 'Licenças e afins' };
+    const filtroPartes = [];
+    if (grupoFiltroAtivo) filtroPartes.push(nomeGrupoMap[s.pessoaFiltro] || s.pessoaFiltro);
+    if (s.pessoaUnidade) filtroPartes.push('Área: ' + s.pessoaUnidade);
+    if (s.nameQuery) filtroPartes.push('Nome: "' + s.nameQuery + '"');
+    if (s.camisaFiltro) filtroPartes.push('Camiseta: ' + s.camisaFiltro);
+    if (s.camisaModFiltro) filtroPartes.push('Modelagem: ' + s.camisaModFiltro);
+    if (s.confFiltro) filtroPartes.push('Confraternização: ' + s.confFiltro);
+    if (s.ppFiltro) filtroPartes.push('Pretende ir: ' + s.ppFiltro);
+    if (s.restricaoFiltro) filtroPartes.push('Restrição: ' + s.restricaoFiltro);
+    if (s.mesaFiltro) filtroPartes.push('Mesa: ' + s.mesaFiltro);
+    if (s.presencaFiltro) filtroPartes.push('Presença confirmada: ' + (s.presencaFiltro === 'sim' ? 'sim' : 'não'));
+    if (s.kitFiltro) filtroPartes.push('Camiseta entregue: ' + (s.kitFiltro === 'sim' ? 'sim' : 'não'));
+    if (s.pcdFiltro) filtroPartes.push('Necessidade especial: ' + s.pcdFiltro);
+    const filtrosAtivosResumo = filtroPartes.join(' · ');
 
     const WMO = {
       0: ['Céu limpo', 'sol'], 1: ['Predomínio de sol', 'sol'], 2: ['Parcialmente nublado', 'nuvem'], 3: ['Nublado', 'nuvem'],
@@ -4528,7 +4657,7 @@ class Component extends DCLogic {
     const maxOrcN = Math.max(1, orcTotal, comprometidoTotal);
     const orcBarW = Math.round(100 * orcTotal / maxOrcN) + '%';
     const realBarW = Math.round(100 * comprometidoTotal / maxOrcN) + '%';
-    const presencaPct = Math.round(100 * presentesCount / PARTICIPANTES.length) + '%';
+    const presencaPct = Math.round(100 * presentesCount / Math.max(1, participantesCatering)) + '%';
     const kitPct = Math.round(100 * kitsCount / PARTICIPANTES.length) + '%';
 
     // donut: status das tarefas
@@ -4636,7 +4765,7 @@ class Component extends DCLogic {
       const origensLabels = PONTOS_ACOES.filter(a => feitosN.indexOf(a.key) !== -1).map(a => a.label);
       if (acertosQuizN > 0) origensLabels.push('Detetive VIART (' + acertosQuizN + ' acerto' + (acertosQuizN > 1 ? 's' : '') + ')');
       const resgatesArr = BRINDES_MARKETPLACE.filter(b => this.valor('brinde-' + b.id + '-' + n));
-      return { nome: n, cidade: cidadeDe(n) === 'sp' ? 'SP' : 'BSB', area: infoDe(n).u ? infoDe(n).u.split(' - ')[0] : '—', pontos: pts, resgatesCount: resgatesArr.length, resgates: resgatesArr.map(b => b.nome).join(', ') || '—', origens: origensLabels.length ? origensLabels.join(' · ') : 'Nenhum ponto ainda' };
+      return { nome: n, cidade: cidadeDe(n) === 'sp' ? 'SP' : 'BSB', area: infoDe(n).u ? infoDe(n).u.split(' - ')[0] : '—', pontos: pts, ativoReal: this.temAcaoRealDe(n), resgatesCount: resgatesArr.length, resgates: resgatesArr.map(b => b.nome).join(', ') || '—', origens: origensLabels.length ? origensLabels.join(' · ') : 'Nenhum ponto ainda' };
     }).sort((a, b) => b.pontos - a.pontos);
     const areaGroupsEngajamento = {};
     pontosRankingView.forEach(p => {
@@ -4644,13 +4773,27 @@ class Component extends DCLogic {
       if (!areaGroupsEngajamento[key]) areaGroupsEngajamento[key] = { area: key, pessoas: 0, pontos: 0, ativos: 0 };
       areaGroupsEngajamento[key].pessoas++;
       areaGroupsEngajamento[key].pontos += p.pontos;
-      if (p.pontos > 0) areaGroupsEngajamento[key].ativos++;
+      if (p.ativoReal) areaGroupsEngajamento[key].ativos++;
     });
     const areaEngajamentoView = Object.values(areaGroupsEngajamento).map(g => ({
       area: g.area, pessoas: g.pessoas,
       media: g.pessoas ? Math.round(10 * g.pontos / g.pessoas) / 10 : 0,
       participacaoPct: g.pessoas ? Math.round(100 * g.ativos / g.pessoas) : 0,
     })).sort((a, b) => b.media - a.media);
+    const AREA_PIE_CORES = ['#0057A6', '#F39200', '#1E7A45', '#7C4DFF', '#B4471F', '#00897B', '#8A5A0B', '#5C6BC0', '#C2185B', '#455A64'];
+    const areaPessoasTotal = Math.max(1, areaEngajamentoView.reduce((a, g) => a + g.pessoas, 0));
+    const AREA_DONUT_R = 40, AREA_DONUT_CIRC = 2 * Math.PI * AREA_DONUT_R;
+    let areaDonutAcc = 0;
+    const areaEngajamentoChart = areaEngajamentoView.slice().sort((a, b) => b.pessoas - a.pessoas).map((g, i) => {
+      const pct = Math.round(100 * g.pessoas / areaPessoasTotal);
+      const len = AREA_DONUT_CIRC * g.pessoas / areaPessoasTotal;
+      const seg = { area: g.area, pessoas: g.pessoas, pct, media: g.media, participacaoPct: g.participacaoPct, cor: AREA_PIE_CORES[i % AREA_PIE_CORES.length],
+        dashArray: len.toFixed(1) + ' ' + (AREA_DONUT_CIRC - len).toFixed(1),
+        dashOffset: (-areaDonutAcc).toFixed(1),
+      };
+      areaDonutAcc += len;
+      return seg;
+    });
     const totalAtivosOrigem = PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d).length || 1;
     const origemPontosView = PONTOS_ACOES.map(a => {
       const count = Object.values(acoesPorNome).filter(f => f.indexOf(a.key) !== -1).length;
@@ -4674,7 +4817,7 @@ class Component extends DCLogic {
     const minResgates = pontosRankingView.length ? Math.min.apply(null, pontosRankingView.map(p => p.resgatesCount)) : 0;
     const empatadosResgateMin = pontosRankingView.filter(p => p.resgatesCount === minResgates);
     const label1 = (arr, valor, unidade) => arr.length === 0 ? '—' : (arr.length === 1 ? arr[0].nome : arr.length + ' pessoas empatadas');
-    const ativosComPonto = pontosRankingView.filter(p => p.pontos > 0).length;
+    const ativosComPonto = pontosRankingView.filter(p => p.ativoReal).length;
     const engajamentoDash = {
       totalPontos: totalPontosGeral,
       maisPontosNome: label1(empatadosMax), maisPontosValor: maxPontos,
@@ -4687,14 +4830,27 @@ class Component extends DCLogic {
       participacaoAtivos: ativosComPonto, participacaoZero: pontosRankingView.length - ativosComPonto,
       participacaoPct: pontosRankingView.length ? Math.round(100 * ativosComPonto / pontosRankingView.length) : 0,
     };
+    const engajTotalPontosCidades = Math.max(1, engajamentoDash.totalSP + engajamentoDash.totalBSB);
+    const engajSpPontosPct = Math.round(100 * engajamentoDash.totalSP / engajTotalPontosCidades);
+    const engajBsbPontosPct = 100 - engajSpPontosPct;
+    const engajTotalResgatesReal = engajamentoDash.resgatesSP + engajamentoDash.resgatesBSB;
+    const engajTotalResgates = Math.max(1, engajTotalResgatesReal);
+    const engajSpResgatesPct = engajTotalResgatesReal ? Math.round(100 * engajamentoDash.resgatesSP / engajTotalResgates) : 0;
+    const engajBsbResgatesPct = engajTotalResgatesReal ? (100 - engajSpResgatesPct) : 0;
+    const engajCidadeDonutBg = 'conic-gradient(#0057A6 0% ' + engajSpPontosPct + '%, #F39200 ' + engajSpPontosPct + '% 100%)';
+    const engajCidadeChart = [
+      { nome: 'São Paulo', cor: '#0057A6', total: engajamentoDash.totalSP, totalPct: engajSpPontosPct, media: engajamentoDash.mediaSP, resgates: engajamentoDash.resgatesSP, resgatesPct: engajSpResgatesPct },
+      { nome: 'Brasília', cor: '#F39200', total: engajamentoDash.totalBSB, totalPct: engajBsbPontosPct, media: engajamentoDash.mediaBSB, resgates: engajamentoDash.resgatesBSB, resgatesPct: engajBsbResgatesPct },
+    ];
     // Dash de estoque em tempo real: agrupa os 4 moleskines numa linha só, mostra
     // restante/total, preço atual em pontos e velocidade de saída (resgates nas últimas 24h)
     // para identificar o que está caindo rápido x encalhando.
-    const GRUPOS_BRINDES = { 'moleskine-seguridade-caneta': 'moleskines', 'moleskine-seguridade-10anos': 'moleskines', 'moleskine-loterias': 'moleskines', 'moleskine-x': 'moleskines' };
+    const GRUPOS_BRINDES = { 'moleskine-seguridade-caneta': 'moleskines', 'moleskine-seguridade-10anos': 'moleskines', 'moleskine-loterias': 'moleskines', 'moleskine-x': 'moleskines', 'moleskine-caneta-asset': 'moleskines', 'xicaras-pires': 'xicaras', 'xicara-2pecas': 'xicaras', 'mochila-seguridade': 'mochilas', 'mochila-caixa': 'mochilas', 'mochila-loterias': 'mochilas' };
+    const NOMES_GRUPO_BRINDES = { moleskines: 'Moleskines (todos)', xicaras: 'Jogo de xícaras (todos)', mochilas: 'Mochilas (todas)' };
     const gruposMapBrindes = {};
     BRINDES_MARKETPLACE.forEach(b => {
       const g = GRUPOS_BRINDES[b.id] || b.id;
-      if (!gruposMapBrindes[g]) gruposMapBrindes[g] = { nome: GRUPOS_BRINDES[b.id] ? 'Moleskines (todos)' : b.nome, total: 0, usado: 0, totalSP: 0, usadoSP: 0, totalBSB: 0, usadoBSB: 0, precoRef: null, velocidade24h: 0 };
+      if (!gruposMapBrindes[g]) gruposMapBrindes[g] = { nome: GRUPOS_BRINDES[b.id] ? NOMES_GRUPO_BRINDES[g] : b.nome, total: 0, usado: 0, totalSP: 0, usadoSP: 0, totalBSB: 0, usadoBSB: 0, precoRef: null, velocidade24h: 0, itens: [] };
       const grp = gruposMapBrindes[g];
       const usadoSPItem = this.contarResgates(b.id, 'sp');
       const usadoBSBItem = this.contarResgates(b.id, 'bsb');
@@ -4703,6 +4859,10 @@ class Component extends DCLogic {
       grp.totalBSB += estBSB; grp.usadoBSB += usadoBSBItem;
       grp.total += estSP + estBSB;
       grp.usado += usadoSPItem + usadoBSBItem;
+      grp.itens.push({
+        nome: b.nome, totalSP: estSP, totalBSB: estBSB, total: estSP + estBSB,
+        usadoSP: usadoSPItem, usadoBSB: usadoBSBItem, usado: usadoSPItem + usadoBSBItem,
+      });
       if (grp.precoRef === null) grp.precoRef = this.precoBrinde(b);
       const prefItem = 'brinde-' + b.id + '-';
       Object.keys(s.sync).forEach(k => {
@@ -4716,7 +4876,7 @@ class Component extends DCLogic {
       return {
         nome: g.nome, usado: g.usado, restante, total: g.total, pct: g.total ? Math.round(100 * g.usado / g.total) : 0,
         restanteSP, totalSP: g.totalSP, restanteBSB, totalBSB: g.totalBSB,
-        preco: g.precoRef, velocidade24h: g.velocidade24h,
+        preco: g.precoRef, velocidade24h: g.velocidade24h, itens: g.itens,
       };
     });
     const maxVelocidade = Math.max.apply(null, brindesDashPre.map(b => b.velocidade24h).concat([0]));
@@ -4735,13 +4895,23 @@ class Component extends DCLogic {
       totalGeralBSB: brindesDashPre.reduce((a, b) => a + b.totalBSB, 0),
     };
     const brindesDashView = brindesDashPre
-      .sort((a, b) => b.pct - a.pct)
-      .map(b => ({
+      .sort((a, b) => b.preco - a.preco)
+      .map((b, i) => ({
+        id: 'bd-' + i,
         nome: b.nome, restante: b.restante, total: b.total, pct: b.pct, preco: b.preco, velocidade24h: b.velocidade24h,
         restanteSP: b.restanteSP, totalSP: b.totalSP, restanteBSB: b.restanteBSB, totalBSB: b.totalBSB,
         barColor: b.pct >= 100 ? '#B4471F' : (b.pct >= 60 ? '#F39200' : '#0057A6'),
         statusLabel: b.pct >= 100 ? 'Esgotado' : (b.velocidade24h === maxVelocidade && maxVelocidade > 0 ? '🔥 caindo mais rápido' : (b.usado === 0 ? 'Encalhando' : '')),
         statusColor: b.pct >= 100 ? '#B4471F' : (b.velocidade24h === maxVelocidade && maxVelocidade > 0 ? '#B4471F' : '#8A8A90'),
+        temItens: b.itens.length > 1,
+        aberto: s.brindesGrupoAberto === ('bd-' + i),
+        verDetalhesLabel: s.brindesGrupoAberto === ('bd-' + i) ? '▾ ocultar detalhes' : '▸ ver detalhes',
+        toggleAberto: () => this.setState(s2 => ({ brindesGrupoAberto: s2.brindesGrupoAberto === ('bd-' + i) ? '' : ('bd-' + i) })),
+        itensView: b.itens.map(it => ({
+          nome: it.nome, restante: Math.max(0, it.total - it.usado), total: it.total,
+          restanteSP: Math.max(0, it.totalSP - it.usadoSP), totalSP: it.totalSP,
+          restanteBSB: Math.max(0, it.totalBSB - it.usadoBSB), totalBSB: it.totalBSB,
+        })),
       }));
     const pontosAcoesView = PONTOS_ACOES.map(a => ({ label: a.label, feito: pontosFeitos.indexOf(a.key) !== -1, marca: pontosFeitos.indexOf(a.key) !== -1 ? '✓' : '○', cor: pontosFeitos.indexOf(a.key) !== -1 ? '#8FD9A8' : '#5E7DA6' }));
     const acertosQuizMeu = temNome ? this.contarAcertosQuiz(s.meuNome) : 0;
@@ -4794,7 +4964,7 @@ class Component extends DCLogic {
         statusBg: jaTem ? '#E3F3E8' : (podeComprar ? '#0057A6' : '#EDEDED'),
         statusColor: jaTem ? '#1E7A45' : (podeComprar ? '#FFFFFF' : '#8A8A90'),
       };
-    });
+    }).sort((a, b) => b.pontos - a.pontos);
 
     const atualizacoesView = Object.keys(s.sync).filter(k => k.startsWith('nv-') && s.sync[k] && s.sync[k].v)
       .map(k => ({ key: k, texto: s.sync[k].v, t: s.sync[k].t,
@@ -4831,7 +5001,7 @@ class Component extends DCLogic {
       showFaleConosco: s.activeTab === 'faleconosco',
       showInfo: s.activeTab === 'info', showOrg: s.activeTab === 'org',
       temNomeLiberado, bloqueadoBrindes, temDadosLiberado, bloqueadoCadastro,
-      irParaFaleConosco: this.irParaFaleConosco,
+      irParaFaleConosco: this.irParaFaleConosco, irParaFotos: this.irParaFotos,
       fcNome: s.fcNome || '', onFcNome: this.onFcNome, fcOpcoes,
       fcMensagem: s.fcMensagem || '', onFcMensagem: this.onFcMensagem,
       fcErro: s.fcErro || '', fcEnviado: s.fcEnviado, fcFormVisivel: !s.fcEnviado, fcEnviar: this.fcEnviar, fcNova: this.fcNova,
@@ -4875,7 +5045,6 @@ class Component extends DCLogic {
         .sort((a, b) => b.t - a.t),
       pwInput: s.pwInput, pwError: s.pwError, onPwChange: this.onPwChange, onPwKeyDown: this.onPwKeyDown,
       tryUnlock: this.tryUnlock, lockOrg: this.lockOrg,
-      brindesRows, brindesConfirmadosTotal, brindesItensGarantidos, brindesPendencias, totalParticipantesEvento: TOTAL_PARTICIPANTES_EVENTO,
       checklistCats: checklistCatsView, checklistRespOpcoes, checklistTemFiltro: !!respFiltro,
       checklistPct, checklistDone, checklistTotal,
       statusCounts: [
@@ -4894,11 +5063,7 @@ class Component extends DCLogic {
       viewGanttColor: s.checklistView === 'gantt' ? '#FFFFFF' : '#002855',
       viewDiarioBg: s.checklistView === 'diario' ? '#0057A6' : '#FFFFFF',
       viewDiarioColor: s.checklistView === 'diario' ? '#FFFFFF' : '#002855',
-      viewBrindesBg: s.checklistView === 'brindes' ? '#0057A6' : '#FFFFFF',
-      viewBrindesColor: s.checklistView === 'brindes' ? '#FFFFFF' : '#002855',
       setViewLista: this.setChecklistView('lista'), setViewGantt: this.setChecklistView('gantt'), setViewDiario: this.setChecklistView('diario'),
-      setViewBrindes: this.setChecklistView('brindes'),
-      showChecklistBrindes: s.checklistView === 'brindes',
       ganttDays, ganttRows, ganttWidth,
       climaEvento, climaDias, climaDica, climaPronto, climaMuitoLonge, diasParaEventoClima, climaErro: s.climaErro,
       showCheckin: s.activeTab === 'checkin',
@@ -4976,7 +5141,9 @@ class Component extends DCLogic {
       showOrgQR: s.orgSubTab === 'cartazes', pdfCartazes: this.pdfCartazes, pdfMesas: this.pdfMesas, pdfNomesMesas: this.pdfNomesMesas,
       cartazes: CARTAZES.map(c => ({ ...c, qrBg: 'url("' + c.qr + '")' })),
       showOrgPessoas: s.orgSubTab === 'pessoas',
-      restricaoStats, restricaoNenhumaCount, restricaoSemRespostaCount, pcdStats, pcdCount: pcdStats.length,
+      restricaoStats, restricaoNenhumaCount, restricaoSemRespostaCount,
+      pcdChart, pcdFiltroAtivo: !!s.pcdFiltro, limparPcdFiltro: () => this.setState({ pcdFiltro: '' }),
+      restricaoChart, confChart, ppChart, unidadeChart,
       restricaoQualquerCount, setRestricaoQualquerFiltro: this.setRestricaoFiltro('qualquer'),
       restricaoQualquerBg: s.restricaoFiltro === 'qualquer' ? '#8A5A0B' : '#FDECC8',
       restricaoQualquerColor: s.restricaoFiltro === 'qualquer' ? '#FFFFFF' : '#8A5A0B',
@@ -4999,7 +5166,7 @@ class Component extends DCLogic {
       accEstoqueLabel: (s.orgAcc || {}).estoque ? 'Ocultar' : 'Ver estoque',
       accMalasAberto: !!(s.orgAcc || {}).malas, toggleAccMalas: this.toggleAcc('malas'),
       accMalasLabel: (s.orgAcc || {}).malas ? 'Ocultar' : 'Ver malas',
-      areaEngajamentoView,
+      areaEngajamentoView, areaEngajamentoChart,
       malasView: (() => {
         // Total já enviado de cada item, somando todas as malas — usado pra saber se a meta de SP já foi coberta.
         const enviadoPorItem = {};
@@ -5043,17 +5210,18 @@ class Component extends DCLogic {
       participantes, nameQuery: s.nameQuery, onNameQuery: this.onNameQuery,
       participantesTotal: PARTICIPANTES.length, participantesFiltrados: participantes.length,
       totalFuncionarios: gruposTotal,
-      presentesCount, presentesSP, presentesBSB, presentesPct: Math.round(100 * presentesCount / PARTICIPANTES.length) + '%',
+      presentesCount, presentesSP, presentesBSB, presentesPct: Math.round(100 * presentesCount / Math.max(1, participantesCatering)) + '%',
       pessoaFiltros, spCount, bsbCount, spOnlyCount, bsbOnlyCount, semCidadeCount, unidadesOpcoes, onUnidadeChange, dualCount, participantesElegiveis, participantesCatering, gruposTotal,
+      gruposChart, grupoFiltroAtivo, verTodosGrupos, filtrosAtivosResumo,
+      maisFiltrosAberto: s.maisFiltrosAberto, toggleMaisFiltros: this.toggleMaisFiltros,
+      maisFiltrosLabel: s.maisFiltrosAberto ? 'Ocultar mais filtros' : 'Mais filtros (tamanho de camiseta)',
       identificadosCount, faltamIdentificarCount, identificadosPct,
       pessoaUnidadeValue: s.pessoaUnidade || '',
-      presencaFiltroLabel: s.presencaFiltro === 'sim' ? 'só presentes' : (s.presencaFiltro === 'nao' ? 'só ausentes' : ''),
-      presencaFiltroAtivo: !!s.presencaFiltro, onPresencaClick: this.setPresencaFiltro,
-      presencaBoxBorder: s.presencaFiltro ? '2px solid #F39200' : '2px solid transparent',
-      kitFiltroLabel: s.kitFiltro === 'sim' ? 'só com kit' : (s.kitFiltro === 'nao' ? 'só sem kit' : ''),
-      kitFiltroAtivo: !!s.kitFiltro, onKitClick: this.setKitFiltro,
-      kitBoxBorder: s.kitFiltro ? '2px solid #1E7A45' : '2px solid transparent',
-      algumFiltroAtivo: !!(s.ppFiltro || s.restricaoFiltro || s.pessoaUnidade || s.nameQuery || s.camisaFiltro || s.camisaModFiltro || s.confFiltro || s.mesaFiltro || s.presencaFiltro || s.kitFiltro || (s.pessoaFiltro && s.pessoaFiltro !== 'todos')),
+      presencaChart, presencaFiltroAtivo: !!s.presencaFiltro,
+      limparPresencaFiltro: () => this.setState({ presencaFiltro: '' }),
+      camisaTamanhoChart, camisaModChart, camisaEntregaChart,
+      kitFiltroAtivo: !!s.kitFiltro, limparKitFiltro: () => this.setState({ kitFiltro: '' }),
+      algumFiltroAtivo: !!(s.ppFiltro || s.restricaoFiltro || s.pcdFiltro || s.pessoaUnidade || s.nameQuery || s.camisaFiltro || s.camisaModFiltro || s.confFiltro || s.mesaFiltro || s.presencaFiltro || s.kitFiltro || (s.pessoaFiltro && s.pessoaFiltro !== 'todos')),
       limparTodosFiltros: this.limparTodosFiltros,
       budgetLedger, orcTotalFmt: brl(orcTotal), realTotalFmt: brl(comprometidoTotal), pagoTotalFmt: brl(pagoTotal),
       saldoFmt: brl(saldo), saldoColor: saldo < 0 ? '#FF8A7A' : '#8FD9A8',
@@ -5149,7 +5317,7 @@ class Component extends DCLogic {
       toggleManualJogo: this.toggleManualJogo, manualJogoToggleLabel: (s.manualJogoAberto === undefined || s.manualJogoAberto) ? 'Ocultar' : 'Ver regras',
       showOrgPontos: s.orgSubTab === 'pontos', pontosRankingView, mediaPontosGeral: Math.round(mediaPontosAtivosGlobal * 10) / 10,
       showOrgFotos: s.orgSubTab === 'fotos',
-      engajamentoDash, brindesDashView, brindesDashResumo, origemPontosView,
+      engajamentoDash, engajCidadeDonutBg, engajCidadeChart, brindesDashView, brindesDashResumo, origemPontosView,
       pontosListaAberta: s.pontosListaAberta, togglePontosLista: this.togglePontosLista,
       pontosListaToggleLabel: s.pontosListaAberta ? 'Ocultar' : 'Ver lista',
     };
