@@ -1631,7 +1631,7 @@
             <div>
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Participantes · {{ participantesTotal }} nomes</div>
 
-            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin-bottom:16px;align-items:stretch">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:16px;align-items:stretch">
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;min-width:0">
               <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px">
                 <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em">Grupos · {{ gruposTotal }} pessoas no total</div>
@@ -1697,7 +1697,7 @@
             </sc-if>
 
             <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Respostas da Identificação</div>
-            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:16px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:16px">
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
               <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Presença no evento</div>
               <div style="display:flex;flex-direction:column;gap:8px;width:100%">
@@ -1792,14 +1792,14 @@
                   </div>
                 </sc-for>
               </div>
-              <div style="font-size:11px;color:#8A8A90;width:100%">SP {{ presentesSP }} · BSB {{ presentesBSB }} · de {{ participantesTotal }}</div>
+              <div style="font-size:11px;color:#8A8A90;width:100%">SP {{ presentesSP }} · BSB {{ presentesBSB }} · de {{ participantesCateringTotal }}</div>
               <sc-if value="{{ presencaFiltroAtivo }}" hint-placeholder-val="{{ false }}">
                 <div onClick="{{ limparPresencaFiltro }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#6B6B70;border:1px solid #C9D6E8;border-radius:999px;padding:5px 12px">Limpar filtro</div>
               </sc-if>
             </div>
             </div>
 
-            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:16px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:16px">
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;align-content:flex-start;min-width:0">
               <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;width:100%">Camisetas por tamanho</div>
               <div style="display:flex;flex-direction:column;gap:8px;width:100%">
@@ -1900,7 +1900,7 @@
               </div>
             </sc-if>
 
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:22px">
               <sc-for list="{{ participantes }}" as="p" hint-placeholder-count="12">
                 <div onClick="{{ p.toggle }}" style="cursor:pointer;display:flex;flex-direction:column;gap:6px;background:{{ p.bg }};border:1px solid #DCE6F2;border-radius:10px;padding:10px 12px">
                   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
@@ -2100,7 +2100,7 @@
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-            <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px;align-items:start">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:20px;align-items:start">
               <sc-for list="{{ brindesDashView }}" as="cm" hint-placeholder-count="16">
                 <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:12px 14px;min-width:0">
                   <div onClick="{{ cm.toggleAberto }}" style="cursor:pointer;display:flex;flex-direction:column;gap:3px;font-size:12px;margin-bottom:6px">
@@ -2138,7 +2138,7 @@
               <div onClick="{{ togglePontosLista }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ pontosListaToggleLabel }}</div>
             </div>
             <sc-if value="{{ pontosListaAberta }}" hint-placeholder-val="{{ false }}">
-            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px">
               <sc-for list="{{ pontosRankingView }}" as="pr" hint-placeholder-count="10">
                 <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:10px;padding:10px 12px;min-width:0">
                   <div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-bottom:3px">
@@ -2306,7 +2306,7 @@
                 <div style="font-size:11.5px;color:#6B6B70">recebidas em SP</div>
               </div>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-items:start">
               <sc-for list="{{ malasView }}" as="m" hint-placeholder-count="5">
                 <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:14px 18px;display:flex;flex-direction:column;gap:10px;min-width:0">
                   <div style="width:100%;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
@@ -4057,7 +4057,7 @@ class Component extends DCLogic {
     const presentesSP = PARTICIPANTES.filter(n => gv('ps-' + n) && cidadeDe(n) === 'sp').length;
     const presentesBSB = PARTICIPANTES.filter(n => gv('ps-' + n) && cidadeDe(n) === 'bsb').length;
     const kitsCount = PARTICIPANTES.filter(n => gv('kit-' + n)).length;
-    const participantes = PARTICIPANTES.filter(n => {
+    const participantesFiltradosNomes = PARTICIPANTES.filter(n => {
       if (q && !norm(n).includes(q)) return false;
       if (s.pessoaFiltro === 'sp') { if (!(cidadeDe(n) === 'sp' && !infoDe(n).d)) return false; }
       else if (s.pessoaFiltro === 'bsb') { if (!(cidadeDe(n) === 'bsb' && !infoDe(n).d)) return false; }
@@ -4102,7 +4102,16 @@ class Component extends DCLogic {
       if (s.kitFiltro === 'sim' && !gv('kit-' + n)) return false;
       if (s.kitFiltro === 'nao' && gv('kit-' + n)) return false;
       return true;
-    }).map(n => {
+    });
+    // Base cumulativa para os cards de resumo (Presença, Confraternização, Restrição, Camisetas, Mesas...):
+    // aplica TODOS os filtros ativos de uma vez (cidade, unidade, camiseta, confraternização, restrição,
+    // necessidade especial, mesa, presença, kit) — clicar em qualquer combinação estreita todos os demais.
+    // "Dinâmica" segue a regra padrão de excluir organização/gestores, exceto quando o filtro
+    // "Organização + Gestores" está ativo. "Catering" inclui organização/gestores (participam do almoço/coffee),
+    // só exclui licenças e afins.
+    const participantesDinamica = participantesFiltradosNomes.filter(n => s.pessoaFiltro === 'ambas' || !infoDe(n).d);
+    const participantesCateringDinamica = participantesFiltradosNomes.filter(n => cidadeDe(n) || infoDe(n).d);
+    const participantes = participantesFiltradosNomes.map(n => {
       const p = !!gv('ps-' + n);
       const kit = !!gv('kit-' + n);
       const c = cidadeDe(n);
@@ -4183,7 +4192,7 @@ class Component extends DCLogic {
     let camisaFaltamCount = 0;
     const camisaModCount = { Feminina: 0, Masculina: 0 };
     let camisaModFaltamCount = 0;
-    baseCatering.forEach(n => {
+    participantesCateringDinamica.forEach(n => {
       const cs = gv('cs-' + n) || infoDe(n).cs || '';
       if (cs && camisaSizeCount[cs] !== undefined) camisaSizeCount[cs]++;
       else camisaFaltamCount++;
@@ -4206,7 +4215,7 @@ class Component extends DCLogic {
     const RESTRICAO_TIPOS = ['Vegetariano', 'Vegano', 'Sem glúten', 'Sem lactose', 'Alergia alimentar', 'Outra'];
     const restricaoCount = {}; RESTRICAO_TIPOS.forEach(t => restricaoCount[t] = 0);
     let restricaoNenhumaCount = 0, restricaoSemRespostaCount = 0;
-    baseCatering.forEach(n => {
+    participantesCateringDinamica.forEach(n => {
       const rt = gv('rt-' + n);
       if (!rt) { restricaoSemRespostaCount++; return; }
       if (rt === 'Nenhuma') { restricaoNenhumaCount++; return; }
@@ -4218,24 +4227,24 @@ class Component extends DCLogic {
       color: s.restricaoFiltro === t ? '#FFFFFF' : '#8A5A0B',
     })).filter(r => r.n > 0);
     const restricaoQualquerCount = Object.values(restricaoCount).reduce((a, b) => a + b, 0);
-    const pcdStats = baseCatering.filter(n => gv('pcd-' + n) === 'Sim').map(n => ({ nome: n, obsSuffix: gv('pcdo-' + n) ? ': ' + gv('pcdo-' + n) : '' }));
+    const pcdStats = participantesCateringDinamica.filter(n => gv('pcd-' + n) === 'Sim').map(n => ({ nome: n, obsSuffix: gv('pcdo-' + n) ? ': ' + gv('pcdo-' + n) : '' }));
     const mesaStats = MESA_VALORES.slice(0, numMesas).map(nome => ({
-      nome, n: mesaElegiveis.filter(n2 => mesaDeSP(n2) === nome).length, onClick: this.setMesaFiltro(nome),
+      nome, n: participantesDinamica.filter(n2 => cidadeDe(n2) === 'sp' && mesaDeSP(n2) === nome).length, onClick: this.setMesaFiltro(nome),
       bg: s.mesaFiltro === nome ? '#0057A6' : 'transparent', color: s.mesaFiltro === nome ? '#FFFFFF' : '#002855',
     }));
     const mesaStatsBSB = MESA_VALORES.slice(0, numMesasBSB).map(nome => ({
-      nome, n: mesaElegiveisBSB.filter(n2 => mesaDeBSB(n2) === nome).length, onClick: this.setMesaFiltro(nome),
+      nome, n: participantesDinamica.filter(n2 => cidadeDe(n2) === 'bsb' && mesaDeBSB(n2) === nome).length, onClick: this.setMesaFiltro(nome),
       bg: s.mesaFiltro === nome ? '#F39200' : 'transparent', color: s.mesaFiltro === nome ? '#FFFFFF' : '#002855',
     }));
     const mesaFiltroAtivo = !!s.mesaFiltro;
-    const confraternizacaoSimCount = baseCatering.filter(n => gv('cf-' + n) === 'Sim').length;
-    const confraternizacaoNaoCount = baseCatering.filter(n => gv('cf-' + n) === 'Não').length;
-    const confraternizacaoTalvezCount = baseCatering.filter(n => gv('cf-' + n) === 'Talvez').length;
-    const presencaPreviaSimCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Sim').length;
-    const presencaPreviaNaoCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Não').length;
-    const presencaPreviaTalvezCount = baseFiltrado.filter(n => gv('pp-' + n) === 'Talvez').length;
-    const presencaPreviaSemRespostaCount = baseFiltrado.length - presencaPreviaSimCount - presencaPreviaNaoCount - presencaPreviaTalvezCount;
-    const confraternizacaoSemRespostaCount = baseCatering.length - confraternizacaoSimCount - confraternizacaoNaoCount - confraternizacaoTalvezCount;
+    const confraternizacaoSimCount = participantesCateringDinamica.filter(n => gv('cf-' + n) === 'Sim').length;
+    const confraternizacaoNaoCount = participantesCateringDinamica.filter(n => gv('cf-' + n) === 'Não').length;
+    const confraternizacaoTalvezCount = participantesCateringDinamica.filter(n => gv('cf-' + n) === 'Talvez').length;
+    const presencaPreviaSimCount = participantesDinamica.filter(n => gv('pp-' + n) === 'Sim').length;
+    const presencaPreviaNaoCount = participantesDinamica.filter(n => gv('pp-' + n) === 'Não').length;
+    const presencaPreviaTalvezCount = participantesDinamica.filter(n => gv('pp-' + n) === 'Talvez').length;
+    const presencaPreviaSemRespostaCount = participantesDinamica.length - presencaPreviaSimCount - presencaPreviaNaoCount - presencaPreviaTalvezCount;
+    const confraternizacaoSemRespostaCount = participantesCateringDinamica.length - confraternizacaoSimCount - confraternizacaoNaoCount - confraternizacaoTalvezCount;
     const barChart = (defs, activeVal, onClickFor) => {
       const total = defs.reduce((a, d) => a + d.n, 0) || 1;
       const max = Math.max(1, ...defs.map(d => d.n));
@@ -4268,17 +4277,20 @@ class Component extends DCLogic {
       { id: 'sem_resposta', nome: 'Sem resposta', n: restricaoSemRespostaCount, cor: '#8A8A90', tint: '#F0F0F1' },
     ];
     const restricaoChart = barChart(restricaoDefs, s.restricaoFiltro, (id) => this.setRestricaoFiltro(id));
-    const pcdSimCount = baseCatering.filter(n => gv('pcd-' + n) === 'Sim').length;
-    const pcdNaoCount = baseCatering.filter(n => gv('pcd-' + n) === 'Não').length;
-    const pcdSemRespostaCount = baseCatering.length - pcdSimCount - pcdNaoCount;
+    const pcdSimCount = participantesCateringDinamica.filter(n => gv('pcd-' + n) === 'Sim').length;
+    const pcdNaoCount = participantesCateringDinamica.filter(n => gv('pcd-' + n) === 'Não').length;
+    const pcdSemRespostaCount = participantesCateringDinamica.length - pcdSimCount - pcdNaoCount;
     const pcdChart = barChart([
       { id: 'Sim', nome: 'Precisa de apoio', n: pcdSimCount, cor: '#B02D1C', tint: '#FBE3E0' },
       { id: 'Não', nome: 'Não precisa', n: pcdNaoCount, cor: '#1E7A45', tint: '#E7F5EC' },
       { id: 'sem_resposta', nome: 'Sem resposta', n: pcdSemRespostaCount, cor: '#8A8A90', tint: '#F0F0F1' },
     ], s.pcdFiltro, (id) => this.setPcdFiltro(id));
+    const presentesCountFiltrado = participantesCateringDinamica.filter(n => gv('ps-' + n)).length;
+    const presentesSPFiltrado = participantesCateringDinamica.filter(n => gv('ps-' + n) && cidadeDe(n) === 'sp').length;
+    const presentesBSBFiltrado = participantesCateringDinamica.filter(n => gv('ps-' + n) && cidadeDe(n) === 'bsb').length;
     const presencaChart = barChart([
-      { id: 'sim', nome: 'Confirmado', n: presentesCount, cor: '#0057A6', tint: '#E8EFF9' },
-      { id: 'nao', nome: 'Pendente', n: participantesCatering - presentesCount, cor: '#8A8A90', tint: '#F0F0F1' },
+      { id: 'sim', nome: 'Confirmado', n: presentesCountFiltrado, cor: '#0057A6', tint: '#E8EFF9' },
+      { id: 'nao', nome: 'Pendente', n: participantesCateringDinamica.length - presentesCountFiltrado, cor: '#8A8A90', tint: '#F0F0F1' },
     ], s.presencaFiltro, (id) => this.setPresencaFiltro(id));
     const camisaTamanhoChart = barChart([
       { id: 'P', nome: 'P', n: camisaSizeCount.P, cor: '#0057A6', tint: '#E8EFF9' },
@@ -4293,10 +4305,10 @@ class Component extends DCLogic {
       { id: 'Masculina', nome: 'Masculina', n: camisaModCount.Masculina, cor: '#0057A6', tint: '#E8EFF9' },
       { id: 'sem', nome: 'Sem sexo', n: camisaModFaltamCount, cor: '#C0392B', tint: '#FBEAE8' },
     ], s.camisaModFiltro, (id) => this.setCamisaModFiltro(id));
-    const kitsCountFiltrado = baseCatering.filter(n => gv('kit-' + n)).length;
+    const kitsCountFiltrado = participantesCateringDinamica.filter(n => gv('kit-' + n)).length;
     const camisaEntregaChart = barChart([
       { id: 'sim', nome: 'Entregue', n: kitsCountFiltrado, cor: '#1E7A45', tint: '#E7F5EC' },
-      { id: 'nao', nome: 'Pendente', n: baseCatering.length - kitsCountFiltrado, cor: '#C0392B', tint: '#FBEAE8' },
+      { id: 'nao', nome: 'Pendente', n: participantesCateringDinamica.length - kitsCountFiltrado, cor: '#C0392B', tint: '#FBEAE8' },
     ], s.kitFiltro, (id) => this.setKitFiltro(id));
     const unidadeBaseFilter = (n) => {
       if (q && !norm(n).includes(q)) return false;
@@ -5210,7 +5222,7 @@ class Component extends DCLogic {
       participantes, nameQuery: s.nameQuery, onNameQuery: this.onNameQuery,
       participantesTotal: PARTICIPANTES.length, participantesFiltrados: participantes.length,
       totalFuncionarios: gruposTotal,
-      presentesCount, presentesSP, presentesBSB, presentesPct: Math.round(100 * presentesCount / Math.max(1, participantesCatering)) + '%',
+      presentesCount, presentesSP: presentesSPFiltrado, presentesBSB: presentesBSBFiltrado, participantesCateringTotal: participantesCateringDinamica.length, presentesPct: Math.round(100 * presentesCountFiltrado / Math.max(1, participantesCateringDinamica.length)) + '%',
       pessoaFiltros, spCount, bsbCount, spOnlyCount, bsbOnlyCount, semCidadeCount, unidadesOpcoes, onUnidadeChange, dualCount, participantesElegiveis, participantesCatering, gruposTotal,
       gruposChart, grupoFiltroAtivo, verTodosGrupos, filtrosAtivosResumo,
       maisFiltrosAberto: s.maisFiltrosAberto, toggleMaisFiltros: this.toggleMaisFiltros,
