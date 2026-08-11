@@ -1999,6 +1999,34 @@
                 <div style="font-size:11.5px;color:#6B6B70">encalhando · zero resgates ({{ brindesDashResumo.encalhadosCount }})</div>
               </div>
             </div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;margin-bottom:20px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:2px">
+                <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Preço vs. capacidade de compra</div>
+                <select value="{{ brindeChartItemId }}" onChange="{{ onBrindeChartItem }}" style="font-size:11.5px;font-weight:700;color:#002855;border:1px solid #C9D6E8;border-radius:8px;padding:5px 8px;background:#F7F9FC">
+                  <sc-for list="{{ brindeChartOpcoes }}" as="op" hint-placeholder-count="6">
+                    <option value="{{ op.id }}">{{ op.nome }}</option>
+                  </sc-for>
+                </select>
+              </div>
+              <div style="font-size:11.5px;color:#8A8A90;margin-bottom:8px">Preço em pontos do item (sobe conforme mais perguntas do quiz são liberadas) contra a pontuação média que os participantes de SP já têm de fato — reconstruído dia a dia desde 05/08. {{ chartDiasRestantesSPLabel }}.</div>
+              <div style="display:flex;gap:14px;margin-bottom:6px">
+                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#4A4A50"><span style="width:12px;height:3px;background:#0057A6;display:inline-block;border-radius:2px"></span>Preço do item (pts)</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#4A4A50"><span style="width:12px;height:3px;background:#1E7A45;display:inline-block;border-radius:2px"></span>Pontuação média real (pts)</div>
+              </div>
+              <svg viewBox="0 0 {{ chartW }} {{ chartH }}" style="width:100%;height:200px;overflow:visible">
+                <polyline points="{{ precoPontos }}" fill="none" stroke="#0057A6" stroke-width="2"></polyline>
+                <polyline points="{{ mediaPontos }}" fill="none" stroke="#1E7A45" stroke-width="2"></polyline>
+                <sc-for list="{{ chartPontosView }}" as="pt" hint-placeholder-count="9">
+                  <circle cx="{{ pt.cxPreco }}" cy="{{ pt.cyPreco }}" r="3" fill="#0057A6"><title>{{ pt.tituloPreco }}</title></circle>
+                  <circle cx="{{ pt.cxMedia }}" cy="{{ pt.cyMedia }}" r="3" fill="#1E7A45"><title>{{ pt.tituloMedia }}</title></circle>
+                  <sc-if value="{{ pt.showLabel }}" hint-placeholder-val="{{ false }}">
+                    <text x="{{ pt.xLabel }}" y="{{ pt.yLabel }}" text-anchor="middle" font-size="9.5" fill="#8A8A90">{{ pt.label }}</text>
+                  </sc-if>
+                </sc-for>
+              </svg>
+              <div style="font-size:11.5px;font-weight:700;color:#8A5A0B;margin-top:2px">{{ chartGapLabel }}</div>
+            </div>
+
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:20px;align-items:start">
               <sc-for list="{{ brindesDashView }}" as="cm" hint-placeholder-count="16">
@@ -3517,10 +3545,61 @@ class Component extends DCLogic {
     // não fica mais fácil só porque a participação geral está baixa.
     const CAMPAIGN_START_QUIZ = '2026-08-05';
     const curiosCount = PARTICIPANTES.filter(n => this.cidadeDe(n) && !(PARTICIPANTES_INFO[n] || {}).d && this.valor('cur-' + n)).length;
-    const dias = Math.max(0, Math.round((new Date(hojeISOAtual(new Date()) + 'T00:00:00') - new Date(CAMPAIGN_START_QUIZ + 'T00:00:00')) / 86400000));
+    // Teto de dias travado no dia do evento SP: depois disso não há mais como ganhar pontos,
+    // então o preço não deve continuar subindo com o calendário real.
+    const hojeOuLimiteSP = hojeISOAtual(new Date()) > DATA_EVENTO_CIDADE.sp ? DATA_EVENTO_CIDADE.sp : hojeISOAtual(new Date());
+    const dias = Math.max(0, Math.round((new Date(hojeOuLimiteSP + 'T00:00:00') - new Date(CAMPAIGN_START_QUIZ + 'T00:00:00')) / 86400000));
     const quizLiberadas = Math.min(curiosCount, (dias + 1) * 3);
     const maxPontos = 7 + quizLiberadas;
     return Math.max(1, Math.round(maxPontos * item.peso));
+  };
+  // Série dia-a-dia (05/08 até o dia do evento SP) comparando o preço em pontos de um item
+  // com a pontuação média real que os participantes de SP já acumularam naquele dia —
+  // reconstruída a partir dos timestamps que cada resposta já grava no sync.
+  precoVsCapacidadeSeries = (itemId) => {
+    const s = this.state;
+    const item = BRINDES_MARKETPLACE.find(b => b.id === itemId) || BRINDES_MARKETPLACE.slice().sort((a, b) => b.peso - a.peso)[0];
+    const ativos = PARTICIPANTES.filter(n => this.cidadeDe(n) === 'sp' && !(PARTICIPANTES_INFO[n] || {}).d);
+    const quizTsPorNome = {};
+    Object.keys(s.sync).forEach(k => {
+      if (k.indexOf('quiz-') === 0) {
+        const v = s.sync[k];
+        if (v && v.v && v.v.certo) {
+          const rest = k.slice(5);
+          const idx = rest.lastIndexOf('-');
+          const nome = idx === -1 ? rest : rest.slice(0, idx);
+          (quizTsPorNome[nome] = quizTsPorNome[nome] || []).push(v.t || 0);
+        }
+      }
+    });
+    const CAMPAIGN_START_QUIZ = '2026-08-05';
+    const startD = new Date(CAMPAIGN_START_QUIZ + 'T00:00:00');
+    const limiteISO = hojeISOAtual(new Date()) > DATA_EVENTO_CIDADE.sp ? DATA_EVENTO_CIDADE.sp : hojeISOAtual(new Date());
+    const totalDias = Math.max(0, Math.round((new Date(limiteISO + 'T00:00:00') - startD) / 86400000));
+    const out = [];
+    for (let i = 0; i <= totalDias; i++) {
+      const d = new Date(startD.getTime() + i * 86400000);
+      const dayEnd = d.getTime() + 86399999;
+      const curiosCount = ativos.filter(n => s.sync['cur-' + n] && s.sync['cur-' + n].t <= dayEnd).length;
+      const quizLiberadas = Math.min(curiosCount, (i + 1) * 3);
+      const maxPontos = 7 + quizLiberadas;
+      const preco = Math.max(1, Math.round(maxPontos * item.peso));
+      let soma = 0;
+      ativos.forEach(n => {
+        let p = 0;
+        ['ps', 'rt', 'cs', 'cf', 'pp', 'pcd'].forEach(pref => { const e = s.sync[pref + '-' + n]; if (e && e.t <= dayEnd) p++; });
+        const npsE = s.sync['nps-' + n];
+        if (npsE && npsE.t <= dayEnd && npsE.v) {
+          if (typeof npsE.v.nota === 'number') p++;
+          if (npsE.v.paineis && Object.keys(npsE.v.paineis).length) p++;
+        }
+        p += (quizTsPorNome[n] || []).filter(t => t <= dayEnd).length;
+        soma += p;
+      });
+      const media = ativos.length ? Math.round((soma / ativos.length) * 10) / 10 : 0;
+      out.push({ diaISO: d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'), label: String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0'), preco, media });
+    }
+    return out;
   };
   resgatarBrinde = (itemId) => () => {
     const nome = this.state.meuNome;
@@ -5107,6 +5186,25 @@ class Component extends DCLogic {
       totalRestanteBSB: brindesDashPre.reduce((a, b) => a + b.restanteBSB, 0),
       totalGeralBSB: brindesDashPre.reduce((a, b) => a + b.totalBSB, 0),
     };
+    const brindeChartItemId = s.brindeChartItem || BRINDES_MARKETPLACE.slice().sort((a, b) => b.peso - a.peso)[0].id;
+    const brindeChartOpcoes = BRINDES_MARKETPLACE.slice().sort((a, b) => a.nome.localeCompare(b.nome)).map(b => ({ id: b.id, nome: b.nome }));
+    const chartSerie = this.precoVsCapacidadeSeries(brindeChartItemId);
+    const chartW = 640, chartH = 200, padL = 34, padR = 10, padT = 10, padB = 26;
+    const plotW = chartW - padL - padR, plotH = chartH - padT - padB;
+    const chartYMax = Math.max(5, Math.ceil(Math.max.apply(null, chartSerie.map(p => p.preco).concat(chartSerie.map(p => p.media)).concat([5])) * 1.15));
+    const chartX = (i) => padL + (chartSerie.length > 1 ? (plotW * i / (chartSerie.length - 1)) : plotW / 2);
+    const chartYOf = (v) => padT + plotH * (1 - v / chartYMax);
+    const precoPontos = chartSerie.map((p, i) => chartX(i) + ',' + chartYOf(p.preco).toFixed(1)).join(' ');
+    const mediaPontos = chartSerie.map((p, i) => chartX(i) + ',' + chartYOf(p.media).toFixed(1)).join(' ');
+    const chartPontosView = chartSerie.map((p, i) => ({
+      cxPreco: chartX(i), cyPreco: chartYOf(p.preco), cxMedia: chartX(i), cyMedia: chartYOf(p.media),
+      label: p.label, dentroDaAlcada: p.media >= p.preco, tituloPreco: p.label + ' · preço ' + p.preco + ' pts', tituloMedia: p.label + ' · média real ' + p.media + ' pts',
+      showLabel: i === 0 || i === chartSerie.length - 1 || i % 2 === 0,
+      xLabel: chartX(i), yLabel: chartH - 6,
+    }));
+    const chartGapAtual = chartSerie.length ? Math.round((chartSerie[chartSerie.length - 1].preco - chartSerie[chartSerie.length - 1].media) * 10) / 10 : 0;
+    const chartDiasRestantesSP = Math.max(0, Math.round((new Date(DATA_EVENTO_CIDADE.sp + 'T00:00:00') - new Date(hojeISOAtual(new Date()) + 'T00:00:00')) / 86400000));
+    const chartGapLabel = chartGapAtual <= 0 ? 'Média real já alcança o preço atual' : ('Faltam ' + chartGapAtual + ' pts, em média, para alcançar o preço atual');
     const brindesDashView = brindesDashPre
       .sort((a, b) => b.preco - a.preco)
       .map((b, i) => ({
@@ -5134,7 +5232,10 @@ class Component extends DCLogic {
     const curiosOrdenadas = PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d && this.valor('cur-' + n))
       .map(n => ({ nome: n, texto: this.valor('cur-' + n), t: (this.state.sync['cur-' + n] || {}).t || 0 }))
       .sort((a, b) => a.t - b.t);
-    const diasDesdeInicioQuiz = Math.max(0, Math.round((new Date(hojeISOAtual(new Date()) + 'T00:00:00') - new Date(CAMPAIGN_START_QUIZ + 'T00:00:00')) / 86400000));
+    // Mesmo teto do dia do evento SP usado em precoBrinde, para o quiz não liberar mais perguntas
+    // do que o preço dos brindes já considera.
+    const hojeOuLimiteSPQuiz = hojeISOAtual(new Date()) > DATA_EVENTO_CIDADE.sp ? DATA_EVENTO_CIDADE.sp : hojeISOAtual(new Date());
+    const diasDesdeInicioQuiz = Math.max(0, Math.round((new Date(hojeOuLimiteSPQuiz + 'T00:00:00') - new Date(CAMPAIGN_START_QUIZ + 'T00:00:00')) / 86400000));
     const quizLiberadas = Math.min(curiosOrdenadas.length, (diasDesdeInicioQuiz + 1) * 3);
     const quizPool = curiosOrdenadas.slice(0, quizLiberadas);
     const quizPerguntasView = temNome ? quizPool.filter(q => q.nome !== s.meuNome).map(q => {
@@ -5652,6 +5753,9 @@ class Component extends DCLogic {
       showOrgNps: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'nps', npsPainelStats, npsPainelStatsVazio, npsSemComentarios: npsComentarios.length === 0,
       npsDistChart, npsPainelChart,
       engajamentoDash, engajCidadeDonutBg, engajCidadeChart, brindesDashView, brindesDashResumo, origemPontosView,
+      brindeChartItemId, brindeChartOpcoes, onBrindeChartItem: (e) => this.setState({ brindeChartItem: e.target.value }),
+      precoPontos, mediaPontos, chartPontosView, chartGapLabel, chartW, chartH,
+      chartDiasRestantesSPLabel: chartDiasRestantesSP === 0 ? 'Evento em SP é hoje' : ('Faltam ' + chartDiasRestantesSP + ' dia' + (chartDiasRestantesSP > 1 ? 's' : '') + ' para o evento em SP'),
       pontosListaAberta: s.pontosListaAberta, togglePontosLista: this.togglePontosLista,
       pontosListaToggleLabel: s.pontosListaAberta ? 'Ocultar' : 'Ver lista',
       pontosListaOrdemOpcoes: [
