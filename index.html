@@ -433,9 +433,9 @@
           <sc-if value="{{ manualJogoAberto }}" hint-placeholder-val="{{ true }}">
           <div style="font-size:13px;color:#4A4A50;line-height:1.7">
             Cada ação de participação no app vale <b>1 ponto</b>: confirmar presença, responder restrição alimentar, escolher camiseta, responder à confraternização, informar necessidade especial e avaliar o evento (nota geral e por painel) — total de 7 pontos possíveis, mais 1 ponto por acerto no Detetive VIART abaixo.<br/><br/>
-            Os pontos podem ser trocados por brindes extras no mercado abaixo. O preço de cada brinde em pontos é fixo: reflete o teto de pontos possível até hoje (7 ações + perguntas do Detetive já liberadas). Esse teto sobe com os dias e conforme mais gente cadastra sua curiosidade pessoal (até um limite por dia) — mas não cai por baixa participação geral. Quanto você paga de fato depende só de quantas dessas ações você mesmo já fez. É por ordem de chegada: quem resgatar primeiro garante o item, mesmo que outra pessoa tenha mais pontos — então, se um brinde te interessa, não deixe pra depois.<br/><br/>
+            Os pontos podem ser trocados por brindes extras no mercado abaixo. O preço de cada brinde em pontos é um preço de mercado, não um valor fixo: ele acompanha o quanto quem já está pontuando de fato conquistou (não o máximo teórico de quem fez tudo). Se as pessoas mais engajadas acumulam mais pontos, o preço sobe; se pouca gente estiver pontuando, o preço cai — assim os itens continuam alcançáveis. Quanto você paga de fato depende só de quantas dessas ações você mesmo já fez. É por ordem de chegada: quem resgatar primeiro garante o item, mesmo que outra pessoa tenha mais pontos — então, se um brinde te interessa, não deixe pra depois.<br/><br/>
             O mercado só abre nos <b>intervalos</b> (almoço e coffee breaks), no dia do evento da sua cidade — fora desses horários dá pra ver os itens e acumular pontos, mas não pra resgatar.<br/><br/>
-            <b>Exemplo:</b> se o teto de pontos de hoje é 10 (7 ações + 3 perguntas do Detetive já liberadas), um item "barato" como as Canetas (peso 0,25) custa 3 pontos — fácil de bater fazendo só as ações básicas. Já um item "caro" como o Carregador Gocase (peso 1,6) custa 16 pontos — mais que o teto de hoje, então só fica acessível conforme novas perguntas do Detetive forem liberadas e você for acumulando pontos.
+            <b>Exemplo:</b> se hoje as pessoas mais engajadas (as que já estão respondendo tudo e acertando o Detetive) somam, em média, 10 pontos, um item "barato" como o Moleskine com caneta (peso 0,3) custa 3 pontos — fácil de bater fazendo só as ações básicas. Já um item "caro" como a Maleta de churrasco (peso 5,6) custa 56 pontos — só fica ao alcance de quem estiver entre os mais engajados, e o valor sobe ou desce junto com o quanto esse grupo está pontuando.
           </div>
           </sc-if>
         </div>
@@ -2025,6 +2025,51 @@
                 </sc-for>
               </svg>
               <div style="font-size:11.5px;font-weight:700;color:#8A5A0B;margin-top:2px">{{ chartGapLabel }}</div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;margin-bottom:20px">
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;margin-bottom:2px">Quem já pode comprar cada item</div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;margin-bottom:20px">
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;margin-bottom:2px">Resgates confirmados</div>
+              <div style="font-size:11.5px;color:#8A8A90;margin-bottom:10px">Quem já garantiu um brinde e ainda precisa recebê-lo da organização.</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+                <sc-for list="{{ resgatesFiltroOpcoes }}" as="op" hint-placeholder-count="3">
+                  <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ resgatesConfirmadosVazio }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12.5px;color:#8A8A90;padding:8px 0">Nenhum resgate nessa categoria.</div>
+              </sc-if>
+              <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+                  <thead>
+                    <tr style="background:#F7F9FC">
+                      <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Item</th>
+                      <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Nome</th>
+                      <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Cidade</th>
+                      <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Quando</th>
+                      <th style="text-align:right;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Entrega</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <sc-for list="{{ resgatesConfirmadosView }}" as="rg" hint-placeholder-count="6">
+                      <tr>
+                        <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;font-weight:700;color:#002855">{{ rg.itemNome }}</td>
+                        <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7">{{ rg.nome }}</td>
+                        <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;color:#6B6B70">{{ rg.cidade }}</td>
+                        <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;color:#6B6B70;white-space:nowrap">{{ rg.quando }}</td>
+                        <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;text-align:right">
+                          <span onClick="{{ rg.toggleEntregue }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:{{ rg.entregueBg }};color:{{ rg.entregueColor }};white-space:nowrap">{{ rg.entregueLabel }}</span>
+                        </td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
@@ -3620,12 +3665,12 @@ class Component extends DCLogic {
     const { sp: estSP, bsb: estBSB } = this.splitEstoque(item.estoqueTotal);
     const estoqueTotal = cidade === 'sp' ? estSP : estBSB;
     if (this.valor('brinde-' + itemId + '-' + nome)) { this.setState({ brindeAviso: 'Você já resgatou esse item.' }); return; }
-    if (this.contarResgates(itemId, cidade) >= estoqueTotal) { this.setState({ brindeAviso: 'Esse item já esgotou na sua cidade.' }); return; }
+    if (this.contarResgates(itemId, cidade) >= estoqueTotal) { this.setState({ brindeAviso: 'Esse item esgotou antes do seu resgate — escolha outro.' }); return; }
     const pontosPessoa = this.pontosTotalDe(nome);
     let gastos = 0;
     BRINDES_MARKETPLACE.forEach(b => { if (this.valor('brinde-' + b.id + '-' + nome)) gastos += this.precoBrinde(b); });
     if (pontosPessoa - gastos < custo) { this.setState({ brindeAviso: 'Pontos insuficientes para esse item.' }); return; }
-    this.setState({ brindeAviso: '' });
+    this.setState({ brindeAviso: 'Parabéns, o brinde é seu! Procure o pessoal da organização!' });
     this.setCampos({ ['brinde-' + itemId + '-' + nome]: true }).then(() => {
       setTimeout(() => this.reconciliarResgate(itemId, cidade, nome, estoqueTotal), 700);
     });
@@ -3641,10 +3686,15 @@ class Component extends DCLogic {
       const idx = claims.findIndex(c => c.nome === nome);
       if (idx >= estoqueTotal) {
         this.setCampos({ [pref + nome]: false });
-        this.setState({ brindeAviso: 'Esse item esgotou nos milissegundos antes do seu resgate — escolha outro.' });
+        this.setState({ brindeAviso: 'Esse item esgotou antes do seu resgate — escolha outro.' });
       }
     }, 500);
   };
+  toggleEntregueBrinde = (itemId, nome) => () => {
+    const k = 'brinde-entregue-' + itemId + '-' + nome;
+    this.setCampos({ [k]: !this.valor(k) });
+  };
+  setResgatesFiltro = (id) => () => this.setState({ resgatesFiltro: id });
 
   cycleCheck = (id, def) => () => {
     const order = ['ok', 'and', 'nao', 'nc'];
@@ -5163,6 +5213,8 @@ class Component extends DCLogic {
         if (k.indexOf(prefItem) === 0 && s.sync[k] && s.sync[k].v && (Date.now() - (s.sync[k].t || 0)) < 86400000) grp.velocidade24h++;
       });
     });
+    const ativosPontosSP = PARTICIPANTES.filter(n => this.cidadeDe(n) === 'sp' && !(PARTICIPANTES_INFO[n] || {}).d).map(n => this.pontosTotalDe(n));
+    const totalAtivosPontosSP = ativosPontosSP.length || 1;
     const brindesDashPre = Object.values(gruposMapBrindes).map(g => {
       const restante = Math.max(0, g.total - g.usado);
       const restanteSP = Math.max(0, g.totalSP - g.usadoSP);
@@ -5171,6 +5223,7 @@ class Component extends DCLogic {
         nome: g.nome, usado: g.usado, restante, total: g.total, pct: g.total ? Math.round(100 * g.usado / g.total) : 0,
         restanteSP, totalSP: g.totalSP, restanteBSB, totalBSB: g.totalBSB,
         preco: g.precoRef, velocidade24h: g.velocidade24h, itens: g.itens,
+        podeComprarCount: ativosPontosSP.filter(p => p >= g.precoRef).length,
       };
     });
     const maxVelocidade = Math.max.apply(null, brindesDashPre.map(b => b.velocidade24h).concat([0]));
@@ -5207,6 +5260,43 @@ class Component extends DCLogic {
     const chartGapAtual = chartSerie.length ? Math.round((chartSerie[chartSerie.length - 1].preco - chartSerie[chartSerie.length - 1].media) * 10) / 10 : 0;
     const chartDiasRestantesSP = Math.max(0, Math.round((new Date(DATA_EVENTO_CIDADE.sp + 'T00:00:00') - new Date(hojeISOAtual(new Date()) + 'T00:00:00')) / 86400000));
     const chartGapLabel = chartGapAtual <= 0 ? 'A mediana real já alcança o preço atual' : ('Faltam ' + chartGapAtual + ' pts, na mediana, para alcançar o preço atual');
+    const podeComprarView = brindesDashPre.slice().sort((a, b) => b.preco - a.preco).map((b, i) => ({
+      id: 'pc-' + i, nome: b.nome, preco: b.preco, count: b.podeComprarCount,
+      pct: Math.round(100 * b.podeComprarCount / totalAtivosPontosSP),
+      barColor: b.podeComprarCount === 0 ? '#B4471F' : (b.podeComprarCount / totalAtivosPontosSP < 0.1 ? '#F39200' : '#1E7A45'),
+    }));
+    const resgatesConfirmadosPre = [];
+    BRINDES_MARKETPLACE.forEach(b => {
+      Object.keys(s.sync).forEach(k => {
+        const pref = 'brinde-' + b.id + '-';
+        if (k.indexOf(pref) === 0 && s.sync[k] && s.sync[k].v === true) {
+          const nomePessoa = k.slice(pref.length);
+          const entregueKey = 'brinde-entregue-' + b.id + '-' + nomePessoa;
+          resgatesConfirmadosPre.push({
+            itemId: b.id, itemNome: b.nome, nome: nomePessoa, cidade: this.cidadeDe(nomePessoa) === 'bsb' ? 'Brasília' : 'São Paulo',
+            t: s.sync[k].t || 0, entregue: !!this.valor(entregueKey), toggleEntregue: this.toggleEntregueBrinde(b.id, nomePessoa),
+          });
+        }
+      });
+    });
+    const resgatesFiltroAtivo = s.resgatesFiltro || 'pendentes';
+    const resgatesPendentesCount = resgatesConfirmadosPre.filter(r => !r.entregue).length;
+    const resgatesEntreguesCount = resgatesConfirmadosPre.filter(r => r.entregue).length;
+    const resgatesFiltroOpcoes = [
+      { id: 'pendentes', label: 'Pendentes (' + resgatesPendentesCount + ')' },
+      { id: 'entregues', label: 'Entregues (' + resgatesEntreguesCount + ')' },
+      { id: 'todos', label: 'Todos (' + resgatesConfirmadosPre.length + ')' },
+    ].map(op => ({ ...op, onClick: this.setResgatesFiltro(op.id), bg: resgatesFiltroAtivo === op.id ? '#0057A6' : '#F2F5FA', color: resgatesFiltroAtivo === op.id ? '#FFFFFF' : '#4A4A50' }));
+    const resgatesConfirmadosView = resgatesConfirmadosPre
+      .filter(r => resgatesFiltroAtivo === 'todos' || (resgatesFiltroAtivo === 'pendentes' ? !r.entregue : r.entregue))
+      .sort((a, b) => b.t - a.t)
+      .map(r => ({
+        ...r,
+        quando: r.t ? new Date(r.t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—',
+        entregueLabel: r.entregue ? '✓ Entregue' : 'Marcar entregue',
+        entregueBg: r.entregue ? '#E3F3E8' : '#F2F5FA', entregueColor: r.entregue ? '#1E7A45' : '#0057A6',
+      }));
+    const resgatesConfirmadosVazio = resgatesConfirmadosView.length === 0;
     const brindesDashView = brindesDashPre
       .sort((a, b) => b.preco - a.preco)
       .map((b, i) => ({
@@ -5756,7 +5846,8 @@ class Component extends DCLogic {
       npsDistChart, npsPainelChart,
       engajamentoDash, engajCidadeDonutBg, engajCidadeChart, brindesDashView, brindesDashResumo, origemPontosView,
       brindeChartItemId, brindeChartOpcoes, onBrindeChartItem: (e) => this.setState({ brindeChartItem: e.target.value }),
-      precoPontos, mediaPontos, chartPontosView, chartGapLabel, chartW, chartH,
+      precoPontos, mediaPontos, chartPontosView, chartGapLabel, chartW, chartH, podeComprarView, totalAtivosPontosSP,
+      resgatesConfirmadosView, resgatesConfirmadosVazio, resgatesFiltroOpcoes,
       chartDiasRestantesSPLabel: chartDiasRestantesSP === 0 ? 'Evento em SP é hoje' : ('Faltam ' + chartDiasRestantesSP + ' dia' + (chartDiasRestantesSP > 1 ? 's' : '') + ' para o evento em SP'),
       pontosListaAberta: s.pontosListaAberta, togglePontosLista: this.togglePontosLista,
       pontosListaToggleLabel: s.pontosListaAberta ? 'Ocultar' : 'Ver lista',
