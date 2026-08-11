@@ -39,6 +39,7 @@
     input::placeholder,textarea::placeholder{color:#A6A29A}
   </style>
   <script src="./image-slot.js"></script>
+  <script src="./docx-lib.js"></script>
 </helmet>
 
 <div style="min-height:100vh;background:#F2F5FA;padding-bottom:60px">
@@ -1333,6 +1334,20 @@
             </div>
             </sc-if>
 
+            <sc-if value="{{ showOrgRelatorios }}" hint-placeholder-val="{{ false }}">
+            <div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Relatórios</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Documentos .docx prontos para impressão, com cabeçalho, rodapé e numeração de páginas.</div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+              <div>
+                <div style="font-weight:700;font-size:14px">Lista de pessoas · camisa e gênero</div>
+                <div style="font-size:12.5px;color:#6B6B70;margin-top:3px">100% dos participantes (inclusive Organização, Gestores, Férias, Destacamento e Licença/outros), separados por cidade/grupo e por área, com tamanho de camisa e gênero.</div>
+              </div>
+              <div onClick="{{ baixarRelatorioPessoas }}" style="cursor:pointer;background:#0057A6;color:#fff;font-weight:700;padding:10px 20px;border-radius:10px;font-size:13px;white-space:nowrap">Baixar .docx</div>
+            </div>
+            </div>
+            </sc-if>
+
             <sc-if value="{{ showOrgManual }}" hint-placeholder-val="{{ false }}">
             <div>
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Manual do App</div>
@@ -1856,54 +1871,42 @@
             <div>
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Gamificação</div>
 
+            <sc-for list="{{ engajCidadeChart }}" as="ec" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:8px;margin:14px 0 8px">
+              <div style="width:9px;height:9px;border-radius:3px;background:{{ ec.cor }};flex-shrink:0"></div>
+              <div style="font-size:11.5px;font-weight:800;color:{{ ec.cor }};text-transform:uppercase;letter-spacing:0.08em">{{ ec.nome }}</div>
+            </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px">
               <div style="background:#0A3C6E;color:#FFFFFF;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ engajamentoDash.totalPontos }}</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ ec.total }}</div>
                 <div style="font-size:11.5px;color:#A9C0DE">pontos no total</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#1E7A45">{{ engajamentoDash.participacaoPct }}%</div>
-                <div style="font-size:11.5px;color:#6B6B70">já pontuaram ({{ engajamentoDash.participacaoAtivos }} de {{ pontosRankingView.length }})</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#1E7A45">{{ ec.participacaoPct }}%</div>
+                <div style="font-size:11.5px;color:#6B6B70">já pontuaram ({{ ec.participacaoAtivos }} de {{ ec.participacaoTotal }})</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#1E7A45">{{ engajamentoDash.maisPontosNome }}</div>
-                <div style="font-size:11.5px;color:#6B6B70">mais pontos ({{ engajamentoDash.maisPontosValor }})</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#1E7A45">{{ ec.maisPontosNome }}</div>
+                <div style="font-size:11.5px;color:#6B6B70">mais pontos ({{ ec.maisPontosValor }})</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#B4471F">{{ engajamentoDash.menosPontosNome }}</div>
-                <div style="font-size:11.5px;color:#6B6B70">menos pontos ({{ engajamentoDash.menosPontosValor }})</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#B4471F">{{ ec.menosPontosNome }}</div>
+                <div style="font-size:11.5px;color:#6B6B70">menos pontos ({{ ec.menosPontosValor }})</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#1E7A45">{{ engajamentoDash.maisResgatouNome }}</div>
-                <div style="font-size:11.5px;color:#6B6B70">mais trocou brindes ({{ engajamentoDash.maisResgatouValor }})</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#1E7A45">{{ ec.maisResgatouNome }}</div>
+                <div style="font-size:11.5px;color:#6B6B70">mais trocou brindes ({{ ec.maisResgatouValor }})</div>
               </div>
               <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#B4471F">{{ engajamentoDash.menosResgatouNome }}</div>
-                <div style="font-size:11.5px;color:#6B6B70">menos trocou brindes ({{ engajamentoDash.menosResgatouValor }})</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#B4471F">{{ ec.menosResgatouNome }}</div>
+                <div style="font-size:11.5px;color:#6B6B70">menos trocou brindes ({{ ec.menosResgatouValor }})</div>
               </div>
+            </div>
+            </sc-for>
             </div>
 
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;margin:0 0 10px">Engajamento por cidade e área</div>
             <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:16px">
-              <div style="flex:1 1 220px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
-                <div style="font-weight:700;font-size:13px;margin-bottom:2px">Engajamento · Pontos & Brindes</div>
-                <div style="font-size:10.5px;color:#8A8A90;margin-bottom:10px">resumo — detalhes na aba Pontos & Brindes</div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline">
-                    <div style="font-size:11.5px;color:#4A4A50">Pontos distribuídos</div>
-                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#0057A6">{{ engajamentoDash.totalPontos }}</div>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:baseline">
-                    <div style="font-size:11.5px;color:#4A4A50">Participação ativa</div>
-                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#1E7A45">{{ engajamentoDash.participacaoPct }}%</div>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
-                    <div style="font-size:11.5px;color:#4A4A50">Mais pontos</div>
-                    <div style="font-size:12px;font-weight:700;color:#002855;text-align:right">{{ engajamentoDash.maisPontosNome }} · {{ engajamentoDash.maisPontosValor }}</div>
-                  </div>
-                </div>
-              </div>
-
               <div style="flex:1 1 260px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:16px 18px">
                 <div style="font-weight:700;font-size:13px;margin-bottom:2px">Engajamento no app</div>
                 <div style="font-size:10.5px;color:#8A8A90;margin-bottom:10px">quem já se identificou (respondeu algo no cadastro)</div>
@@ -1913,6 +1916,19 @@
                 </div>
                 <div style="height:10px;border-radius:999px;background:#EDF1F7;overflow:hidden;display:flex">
                   <div style="height:100%;background:#1E7A45;width:{{ identificadosPct }}%"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+                  <sc-for list="{{ identificadosPorCidade }}" as="ic" hint-placeholder-count="2">
+                    <div>
+                      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
+                        <div style="font-size:10.5px;font-weight:800;color:{{ ic.cor }};text-transform:uppercase;letter-spacing:0.06em">{{ ic.nome }}</div>
+                        <div style="font-size:11px;color:#6B6B70">{{ ic.count }} de {{ ic.total }} · {{ ic.pct }}%</div>
+                      </div>
+                      <div style="height:6px;border-radius:999px;background:#EDF1F7;overflow:hidden;display:flex">
+                        <div style="height:100%;background:{{ ic.cor }};width:{{ ic.pct }}%"></div>
+                      </div>
+                    </div>
+                  </sc-for>
                 </div>
               </div>
             </div>
@@ -1935,6 +1951,9 @@
                       <div style="font-size:10.5px;font-weight:800;color:{{ ec.cor }};text-transform:uppercase;letter-spacing:0.06em">{{ ec.nome }}</div>
                     </div>
                     <div style="font-size:11.5px;color:#4A4A50;line-height:1.6">Total: <b>{{ ec.total }}</b> · {{ ec.totalPct }}% · Média: <b>{{ ec.media }}</b> · Resgates: <b>{{ ec.resgates }}</b> · {{ ec.resgatesPct }}%</div>
+                    <div style="font-size:11.5px;color:#4A4A50;line-height:1.6">Participação ativa: <b>{{ ec.participacaoPct }}%</b> ({{ ec.participacaoAtivos }} de {{ ec.participacaoTotal }})</div>
+                    <div style="font-size:11.5px;color:#4A4A50;line-height:1.6">Mais pontos: <b>{{ ec.maisPontosNome }}</b> ({{ ec.maisPontosValor }}) · Menos: <b>{{ ec.menosPontosNome }}</b> ({{ ec.menosPontosValor }})</div>
+                    <div style="font-size:11.5px;color:#4A4A50;line-height:1.6">Mais resgatou: <b>{{ ec.maisResgatouNome }}</b> ({{ ec.maisResgatouValor }}) · Menos: <b>{{ ec.menosResgatouNome }}</b> ({{ ec.menosResgatouValor }})</div>
                   </div>
                 </sc-for>
               </div>
@@ -1970,12 +1989,21 @@
               <div style="display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto">
                 <sc-for list="{{ origemPontosView }}" as="op" hint-placeholder-count="8">
                   <div style="background:#F7F9FC;border-radius:10px;padding:9px 12px">
-                    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:11.5px;margin-bottom:5px">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:11.5px;margin-bottom:6px">
                       <div style="font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ op.label }}</div>
                       <div style="color:#6B6B70;flex-shrink:0;white-space:nowrap">{{ op.count }} · {{ op.pct }}%</div>
                     </div>
-                    <div style="height:5px;border-radius:999px;background:#EDF1F7;overflow:hidden">
-                      <div style="height:100%;width:{{ op.pct }}%;background:#1E7A45;border-radius:999px"></div>
+                    <div style="display:flex;flex-direction:column;gap:3px">
+                      <div style="display:flex;align-items:center;gap:6px">
+                        <div style="font-size:9.5px;font-weight:800;color:#0057A6;width:32px;flex-shrink:0">SP</div>
+                        <div style="flex:1;height:5px;border-radius:999px;background:#EDF1F7;overflow:hidden"><div style="height:100%;width:{{ op.pctSP }}%;background:#0057A6;border-radius:999px"></div></div>
+                        <div style="font-size:10px;color:#6B6B70;width:64px;text-align:right;flex-shrink:0">{{ op.countSP }} · {{ op.pctSP }}%</div>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:6px">
+                        <div style="font-size:9.5px;font-weight:800;color:#F39200;width:32px;flex-shrink:0">BSB</div>
+                        <div style="flex:1;height:5px;border-radius:999px;background:#EDF1F7;overflow:hidden"><div style="height:100%;width:{{ op.pctBSB }}%;background:#F39200;border-radius:999px"></div></div>
+                        <div style="font-size:10px;color:#6B6B70;width:64px;text-align:right;flex-shrink:0">{{ op.countBSB }} · {{ op.pctBSB }}%</div>
+                      </div>
                     </div>
                   </div>
                 </sc-for>
@@ -2031,35 +2059,6 @@
                   <div style="font-size:10px;color:#8A8A90">pessoas</div>
                 </div>
               </div>
-            </div>
-
-            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;margin-bottom:20px">
-              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:2px">
-                <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Preço vs. capacidade de compra</div>
-                <select value="{{ brindeChartItemId }}" onChange="{{ onBrindeChartItem }}" style="font-size:11.5px;font-weight:700;color:#002855;border:1px solid #C9D6E8;border-radius:8px;padding:5px 8px;background:#F7F9FC">
-                  <sc-for list="{{ brindeChartOpcoes }}" as="op" hint-placeholder-count="6">
-                    <option value="{{ op.id }}">{{ op.nome }}</option>
-                  </sc-for>
-                </select>
-              </div>
-              <div style="font-size:11.5px;color:#8A8A90;margin-bottom:8px">Como o preço deste item cai conforme a adesão geral de SP às ações básicas sobe de 0% a 100%. O ponto laranja marca onde estamos hoje ({{ adesaoAtualPct }}% de adesão · {{ precoAtualChart }} pts); a linha verde é a pontuação mediana real dos participantes de SP hoje ({{ medianaAtual }} pts).</div>
-              <div style="display:flex;gap:14px;margin-bottom:6px;flex-wrap:wrap">
-                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#4A4A50"><span style="width:12px;height:3px;background:#0057A6;display:inline-block;border-radius:2px"></span>Preço conforme a adesão (pts)</div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#4A4A50"><span style="width:12px;height:3px;background:#1E7A45;display:inline-block;border-radius:2px;border-top:2px dashed #1E7A45;height:0"></span>Mediana real hoje (pts)</div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#4A4A50"><span style="width:9px;height:9px;border-radius:999px;background:#F39200;display:inline-block"></span>Hoje</div>
-              </div>
-              <svg viewBox="0 0 {{ chartW }} {{ chartH }}" style="width:100%;height:200px;overflow:visible">
-                <polyline points="{{ precoPontos }}" fill="none" stroke="#0057A6" stroke-width="2"></polyline>
-                <polyline points="{{ mediaPontos }}" fill="none" stroke="#1E7A45" stroke-width="2" stroke-dasharray="4,4"></polyline>
-                <sc-for list="{{ chartPontosView }}" as="pt" hint-placeholder-count="11">
-                  <circle cx="{{ pt.cxPreco }}" cy="{{ pt.cyPreco }}" r="3" fill="#0057A6"><title>{{ pt.tituloPreco }}</title></circle>
-                  <sc-if value="{{ pt.showLabel }}" hint-placeholder-val="{{ false }}">
-                    <text x="{{ pt.xLabel }}" y="{{ pt.yLabel }}" text-anchor="middle" font-size="9.5" fill="#8A8A90">{{ pt.label }}</text>
-                  </sc-if>
-                </sc-for>
-                <circle cx="{{ markerX }}" cy="{{ markerY }}" r="5" fill="#F39200" stroke="#FFFFFF" stroke-width="1.5"><title>Hoje: {{ adesaoAtualPct }}% de adesão · {{ precoAtualChart }} pts</title></circle>
-              </svg>
-              <div style="font-size:11.5px;font-weight:700;color:#8A5A0B;margin-top:2px">{{ chartGapLabel }}</div>
             </div>
 
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;margin-bottom:20px">
@@ -2153,78 +2152,6 @@
             </sc-if>
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px">
-              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Malas de brindes · BSB → SP</div>
-              <div onClick="{{ toggleAccMalas }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accMalasLabel }}</div>
-            </div>
-            <sc-if value="{{ accMalasAberto }}" hint-placeholder-val="{{ false }}">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px">
-              <div style="background:#0A3C6E;color:#FFFFFF;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px">{{ malasTotal }}</div>
-                <div style="font-size:11.5px;color:#A9C0DE">malas no total</div>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#8A5A00">{{ malasDespachadasCount }}</div>
-                <div style="font-size:11.5px;color:#6B6B70">despachadas em BSB</div>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px">
-                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:#1E7A45">{{ malasRecebidasCount }}</div>
-                <div style="font-size:11.5px;color:#6B6B70">recebidas em SP</div>
-              </div>
-            </div>
-
-            <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Malas · item a item</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
-              <sc-for list="{{ malaFiltroPassageiroOpcoes }}" as="op" hint-placeholder-count="7">
-                <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
-              </sc-for>
-            </div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-              <sc-for list="{{ malaFiltroStatusOpcoes }}" as="op" hint-placeholder-count="4">
-                <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
-              </sc-for>
-            </div>
-            <div style="overflow-x:auto;border:1px solid #DCE6F2;border-radius:10px;margin-bottom:20px">
-              <table style="width:100%;border-collapse:collapse;font-size:12.5px;background:#FFFFFF">
-                <thead>
-                  <tr style="background:#F7F9FC">
-                    <th style="text-align:left;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Mala</th>
-                    <th style="text-align:left;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Chega em SP</th>
-                    <th style="text-align:left;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Status da mala</th>
-                    <th style="text-align:left;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Item</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Qtd nesta mala</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Restam em BSB</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Meta SP do item</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <sc-for list="{{ malasLinhas }}" as="l" hint-placeholder-count="10">
-                    <tr style="border-bottom:1px solid #EEF2F8">
-                      <sc-if value="{{ l.primeiraDoGrupo }}" hint-placeholder-val="{{ true }}">
-                        <td style="padding:10px 12px;font-weight:700;color:#002855;white-space:nowrap;border-top:2px solid #DCE6F2">{{ l.passageiro }}</td>
-                        <td style="padding:10px 12px;color:#6B6B70;white-space:nowrap;border-top:2px solid #DCE6F2">{{ l.chegada }}</td>
-                        <td style="padding:10px 12px;white-space:nowrap;border-top:2px solid #DCE6F2"><span onClick="{{ l.ciclo }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 10px;border-radius:999px;background:{{ l.statusBg }};color:{{ l.statusColor }}">{{ l.status }}</span></td>
-                        <td style="padding:10px 12px;color:#002855;white-space:nowrap;border-top:2px solid #DCE6F2">{{ l.nome }}</td>
-                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:#0057A6;border-top:2px solid #DCE6F2">{{ l.qtd }}</td>
-                        <td style="padding:10px 12px;text-align:right;color:#6B6B70;border-top:2px solid #DCE6F2">{{ l.restanteBSB }}</td>
-                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:{{ l.spColor }};white-space:nowrap;border-top:2px solid #DCE6F2">{{ l.spLabel }}</td>
-                      </sc-if>
-                      <sc-if value="{{ l.naoPrimeiraDoGrupo }}" hint-placeholder-val="{{ false }}">
-                        <td style="padding:10px 12px"></td>
-                        <td style="padding:10px 12px"></td>
-                        <td style="padding:10px 12px"></td>
-                        <td style="padding:10px 12px;color:#002855;white-space:nowrap">{{ l.nome }}</td>
-                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:#0057A6">{{ l.qtd }}</td>
-                        <td style="padding:10px 12px;text-align:right;color:#6B6B70">{{ l.restanteBSB }}</td>
-                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:{{ l.spColor }};white-space:nowrap">{{ l.spLabel }}</td>
-                      </sc-if>
-                    </tr>
-                  </sc-for>
-                </tbody>
-              </table>
-            </div>
-            </sc-if>
-
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">
               <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Lista nome a nome ({{ pontosRankingView.length }})</div>
               <div onClick="{{ togglePontosLista }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ pontosListaToggleLabel }}</div>
             </div>
@@ -2595,7 +2522,7 @@
 
 const PARTICIPANTES = "Adriana Carrilho Felippe|Adriano Shiratsu Ueda|Alan Barbieri|Alan Ferreira de Lima Filho|Alan Rodrigo do Nascimento Rodrigues|Alessandra Grellet Miranda|Alexandre da Silva Dias|Alica Dias Ribeiro Marques Pereira|Aline Taboga Franca de Godoy|Alisson Araujo de Lima|Alvaro Cunha Matos Lessa de Oliveira|Amaralina de Oliveira Abrantes Sant Anna|Ana Paula Alves Paschoalini|Ana Sefora Pires Farias|Anderson Buso|Anderson de Queiroz Moreira|Andrea Felicio Chaves|Andrea Natashya Fukushima Fukuda|Anna Patricia de Pinho Silva|Antonio Francisco Maciel|Arthur Felipe Rodrigues da Silva|Bruno Oliveira Manhaes de Almeida|Calil Abdo Marino Salum|Camila de Oliveira Ragognete|Camila Gregorio do Nascimento|Camilla de Almeida Mary|Carlos Eugenio de Brito Sousa|Catarina Moretti Ribeiro|Cinthia Freitas Duarte|Cintia da Silva Arruda|Cristiane Maya Yoshida|Cristiane Paulino|Daniel Correa Munhoz|Daniel Pereira Cunha|Daniela Gadelha Saraiva do Amaral|Daniela Nagumo|Danielle Eskenazi Cruzolini|Danielle Monteiro Cruz da Silva|Danielle Patricia Cordeiro Aurelio|Dazia Vanessa Eguchi Kemper|Diego Augusto Granado|Diego Mathias|Diogo Caetano Ribeiro|Douglas Martins Neves Costa|Edney Jonas Sena|Eduardo Alves de Oliveira|Eduardo Capitulino Viana|Eduardo Luiz Rocha dos Santos|Eladio Caldas de Almeida|Eliana Marques Lisboa|Emily Mendes Xavier|Erika Carolina Ruiz Ganga|Erika Cerqueira Silva|Fabiana Graciano|Fabio Becare Junqueira|Fabio Coelho da Silva|Fabio da Silva Bueno|Fabio Henrique Secomandi|Fabricio Honorato Soares|Fazio Roberto Dias dos Santos|Fernanda Bueno Frederico Martinis|Fernando Ferreira dos Santos|Fernando Gomes Saidel Herbst|Fernando Henrique Augusto|Fernando Vinicius Barros de Almeida|Fernando Zandona Assuncao|Filipe Sousa Moreira|Flavia Gualtieri|Flavia Regina Finholdt B Mazzocchi|Gabriel Dalessandro Pereira|Gabriela Birk|Gabrielle Matosinho de Oliveira|Gerrana Campos Favieiro|Glayce Lopes da Nobrega|Guilherme Ehlers Farias|Guilherme Fernandes de Souza|Guilherme Ivan Batista|Guilherme Ribeiro de Oliveira|Gustavo Luiz Costa Araujo|Hugo Alves Richard|Humberto Dantas de Matos|Ian Victor de Oliveira Cimino|Ingrid de Jesus Cabral|Ivan Dechen Pedro|Janaina de Amorim Silva|Jeferson Ferreira|Jerusa Alberton de Alencar Nogueira|Joao Cesar Nobre|Joao Paulo Barroso dos Santos|Joao Paulo Vargas da Silveira|Joe Moroizumi|Jose Romulo de Castro Vieira|Julio Cesar Brandao da Silva|Julio Cesar Silva|Karen Gloria Buono|Karen Rondelo Duarte|Katia Cilene da Silva Peralta|Kleber de Jesus Ivanchuk|Lais Rodrigues Carudelli Badin|Laiza Fabiola Martins de Santa Rosa|Leandro Cenati Bueno de Lima|Leandro Franco da Silveira|Leonardo Barbosa Tavares|Leonardo Matzenbacher Finger|Livia Dombroski Santos|Lorena dos Santos Bezerra|Lucas Rafael Ramos da Silva|Lucas Roberto Ribeiro da Silva|Luci Cleide Silva e Castro|Luciana de Oliveira Ferreira|Luciana Mickel Miyamoto|Luciano Garrido|Luis Gustavo Viana de Araujo Zanfra|Maisa Abrantes de Pina Afonso|Marcela dos Anjos Abeid|Marcia Midori Kataoka|Marcio Caetano dos Santos|Marcos Vieira dos Santos|Maria Perpetuo Socorro Passos L Almeida|Maria Stela Kamisaki Katayama|Mariana Mazivieiro|Marina Baggio Rodrigues|Mario Erbolato Neto|Mauricio Antonio Alves da Costa|Michael Prudencio Favero|Moacyr Ligabo Junior|Natalia Walkovics|Nellie Nagasse|Nicole Suemi Suzuki|Patricia Keiko Honda|Patrik Hideki Ito|Paula Baffini de Castro Santana|Paula Cristina da Silva|Paula Hitomi Konishi|Pedro Henrique Machado Martins|Pedro Victor Oliveira Costa Giacomazzo|Priscila Castilho de Almeida Pereira|Priscila Rodrigues Ferreira|Rafael de Vasconcelos Florentino|Raoni Ferreira Pinho|Raquel Boatto de Moraes|Renan Gama Oliveira|Renata Casemiro do Prado Santos|Renata Leonel Dias Ajame|Renata Lopes Franco|Renata Loureiro e Silva Koshimura|Renato Silva dos Santos|Renato Yoshio Okabe|Ricardo Alexandre Barbosa Dantas|Ricardo Alexandre Ramos|Ricardo Kendy Yokomizo|Ricardo Oliveira do Amaral|Ricardo Silva Nunes de Siqueira|Ricardo Troes|Roberto Cavalcante Amorim|Rodney Yamane|Rodrigo Chaves Batista|Rodrigo de Oliveira Coutinho|Rodrigo Devchi|Rodrigo Gomes Coelho|Rolando Tadashi Oride|Ronaldo de Oliveira|Rosemeire Aparecida Duque Prosperi|Ruthe Ventura Cuesta|Sergio Henrique Oliveira Bini|Simone Shiroma|Sintia das Neves Barbosa Rodrigues|Sonayara Oliveira Lima|Stella Mitiko Ushizima|Talita Sabioni Itocazo|Tania Gobatti Calca|Tatiana Pereira Cosentino|Tatiana Sanches Biscari Nagase|Tatianna Felix dos Santos Morais|Tatyana Arashiro|Thais Moura Brito|Thiago Bosisio Ferreira|Thiago de Oliveira Montanari|Thiago Pereira Gonzalez|Vagner Junio da Silva|Vanessa Bittencourt Bernardes|Vanessa Paes Suppa|Verena Primo Ikeda|Vinicius Barbieri Domingues|Viviana Machado dos Santos|Willian Abreu Canelada|Zeila Itokazu".split('|');
 const PARTICIPANTES_CIDADE_AUTO = {"Adriana Carrilho Felippe":"sp","Adriano Shiratsu Ueda":"sp","Alan Barbieri":"sp","Alan Ferreira de Lima Filho":"sp","Alan Rodrigo do Nascimento Rodrigues":"sp","Alessandra Grellet Miranda":"sp","Alexandre da Silva Dias":"bsb","Alica Dias Ribeiro Marques Pereira":"bsb","Aline Taboga Franca de Godoy":"sp","Alisson Araujo de Lima":"sp","Alvaro Cunha Matos Lessa de Oliveira":"sp","Amaralina de Oliveira Abrantes Sant Anna":"bsb","Ana Paula Alves Paschoalini":"sp","Ana Sefora Pires Farias":"sp","Anderson Buso":"sp","Anderson de Queiroz Moreira":"sp","Andrea Felicio Chaves":"sp","Andrea Natashya Fukushima Fukuda":"sp","Anna Patricia de Pinho Silva":"","Antonio Francisco Maciel":"bsb","Arthur Felipe Rodrigues da Silva":"bsb","Bruno Oliveira Manhaes de Almeida":"bsb","Calil Abdo Marino Salum":"sp","Camila de Oliveira Ragognete":"sp","Camila Gregorio do Nascimento":"sp","Camilla de Almeida Mary":"bsb","Carlos Eugenio de Brito Sousa":"bsb","Catarina Moretti Ribeiro":"sp","Cinthia Freitas Duarte":"bsb","Cristiane Paulino":"sp","Daniel Correa Munhoz":"sp","Daniel Pereira Cunha":"sp","Daniela Gadelha Saraiva do Amaral":"sp","Daniela Nagumo":"sp","Danielle Eskenazi Cruzolini":"sp","Danielle Monteiro Cruz da Silva":"sp","Danielle Patricia Cordeiro Aurelio":"sp","Dazia Vanessa Eguchi Kemper":"sp","Diego Augusto Granado":"bsb","Diego Mathias":"sp","Diogo Caetano Ribeiro":"sp","Douglas Martins Neves Costa":"bsb","Edney Jonas Sena":"sp","Eduardo Alves de Oliveira":"sp","Eduardo Capitulino Viana":"sp","Eladio Caldas de Almeida":"bsb","Eliana Marques Lisboa":"sp","Emily Mendes Xavier":"bsb","Erika Carolina Ruiz Ganga":"sp","Erika Cerqueira Silva":"sp","Fabiana Graciano":"bsb","Fabio Becare Junqueira":"sp","Fabio Coelho da Silva":"bsb","Fabio da Silva Bueno":"sp","Fabio Henrique Secomandi":"sp","Fabricio Honorato Soares":"sp","Fazio Roberto Dias dos Santos":"sp","Fernando Ferreira dos Santos":"sp","Fernando Gomes Saidel Herbst":"sp","Fernando Henrique Augusto":"sp","Fernando Vinicius Barros de Almeida":"bsb","Fernando Zandona Assuncao":"bsb","Filipe Sousa Moreira":"sp","Flavia Gualtieri":"sp","Flavia Regina Finholdt B Mazzocchi":"sp","Gabriel Dalessandro Pereira":"bsb","Gabriela Birk":"sp","Gabrielle Matosinho de Oliveira":"sp","Glayce Lopes da Nobrega":"bsb","Guilherme Ehlers Farias":"bsb","Guilherme Fernandes de Souza":"bsb","Guilherme Ivan Batista":"bsb","Guilherme Ribeiro de Oliveira":"bsb","Gustavo Luiz Costa Araujo":"bsb","Hugo Alves Richard":"bsb","Humberto Dantas de Matos":"sp","Ian Victor de Oliveira Cimino":"bsb","Ingrid de Jesus Cabral":"sp","Ivan Dechen Pedro":"sp","Janaina de Amorim Silva":"sp","Jeferson Ferreira":"sp","Jerusa Alberton de Alencar Nogueira":"bsb","Joao Cesar Nobre":"sp","Joao Paulo Barroso dos Santos":"sp","Joao Paulo Vargas da Silveira":"bsb","Joe Moroizumi":"sp","Jose Romulo de Castro Vieira":"sp","Julio Cesar Brandao da Silva":"sp","Julio Cesar Silva":"sp","Karen Gloria Buono":"sp","Karen Rondelo Duarte":"sp","Katia Cilene da Silva Peralta":"sp","Kleber de Jesus Ivanchuk":"sp","Lais Rodrigues Carudelli Badin":"bsb","Laiza Fabiola Martins de Santa Rosa":"sp","Leandro Cenati Bueno de Lima":"sp","Leandro Franco da Silveira":"sp","Leonardo Barbosa Tavares":"bsb","Leonardo Matzenbacher Finger":"sp","Livia Dombroski Santos":"bsb","Lorena dos Santos Bezerra":"bsb","Lucas Rafael Ramos da Silva":"sp","Lucas Roberto Ribeiro da Silva":"sp","Luciana de Oliveira Ferreira":"bsb","Luciana Mickel Miyamoto":"sp","Luciano Garrido":"sp","Luis Gustavo Viana de Araujo Zanfra":"sp","Marcela dos Anjos Abeid":"sp","Marcia Midori Kataoka":"sp","Marcio Caetano dos Santos":"sp","Marcos Vieira dos Santos":"sp","Maria Perpetuo Socorro Passos L Almeida":"bsb","Maria Stela Kamisaki Katayama":"sp","Mariana Mazivieiro":"sp","Marina Baggio Rodrigues":"sp","Mauricio Antonio Alves da Costa":"sp","Michael Prudencio Favero":"sp","Moacyr Ligabo Junior":"sp","Natalia Walkovics":"sp","Nicole Suemi Suzuki":"sp","Patricia Keiko Honda":"sp","Patrik Hideki Ito":"sp","Paula Baffini de Castro Santana":"sp","Paula Cristina da Silva":"sp","Pedro Henrique Machado Martins":"sp","Pedro Victor Oliveira Costa Giacomazzo":"bsb","Priscila Castilho de Almeida Pereira":"sp","Priscila Rodrigues Ferreira":"bsb","Rafael de Vasconcelos Florentino":"sp","Raoni Ferreira Pinho":"bsb","Raquel Boatto de Moraes":"sp","Renan Gama Oliveira":"sp","Renata Leonel Dias Ajame":"sp","Renata Lopes Franco":"bsb","Renata Loureiro e Silva Koshimura":"sp","Renato Silva dos Santos":"sp","Renato Yoshio Okabe":"bsb","Ricardo Alexandre Barbosa Dantas":"bsb","Ricardo Alexandre Ramos":"sp","Ricardo Oliveira do Amaral":"sp","Ricardo Silva Nunes de Siqueira":"sp","Roberto Cavalcante Amorim":"bsb","Rodney Yamane":"sp","Rodrigo Chaves Batista":"bsb","Rodrigo de Oliveira Coutinho":"sp","Rodrigo Devchi":"bsb","Rolando Tadashi Oride":"sp","Ronaldo de Oliveira":"sp","Rosemeire Aparecida Duque Prosperi":"sp","Ruthe Ventura Cuesta":"sp","Simone Shiroma":"sp","Sintia das Neves Barbosa Rodrigues":"bsb","Sonayara Oliveira Lima":"sp","Stella Mitiko Ushizima":"sp","Talita Sabioni Itocazo":"sp","Tania Gobatti Calca":"sp","Tatiana Pereira Cosentino":"sp","Tatiana Sanches Biscari Nagase":"sp","Tatianna Felix dos Santos Morais":"bsb","Tatyana Arashiro":"sp","Thais Moura Brito":"bsb","Thiago Bosisio Ferreira":"sp","Thiago de Oliveira Montanari":"bsb","Thiago Pereira Gonzalez":"sp","Vanessa Bittencourt Bernardes":"bsb","Vanessa Paes Suppa":"bsb","Vinicius Barbieri Domingues":"bsb","Viviana Machado dos Santos":"bsb","Willian Abreu Canelada":"sp","Zeila Itokazu":"sp","Luci Cleide Silva e Castro":"sp"};
-const PARTICIPANTES_INFO = {"Adriana Carrilho Felippe":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Feminina"},"Adriano Shiratsu Ueda":{"f":"CONSULTOR DE DIRIGENTE","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99624-4355","cs":"GG","cm":"Masculina"},"Alan Barbieri":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Alan Ferreira de Lima Filho":{"f":"COOR PROJ/PROCES MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 98077-1500","cs":"G","cm":"Masculina"},"Alan Rodrigo do Nascimento Rodrigues":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 99169-9019","cs":"P","cm":"Masculina"},"Alessandra Grellet Miranda":{"f":"CONSULTOR DE DIRIGENTE","u":"DEASQ - DE ADM FUNDOS INVEST SERV QUALIFICADOS","cs":"G","cm":"Feminina"},"Alexandre da Silva Dias":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98158-0129","cs":"G","cm":"Masculina"},"Alica Dias Ribeiro Marques Pereira":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Aline Taboga Franca de Godoy":{"f":"TECNICO BANCARIO NOVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 95793-2675","cs":"G","cm":"Feminina"},"Alisson Araujo de Lima":{"f":"OPERADOR DE MESA SENIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Alvaro Cunha Matos Lessa de Oliveira":{"f":"ASSIST EXECUTIVO JR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(11) 98713-8633","cs":"M","cm":"Masculina"},"Amaralina de Oliveira Abrantes Sant Anna":{"f":"GER CLIENTES NEGOCIOS I","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98595-0507","cs":"M","cm":"Feminina"},"Ana Paula Alves Paschoalini":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Ana Sefora Pires Farias":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"EGG","cm":"Masculina"},"Anderson Buso":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Masculina"},"Anderson de Queiroz Moreira":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Andrea Felicio Chaves":{"f":"TECNICO BANCARIO NOVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"P","cm":"Feminina"},"Andrea Natashya Fukushima Fukuda":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Anna Patricia de Pinho Silva":{"f":"TECNICO BANCARIO NOVO","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 99130-2132","cs":"M","cm":"Feminina"},"Antonio Francisco Maciel":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98287-0748","cs":"G","cm":"Masculina"},"Arthur Felipe Rodrigues da Silva":{"f":"GERENTE NACIONAL","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(44) 99828-4163","cs":"G","cm":"Masculina"},"Bruno Oliveira Manhaes de Almeida":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Calil Abdo Marino Salum":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"GG","cm":"Masculina"},"Camila de Oliveira Ragognete":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99001-3626","cs":"P","cm":"Feminina"},"Camila Gregorio do Nascimento":{"f":"ASSIST EXECUTIVO JR","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 99670-0066","cs":"G","cm":"Feminina"},"Camilla de Almeida Mary":{"f":"OPERADOR DE MESA JUNIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(21) 97621-3919","cs":"M","cm":"Feminina"},"Carlos Eugenio de Brito Sousa":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99154-8792","cs":"M","cm":"Masculina"},"Catarina Moretti Ribeiro":{"f":"GERENTE NACIONAL SE","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99626-1501","cs":"M","cm":"Feminina"},"Cinthia Freitas Duarte":{"f":"ASSESSOR EXECUTIVO","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99434-5853","cs":"M","cm":"Feminina"},"Cintia da Silva Arruda":{"f":"COOR PROJ/PROCES MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 98135-7965","cs":"M","cm":"Feminina","de":true},"Cristiane Maya Yoshida":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Feminina","fe":true},"Cristiane Paulino":{"f":"ASSIST EXECUTIVO MASTER","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 98185-5530","cs":"P","cm":"Feminina"},"Daniel Correa Munhoz":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Daniel Pereira Cunha":{"f":"COOR PROJ/PROCES MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"G","cm":"Masculina"},"Daniela Gadelha Saraiva do Amaral":{"f":"TECNICO BANCARIO NOVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Daniela Nagumo":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"G","cm":"Feminina"},"Danielle Eskenazi Cruzolini":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"P","cm":"Feminina"},"Danielle Monteiro Cruz da Silva":{"f":"GER CLIENTES NEGOCIOS I SE","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Danielle Patricia Cordeiro Aurelio":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Dazia Vanessa Eguchi Kemper":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"GG","cm":"Feminina"},"Diego Augusto Granado":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"GG","cm":"Masculina"},"Diego Mathias":{"f":"GERENTE EXECUTIVO","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","t":"(11) 96304-7113","cs":"P","cm":"Masculina"},"Diogo Caetano Ribeiro":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Masculina"},"Douglas Martins Neves Costa":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98250-0311","cs":"G","cm":"Masculina"},"Edney Jonas Sena":{"f":"GERENTE EXECUTIVO SE","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"GG","cm":"Masculina"},"Eduardo Alves de Oliveira":{"f":"GER CLIENTES NEGOCIOS I","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Eduardo Capitulino Viana":{"f":"CONSULTOR MATRIZ","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Eduardo Luiz Rocha dos Santos":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 97359-6226","cs":"GG","cm":"Masculina","fe":true},"Eladio Caldas de Almeida":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99997-3061","cs":"G","cm":"Masculina"},"Eliana Marques Lisboa":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 94121-1225","cs":"G","cm":"Feminina"},"Emily Mendes Xavier":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99905-8194","cs":"M","cm":"Feminina"},"Erika Carolina Ruiz Ganga":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"GG","cm":"Feminina"},"Erika Cerqueira Silva":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"P","cm":"Feminina"},"Fabiana Graciano":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99881-9769","cs":"G","cm":"Feminina"},"Fabio Becare Junqueira":{"f":"OPERADOR DE MESA SENIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Fabio Coelho da Silva":{"f":"GER CLIENTES NEGOCIOS I","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99858-7006","cs":"M","cm":"Masculina"},"Fabio da Silva Bueno":{"f":"COOR PROJ/PROCES MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 95973-6694","cs":"P","cm":"Masculina"},"Fabio Henrique Secomandi":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99369-1150","cs":"G","cm":"Masculina"},"Fabricio Honorato Soares":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(14) 99183-1762","cs":"G","cm":"Masculina"},"Fazio Roberto Dias dos Santos":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 95458-1210"},"Fernanda Bueno Frederico Martinis":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99696-1992","fe":true,"cs":"GG","cm":"Feminina"},"Fernando Ferreira dos Santos":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(13) 99630-8466","cs":"M","cm":"Masculina"},"Fernando Gomes Saidel Herbst":{"f":"CONSULTOR DE DIRIGENTE SE","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 98931-9941","cs":"M","cm":"Masculina"},"Fernando Henrique Augusto":{"f":"GERENTE NACIONAL SE","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 95583-7799","cs":"M","cm":"Masculina"},"Fernando Vinicius Barros de Almeida":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99866-1009","cs":"G","cm":"Masculina"},"Fernando Zandona Assuncao":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(85) 99909-1316","cs":"G","cm":"Masculina"},"Filipe Sousa Moreira":{"f":"CONSULTOR MATRIZ","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Flavia Gualtieri":{"f":"ASSESSOR EXECUTIVO","u":"DEASQ - DE ADM FUNDOS INVEST SERV QUALIFICADOS","cs":"M","cm":"Feminina"},"Flavia Regina Finholdt B Mazzocchi":{"f":"CONSULTOR MATRIZ","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Feminina"},"Gabriel Dalessandro Pereira":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99922-1993","cs":"G","cm":"Masculina"},"Gabriela Birk":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(54) 99925-7890","cs":"M","cm":"Feminina"},"Gabrielle Matosinho de Oliveira":{"f":"ASSIST EXECUTIVO JR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"P","cm":"Feminina"},"Gerrana Campos Favieiro":{"f":"SECR DE VICE-PRESIDENCIA","u":"VIART - VP FUNDOS DE INVESTIMENTO","t":"(61) 99978-3720","d":1,"cs":"M","cm":"Feminina","tipo":"organizacao"},"Glayce Lopes da Nobrega":{"f":"GERENTE EXECUTIVO","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 98132-2981","cs":"P","cm":"Feminina"},"Guilherme Ehlers Farias":{"f":"COOR PROJ/PROCES MATRIZ SE","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98127-0007","cs":"GG","cm":"Masculina"},"Guilherme Fernandes de Souza":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99934-8008","cs":"G","cm":"Masculina"},"Guilherme Ivan Batista":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98200-6100","cs":"M","cm":"Masculina"},"Guilherme Ribeiro de Oliveira":{"f":"TECNICO BANCARIO NOVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99161-5029","cs":"G","cm":"Masculina"},"Gustavo Luiz Costa Araujo":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Hugo Alves Richard":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Humberto Dantas de Matos":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(11) 99114-0814","cs":"P","cm":"Masculina"},"Ian Victor de Oliveira Cimino":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Ingrid de Jesus Cabral":{"f":"CONSULTOR MATRIZ","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Feminina"},"Ivan Dechen Pedro":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 98617-3787","cs":"G","cm":"Masculina"},"Janaina de Amorim Silva":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 98686-7176","cs":"M","cm":"Feminina"},"Jeferson Ferreira":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 97531-0676","cs":"EGG","cm":"Masculina"},"Jerusa Alberton de Alencar Nogueira":{"f":"TEC BANC SUPERIOR NOVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"P","cm":"Feminina"},"Joao Cesar Nobre":{"f":"GERENTE EXECUTIVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Masculina"},"Joao Paulo Barroso dos Santos":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99854-5595","cs":"G","cm":"Masculina"},"Joao Paulo Vargas da Silveira":{"f":"DIRETOR","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99172-1311","cs":"G","cm":"Masculina","d":1,"tipo":"gestor"},"Joe Moroizumi":{"f":"ASSIST EXECUTIVO MASTER","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99948-1753","cs":"M","cm":"Masculina"},"Jose Romulo de Castro Vieira":{"f":"SUPERINTENDENTE NACIONAL","u":"SUFES - SN GESTAO FUNDOS ESPECIAIS","t":"(61) 98246-7203","cs":"M","cm":"Masculina","d":1,"tipo":"gestor"},"Julio Cesar Brandao da Silva":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"EGG","cm":"Masculina"},"Julio Cesar Silva":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Karen Gloria Buono":{"f":"OPERADOR DE MESA SENIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Karen Rondelo Duarte":{"f":"ASSESSOR EXECUTIVO SE","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Feminina"},"Katia Cilene da Silva Peralta":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 98387-6903","cs":"M","cm":"Feminina"},"Kleber de Jesus Ivanchuk":{"f":"GERENTE EXECUTIVO","u":"GERIC - GN RISCO E COMPLIANCE","cs":"G","cm":"Masculina"},"Lais Rodrigues Carudelli Badin":{"f":"SECRETARIO EXECUTIVO","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Feminina"},"Laiza Fabiola Martins de Santa Rosa":{"f":"TECNICO BANCARIO NOVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(13) 99128-2042","cs":"G","cm":"Feminina"},"Leandro Cenati Bueno de Lima":{"f":"CONSULTOR MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"EGG","cm":"Masculina"},"Leandro Franco da Silveira":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 97334-6679","cs":"M","cm":"Masculina"},"Leonardo Barbosa Tavares":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99988-0507","cs":"M","cm":"Masculina"},"Leonardo Matzenbacher Finger":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Masculina"},"Livia Dombroski Santos":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98183-8832","cs":"M","cm":"Feminina"},"Lorena dos Santos Bezerra":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Lucas Rafael Ramos da Silva":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Lucas Roberto Ribeiro da Silva":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 95286-2946","cs":"G","cm":"Masculina"},"Luci Cleide Silva e Castro":{"f":"SECR DE VICE-PRESIDENCIA","d":1,"t":"(11) 97485-3282","tipo":"organizacao"},"Luciana de Oliveira Ferreira":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Luciana Mickel Miyamoto":{"f":"ASSIST EXECUTIVO JR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99922-5077","cs":"M","cm":"Feminina"},"Luciano Garrido":{"f":"GERENTE NACIONAL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 97166-7835","cs":"M","cm":"Masculina"},"Luis Gustavo Viana de Araujo Zanfra":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(11) 97089-4619","cs":"M","cm":"Masculina"},"Maisa Abrantes de Pina Afonso":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Feminina"},"Marcela dos Anjos Abeid":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"P","cm":"Feminina"},"Marcia Midori Kataoka":{"f":"ASSIST EXECUTIVO JR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99595-2275","cs":"M","cm":"Feminina"},"Marcio Caetano dos Santos":{"f":"COOR PROJ/PROCES MATRIZ SE","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Masculina"},"Marcos Vieira dos Santos":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Maria Perpetuo Socorro Passos L Almeida":{"f":"ASSIST EXECUTIVO MASTER","u":"GERIC - GN RISCO E COMPLIANCE","t":"(69) 99227-6643","cs":"M","cm":"Feminina"},"Maria Stela Kamisaki Katayama":{"f":"GERENTE EXECUTIVO SE","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Mariana Mazivieiro":{"f":"ASSIST EXECUTIVO SR","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 98316-6608","cs":"M","cm":"Feminina"},"Marina Baggio Rodrigues":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Feminina"},"Mario Erbolato Neto":{"f":"CONSULTOR DE DIRIGENTE","u":"VIART - VP FUNDOS DE INVESTIMENTO","t":"(19) 98124-5422","d":1,"cs":"G","cm":"Masculina","tipo":"organizacao"},"Mauricio Antonio Alves da Costa":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Michael Prudencio Favero":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Masculina"},"Moacyr Ligabo Junior":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(12) 99723-7596","cs":"M","cm":"Masculina"},"Natalia Walkovics":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Nellie Nagasse":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"P","cm":"Feminina","fe":true},"Nicole Suemi Suzuki":{"f":"GERENTE EXECUTIVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Patricia Keiko Honda":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Feminina"},"Patrik Hideki Ito":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Paula Baffini de Castro Santana":{"f":"CONSULTOR MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"GG","cm":"Feminina"},"Paula Cristina da Silva":{"f":"ASSIST EXECUTIVO JR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"P","cm":"Feminina"},"Paula Hitomi Konishi":{"f":"GERENTE EXECUTIVO","u":"GERIC - GN RISCO E COMPLIANCE","cs":"EGG","cm":"Feminina","fe":true},"Pedro Henrique Machado Martins":{"f":"GERENTE EXECUTIVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 95596-1036","cs":"G","cm":"Masculina"},"Pedro Victor Oliveira Costa Giacomazzo":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98136-1655","cs":"G","cm":"Masculina"},"Priscila Castilho de Almeida Pereira":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Priscila Rodrigues Ferreira":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98384-4560","cs":"M","cm":"Feminina"},"Rafael de Vasconcelos Florentino":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99698-5896","cs":"G","cm":"Masculina"},"Raoni Ferreira Pinho":{"f":"CONSULTOR DE DIRIGENTE","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99676-7410","cs":"G","cm":"Masculina"},"Raquel Boatto de Moraes":{"f":"OPERADOR DE MESA JUNIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Renan Gama Oliveira":{"f":"OPERADOR DE MESA JUNIOR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Renata Casemiro do Prado Santos":{"f":"GERENTE NACIONAL","u":"GERIC - GN RISCO E COMPLIANCE","d":1,"cs":"M","cm":"Feminina","tipo":"gestor"},"Renata Leonel Dias Ajame":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 98259-9374","cs":"P","cm":"Feminina"},"Renata Lopes Franco":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 98112-8258","cs":"M","cm":"Feminina"},"Renata Loureiro e Silva Koshimura":{"f":"ASSIST EXECUTIVO MASTER","u":"GERIC - GN RISCO E COMPLIANCE","cs":"P","cm":"Feminina"},"Renato Silva dos Santos":{"f":"ASSIST EXECUTIVO MASTER","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(21) 99163-7438","cs":"GG","cm":"Masculina"},"Renato Yoshio Okabe":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Masculina"},"Ricardo Alexandre Barbosa Dantas":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98528-4286","cs":"G","cm":"Masculina"},"Ricardo Alexandre Ramos":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Ricardo Kendy Yokomizo":{"f":"ASSIST EXECUTIVO MASTER","u":"GERIC - GN RISCO E COMPLIANCE","cs":"G","cm":"Masculina","de":true},"Ricardo Oliveira do Amaral":{"f":"GERENTE EXECUTIVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 97035-7055","cs":"G","cm":"Masculina","d":1,"tipo":"organizacao"},"Ricardo Silva Nunes de Siqueira":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Ricardo Troes":{"f":"DIRETOR","u":"DEASQ - DE ADM FUNDOS INVEST SERV QUALIFICADOS","t":"(11) 98121-7803","d":1,"cs":"GG","cm":"Masculina","tipo":"gestor"},"Roberto Cavalcante Amorim":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98260-7670","cs":"GG","cm":"Masculina"},"Rodney Yamane":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99695-7878","cs":"P","cm":"Masculina"},"Rodrigo Chaves Batista":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Masculina"},"Rodrigo de Oliveira Coutinho":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Masculina"},"Rodrigo Devchi":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Rodrigo Gomes Coelho":{"f":"OPERADOR DE MESA PLENO","u":"VIART - VP FUNDOS DE INVESTIMENTO","t":"(61) 99901-1004","d":1,"cs":"GG","cm":"Masculina","tipo":"organizacao"},"Rolando Tadashi Oride":{"f":"TECNICO BANCARIO NOVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99783-1151","cs":"GG","cm":"Masculina"},"Ronaldo de Oliveira":{"f":"COOR PROJ/PROCES MATRIZ SE","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"GG","cm":"Masculina"},"Rosemeire Aparecida Duque Prosperi":{"f":"OPERADOR DE MESA PLENO","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Feminina"},"Ruthe Ventura Cuesta":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cm":"Feminina","cs":"G"},"Sergio Henrique Oliveira Bini":{"f":"VICE PRESIDENTE","u":"VIART - VP FUNDOS DE INVESTIMENTO","d":1,"tipo":"gestor"},"Simone Shiroma":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99549-6670","cs":"M","cm":"Feminina"},"Sintia das Neves Barbosa Rodrigues":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98222-3652","cs":"G","cm":"Feminina"},"Sonayara Oliveira Lima":{"f":"OPERADOR DE MESA JUNIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 96654-2948","cs":"M","cm":"Feminina"},"Stella Mitiko Ushizima":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 98292-0807","cs":"M","cm":"Feminina"},"Talita Sabioni Itocazo":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99341-9054","cs":"G","cm":"Feminina"},"Tania Gobatti Calca":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(11) 98082-1908","cs":"M","cm":"Feminina"},"Tatiana Pereira Cosentino":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Tatiana Sanches Biscari Nagase":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99251-1984","cs":"P","cm":"Feminina"},"Tatianna Felix dos Santos Morais":{"f":"OPERADOR DE MESA JUNIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99918-9851","cs":"M","cm":"Feminina"},"Tatyana Arashiro":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Thais Moura Brito":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Thiago Bosisio Ferreira":{"f":"GERENTE NACIONAL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Thiago de Oliveira Montanari":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99805-0379","cs":"G","cm":"Masculina"},"Thiago Pereira Gonzalez":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Vagner Junio da Silva":{"f":"OPERADOR DE MESA SENIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 98943-3619","cm":"Masculina","cs":"G","fe":true},"Vanessa Bittencourt Bernardes":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Feminina"},"Vanessa Paes Suppa":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99815-4574","cs":"M","cm":"Feminina"},"Verena Primo Ikeda":{"f":"TECNICO BANCARIO NOVO","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 97873-2866"},"Vinicius Barbieri Domingues":{"f":"ASSIST EXECUTIVO PL","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Viviana Machado dos Santos":{"f":"ASSESSOR EXECUTIVO","u":"SUFES - SN GESTAO FUNDOS ESPECIAIS","t":"(21) 98633-5246","cs":"M","cm":"Feminina"},"Willian Abreu Canelada":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99291-7965","cs":"GG","cm":"Masculina"},"Zeila Itokazu":{"f":"OPERADOR DE MESA PLENO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99114-9319","cs":"P","cm":"Feminina"}};
+const PARTICIPANTES_INFO = {"Adriana Carrilho Felippe":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Feminina"},"Adriano Shiratsu Ueda":{"f":"CONSULTOR DE DIRIGENTE","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99624-4355","cs":"GG","cm":"Masculina"},"Alan Barbieri":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Alan Ferreira de Lima Filho":{"f":"COOR PROJ/PROCES MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 98077-1500","cs":"G","cm":"Masculina"},"Alan Rodrigo do Nascimento Rodrigues":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 99169-9019","cs":"P","cm":"Masculina"},"Alessandra Grellet Miranda":{"f":"CONSULTOR DE DIRIGENTE","u":"DEASQ - DE ADM FUNDOS INVEST SERV QUALIFICADOS","cs":"G","cm":"Feminina"},"Alexandre da Silva Dias":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98158-0129","cs":"G","cm":"Masculina"},"Alica Dias Ribeiro Marques Pereira":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Aline Taboga Franca de Godoy":{"f":"TECNICO BANCARIO NOVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 95793-2675","cs":"G","cm":"Feminina"},"Alisson Araujo de Lima":{"f":"OPERADOR DE MESA SENIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Alvaro Cunha Matos Lessa de Oliveira":{"f":"ASSIST EXECUTIVO JR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(11) 98713-8633","cs":"M","cm":"Masculina"},"Amaralina de Oliveira Abrantes Sant Anna":{"f":"GER CLIENTES NEGOCIOS I","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98595-0507","cs":"M","cm":"Feminina"},"Ana Paula Alves Paschoalini":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Ana Sefora Pires Farias":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"EGG","cm":"Masculina"},"Anderson Buso":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Masculina"},"Anderson de Queiroz Moreira":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Andrea Felicio Chaves":{"f":"TECNICO BANCARIO NOVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"P","cm":"Feminina"},"Andrea Natashya Fukushima Fukuda":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Anna Patricia de Pinho Silva":{"f":"TECNICO BANCARIO NOVO","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 99130-2132","cs":"M","cm":"Feminina"},"Antonio Francisco Maciel":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98287-0748","cs":"G","cm":"Masculina"},"Arthur Felipe Rodrigues da Silva":{"f":"GERENTE NACIONAL","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(44) 99828-4163","cs":"G","cm":"Masculina"},"Bruno Oliveira Manhaes de Almeida":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Calil Abdo Marino Salum":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"GG","cm":"Masculina"},"Camila de Oliveira Ragognete":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99001-3626","cs":"P","cm":"Feminina"},"Camila Gregorio do Nascimento":{"f":"ASSIST EXECUTIVO JR","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 99670-0066","cs":"G","cm":"Feminina"},"Camilla de Almeida Mary":{"f":"OPERADOR DE MESA JUNIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(21) 97621-3919","cs":"M","cm":"Feminina"},"Carlos Eugenio de Brito Sousa":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99154-8792","cs":"M","cm":"Masculina"},"Catarina Moretti Ribeiro":{"f":"GERENTE NACIONAL SE","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99626-1501","cs":"M","cm":"Feminina"},"Cinthia Freitas Duarte":{"f":"ASSESSOR EXECUTIVO","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99434-5853","cs":"M","cm":"Feminina"},"Cintia da Silva Arruda":{"f":"COOR PROJ/PROCES MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 98135-7965","cs":"M","cm":"Feminina","de":true},"Cristiane Maya Yoshida":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Feminina","fe":true},"Cristiane Paulino":{"f":"ASSIST EXECUTIVO MASTER","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 98185-5530","cs":"P","cm":"Feminina"},"Daniel Correa Munhoz":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Daniel Pereira Cunha":{"f":"COOR PROJ/PROCES MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"G","cm":"Masculina"},"Daniela Gadelha Saraiva do Amaral":{"f":"TECNICO BANCARIO NOVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Daniela Nagumo":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"G","cm":"Feminina"},"Danielle Eskenazi Cruzolini":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"P","cm":"Feminina"},"Danielle Monteiro Cruz da Silva":{"f":"GER CLIENTES NEGOCIOS I SE","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Danielle Patricia Cordeiro Aurelio":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Dazia Vanessa Eguchi Kemper":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"GG","cm":"Feminina"},"Diego Augusto Granado":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"GG","cm":"Masculina"},"Diego Mathias":{"f":"GERENTE EXECUTIVO","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","t":"(11) 96304-7113","cs":"P","cm":"Masculina"},"Diogo Caetano Ribeiro":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Masculina"},"Douglas Martins Neves Costa":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98250-0311","cs":"G","cm":"Masculina"},"Edney Jonas Sena":{"f":"GERENTE EXECUTIVO SE","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"GG","cm":"Masculina"},"Eduardo Alves de Oliveira":{"f":"GER CLIENTES NEGOCIOS I","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Eduardo Capitulino Viana":{"f":"CONSULTOR MATRIZ","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Eduardo Luiz Rocha dos Santos":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 97359-6226","cs":"GG","cm":"Masculina","fe":true},"Eladio Caldas de Almeida":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99997-3061","cs":"G","cm":"Masculina"},"Eliana Marques Lisboa":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 94121-1225","cs":"G","cm":"Feminina"},"Emily Mendes Xavier":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99905-8194","cs":"M","cm":"Feminina"},"Erika Carolina Ruiz Ganga":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"GG","cm":"Feminina"},"Erika Cerqueira Silva":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"P","cm":"Feminina"},"Fabiana Graciano":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99881-9769","cs":"G","cm":"Feminina"},"Fabio Becare Junqueira":{"f":"OPERADOR DE MESA SENIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Fabio Coelho da Silva":{"f":"GER CLIENTES NEGOCIOS I","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99858-7006","cs":"M","cm":"Masculina"},"Fabio da Silva Bueno":{"f":"COOR PROJ/PROCES MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 95973-6694","cs":"P","cm":"Masculina"},"Fabio Henrique Secomandi":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99369-1150","cs":"G","cm":"Masculina"},"Fabricio Honorato Soares":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(14) 99183-1762","cs":"G","cm":"Masculina"},"Fazio Roberto Dias dos Santos":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 95458-1210"},"Fernanda Bueno Frederico Martinis":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99696-1992","fe":true,"cs":"GG","cm":"Feminina"},"Fernando Ferreira dos Santos":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(13) 99630-8466","cs":"M","cm":"Masculina"},"Fernando Gomes Saidel Herbst":{"f":"CONSULTOR DE DIRIGENTE SE","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 98931-9941","cs":"M","cm":"Masculina"},"Fernando Henrique Augusto":{"f":"GERENTE NACIONAL SE","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 95583-7799","cs":"M","cm":"Masculina"},"Fernando Vinicius Barros de Almeida":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99866-1009","cs":"G","cm":"Masculina"},"Fernando Zandona Assuncao":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(85) 99909-1316","cs":"G","cm":"Masculina"},"Filipe Sousa Moreira":{"f":"CONSULTOR MATRIZ","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Flavia Gualtieri":{"f":"ASSESSOR EXECUTIVO","u":"DEASQ - DE ADM FUNDOS INVEST SERV QUALIFICADOS","cs":"M","cm":"Feminina"},"Flavia Regina Finholdt B Mazzocchi":{"f":"CONSULTOR MATRIZ","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Feminina"},"Gabriel Dalessandro Pereira":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99922-1993","cs":"G","cm":"Masculina"},"Gabriela Birk":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(54) 99925-7890","cs":"M","cm":"Feminina"},"Gabrielle Matosinho de Oliveira":{"f":"ASSIST EXECUTIVO JR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"P","cm":"Feminina"},"Gerrana Campos Favieiro":{"f":"SECR DE VICE-PRESIDENCIA","u":"VIART - VP FUNDOS DE INVESTIMENTO","t":"(61) 99978-3720","d":1,"cs":"M","cm":"Feminina","tipo":"organizacao"},"Glayce Lopes da Nobrega":{"f":"GERENTE EXECUTIVO","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 98132-2981","cs":"P","cm":"Feminina"},"Guilherme Ehlers Farias":{"f":"COOR PROJ/PROCES MATRIZ SE","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98127-0007","cs":"GG","cm":"Masculina"},"Guilherme Fernandes de Souza":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99934-8008","cs":"G","cm":"Masculina"},"Guilherme Ivan Batista":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98200-6100","cs":"M","cm":"Masculina"},"Guilherme Ribeiro de Oliveira":{"f":"TECNICO BANCARIO NOVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99161-5029","cs":"G","cm":"Masculina"},"Gustavo Luiz Costa Araujo":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Hugo Alves Richard":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Humberto Dantas de Matos":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(11) 99114-0814","cs":"P","cm":"Masculina"},"Ian Victor de Oliveira Cimino":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Ingrid de Jesus Cabral":{"f":"CONSULTOR MATRIZ","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Feminina"},"Ivan Dechen Pedro":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 98617-3787","cs":"G","cm":"Masculina"},"Janaina de Amorim Silva":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 98686-7176","cs":"M","cm":"Feminina"},"Jeferson Ferreira":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 97531-0676","cs":"EGG","cm":"Masculina"},"Jerusa Alberton de Alencar Nogueira":{"f":"TEC BANC SUPERIOR NOVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"P","cm":"Feminina"},"Joao Cesar Nobre":{"f":"GERENTE EXECUTIVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Masculina"},"Joao Paulo Barroso dos Santos":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99854-5595","cs":"G","cm":"Masculina"},"Joao Paulo Vargas da Silveira":{"f":"DIRETOR","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99172-1311","cs":"G","cm":"Masculina","d":1,"tipo":"gestor"},"Joe Moroizumi":{"f":"ASSIST EXECUTIVO MASTER","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99948-1753","cs":"M","cm":"Masculina"},"Jose Romulo de Castro Vieira":{"f":"SUPERINTENDENTE NACIONAL","u":"SUFES - SN GESTAO FUNDOS ESPECIAIS","t":"(61) 98246-7203","cs":"M","cm":"Masculina","d":1,"tipo":"gestor"},"Julio Cesar Brandao da Silva":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"EGG","cm":"Masculina"},"Julio Cesar Silva":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Karen Gloria Buono":{"f":"OPERADOR DE MESA SENIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Karen Rondelo Duarte":{"f":"ASSESSOR EXECUTIVO SE","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Feminina"},"Katia Cilene da Silva Peralta":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 98387-6903","cs":"M","cm":"Feminina"},"Kleber de Jesus Ivanchuk":{"f":"GERENTE EXECUTIVO","u":"GERIC - GN RISCO E COMPLIANCE","cs":"G","cm":"Masculina"},"Lais Rodrigues Carudelli Badin":{"f":"SECRETARIO EXECUTIVO","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Feminina"},"Laiza Fabiola Martins de Santa Rosa":{"f":"TECNICO BANCARIO NOVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(13) 99128-2042","cs":"G","cm":"Feminina"},"Leandro Cenati Bueno de Lima":{"f":"CONSULTOR MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"EGG","cm":"Masculina"},"Leandro Franco da Silveira":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 97334-6679","cs":"M","cm":"Masculina"},"Leonardo Barbosa Tavares":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99988-0507","cs":"M","cm":"Masculina"},"Leonardo Matzenbacher Finger":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Masculina"},"Livia Dombroski Santos":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98183-8832","cs":"M","cm":"Feminina"},"Lorena dos Santos Bezerra":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Lucas Rafael Ramos da Silva":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Lucas Roberto Ribeiro da Silva":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 95286-2946","cs":"G","cm":"Masculina"},"Luci Cleide Silva e Castro":{"f":"SECR DE VICE-PRESIDENCIA","u":"VIART","d":1,"t":"(11) 97485-3282","tipo":"organizacao"},"Luciana de Oliveira Ferreira":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Luciana Mickel Miyamoto":{"f":"ASSIST EXECUTIVO JR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99922-5077","cs":"M","cm":"Feminina"},"Luciano Garrido":{"f":"GERENTE NACIONAL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 97166-7835","cs":"M","cm":"Masculina"},"Luis Gustavo Viana de Araujo Zanfra":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(11) 97089-4619","cs":"M","cm":"Masculina"},"Maisa Abrantes de Pina Afonso":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Feminina"},"Marcela dos Anjos Abeid":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"P","cm":"Feminina"},"Marcia Midori Kataoka":{"f":"ASSIST EXECUTIVO JR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99595-2275","cs":"M","cm":"Feminina"},"Marcio Caetano dos Santos":{"f":"COOR PROJ/PROCES MATRIZ SE","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Masculina"},"Marcos Vieira dos Santos":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Maria Perpetuo Socorro Passos L Almeida":{"f":"ASSIST EXECUTIVO MASTER","u":"GERIC - GN RISCO E COMPLIANCE","t":"(69) 99227-6643","cs":"M","cm":"Feminina"},"Maria Stela Kamisaki Katayama":{"f":"GERENTE EXECUTIVO SE","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Mariana Mazivieiro":{"f":"ASSIST EXECUTIVO SR","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 98316-6608","cs":"M","cm":"Feminina"},"Marina Baggio Rodrigues":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Feminina"},"Mario Erbolato Neto":{"f":"CONSULTOR DE DIRIGENTE","u":"VIART - VP FUNDOS DE INVESTIMENTO","t":"(19) 98124-5422","d":1,"cs":"G","cm":"Masculina","tipo":"organizacao"},"Mauricio Antonio Alves da Costa":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Michael Prudencio Favero":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Masculina"},"Moacyr Ligabo Junior":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(12) 99723-7596","cs":"M","cm":"Masculina"},"Natalia Walkovics":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Nellie Nagasse":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"P","cm":"Feminina","fe":true},"Nicole Suemi Suzuki":{"f":"GERENTE EXECUTIVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Patricia Keiko Honda":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Feminina"},"Patrik Hideki Ito":{"f":"ASSIST EXECUTIVO SR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Paula Baffini de Castro Santana":{"f":"CONSULTOR MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"GG","cm":"Feminina"},"Paula Cristina da Silva":{"f":"ASSIST EXECUTIVO JR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"P","cm":"Feminina"},"Paula Hitomi Konishi":{"f":"GERENTE EXECUTIVO","u":"GERIC - GN RISCO E COMPLIANCE","cs":"EGG","cm":"Feminina","fe":true},"Pedro Henrique Machado Martins":{"f":"GERENTE EXECUTIVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 95596-1036","cs":"G","cm":"Masculina"},"Pedro Victor Oliveira Costa Giacomazzo":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98136-1655","cs":"G","cm":"Masculina"},"Priscila Castilho de Almeida Pereira":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Priscila Rodrigues Ferreira":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98384-4560","cs":"M","cm":"Feminina"},"Rafael de Vasconcelos Florentino":{"f":"GERENTE EXECUTIVO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99698-5896","cs":"G","cm":"Masculina"},"Raoni Ferreira Pinho":{"f":"CONSULTOR DE DIRIGENTE","u":"DEGES - DE GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99676-7410","cs":"G","cm":"Masculina"},"Raquel Boatto de Moraes":{"f":"OPERADOR DE MESA JUNIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Renan Gama Oliveira":{"f":"OPERADOR DE MESA JUNIOR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Masculina"},"Renata Casemiro do Prado Santos":{"f":"GERENTE NACIONAL","u":"GERIC - GN RISCO E COMPLIANCE","d":1,"cs":"M","cm":"Feminina","tipo":"gestor"},"Renata Leonel Dias Ajame":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 98259-9374","cs":"P","cm":"Feminina"},"Renata Lopes Franco":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","t":"(61) 98112-8258","cs":"M","cm":"Feminina"},"Renata Loureiro e Silva Koshimura":{"f":"ASSIST EXECUTIVO MASTER","u":"GERIC - GN RISCO E COMPLIANCE","cs":"P","cm":"Feminina"},"Renato Silva dos Santos":{"f":"ASSIST EXECUTIVO MASTER","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(21) 99163-7438","cs":"GG","cm":"Masculina"},"Renato Yoshio Okabe":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Masculina"},"Ricardo Alexandre Barbosa Dantas":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98528-4286","cs":"G","cm":"Masculina"},"Ricardo Alexandre Ramos":{"f":"ASSIST EXECUTIVO PL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Ricardo Kendy Yokomizo":{"f":"ASSIST EXECUTIVO MASTER","u":"GERIC - GN RISCO E COMPLIANCE","cs":"G","cm":"Masculina","de":true},"Ricardo Oliveira do Amaral":{"f":"GERENTE EXECUTIVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 97035-7055","cs":"G","cm":"Masculina","d":1,"tipo":"organizacao"},"Ricardo Silva Nunes de Siqueira":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Ricardo Troes":{"f":"DIRETOR","u":"DEASQ - DE ADM FUNDOS INVEST SERV QUALIFICADOS","t":"(11) 98121-7803","d":1,"cs":"GG","cm":"Masculina","tipo":"gestor"},"Roberto Cavalcante Amorim":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98260-7670","cs":"GG","cm":"Masculina"},"Rodney Yamane":{"f":"ASSIST EXECUTIVO PL","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99695-7878","cs":"P","cm":"Masculina"},"Rodrigo Chaves Batista":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Masculina"},"Rodrigo de Oliveira Coutinho":{"f":"COOR PROJ/PROCES MATRIZ","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"G","cm":"Masculina"},"Rodrigo Devchi":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Rodrigo Gomes Coelho":{"f":"OPERADOR DE MESA PLENO","u":"VIART - VP FUNDOS DE INVESTIMENTO","t":"(61) 99901-1004","d":1,"cs":"GG","cm":"Masculina","tipo":"organizacao"},"Rolando Tadashi Oride":{"f":"TECNICO BANCARIO NOVO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99783-1151","cs":"GG","cm":"Masculina"},"Ronaldo de Oliveira":{"f":"COOR PROJ/PROCES MATRIZ SE","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"GG","cm":"Masculina"},"Rosemeire Aparecida Duque Prosperi":{"f":"OPERADOR DE MESA PLENO","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Feminina"},"Ruthe Ventura Cuesta":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","cm":"Feminina","cs":"G"},"Sergio Henrique Oliveira Bini":{"f":"VICE PRESIDENTE","u":"VIART - VP FUNDOS DE INVESTIMENTO","d":1,"tipo":"gestor"},"Simone Shiroma":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99549-6670","cs":"M","cm":"Feminina"},"Sintia das Neves Barbosa Rodrigues":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 98222-3652","cs":"G","cm":"Feminina"},"Sonayara Oliveira Lima":{"f":"OPERADOR DE MESA JUNIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 96654-2948","cs":"M","cm":"Feminina"},"Stella Mitiko Ushizima":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 98292-0807","cs":"M","cm":"Feminina"},"Talita Sabioni Itocazo":{"f":"OPERADOR DE MESA PLENO","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","t":"(11) 99341-9054","cs":"G","cm":"Feminina"},"Tania Gobatti Calca":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(11) 98082-1908","cs":"M","cm":"Feminina"},"Tatiana Pereira Cosentino":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFI - GN ADMINISTRACAO FUNDOS INVESTIMENTO","cs":"M","cm":"Feminina"},"Tatiana Sanches Biscari Nagase":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99251-1984","cs":"P","cm":"Feminina"},"Tatianna Felix dos Santos Morais":{"f":"OPERADOR DE MESA JUNIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99918-9851","cs":"M","cm":"Feminina"},"Tatyana Arashiro":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Feminina"},"Thais Moura Brito":{"f":"OPERADOR DE MESA PLENO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"M","cm":"Feminina"},"Thiago Bosisio Ferreira":{"f":"GERENTE NACIONAL","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"G","cm":"Masculina"},"Thiago de Oliveira Montanari":{"f":"GERENTE EXECUTIVO","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99805-0379","cs":"G","cm":"Masculina"},"Thiago Pereira Gonzalez":{"f":"ASSIST EXECUTIVO MASTER","u":"GESEQ - GN SERVICOS QUALIFICADOS","cs":"M","cm":"Masculina"},"Vagner Junio da Silva":{"f":"OPERADOR DE MESA SENIOR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 98943-3619","cm":"Masculina","cs":"G","fe":true},"Vanessa Bittencourt Bernardes":{"f":"CONSULTOR MATRIZ","u":"GERIC - GN RISCO E COMPLIANCE","cs":"M","cm":"Feminina"},"Vanessa Paes Suppa":{"f":"OPERADOR DE MESA SENIOR","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","t":"(61) 99815-4574","cs":"M","cm":"Feminina"},"Verena Primo Ikeda":{"f":"TECNICO BANCARIO NOVO","u":"GERIC - GN RISCO E COMPLIANCE","t":"(11) 97873-2866"},"Vinicius Barbieri Domingues":{"f":"ASSIST EXECUTIVO PL","u":"GEAFE - GN GESTAO FUNDOS ESTRUTURADOS","cs":"G","cm":"Masculina"},"Viviana Machado dos Santos":{"f":"ASSESSOR EXECUTIVO","u":"SUFES - SN GESTAO FUNDOS ESPECIAIS","t":"(21) 98633-5246","cs":"M","cm":"Feminina"},"Willian Abreu Canelada":{"f":"ASSIST EXECUTIVO SR","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99291-7965","cs":"GG","cm":"Masculina"},"Zeila Itokazu":{"f":"OPERADOR DE MESA PLENO","u":"GESEQ - GN SERVICOS QUALIFICADOS","t":"(11) 99114-9319","cs":"P","cm":"Feminina"}};
 
 const LINKS_UTEIS = [
   { grupo: 'Evento', itens: [
@@ -2615,6 +2542,7 @@ const ORG_SUBTABS_DEF = [
   { id: 'orcamento', label: 'Orçamento' },
   { id: 'contatos', label: 'Contatos' },
   { id: 'programacaoreal', label: 'Programação real 🔒' },
+  { id: 'relatorios', label: 'Relatórios' },
   { id: 'manual', label: 'Manual do App' },
 ];
 const ORG_PESSOAS_SUBTABS_DEF = [
@@ -2770,15 +2698,15 @@ const BRINDES_MARKETPLACE = [
   { id: 'mouse-pad', nome: 'Desk Pad', desc: 'Desk pad estendido em couro sintético preto de alta qualidade, com acabamento costurado nas bordas.', foto: 'mouse-pad.jpg', peso: 0.6, estoqueTotal: 4, fit: 'cover' },
   { id: 'copo-caixa', nome: 'Copo CAIXA Térmico', desc: 'Copo térmico de aço inox 360ml, tampa com abertura para canudo e a marca CAIXA impressa no corpo azul marinho.', foto: 'copo-caixa.jpg', peso: 3.2, estoqueTotal: 5, fit: 'cover' },
   { id: 'moleskine-seguridade-caneta', nome: 'Moleskine Seguridade c/ caneta', desc: 'Caderno executivo azul com elástico vertical na cor azul royal, caneta metálica encaixada na lateral e estampa da CAIXA Seguridade.', foto: 'moleskine-seguridade-caneta.jpg', peso: 0.3, estoqueTotal: 11 },
-  { id: 'moleskine-caneta-asset', nome: 'Moleskine com caneta CAIXA Asset', desc: 'Kit em caixa preta com caderno executivo preto e caneta esferográfica metálica preta, ambos com a marca "CAIXA Asset".', foto: 'moleskine-caneta-asset.jpg', peso: 0.35, estoqueTotal: 2 },
+  { id: 'moleskine-caneta-asset', nome: 'Moleskine com caneta CAIXA Asset', desc: 'Kit em caixa preta com caderno executivo preto e caneta esferográfica metálica preta, ambos com a marca "CAIXA Asset".', foto: 'moleskine-caneta-asset.jpg', peso: 0.35, estoqueTotal: 2, origemSP: true },
   { id: 'moleskine-seguridade-10anos', nome: 'Moleskine CAIXA Seguridade', desc: 'Caderno especial comemorativo de 10 Anos da CAIXA Seguridade, com design degradê em tons de azul e rosa, fechamento em elástico e caneta metálica inclusa.', foto: 'moleskine-seguridade-10anos.jpg', peso: 0.3, estoqueTotal: 2 },
   { id: 'moleskine-loterias', nome: 'Moleskine CAIXA Loterias', desc: 'Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.', foto: 'moleskine-loterias.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 198 },
   { id: 'moleskine-x', nome: 'Moleskine X', desc: 'Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.', foto: 'moleskine-x.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 204 },
   { id: 'bloco-rapidex', nome: 'Bloco Rapidex', desc: 'Caderno corporativo com capa em tons de azul e detalhes geométricos coloridos nas bordas, com a marca "Rapidex" em destaque.', foto: 'bloco-rapidex.jpg', peso: 0.6, estoqueTotal: 15 },
-  { id: 'caneta-tipo1', nome: 'Caneta CAIXA Tipo 1', desc: 'Caneta esferográfica metálica azul, com clipe prateado e a marca CAIXA Asset gravada no corpo.', foto: 'caneta-caixa-tipo1.jpg', peso: 0.2, estoqueTotal: 96, fit: 'contain' },
-  { id: 'caneta-tipo2', nome: 'Caneta CAIXA Tipo 2', desc: 'Caneta esferográfica metálica azul marinho, com acabamentos prateados e estojo de veludo com a marca CAIXA.', foto: 'caneta-caixa-tipo2.jpg', peso: 0.2, estoqueTotal: 70, fit: 'contain' },
-  { id: 'pasta-executiva', nome: 'Pasta executiva CAIXA Asset', desc: 'Pasta executiva em material sintético preto com fecho por trava metálica, bloco de anotações e caneta inclusos, e placa "CAIXA Asset" na capa.', foto: 'pasta-executiva.jpg', peso: 3.4, estoqueTotal: 2 },
-  { id: 'carregador-wireless', nome: 'Carregador Wireless CAIXA Asset', desc: 'Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca "CAIXA Asset" em destaque, com cabo e caixa individual.', foto: 'carregador-wireless.jpg', peso: 3.0, estoqueTotal: 1 },
+  { id: 'caneta-tipo1', nome: 'Caneta CAIXA Tipo 1', desc: 'Caneta esferográfica metálica azul, com clipe prateado e a marca CAIXA Asset gravada no corpo.', foto: 'caneta-caixa-tipo1.jpg', peso: 0.2, estoqueTotal: 96, fit: 'contain', origemSP: true },
+  { id: 'caneta-tipo2', nome: 'Caneta CAIXA Tipo 2', desc: 'Caneta esferográfica metálica azul marinho, com acabamentos prateados e estojo de veludo com a marca CAIXA.', foto: 'caneta-caixa-tipo2.jpg', peso: 0.2, estoqueTotal: 70, fit: 'contain', origemSP: true },
+  { id: 'pasta-executiva', nome: 'Pasta executiva CAIXA Asset', desc: 'Pasta executiva em material sintético preto com fecho por trava metálica, bloco de anotações e caneta inclusos, e placa "CAIXA Asset" na capa.', foto: 'pasta-executiva.jpg', peso: 3.4, estoqueTotal: 2, origemSP: true },
+  { id: 'carregador-wireless', nome: 'Carregador Wireless CAIXA Asset', desc: 'Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca "CAIXA Asset" em destaque, com cabo e caixa individual.', foto: 'carregador-wireless.jpg', peso: 3.0, estoqueTotal: 1, origemSP: true },
 ];
 
 const MANUAL_SECOES = [
@@ -2796,6 +2724,7 @@ const MANUAL_SECOES = [
     'Agenda completa do dia, por horário.',
     'Destaque automático "AGORA" no item em andamento, no dia do evento.',
     'Ícone/cor por pilar do objetivo (Alinhar, Conectar, Executar).',
+    'Estudo de Caso (11h30–12h45): botão com link direto para o PDF do estudo de caso, o mesmo disponível na aba Informações.',
   ] },
   { id: 'fotos', titulo: 'Fotos (público)', itens: [
     'Mural de fotos do evento: qualquer pessoa identificada posta uma foto (com legenda opcional), direto no ar, sem aprovação prévia.',
@@ -2806,10 +2735,12 @@ const MANUAL_SECOES = [
   ] },
   { id: 'brindes', titulo: 'Pontos & Brindes (público)', itens: [
     'Identificação por nome (busca na lista de participantes).',
-    'Pontos por ação de participação: confirmar presença, restrição alimentar, camiseta, confraternização, necessidade especial, avaliação do evento, acertos no Detetive VIART.',
+    'Pontos por ação de participação: confirmar presença, restrição alimentar, camiseta, confraternização, necessidade especial, avaliação do evento, acertos no Detetive VIART — e novas formas de interação podem ser adicionadas ao longo da campanha, sempre valendo ponto também.',
     'Detetive VIART: adivinhe de quem é cada curiosidade cadastrada no pré-cadastro (sem nome exposto); acerto vale 1 ponto, uma tentativa por pergunta, novas perguntas liberam aos poucos até o evento.',
-    'Mercado de brindes: preço = base fixa por item (peso × 8) com desconto coletivo de até 50%, proporcional à % de participantes de SP que já completaram as ações básicas do pré-cadastro — mais gente participando, mais barato pra todo mundo; quanto cada um paga de fato ainda depende só dos próprios pontos; resgate por ordem de chegada; abre às 12h45 (horário do almoço) no dia do evento da cidade.',
-    'Fora da contagem de pontos e do mercado de brindes: quem não tem cidade definida (licenças e afins) e quem está marcado como organização/dupla função SP+BSB (gestores).',
+    'Mercado de brindes: preço = base fixa por item (peso × 8) com desconto coletivo de até 50%, proporcional à % de participantes de SP que já completaram as ações básicas do pré-cadastro — mais gente participando, mais barato pra todo mundo; quanto cada um paga de fato ainda depende só dos próprios pontos; cada card do marketplace mostra a adesão geral atual e o desconto resultante; resgate por ordem de chegada; abre às 12h45 (horário do almoço) no dia do evento da cidade.',
+    'Estoque disponível pra resgate em SP = o que já chegou nas malas BSB → SP (não a meta teórica do item) — quantidade total do item, pra planejamento, fica na tabela "Controle de estoques" (Gamificação).',
+    'Jogo de xícaras é um item só no marketplace (os dois modelos que existiam separados foram unificados).',
+    'Fora da contagem de pontos e do mercado de brindes: Organização, Gestores, Férias, Destacamento e Licença/outros (quem não tem cidade definida ou está marcado como dupla função SP+BSB).',
     'Disponível, por enquanto, apenas para participantes do evento de São Paulo — quem está marcado como Brasília vê um aviso no lugar do mercado e do Detetive VIART.',
   ] },
   { id: 'faleconosco', titulo: 'Fale conosco (público)', itens: [
@@ -2848,7 +2779,7 @@ const MANUAL_SECOES = [
     'Filtros cumulativos: cidade, tamanho/modelagem de camiseta, confraternização, mesa, presença, camiseta entregue, unidade/área.',
     'Edição inline: cidade, camiseta, confraternização, camiseta entregue — direto no card.',
     'Distribuição automática de mesas (16 nomes temáticos), com número de mesas ajustável.',
-    'Badges de necessidade especial e curiosidade preenchida.',
+    'Badges no card de cada pessoa: necessidade especial, curiosidade preenchida, Organização, Gestor, Férias, Destacamento, Licença (sem cidade e sem os motivos anteriores) e Não vai (confirmou ausência).',
   ] },
   { id: 'curiosidades', titulo: 'Organização · Curiosidades', itens: [
     'Lista de todas as curiosidades pessoais coletadas no pré-cadastro, para montar a dinâmica "quem é quem".',
@@ -2857,10 +2788,10 @@ const MANUAL_SECOES = [
     'Ranking de pontos por pessoa e por ação.',
     'Quem mais/menos pontuou, quem mais resgatou brindes.',
     'Comparação SP x BSB (pontos e resgates).',
-    'Estoque de brindes em tempo real: uma única tabela por item, com preço atual, estoque total, restante por cidade, enviado p/ SP, excedente e status (estoque e logística) — antes eram cards e uma tabela separada, agora é uma coisa só.',
-    'Gráfico "Preço vs. capacidade de compra": compara o preço do item selecionado com a pontuação mediana real dos participantes de SP, dia a dia desde 05/08.',
+    'Gráfico "Quem conta pra brindes": donut com os 187 participantes segmentados em São Paulo, Brasília, Organização, Gestor, Férias, Destacamento e Licença/outros, com selo de quem conta ou não pra contagem de brindes.',
+    'Seção "Controle de estoques" (acima de Malas de brindes): uma única tabela por item, com preço atual, estoque total, restante por cidade, enviado p/ SP, excedente e status (estoque e logística); filtro por status logístico e por ordem (maior pro menor preço ou alfabética).',
     'Tabela "Resgates confirmados": lista de quem já garantiu qual brinde, com filtro Pendentes/Entregues/Todos e botão para marcar a entrega — usada para saber quem deve receber o brinde.',
-    'Malas de brindes BSB → SP: acompanhamento de cada mala despachada (status, itens), análise por item (estoque total, enviado p/ SP, meta SP/BSB, excedente) com filtros.',
+
     'Subaba Fotos: lista de todas as fotos postadas, com "Remover" para moderação — some do mural e deixa de contar pontos.',
   ] },
   { id: 'nps-org', titulo: 'Organização · NPS', itens: [
@@ -3555,6 +3486,17 @@ class Component extends DCLogic {
     const qtdBSB = Math.round(total * bsb / totalPessoas);
     return { sp: total - qtdBSB, bsb: qtdBSB };
   };
+  // Alguns itens (marca "CAIXA Asset") nunca vieram de BSB — já nasceram 100% no estoque de
+  // SP, então não seguem o rateio proporcional por headcount como os demais.
+  splitEstoqueItem = (item) => item.soSP ? { sp: item.estoqueTotal, bsb: 0 } : this.splitEstoque(item.estoqueTotal);
+  // Estoque disponível pra resgate no marketplace de SP: reflete o que já chegou nas malas
+  // BSB → SP (não a meta teórica) — o que o participante vê e resgata é só o que existe de
+  // fato em SP. O total do item (pra planejamento) continua na tabela "Controle de estoques".
+  enviadoParaSP = (itemId) => {
+    let total = 0;
+    MALAS_BSB_SP.forEach(m => (m.conteudoItens || []).forEach(it => { if (it.id === itemId) total += it.qtd; }));
+    return total;
+  };
   // Trava as respostas de identificação (restrição, camiseta, confraternização, necessidade especial)
   // a partir do dia do evento da cidade da pessoa — pode informar/alterar livremente até a véspera.
   respostasTravadas = (nome) => {
@@ -3667,8 +3609,8 @@ class Component extends DCLogic {
     const item = BRINDES_MARKETPLACE.find(b => b.id === itemId);
     if (!item) return;
     const custo = this.precoBrinde(item);
-    const { sp: estSP, bsb: estBSB } = this.splitEstoque(item.estoqueTotal);
-    const estoqueTotal = cidade === 'sp' ? estSP : estBSB;
+    const { sp: estSP, bsb: estBSB } = this.splitEstoqueItem(item);
+    const estoqueTotal = cidade === 'sp' ? this.enviadoParaSP(item.id) : estBSB;
     if (this.valor('brinde-' + itemId + '-' + nome)) { this.setState({ brindeAviso: 'Você já resgatou esse item.' }); return; }
     if (this.contarResgates(itemId, cidade) >= estoqueTotal) { this.setState({ brindeAviso: 'Esse item esgotou antes do seu resgate — escolha outro.' }); return; }
     const pontosPessoa = this.pontosTotalDe(nome);
@@ -3973,6 +3915,46 @@ class Component extends DCLogic {
     this.abrirPdf(corpo, estilo, 'Nomes de mesa · VIART 2026');
   };
 
+  relatorioPessoasGrupos = () => {
+    const porCidade = { sp: {}, bsb: {} };
+    const orgGestor = {};
+    const outros = {};
+    PARTICIPANTES.forEach(n => {
+      const info = PARTICIPANTES_INFO[n] || {};
+      const area = info.u ? info.u.split(' - ')[0] : '—';
+      if (info.tipo === 'organizacao' || info.tipo === 'gestor') {
+        if (!orgGestor[area]) orgGestor[area] = [];
+        orgGestor[area].push({ nome: n, camisa: info.cs || '—', genero: info.cm || '—' });
+        return;
+      }
+      const c = this.cidadeDe(n);
+      if (c === 'sp' || c === 'bsb') {
+        if (!porCidade[c][area]) porCidade[c][area] = [];
+        porCidade[c][area].push({ nome: n, camisa: info.cs || '—', genero: info.cm || '—' });
+        return;
+      }
+      const status = info.fe ? 'Férias' : info.de ? 'Destacamento' : 'Licença/outros';
+      if (!outros[status]) outros[status] = [];
+      outros[status].push({ nome: n, camisa: info.cs || '—', genero: info.cm || '—' });
+    });
+    const montaGrupo = (bucket, nomeGrupo, cor) => {
+      const areas = Object.keys(bucket).sort((a, b) => a === '—' ? 1 : b === '—' ? -1 : a.localeCompare(b)).map(area => ({
+        area, pessoas: bucket[area].slice().sort((a, b) => a.nome.localeCompare(b.nome)),
+      }));
+      const total = areas.reduce((a, g) => a + g.pessoas.length, 0);
+      return { cidade: nomeGrupo, cor, total, areas };
+    };
+    const grupos = [montaGrupo(porCidade.sp, 'São Paulo', '0057A6'), montaGrupo(porCidade.bsb, 'Brasília', 'F39200')];
+    if (Object.keys(orgGestor).length) grupos.push(montaGrupo(orgGestor, 'Organização / Gestores', '002855'));
+    if (Object.keys(outros).length) grupos.push(montaGrupo(outros, 'Férias, Destacamento e Licença', '6B6B70'));
+    return grupos;
+  };
+  baixarRelatorioPessoas = () => {
+    const groups = this.relatorioPessoasGrupos();
+    const total = groups.reduce((a, g) => a + g.total, 0);
+    const hoje = new Date().toLocaleDateString('pt-BR');
+    window.gerarRelatorioPessoasDocx(groups, { titulo: 'Relatório · Lista de pessoas', geradoEm: hoje, total, filename: 'relatorio-pessoas-viart2026' });
+  };
   pdfCartazes = () => {
     const corpo = CARTAZES.map(c => '<section class="folha">' +
       '<div class="kicker">Planejamento Estratégico VIART 2026</div>' +
@@ -4473,6 +4455,13 @@ class Component extends DCLogic {
     ).length;
     const faltamIdentificarCount = baseIdentificacao.length - identificadosCount;
     const identificadosPct = baseIdentificacao.length ? Math.round(100 * identificadosCount / baseIdentificacao.length) : 0;
+    const identifOk = (n) => gv('rt-' + n) || gv('cf-' + n) || gv('pp-' + n) || gv('pcd-' + n) || gv('cs-' + n);
+    const identificadosPorCidade = ['sp', 'bsb'].map(c => {
+      const base = baseIdentificacao.filter(n => cidadeDe(n) === c);
+      const ok = base.filter(identifOk).length;
+      return { id: c, nome: c === 'sp' ? 'São Paulo' : 'Brasília', cor: c === 'sp' ? '#0057A6' : '#F39200',
+        count: ok, total: base.length, pct: base.length ? Math.round(100 * ok / base.length) : 0 };
+    });
     const baseFiltrado = PARTICIPANTES.filter(n => {
       if (q && !norm(n).includes(q)) return false;
       // Organização + gestores (dupla função SP+BSB) ficam fora das contagens de presença/confraternização/
@@ -5147,13 +5136,22 @@ class Component extends DCLogic {
       return seg;
     });
     const totalAtivosOrigem = PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d).length || 1;
+    const totalAtivosOrigemSP = PARTICIPANTES.filter(n => cidadeDe(n) === 'sp' && !infoDe(n).d).length || 1;
+    const totalAtivosOrigemBSB = PARTICIPANTES.filter(n => cidadeDe(n) === 'bsb' && !infoDe(n).d).length || 1;
     const origemPontosView = PONTOS_ACOES.map(a => {
       const count = Object.values(acoesPorNome).filter(f => f.indexOf(a.key) !== -1).length;
-      return { label: a.label, count, pct: Math.round(100 * count / totalAtivosOrigem) };
+      const countSP = PARTICIPANTES.filter(n => cidadeDe(n) === 'sp' && !infoDe(n).d && (acoesPorNome[n] || []).indexOf(a.key) !== -1).length;
+      const countBSB = PARTICIPANTES.filter(n => cidadeDe(n) === 'bsb' && !infoDe(n).d && (acoesPorNome[n] || []).indexOf(a.key) !== -1).length;
+      return { label: a.label, count, pct: Math.round(100 * count / totalAtivosOrigem),
+        countSP, pctSP: Math.round(100 * countSP / totalAtivosOrigemSP), countBSB, pctBSB: Math.round(100 * countBSB / totalAtivosOrigemBSB) };
     }).concat([{
       label: 'Detetive VIART (ao menos 1 acerto)',
       count: PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d && this.contarAcertosQuiz(n) > 0).length,
       pct: Math.round(100 * PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d && this.contarAcertosQuiz(n) > 0).length / totalAtivosOrigem),
+      countSP: PARTICIPANTES.filter(n => cidadeDe(n) === 'sp' && !infoDe(n).d && this.contarAcertosQuiz(n) > 0).length,
+      pctSP: Math.round(100 * PARTICIPANTES.filter(n => cidadeDe(n) === 'sp' && !infoDe(n).d && this.contarAcertosQuiz(n) > 0).length / totalAtivosOrigemSP),
+      countBSB: PARTICIPANTES.filter(n => cidadeDe(n) === 'bsb' && !infoDe(n).d && this.contarAcertosQuiz(n) > 0).length,
+      pctBSB: Math.round(100 * PARTICIPANTES.filter(n => cidadeDe(n) === 'bsb' && !infoDe(n).d && this.contarAcertosQuiz(n) > 0).length / totalAtivosOrigemBSB),
     }]).sort((a, b) => b.count - a.count);
     const totalPontosGeral = pontosRankingView.reduce((a, p) => a + p.pontos, 0);
     const rankingSP = pontosRankingView.filter(p => p.cidade === 'SP');
@@ -5190,9 +5188,24 @@ class Component extends DCLogic {
     const engajSpResgatesPct = engajTotalResgatesReal ? Math.round(100 * engajamentoDash.resgatesSP / engajTotalResgates) : 0;
     const engajBsbResgatesPct = engajTotalResgatesReal ? (100 - engajSpResgatesPct) : 0;
     const engajCidadeDonutBg = 'conic-gradient(#0057A6 0% ' + engajSpPontosPct + '%, #F39200 ' + engajSpPontosPct + '% 100%)';
+    const statsCidade = (arr) => {
+      const ativosComPontoC = arr.filter(p => p.ativoReal).length;
+      const maxPC = arr.length ? Math.max.apply(null, arr.map(p => p.pontos)) : 0;
+      const minPC = arr.length ? Math.min.apply(null, arr.map(p => p.pontos)) : 0;
+      const maxRC = Math.max.apply(null, arr.map(p => p.resgatesCount).concat([0]));
+      const minRC = arr.length ? Math.min.apply(null, arr.map(p => p.resgatesCount)) : 0;
+      return {
+        participacaoPct: arr.length ? Math.round(100 * ativosComPontoC / arr.length) : 0,
+        participacaoAtivos: ativosComPontoC, participacaoTotal: arr.length,
+        maisPontosNome: label1(arr.filter(p => p.pontos === maxPC)), maisPontosValor: maxPC,
+        menosPontosNome: label1(arr.filter(p => p.pontos === minPC)), menosPontosValor: minPC,
+        maisResgatouNome: label1(arr.filter(p => p.resgatesCount === maxRC && maxRC > 0)), maisResgatouValor: maxRC,
+        menosResgatouNome: label1(arr.filter(p => p.resgatesCount === minRC)), menosResgatouValor: minRC,
+      };
+    };
     const engajCidadeChart = [
-      { nome: 'São Paulo', cor: '#0057A6', total: engajamentoDash.totalSP, totalPct: engajSpPontosPct, media: engajamentoDash.mediaSP, resgates: engajamentoDash.resgatesSP, resgatesPct: engajSpResgatesPct },
-      { nome: 'Brasília', cor: '#F39200', total: engajamentoDash.totalBSB, totalPct: engajBsbPontosPct, media: engajamentoDash.mediaBSB, resgates: engajamentoDash.resgatesBSB, resgatesPct: engajBsbResgatesPct },
+      { nome: 'São Paulo', cor: '#0057A6', total: engajamentoDash.totalSP, totalPct: engajSpPontosPct, media: engajamentoDash.mediaSP, resgates: engajamentoDash.resgatesSP, resgatesPct: engajSpResgatesPct, ...statsCidade(rankingSP) },
+      { nome: 'Brasília', cor: '#F39200', total: engajamentoDash.totalBSB, totalPct: engajBsbPontosPct, media: engajamentoDash.mediaBSB, resgates: engajamentoDash.resgatesBSB, resgatesPct: engajBsbResgatesPct, ...statsCidade(rankingBSB) },
     ];
     // Dash de estoque em tempo real: agrupa os 4 moleskines numa linha só, mostra
     // restante/total, preço atual em pontos e velocidade de saída (resgates nas últimas 24h)
@@ -5206,7 +5219,7 @@ class Component extends DCLogic {
       const grp = gruposMapBrindes[g];
       const usadoSPItem = this.contarResgates(b.id, 'sp');
       const usadoBSBItem = this.contarResgates(b.id, 'bsb');
-      const { sp: estSP, bsb: estBSB } = this.splitEstoque(b.estoqueTotal);
+      const { sp: estSP, bsb: estBSB } = this.splitEstoqueItem(b);
       grp.totalSP += estSP; grp.usadoSP += usadoSPItem;
       grp.totalBSB += estBSB; grp.usadoBSB += usadoBSBItem;
       grp.total += estSP + estBSB;
@@ -5246,7 +5259,7 @@ class Component extends DCLogic {
       });
       return BRINDES_MARKETPLACE.map(b => {
         const preco = this.precoBrinde(b);
-        const { sp: metaSP, bsb: metaBSB } = this.splitEstoque(b.estoqueTotal);
+        const { sp: metaSP, bsb: metaBSB } = this.splitEstoqueItem(b);
         const usadoSP = this.contarResgates(b.id, 'sp');
         const usadoBSB = this.contarResgates(b.id, 'bsb');
         const restanteSP = Math.max(0, metaSP - usadoSP);
@@ -5254,15 +5267,17 @@ class Component extends DCLogic {
         const usado = usadoSP + usadoBSB;
         const restante = restanteSP + restanteBSB;
         const pct = b.estoqueTotal ? Math.round(100 * usado / b.estoqueTotal) : 0;
-        const enviado = enviadoPorItem[b.id] || 0;
+        const enviado = b.origemSP ? b.estoqueTotal : (enviadoPorItem[b.id] || 0);
         const excedente = Math.max(0, enviado - metaSP);
-        const malaOk = enviado >= metaSP;
+        const malaOk = b.origemSP ? metaBSB === 0 : enviado >= metaSP;
         return {
           id: b.id, nome: b.nome, preco, estoqueTotal: b.estoqueTotal,
           restanteSP, metaSP, restanteBSB, metaBSB, restante, pct, usado, enviado, excedente, malaOk,
           statusEstoqueLabel: restante <= 0 ? 'Esgotado' : (vels[b.id] === maxVel && maxVel > 0 ? '🔥 caindo rápido' : (usado === 0 ? 'Encalhando' : '—')),
           statusEstoqueColor: restante <= 0 ? '#B4471F' : (vels[b.id] === maxVel && maxVel > 0 ? '#B4471F' : '#8A8A90'),
-          statusLogisticaLabel: malaOk ? 'Meta SP completa' : ('Faltam ' + Math.max(0, metaSP - enviado) + ' p/ SP'),
+          statusLogisticaLabel: b.origemSP
+            ? (metaBSB === 0 ? 'Meta SP completa' : ('Faltam ' + metaBSB + ' p/ BSB'))
+            : (malaOk ? 'Meta SP completa' : ('Faltam ' + Math.max(0, metaSP - enviado) + ' p/ SP')),
           statusLogisticaColor: malaOk ? '#1E7A45' : '#B4471F',
           barColor: pct >= 100 ? '#B4471F' : (pct >= 60 ? '#F39200' : '#0057A6'),
         };
@@ -5410,8 +5425,8 @@ class Component extends DCLogic {
     const brindesView = BRINDES_MARKETPLACE.map(b => {
       const custo = this.precoBrinde(b);
       const baseSemDesconto = Math.max(1, Math.round(b.peso * 8));
-      const { sp: estSP, bsb: estBSB } = this.splitEstoque(b.estoqueTotal);
-      const estoqueTotal = minhaCidadeId === 'bsb' ? estBSB : estSP;
+      const { sp: estSP, bsb: estBSB } = this.splitEstoqueItem(b);
+      const estoqueTotal = minhaCidadeId === 'bsb' ? estBSB : this.enviadoParaSP(b.id);
       const usados = this.contarResgates(b.id, minhaCidadeId || 'sp');
       const restante = Math.max(0, estoqueTotal - usados);
       const jaTem = temNome && !!this.valor('brinde-' + b.id + '-' + s.meuNome);
@@ -5692,7 +5707,7 @@ class Component extends DCLogic {
         const enviadoPorItem = {};
         MALAS_BSB_SP.forEach(m => (m.conteudoItens || []).forEach(it => { enviadoPorItem[it.id] = (enviadoPorItem[it.id] || 0) + it.qtd; }));
         return MALAS_BSB_SP.map(m => {
-          const status = this.valor('mala-' + m.id) || m.statusInicial || MALA_STATUS_CICLO[0];
+          const status = m.statusInicial || this.valor('mala-' + m.id) || MALA_STATUS_CICLO[0];
           const cor = status === 'Recebida em SP' ? { bg: '#E3F3E9', color: '#1E7A45' } : (status === 'Despachada em BSB' ? { bg: '#FDECC8', color: '#8A5A00' } : { bg: '#F2F5FA', color: '#6B6B70' });
           const itens = (m.conteudoItens || []).map(it => {
             const item = BRINDES_MARKETPLACE.find(b => b.id === it.id);
@@ -5700,7 +5715,7 @@ class Component extends DCLogic {
             const origemBSB = BSB_ORIGEM_TOTAL[it.id] || 0;
             const totalEnviado = enviadoPorItem[it.id] || 0;
             const restanteBSB = Math.max(0, origemBSB - totalEnviado);
-            const metaSP = item ? this.splitEstoque(item.estoqueTotal).sp : 0;
+            const metaSP = item ? this.splitEstoqueItem(item).sp : 0;
             const spOk = totalEnviado >= metaSP;
             return {
               nome, qtd: it.qtd, restanteBSB,
@@ -5724,7 +5739,7 @@ class Component extends DCLogic {
         MALAS_BSB_SP.forEach(m => (m.conteudoItens || []).forEach(it => { enviadoPorItem[it.id] = (enviadoPorItem[it.id] || 0) + it.qtd; }));
         const linhas = [];
         MALAS_BSB_SP.forEach(m => {
-          const status = this.valor('mala-' + m.id) || m.statusInicial || MALA_STATUS_CICLO[0];
+          const status = m.statusInicial || this.valor('mala-' + m.id) || MALA_STATUS_CICLO[0];
           const cor = status === 'Recebida em SP' ? { bg: '#E3F3E9', color: '#1E7A45' } : (status === 'Despachada em BSB' ? { bg: '#FDECC8', color: '#8A5A00' } : { bg: '#F2F5FA', color: '#6B6B70' });
           (m.conteudoItens || []).forEach(it => {
             const item = BRINDES_MARKETPLACE.find(b => b.id === it.id);
@@ -5732,7 +5747,7 @@ class Component extends DCLogic {
             const origemBSB = BSB_ORIGEM_TOTAL[it.id] || 0;
             const totalEnviado = enviadoPorItem[it.id] || 0;
             const restanteBSB = Math.max(0, origemBSB - totalEnviado);
-            const metaSP = item ? this.splitEstoque(item.estoqueTotal).sp : 0;
+            const metaSP = item ? this.splitEstoqueItem(item).sp : 0;
             const spOk = totalEnviado >= metaSP;
             linhas.push({
               malaId: m.id, passageiro: m.passageiro, chegada: (m.data || '—') + (m.chegada ? ' · ' + m.chegada : ''),
@@ -5759,7 +5774,7 @@ class Component extends DCLogic {
           const nome = item ? item.nome : id;
           const estoqueTotal = item ? item.estoqueTotal : (BSB_ORIGEM_TOTAL[id] || 0);
           const enviado = enviadoPorItem[id];
-          const split = item ? this.splitEstoque(item.estoqueTotal) : { sp: 0, bsb: 0 };
+          const split = item ? this.splitEstoqueItem(item) : { sp: 0, bsb: 0 };
           const metaSP = split.sp, metaBSB = split.bsb;
           const pct = metaSP ? Math.min(100, Math.round(100 * enviado / metaSP)) : 100;
           const ok = enviado >= metaSP;
@@ -5786,9 +5801,23 @@ class Component extends DCLogic {
         bg: (s.estoqueOrdem || 'preco') === o.id ? '#0057A6' : '#F2F5FA', color: (s.estoqueOrdem || 'preco') === o.id ? '#FFFFFF' : '#4A4A50' })),
       malasRecebidasCount: MALAS_BSB_SP.filter(m => this.valor('mala-' + m.id) === 'Recebida em SP').length,
       malasDespachadasCount: MALAS_BSB_SP.filter(m => this.valor('mala-' + m.id) === 'Despachada em BSB').length,
+      despachoConsolidadoView: (() => {
+        const soma = {};
+        MALAS_BSB_SP.forEach(m => (m.conteudoItens || []).forEach(it => { soma[it.id] = (soma[it.id] || 0) + it.qtd; }));
+        return Object.keys(soma).map(id => {
+          const item = BRINDES_MARKETPLACE.find(b => b.id === id);
+          return { id, nome: item ? item.nome : id, qtd: soma[id] };
+        }).sort((a, b) => b.qtd - a.qtd);
+      })(),
+      despachoConsolidadoTotal: (() => {
+        let total = 0;
+        MALAS_BSB_SP.forEach(m => (m.conteudoItens || []).forEach(it => { total += it.qtd; }));
+        return total;
+      })(),
       malasTotal: MALAS_BSB_SP.length,
       showOrgCuriosidades: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'pontos',
       showOrgManual: s.orgSubTab === 'manual',
+      showOrgRelatorios: s.orgSubTab === 'relatorios', baixarRelatorioPessoas: this.baixarRelatorioPessoas,
       manualSecoes: (() => {
         let n = 0;
         return MANUAL_SECOES.map(sec => ({
@@ -5808,7 +5837,7 @@ class Component extends DCLogic {
       gruposChart, grupoFiltroAtivo, verTodosGrupos, filtrosAtivosResumo,
       maisFiltrosAberto: s.maisFiltrosAberto, toggleMaisFiltros: this.toggleMaisFiltros,
       maisFiltrosLabel: s.maisFiltrosAberto ? 'Ocultar mais filtros' : 'Mais filtros (tamanho de camiseta)',
-      identificadosCount, faltamIdentificarCount, identificadosPct,
+      identificadosCount, faltamIdentificarCount, identificadosPct, identificadosPorCidade,
       pessoaUnidadeValue: s.pessoaUnidade || '',
       presencaChart, presencaFiltroAtivo: !!s.presencaFiltro,
       limparPresencaFiltro: () => this.setState({ presencaFiltro: '' }),
