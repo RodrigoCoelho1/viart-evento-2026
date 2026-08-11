@@ -1345,6 +1345,13 @@
               </div>
               <div onClick="{{ baixarRelatorioPessoas }}" style="cursor:pointer;background:#0057A6;color:#fff;font-weight:700;padding:10px 20px;border-radius:10px;font-size:13px;white-space:nowrap">Baixar .docx</div>
             </div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px">
+              <div>
+                <div style="font-weight:700;font-size:14px">Controle de estoques</div>
+                <div style="font-size:12.5px;color:#6B6B70;margin-top:3px">Todos os brindes por categoria, com estoque total, divisão SP/BSB, enviado p/ SP e o que falta enviar p/ BSB.</div>
+              </div>
+              <div onClick="{{ baixarRelatorioEstoque }}" style="cursor:pointer;background:#0057A6;color:#fff;font-weight:700;padding:10px 20px;border-radius:10px;font-size:13px;white-space:nowrap">Baixar .docx</div>
+            </div>
             </div>
             </sc-if>
 
@@ -2105,13 +2112,8 @@
               <div onClick="{{ toggleAccEstoque }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ accEstoqueLabel }}</div>
             </div>
             <sc-if value="{{ accEstoqueAberto }}" hint-placeholder-val="{{ false }}">
-            <div style="font-size:11.5px;color:#8A8A90;margin-bottom:4px">Estoque total = tudo que existe do item (SP + BSB). SP/BSB restante = quanto ainda não foi resgatado em cada cidade. Enviado p/ SP = o que já saiu nas malas.</div>
+            <div style="font-size:11.5px;color:#8A8A90;margin-bottom:4px">Estoque total = tudo que existe do item (SP + BSB). SP/BSB = quanto cabe a cada cidade, na proporção de participantes, e quanto ainda resta lá.</div>
             <div style="font-size:11.5px;color:#0057A6;font-weight:700;margin-bottom:10px">Proporção atual: {{ proporcaoCidadesLabel }} — recalculada automaticamente conforme licenças, ausências confirmadas ("não vou") e mudanças de cidade.</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-              <sc-for list="{{ analiseFiltroStatusOpcoes }}" as="op" hint-placeholder-count="3">
-                <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
-              </sc-for>
-            </div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
               <sc-for list="{{ estoqueOrdemOpcoes }}" as="op" hint-placeholder-count="2">
                 <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
@@ -2123,39 +2125,67 @@
                   <tr style="background:#F7F9FC">
                     <th style="text-align:left;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Item</th>
                     <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Preço agora</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Estoque total</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">SP restante</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">BSB restante</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Enviado p/ SP</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Excedente SP</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Status estoque</th>
-                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Status logística</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Qtd. total¹</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">SP</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">BSB</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Enviado p/ SP²</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Enviar p/ BSB</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <sc-for list="{{ brindesUnificadoView }}" as="an" hint-placeholder-count="20">
-                    <tr style="border-bottom:1px solid #EEF2F8">
-                      <td style="padding:10px 12px;font-weight:700;color:#002855;white-space:nowrap">{{ an.nome }}</td>
-                      <td style="padding:10px 12px;text-align:right;font-weight:700;color:#002855">{{ an.preco }}</td>
-                      <td style="padding:10px 12px;text-align:right;color:#002855">{{ an.estoqueTotal }}</td>
-                      <td style="padding:10px 12px;text-align:right;color:#002855">{{ an.restanteSP }}/{{ an.metaSP }}</td>
-                      <td style="padding:10px 12px;text-align:right;color:#002855">{{ an.restanteBSB }}/{{ an.metaBSB }}</td>
-                      <td style="padding:10px 12px;text-align:right;font-weight:700;color:#0057A6">{{ an.enviado }}</td>
-                      <td style="padding:10px 12px;text-align:right;color:#8A5A00;font-weight:700">{{ an.excedente }}</td>
-                      <td style="padding:10px 12px;text-align:right;font-weight:700;color:{{ an.statusEstoqueColor }};white-space:nowrap">{{ an.statusEstoqueLabel }}</td>
-                      <td style="padding:10px 12px;text-align:right;font-weight:700;color:{{ an.statusLogisticaColor }};white-space:nowrap">{{ an.statusLogisticaLabel }}</td>
+                  <sc-for list="{{ brindesUnificadoView }}" as="cat" hint-placeholder-count="7">
+                    <tr>
+                      <td style="padding:8px 12px;background:#F2F5FA;font-weight:800;font-size:11px;color:#0057A6;text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap">{{ cat.categoria }} · {{ cat.totalItens }} itens</td>
+                      <td style="padding:8px 12px;background:#F2F5FA"></td>
+                      <td style="padding:8px 12px;text-align:right;background:#F2F5FA;font-weight:800;font-size:11px;color:#0057A6">{{ cat.totalUnidades }}</td>
+                      <td style="padding:8px 12px;text-align:right;background:#F2F5FA;font-weight:800;font-size:11px;color:#0057A6">{{ cat.totalSP }} un.</td>
+                      <td style="padding:8px 12px;text-align:right;background:#F2F5FA;font-weight:800;font-size:11px;color:#F39200">{{ cat.totalBSB }} un.</td>
+                      <td style="padding:8px 12px;text-align:right;background:#F2F5FA;font-weight:800;font-size:11px;color:#0057A6">{{ cat.totalEnviadoSP }}</td>
+                      <td style="padding:8px 12px;text-align:right;background:#F2F5FA;font-weight:800;font-size:11px;color:#F39200">{{ cat.totalEnviarBSB }}</td>
+                      <td style="padding:8px 12px;background:#F2F5FA"></td>
                     </tr>
+                    <sc-for list="{{ cat.itens }}" as="an" hint-placeholder-count="3">
+                      <tr style="border-bottom:1px solid #EEF2F8">
+                        <td style="padding:10px 12px;font-weight:700;color:#002855;white-space:nowrap">{{ an.nome }}</td>
+                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:#002855">{{ an.preco }}</td>
+                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:#002855">{{ an.estoqueTotal }}</td>
+                        <td style="padding:10px 12px;text-align:right;color:#0057A6">{{ an.metaSP }} un.</td>
+                        <td style="padding:10px 12px;text-align:right;color:#F39200">{{ an.metaBSB }} un.</td>
+                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:#0057A6">{{ an.enviadoSP }}</td>
+                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:{{ an.enviarBSBColor }}">{{ an.enviarBSBLabel }}</td>
+                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:{{ an.statusEstoqueColor }};white-space:nowrap">{{ an.statusEstoqueLabel }}</td>
+                      </tr>
+                    </sc-for>
                   </sc-for>
                 </tbody>
+                <tfoot>
+                  <tr style="background:#F7F9FC;border-top:2px solid #DCE6F2">
+                    <td style="padding:10px 12px;font-weight:800;color:#002855">Total</td>
+                    <td></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:800;color:#002855">{{ brindesUnificadoTotal.estoqueTotal }}</td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:800;color:#0057A6">{{ brindesUnificadoTotal.metaSP }} un.</td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:800;color:#F39200">{{ brindesUnificadoTotal.metaBSB }} un.</td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:800;color:#0057A6">{{ brindesUnificadoTotal.enviadoSP }}</td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:800;color:#F39200">{{ brindesUnificadoTotal.enviarBSB }}</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
+            <div style="font-size:11px;color:#8A8A90;margin:-12px 0 20px">¹ Quantidades totais conforme anotações da Gê. ² Enviado p/ SP conforme listagem de despacho por malas. "Enviar p/ BSB" = quanto falta mandar pra BSB considerando o que já foi enviado a mais pra SP e o que ainda não foi despachado de nenhum lugar. * Ainda não enviados para SP.</div>
             </sc-if>
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px">
-              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Lista nome a nome ({{ pontosRankingView.length }})</div>
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px">Lista nome a nome ({{ pontosRankingListaView.length }})</div>
               <div onClick="{{ togglePontosLista }}" style="cursor:pointer;font-size:11.5px;font-weight:700;color:#0057A6;border:1px solid #C9D6E8;border-radius:999px;padding:6px 14px;width:110px;text-align:center;white-space:nowrap">{{ pontosListaToggleLabel }}</div>
             </div>
             <sc-if value="{{ pontosListaAberta }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+              <sc-for list="{{ pontosListaFiltroCidadeOpcoes }}" as="op" hint-placeholder-count="3">
+                <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
+              </sc-for>
+            </div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
               <sc-for list="{{ pontosListaOrdemOpcoes }}" as="op" hint-placeholder-count="4">
                 <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
@@ -2684,29 +2714,29 @@ const PONTOS_ACOES = [
 // pontuação média de quem já participou (tipo bolsa de valores): poucas pessoas pontuando = preços sobem;
 // muita gente pontuando = preços caem, mantendo o acesso equilibrado.
 const BRINDES_MARKETPLACE = [
-  { id: 'mochila-seguridade', nome: 'Mochila CAIXA Seguridade', desc: 'Mochila executiva cinza mescla, compartimentos espaçosos, bolsos laterais em redinha e placa metálica personalizada com a marca.', foto: 'mochila-seguridade.jpg', peso: 4.8, estoqueTotal: 6 },
-  { id: 'mochila-caixa', nome: 'Mochila CAIXA', desc: 'Modelo clássico de mochila cinza corporativa com acabamento texturizado e placa metálica discreta da CAIXA.', foto: 'mochila-caixa.jpg', peso: 3.6, estoqueTotal: 5 },
-  { id: 'mochila-loterias', nome: 'Mochila CAIXA Loterias', desc: 'Mochila cinza estruturada de alta resistência com o logo oficial da CAIXA Loterias em destaque, amplo espaço interno e bolsos laterais telados.', foto: 'mochila-loterias.jpg', peso: 3.6, estoqueTotal: 5 },
-  { id: 'maleta-churrasco', nome: 'Maleta de churrasco', desc: 'Maleta de alumínio estruturada com cantoneiras reforçadas e placa central lisa para personalização.', foto: 'maleta-churrasco.jpg?v=2', peso: 5.6, estoqueTotal: 5 },
-  { id: 'kit-uau', nome: 'Kit UAU', desc: 'Kit completo com ecobag/sacochila de algodão CAIXA, nécessaire preta compacta CAIXA Cartões e camisa polo azul embalada individualmente.', foto: 'kit-uau.jpg', peso: 2.8, estoqueTotal: 59 },
-  { id: 'carregador-gocase', nome: 'Carregador Gocase', desc: 'Power bank Gocase 10.000mAh na cor azul tiffany, com carregamento rápido, saídas USB-C e USB-A e lanterna integrada.', foto: 'carregador-gocase.jpg', peso: 3.4, estoqueTotal: 3, fit: 'cover' },
-  { id: 'bolsa-cop30', nome: 'Bolsa COP 30', desc: 'Estojo rígido multiuso com zíper e alça transversal removível, estampa temática da fauna e flora do Pampa e chancela CAIXA.', foto: 'bolsa-cop30.jpg', peso: 1.8, estoqueTotal: 10 },
-  { id: 'garrafinha', nome: 'Garrafinha', desc: 'Garrafa térmica branca com ilustração infantil colorida (sol, nuvens e casinhas) e a marca CAIXA Residencial.', foto: 'garrafinha.jpg', peso: 3.4, estoqueTotal: 4, fit: 'cover' },
-  { id: 'xicaras', nome: 'Jogo de xícaras', desc: 'Jogo de xícaras CAIXA, com caixa de apresentação. O modelo pode variar entre espresso ou copos de vidro com parede dupla, conforme o estoque disponível na sua cidade.', foto: 'xicara-2pecas.jpg?v=2', peso: 3.2, estoqueTotal: 11 },
-  { id: 'bone-caixa', nome: 'Boné CAIXA', desc: 'Boné azul marinho clássico, aba curvada, costuras pespontadas em tom contrastante e bordado oficial da CAIXA.', foto: 'bone-caixa.jpg', peso: 1.4, estoqueTotal: 10, fit: 'cover' },
-  { id: 'necessaire', nome: 'Necessaire', desc: 'Nécessaire estruturada em tom coral/salmão, estampa inspirada na Caatinga e os dizeres "É da nossa natureza fazer acontecer - Caixa Brasil".', foto: 'necessaire.jpg', peso: 1.0, estoqueTotal: 10 },
-  { id: 'mouse-pad', nome: 'Desk Pad', desc: 'Desk pad estendido em couro sintético preto de alta qualidade, com acabamento costurado nas bordas.', foto: 'mouse-pad.jpg', peso: 0.6, estoqueTotal: 4, fit: 'cover' },
-  { id: 'copo-caixa', nome: 'Copo CAIXA Térmico', desc: 'Copo térmico de aço inox 360ml, tampa com abertura para canudo e a marca CAIXA impressa no corpo azul marinho.', foto: 'copo-caixa.jpg', peso: 3.2, estoqueTotal: 5, fit: 'cover' },
-  { id: 'moleskine-seguridade-caneta', nome: 'Moleskine Seguridade c/ caneta', desc: 'Caderno executivo azul com elástico vertical na cor azul royal, caneta metálica encaixada na lateral e estampa da CAIXA Seguridade.', foto: 'moleskine-seguridade-caneta.jpg', peso: 0.3, estoqueTotal: 11 },
-  { id: 'moleskine-caneta-asset', nome: 'Moleskine com caneta CAIXA Asset', desc: 'Kit em caixa preta com caderno executivo preto e caneta esferográfica metálica preta, ambos com a marca "CAIXA Asset".', foto: 'moleskine-caneta-asset.jpg', peso: 0.35, estoqueTotal: 2, origemSP: true },
-  { id: 'moleskine-seguridade-10anos', nome: 'Moleskine CAIXA Seguridade', desc: 'Caderno especial comemorativo de 10 Anos da CAIXA Seguridade, com design degradê em tons de azul e rosa, fechamento em elástico e caneta metálica inclusa.', foto: 'moleskine-seguridade-10anos.jpg', peso: 0.3, estoqueTotal: 2 },
-  { id: 'moleskine-loterias', nome: 'Moleskine CAIXA Loterias', desc: 'Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.', foto: 'moleskine-loterias.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 198 },
-  { id: 'moleskine-x', nome: 'Moleskine X', desc: 'Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.', foto: 'moleskine-x.jpg', fit: 'contain', peso: 0.3, estoqueTotal: 204 },
-  { id: 'bloco-rapidex', nome: 'Bloco Rapidex', desc: 'Caderno corporativo com capa em tons de azul e detalhes geométricos coloridos nas bordas, com a marca "Rapidex" em destaque.', foto: 'bloco-rapidex.jpg', peso: 0.6, estoqueTotal: 15 },
-  { id: 'caneta-tipo1', nome: 'Caneta CAIXA Tipo 1', desc: 'Caneta esferográfica metálica azul, com clipe prateado e a marca CAIXA Asset gravada no corpo.', foto: 'caneta-caixa-tipo1.jpg', peso: 0.2, estoqueTotal: 96, fit: 'contain', origemSP: true },
-  { id: 'caneta-tipo2', nome: 'Caneta CAIXA Tipo 2', desc: 'Caneta esferográfica metálica azul marinho, com acabamentos prateados e estojo de veludo com a marca CAIXA.', foto: 'caneta-caixa-tipo2.jpg', peso: 0.2, estoqueTotal: 70, fit: 'contain', origemSP: true },
-  { id: 'pasta-executiva', nome: 'Pasta executiva CAIXA Asset', desc: 'Pasta executiva em material sintético preto com fecho por trava metálica, bloco de anotações e caneta inclusos, e placa "CAIXA Asset" na capa.', foto: 'pasta-executiva.jpg', peso: 3.4, estoqueTotal: 2, origemSP: true },
-  { id: 'carregador-wireless', nome: 'Carregador Wireless CAIXA Asset', desc: 'Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca "CAIXA Asset" em destaque, com cabo e caixa individual.', foto: 'carregador-wireless.jpg', peso: 3.0, estoqueTotal: 1, origemSP: true },
+  {"id":"mochila-seguridade","nome":"Mochila CAIXA Seguridade","categoria":"Mochilas","desc":"Mochila executiva cinza mescla, compartimentos espaçosos, bolsos laterais em redinha e placa metálica personalizada com a marca.","foto":"mochila-seguridade.jpg","peso":4.8,"estoqueTotal":6,"enviadoSP":1},
+  {"id":"mochila-caixa","nome":"Mochila CAIXA","categoria":"Mochilas","desc":"Modelo clássico de mochila cinza corporativa com acabamento texturizado e placa metálica discreta da CAIXA.","foto":"mochila-caixa.jpg","peso":3.6,"estoqueTotal":5,"enviadoSP":4},
+  {"id":"mochila-loterias","nome":"Mochila CAIXA Loterias","categoria":"Mochilas","desc":"Mochila cinza estruturada de alta resistência com o logo oficial da CAIXA Loterias em destaque, amplo espaço interno e bolsos laterais telados.","foto":"mochila-loterias.jpg","peso":3.6,"estoqueTotal":5,"enviadoSP":5},
+  {"id":"maleta-churrasco","nome":"Maleta de churrasco","categoria":"Casa & Lazer","desc":"Maleta de alumínio estruturada com cantoneiras reforçadas e placa central lisa para personalização.","foto":"maleta-churrasco.jpg?v=2","peso":5.6,"estoqueTotal":5,"enviadoSP":4},
+  {"id":"kit-uau","nome":"Kit UAU","categoria":"Vestuário & Kits","desc":"Kit completo com ecobag/sacochila de algodão CAIXA, nécessaire preta compacta CAIXA Cartões e camisa polo azul embalada individualmente.","foto":"kit-uau.jpg","peso":2.8,"estoqueTotal":59,"enviadoSP":40},
+  {"id":"carregador-gocase","nome":"Carregador Gocase","categoria":"Tecnologia","desc":"Power bank Gocase 10.000mAh na cor azul tiffany, com carregamento rápido, saídas USB-C e USB-A e lanterna integrada.","foto":"carregador-gocase.jpg","peso":3.4,"estoqueTotal":3,"enviadoSP":2,"fit":"cover"},
+  {"id":"bolsa-cop30","nome":"Bolsa COP 30","categoria":"Bolsas & Necessaires","desc":"Estojo rígido multiuso com zíper e alça transversal removível, estampa temática da fauna e flora do Pampa e chancela CAIXA.","foto":"bolsa-cop30.jpg","peso":1.8,"estoqueTotal":10,"enviadoSP":7},
+  {"id":"garrafinha","nome":"Garrafinha","categoria":"Casa & Lazer","desc":"Garrafa térmica branca com ilustração infantil colorida (sol, nuvens e casinhas) e a marca CAIXA Residencial.","foto":"garrafinha.jpg","peso":3.4,"estoqueTotal":4,"enviadoSP":3,"fit":"cover"},
+  {"id":"xicaras","nome":"Jogo de xícaras","categoria":"Casa & Lazer","desc":"Jogo de xícaras CAIXA, com caixa de apresentação. O modelo pode variar entre espresso ou copos de vidro com parede dupla, conforme o estoque disponível na sua cidade.","foto":"xicara-2pecas.jpg?v=2","peso":3.2,"estoqueTotal":11,"enviadoSP":8},
+  {"id":"bone-caixa","nome":"Boné CAIXA","categoria":"Vestuário & Kits","desc":"Boné azul marinho clássico, aba curvada, costuras pespontadas em tom contrastante e bordado oficial da CAIXA.","foto":"bone-caixa.jpg","peso":1.4,"estoqueTotal":10,"enviadoSP":9,"fit":"cover"},
+  {"id":"necessaire","nome":"Necessaire","categoria":"Bolsas & Necessaires","desc":"Nécessaire estruturada em tom coral/salmão, estampa inspirada na Caatinga e os dizeres \"É da nossa natureza fazer acontecer - Caixa Brasil\".","foto":"necessaire.jpg","peso":1,"estoqueTotal":10,"enviadoSP":7},
+  {"id":"mouse-pad","nome":"Desk Pad","categoria":"Tecnologia","desc":"Desk pad estendido em couro sintético preto de alta qualidade, com acabamento costurado nas bordas.","foto":"mouse-pad.jpg","peso":0.6,"estoqueTotal":9,"enviadoSP":2,"fit":"cover"},
+  {"id":"copo-caixa","nome":"Copo CAIXA Térmico","categoria":"Casa & Lazer","desc":"Copo térmico de aço inox 360ml, tampa com abertura para canudo e a marca CAIXA impressa no corpo azul marinho.","foto":"copo-caixa.jpg","peso":3.2,"estoqueTotal":5,"enviadoSP":3,"fit":"cover"},
+  {"id":"moleskine-seguridade-caneta","nome":"Moleskine Seguridade c/ caneta","categoria":"Cadernos & Blocos","desc":"Caderno executivo azul com elástico vertical na cor azul royal, caneta metálica encaixada na lateral e estampa da CAIXA Seguridade.","foto":"moleskine-seguridade-caneta.jpg","peso":0.3,"estoqueTotal":11,"enviadoSP":4},
+  {"id":"moleskine-caneta-asset","nome":"Moleskine com caneta CAIXA Asset","categoria":"Cadernos & Blocos","desc":"Kit em caixa preta com caderno executivo preto e caneta esferográfica metálica preta, ambos com a marca \"CAIXA Asset\".","foto":"moleskine-caneta-asset.jpg","peso":0.35,"estoqueTotal":2,"enviadoSP":0,"origemSP":true},
+  {"id":"moleskine-seguridade-10anos","nome":"Moleskine CAIXA Seguridade","categoria":"Cadernos & Blocos","desc":"Caderno especial comemorativo de 10 Anos da CAIXA Seguridade, com design degradê em tons de azul e rosa, fechamento em elástico e caneta metálica inclusa.","foto":"moleskine-seguridade-10anos.jpg","peso":0.3,"estoqueTotal":2,"enviadoSP":0},
+  {"id":"moleskine-loterias","nome":"Moleskine CAIXA Loterias","categoria":"Cadernos & Blocos","desc":"Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.","foto":"moleskine-loterias.jpg","fit":"contain","peso":0.3,"estoqueTotal":198,"enviadoSP":0},
+  {"id":"moleskine-x","nome":"Moleskine X","categoria":"Cadernos & Blocos","desc":"Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.","foto":"moleskine-x.jpg","fit":"contain","peso":0.3,"estoqueTotal":205,"enviadoSP":140},
+  {"id":"bloco-rapidex","nome":"Bloco Rapidex","categoria":"Cadernos & Blocos","desc":"Caderno corporativo com capa em tons de azul e detalhes geométricos coloridos nas bordas, com a marca \"Rapidex\" em destaque.","foto":"bloco-rapidex.jpg","peso":0.6,"estoqueTotal":15,"enviadoSP":7},
+  {"id":"caneta-tipo1","nome":"Caneta CAIXA Tipo 1","categoria":"Canetas","desc":"Caneta esferográfica metálica azul, com clipe prateado e a marca CAIXA Asset gravada no corpo.","foto":"caneta-caixa-tipo1.jpg","peso":0.2,"estoqueTotal":96,"enviadoSP":96,"fit":"contain","origemSP":true,"aindaEmSP":true},
+  {"id":"caneta-tipo2","nome":"Caneta CAIXA Tipo 2","categoria":"Canetas","desc":"Caneta esferográfica metálica azul marinho, com acabamentos prateados e estojo de veludo com a marca CAIXA.","foto":"caneta-caixa-tipo2.jpg","peso":0.2,"estoqueTotal":70,"enviadoSP":70,"fit":"contain","origemSP":true,"aindaEmSP":true},
+  {"id":"pasta-executiva","nome":"Pasta executiva CAIXA Asset","categoria":"Bolsas & Necessaires","desc":"Pasta executiva em material sintético preto com fecho por trava metálica, bloco de anotações e caneta inclusos, e placa \"CAIXA Asset\" na capa.","foto":"pasta-executiva.jpg","peso":3.4,"estoqueTotal":2,"enviadoSP":2,"origemSP":true,"aindaEmSP":true},
+  {"id":"carregador-wireless","nome":"Carregador Wireless CAIXA Asset","categoria":"Tecnologia","desc":"Carregador sem fio compatível com padrão Qi, acabamento preto com acabamento metálico e a marca \"CAIXA Asset\" em destaque, com cabo e caixa individual.","foto":"carregador-wireless.jpg","peso":3,"estoqueTotal":1,"enviadoSP":1,"origemSP":true,"aindaEmSP":true}
 ];
 
 const MANUAL_SECOES = [
@@ -3375,6 +3405,7 @@ class Component extends DCLogic {
   setOrgSubTab = (id) => () => this.setState({ orgSubTab: id });
   setOrgPessoasSub = (id) => () => this.setState({ orgPessoasSub: id });
   setEstoqueOrdem = (id) => () => this.setState({ estoqueOrdem: id });
+  setPontosListaFiltroCidade = (id) => () => this.setState({ pontosListaFiltroCidade: id });
   toggleManualSecao = (id) => () => this.setState(s => ({ manualAppOpen: { ...(s.manualAppOpen || {}), [id]: !(s.manualAppOpen || {})[id] } }));
 
   onDiarioNomeChange = (e) => this.setState({ diarioNome: e.target.value });
@@ -3954,6 +3985,42 @@ class Component extends DCLogic {
     const total = groups.reduce((a, g) => a + g.total, 0);
     const hoje = new Date().toLocaleDateString('pt-BR');
     window.gerarRelatorioPessoasDocx(groups, { titulo: 'Relatório · Lista de pessoas', geradoEm: hoje, total, filename: 'relatorio-pessoas-viart2026' });
+  };
+  relatorioEstoqueGrupos = () => {
+    const s = this.state;
+    let maxVel = 0;
+    const vels = {};
+    BRINDES_MARKETPLACE.forEach(b => {
+      let v = 0; const pref = 'brinde-' + b.id + '-';
+      Object.keys(s.sync).forEach(k => { if (k.indexOf(pref) === 0 && s.sync[k] && s.sync[k].v && (Date.now() - (s.sync[k].t || 0)) < 86400000) v++; });
+      vels[b.id] = v; if (v > maxVel) maxVel = v;
+    });
+    const itens = BRINDES_MARKETPLACE.map(b => {
+      const preco = this.precoBrinde(b);
+      const { sp: metaSP, bsb: metaBSB } = this.splitEstoqueItem(b);
+      const usadoSP = this.contarResgates(b.id, 'sp');
+      const usadoBSB = this.contarResgates(b.id, 'bsb');
+      const restante = Math.max(0, metaSP - usadoSP) + Math.max(0, metaBSB - usadoBSB);
+      const usado = usadoSP + usadoBSB;
+      const enviadoSP = b.enviadoSP || 0;
+      const enviarBSB = Math.max(0, metaBSB - Math.max(0, b.estoqueTotal - enviadoSP));
+      const statusLabel = restante <= 0 ? 'Esgotado' : (vels[b.id] === maxVel && maxVel > 0 ? 'Caindo rápido' : (usado === 0 ? 'Encalhando' : '—'));
+      return { nome: b.nome, categoria: b.categoria, preco, estoqueTotal: b.estoqueTotal, metaSP, metaBSB, enviadoSP, enviarBSB, statusLabel };
+    });
+    const CATEGORIA_ORDEM = ['Mochilas', 'Cadernos & Blocos', 'Canetas', 'Tecnologia', 'Casa & Lazer', 'Bolsas & Necessaires', 'Vestuário & Kits'];
+    const grupos = {};
+    itens.forEach(it => { (grupos[it.categoria] = grupos[it.categoria] || []).push(it); });
+    return CATEGORIA_ORDEM.filter(c => grupos[c]).map(c => ({
+      categoria: c, itens: grupos[c],
+      totalItens: grupos[c].length, totalUnidades: grupos[c].reduce((a, x) => a + x.estoqueTotal, 0),
+    }));
+  };
+  baixarRelatorioEstoque = () => {
+    const categorias = this.relatorioEstoqueGrupos();
+    const totalItens = categorias.reduce((a, c) => a + c.totalItens, 0);
+    const totalUnidades = categorias.reduce((a, c) => a + c.totalUnidades, 0);
+    const hoje = new Date().toLocaleDateString('pt-BR');
+    window.gerarRelatorioEstoqueDocx(categorias, { titulo: 'Relatório · Controle de estoques', geradoEm: hoje, totalItens, totalUnidades, filename: 'relatorio-estoque-viart2026' });
   };
   pdfCartazes = () => {
     const corpo = CARTAZES.map(c => '<section class="folha">' +
@@ -5248,8 +5315,6 @@ class Component extends DCLogic {
       };
     });
     const brindesUnificadoView = (() => {
-      const enviadoPorItem = {};
-      MALAS_BSB_SP.forEach(m => (m.conteudoItens || []).forEach(it => { enviadoPorItem[it.id] = (enviadoPorItem[it.id] || 0) + it.qtd; }));
       let maxVel = 0;
       const vels = {};
       BRINDES_MARKETPLACE.forEach(b => {
@@ -5257,7 +5322,7 @@ class Component extends DCLogic {
         Object.keys(s.sync).forEach(k => { if (k.indexOf(pref) === 0 && s.sync[k] && s.sync[k].v && (Date.now() - (s.sync[k].t || 0)) < 86400000) v++; });
         vels[b.id] = v; if (v > maxVel) maxVel = v;
       });
-      return BRINDES_MARKETPLACE.map(b => {
+      const itensView = BRINDES_MARKETPLACE.map(b => {
         const preco = this.precoBrinde(b);
         const { sp: metaSP, bsb: metaBSB } = this.splitEstoqueItem(b);
         const usadoSP = this.contarResgates(b.id, 'sp');
@@ -5266,24 +5331,35 @@ class Component extends DCLogic {
         const restanteBSB = Math.max(0, metaBSB - usadoBSB);
         const usado = usadoSP + usadoBSB;
         const restante = restanteSP + restanteBSB;
-        const pct = b.estoqueTotal ? Math.round(100 * usado / b.estoqueTotal) : 0;
-        const enviado = b.origemSP ? b.estoqueTotal : (enviadoPorItem[b.id] || 0);
-        const excedente = Math.max(0, enviado - metaSP);
-        const malaOk = b.origemSP ? metaBSB === 0 : enviado >= metaSP;
+        const spPct = b.estoqueTotal ? Math.round(100 * metaSP / b.estoqueTotal) : 0;
+        const bsbPct = 100 - spPct;
         return {
-          id: b.id, nome: b.nome, preco, estoqueTotal: b.estoqueTotal,
-          restanteSP, metaSP, restanteBSB, metaBSB, restante, pct, usado, enviado, excedente, malaOk,
+          id: b.id, nome: b.nome + ((b.id === 'moleskine-seguridade-10anos' || b.id === 'moleskine-loterias') ? ' *' : ''), categoria: b.categoria, preco, estoqueTotal: b.estoqueTotal, enviadoSP: b.enviadoSP || 0,
+          enviarBSB: Math.max(0, metaBSB - Math.max(0, b.estoqueTotal - (b.enviadoSP || 0))),
+          enviarBSBLabel: Math.max(0, metaBSB - Math.max(0, b.estoqueTotal - (b.enviadoSP || 0))) > 0 ? Math.max(0, metaBSB - Math.max(0, b.estoqueTotal - (b.enviadoSP || 0))) : '—',
+          enviarBSBColor: Math.max(0, metaBSB - Math.max(0, b.estoqueTotal - (b.enviadoSP || 0))) > 0 ? '#F39200' : '#C9C9CE',
+          metaSP, metaBSB, spPct, bsbPct, restanteSP, restanteBSB, restante, usado,
           statusEstoqueLabel: restante <= 0 ? 'Esgotado' : (vels[b.id] === maxVel && maxVel > 0 ? '🔥 caindo rápido' : (usado === 0 ? 'Encalhando' : '—')),
           statusEstoqueColor: restante <= 0 ? '#B4471F' : (vels[b.id] === maxVel && maxVel > 0 ? '#B4471F' : '#8A8A90'),
-          statusLogisticaLabel: b.origemSP
-            ? (metaBSB === 0 ? 'Meta SP completa' : ('Faltam ' + metaBSB + ' p/ BSB'))
-            : (malaOk ? 'Meta SP completa' : ('Faltam ' + Math.max(0, metaSP - enviado) + ' p/ SP')),
-          statusLogisticaColor: malaOk ? '#1E7A45' : '#B4471F',
-          barColor: pct >= 100 ? '#B4471F' : (pct >= 60 ? '#F39200' : '#0057A6'),
         };
-      }).sort((a, b) => (s.estoqueOrdem === 'az' ? a.nome.localeCompare(b.nome) : b.preco - a.preco))
-        .filter(l => !s.analiseFiltroStatus || (s.analiseFiltroStatus === 'completo' ? l.malaOk : !l.malaOk));
+      }).sort((a, b) => (s.estoqueOrdem === 'az' ? a.nome.localeCompare(b.nome) : b.preco - a.preco));
+      const CATEGORIA_ORDEM = ['Mochilas', 'Cadernos & Blocos', 'Canetas', 'Tecnologia', 'Casa & Lazer', 'Bolsas & Necessaires', 'Vestuário & Kits'];
+      const grupos = {};
+      itensView.forEach(it => { (grupos[it.categoria] = grupos[it.categoria] || []).push(it); });
+      return CATEGORIA_ORDEM.filter(c => grupos[c]).map(c => ({
+        categoria: c, itens: grupos[c],
+        totalItens: grupos[c].length, totalUnidades: grupos[c].reduce((a, x) => a + x.estoqueTotal, 0),
+        totalSP: grupos[c].reduce((a, x) => a + x.metaSP, 0), totalBSB: grupos[c].reduce((a, x) => a + x.metaBSB, 0),
+        totalEnviadoSP: grupos[c].reduce((a, x) => a + x.enviadoSP, 0), totalEnviarBSB: grupos[c].reduce((a, x) => a + x.enviarBSB, 0),
+      }));
     })();
+    const brindesUnificadoTotal = {
+      estoqueTotal: BRINDES_MARKETPLACE.reduce((a, b) => a + b.estoqueTotal, 0),
+      enviadoSP: BRINDES_MARKETPLACE.reduce((a, b) => a + (b.enviadoSP || 0), 0),
+      enviarBSB: brindesUnificadoView.reduce((a, g) => a + g.itens.reduce((x, it) => x + it.enviarBSB, 0), 0),
+      metaSP: brindesUnificadoView.reduce((a, g) => a + g.itens.reduce((x, it) => x + it.metaSP, 0), 0),
+      metaBSB: brindesUnificadoView.reduce((a, g) => a + g.itens.reduce((x, it) => x + it.metaBSB, 0), 0),
+    };
     const maxVelocidade = Math.max.apply(null, brindesDashPre.map(b => b.velocidade24h).concat([0]));
     const encalhadosPre = brindesDashPre.filter(b => b.usado === 0 && b.total > 0);
     const nomesOuContagem = (arr) => arr.length === 0 ? '—' : (arr.length <= 2 ? arr.map(b => b.nome).join(', ') : arr.length + ' itens parados');
@@ -5426,7 +5502,10 @@ class Component extends DCLogic {
       const custo = this.precoBrinde(b);
       const baseSemDesconto = Math.max(1, Math.round(b.peso * 8));
       const { sp: estSP, bsb: estBSB } = this.splitEstoqueItem(b);
-      const estoqueTotal = minhaCidadeId === 'bsb' ? estBSB : this.enviadoParaSP(b.id);
+      // Estoque disponível pra resgate em SP = o que já chegou lá (campo enviadoSP, revisado
+      // conforme a listagem de despacho), mas nunca mais que a cota de SP (estSP) — itens com
+      // excedente em SP (ou 100% do estoque já em SP, como as Canetas) reservam o resto pra BSB.
+      const estoqueTotal = minhaCidadeId === 'bsb' ? estBSB : Math.min(b.enviadoSP || 0, estSP);
       const usados = this.contarResgates(b.id, minhaCidadeId || 'sp');
       const restante = Math.max(0, estoqueTotal - usados);
       const jaTem = temNome && !!this.valor('brinde-' + b.id + '-' + s.meuNome);
@@ -5817,7 +5896,7 @@ class Component extends DCLogic {
       malasTotal: MALAS_BSB_SP.length,
       showOrgCuriosidades: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'pontos',
       showOrgManual: s.orgSubTab === 'manual',
-      showOrgRelatorios: s.orgSubTab === 'relatorios', baixarRelatorioPessoas: this.baixarRelatorioPessoas,
+      showOrgRelatorios: s.orgSubTab === 'relatorios', baixarRelatorioPessoas: this.baixarRelatorioPessoas, baixarRelatorioEstoque: this.baixarRelatorioEstoque,
       manualSecoes: (() => {
         let n = 0;
         return MANUAL_SECOES.map(sec => ({
@@ -5941,7 +6020,7 @@ class Component extends DCLogic {
       showOrgFotos: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'fotos',
       showOrgNps: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'nps', npsPainelStats, npsPainelStatsVazio, npsSemComentarios: npsComentarios.length === 0,
       npsDistChart, npsPainelChart,
-      engajamentoDash, engajCidadeDonutBg, engajCidadeChart, brindesDashView, brindesDashResumo, origemPontosView, brindesUnificadoView,
+      engajamentoDash, engajCidadeDonutBg, engajCidadeChart, brindesDashView, brindesDashResumo, origemPontosView, brindesUnificadoView, brindesUnificadoTotal,
       brindeChartItemId, brindeChartOpcoes, onBrindeChartItem: (e) => this.setState({ brindeChartItem: e.target.value }),
       precoPontos, mediaPontos: medianaPontos, chartPontosView, chartGapLabel, chartW, chartH, podeComprarView, totalAtivosPontosSP,
       markerX, markerY, adesaoAtualPct, precoAtualChart, medianaAtual,
@@ -5998,7 +6077,14 @@ class Component extends DCLogic {
       ].map(o => ({ id: o.id, label: o.label, onClick: this.setPontosListaOrdem(o.id),
         bg: (s.pontosListaOrdem || 'pontos-desc') === o.id ? '#0057A6' : '#F2F5FA',
         color: (s.pontosListaOrdem || 'pontos-desc') === o.id ? '#FFFFFF' : '#4A4A50' })),
-      pontosRankingListaView: pontosRankingView.slice().sort((a, b) => {
+      pontosListaFiltroCidadeOpcoes: [
+        { id: '', label: 'Todos' }, { id: 'SP', label: 'São Paulo' }, { id: 'BSB', label: 'Brasília' },
+      ].map(o => ({ id: o.id, label: o.label, onClick: this.setPontosListaFiltroCidade(o.id),
+        bg: (s.pontosListaFiltroCidade || '') === o.id ? '#0057A6' : '#F2F5FA',
+        color: (s.pontosListaFiltroCidade || '') === o.id ? '#FFFFFF' : '#4A4A50' })),
+      pontosRankingListaView: pontosRankingView.slice()
+        .filter(p => !s.pontosListaFiltroCidade || p.cidade === s.pontosListaFiltroCidade)
+        .sort((a, b) => {
         const ord = s.pontosListaOrdem || 'pontos-desc';
         if (ord === 'nome-asc') return a.nome.localeCompare(b.nome, 'pt-BR');
         if (ord === 'nome-desc') return b.nome.localeCompare(a.nome, 'pt-BR');
