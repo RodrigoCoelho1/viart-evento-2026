@@ -459,8 +459,12 @@
                 <div style="font-size:11px;font-weight:800;color:#A9C0DE;text-transform:uppercase;letter-spacing:0.06em">{{ meuNome }}</div>
                 <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:32px;margin-top:4px">{{ pontosDisponiveis }} <span style="font-size:14px;font-weight:600;color:#A9C0DE">pontos disponíveis</span></div>
               </div>
-              <div onClick="{{ limparMeuNome }}" style="cursor:pointer;font-size:12.5px;font-weight:700;color:#A9C0DE">não sou eu · trocar</div>
+              <div style="display:flex;align-items:center;gap:14px">
+                <div onClick="{{ togglePontosDetalhe }}" style="cursor:pointer;font-size:12.5px;font-weight:700;color:#A9C0DE">{{ pontosDetalheLabel }}</div>
+                <div onClick="{{ limparMeuNome }}" style="cursor:pointer;font-size:12.5px;font-weight:700;color:#A9C0DE">não sou eu · trocar</div>
+              </div>
             </div>
+            <sc-if value="{{ pontosDetalheAberto }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:6px">
               <sc-for list="{{ pontosAcoesView }}" as="pa" hint-placeholder-count="7">
                 <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:{{ pa.cor }}">
@@ -469,6 +473,7 @@
                 </div>
               </sc-for>
             </div>
+            </sc-if>
           </div>
         </sc-if>
 
@@ -489,17 +494,25 @@
             </sc-if>
             <div style="display:flex;flex-direction:column;gap:16px">
               <sc-for list="{{ quizPerguntasView }}" as="q" hint-placeholder-count="3">
-                <div style="background:#F7F9FC;border:1px solid #DCE6F2;border-radius:12px;padding:14px 16px">
-                  <div style="font-size:13.5px;color:#002855;font-style:italic;margin-bottom:10px">"{{ q.texto }}" — quem é?</div>
-                  <div style="display:flex;flex-wrap:wrap;gap:8px">
-                    <sc-for list="{{ q.opcoes }}" as="op" hint-placeholder-count="4">
-                      <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;background:{{ op.bg }};color:#002855;border:1.5px solid {{ op.border }}">{{ op.nome }}</div>
-                    </sc-for>
+                <sc-if value="{{ q.respondida }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:baseline;gap:8px;font-size:12.5px;padding:8px 4px;border-bottom:1px solid #EEF2F8">
+                    <div style="font-style:italic;color:#6B6B70;flex-shrink:0">"{{ q.texto }}"</div>
+                    <div style="font-weight:700;color:{{ q.resultColor }}">{{ q.resultLabel }}</div>
                   </div>
-                  <sc-if value="{{ q.respondida }}" hint-placeholder-val="{{ false }}">
-                    <div style="font-size:12px;font-weight:700;margin-top:8px;color:{{ q.resultColor }}">{{ q.resultLabel }}</div>
-                  </sc-if>
-                </div>
+                </sc-if>
+                <sc-if value="{{ q.naoRespondida }}" hint-placeholder-val="{{ true }}">
+                  <div style="background:#F7F9FC;border:1px solid #DCE6F2;border-radius:12px;padding:14px 16px">
+                    <div style="font-size:13.5px;color:#002855;font-style:italic;margin-bottom:10px">"{{ q.texto }}" — quem é?</div>
+                    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+                      <sc-for list="{{ q.opcoes }}" as="op" hint-placeholder-count="4">
+                        <div onClick="{{ op.onClick }}" style="cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;padding:10px 12px;border-radius:10px;background:{{ op.bg }};color:#002855;border:1.5px solid {{ op.border }}">
+                          <div style="width:26px;height:26px;border-radius:999px;background:#DCE6F2;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px">🕵️</div>
+                          <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ op.nome }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
               </sc-for>
             </div>
           </div>
@@ -2636,9 +2649,6 @@ const ATUALIZACOES_INICIAIS = [
   { quando: '11/08 11:40', texto: 'Cronograma atualizado com os novos horários do dia, mais o local de cada atividade em SP e em BSB.' },
   { quando: '11/08 11:35', texto: 'Card do Report Planejamento VIART, na Programação, ganhou link direto para o PDF do Plano de Atuação VIART 2026-2030.' },
   { quando: '11/08 11:20', texto: 'Correção no Mercado de Brindes: alguns itens apareciam "Esgotado" mesmo já estando em SP (Canetas CAIXA, Pasta executiva CAIXA Asset, Carregador Wireless e Moleskine com caneta CAIXA Asset).' },
-  { quando: '11/08 10:45', texto: 'Nova seção Relatórios na área restrita: exporta em .docx a lista de pessoas (camisa e gênero, por cidade e área) e o Controle de estoques (por categoria, com SP/BSB e o que falta enviar entre as cidades).' },
-  { quando: '11/08 10:05', texto: 'Tabela Controle de estoques recriada: agora organizada por categoria, com quantidade total, divisão SP/BSB e o que já foi/falta enviar entre as cidades.' },
-  { quando: '11/08 09:20', texto: 'Visão de Engajamento (Gamificação) reorganizada: pontuação, participação e ranking agora abrem separados por cidade (SP/BSB).' },
   { quando: '11/08 09:00', texto: 'Filtro por cidade (SP/BSB/Todos) na Lista nome a nome, em Pontos & Brindes.' },
   { quando: '10/08 19:20', texto: 'Alerta imediato para a organização: quando alguém marca uma restrição alimentar ou necessidade especial no Cadastro, um pop-up avisa a organização na próxima vez que abrir o app.' },
   { quando: '10/08 19:20', texto: 'Manual de instalação do app ganhou passo a passo também para Samsung Internet e Edge no Android, além de Chrome.' },
@@ -3713,6 +3723,7 @@ class Component extends DCLogic {
   toggleNpsPaineis = () => this.setState(s => ({ npsPaineisAberto: !s.npsPaineisAberto }));
   toggleManualJogo = () => this.setState(s => ({ manualJogoAberto: s.manualJogoAberto === undefined ? false : !s.manualJogoAberto }));
   togglePontosLista = () => this.setState(s => ({ pontosListaAberta: !s.pontosListaAberta }));
+  togglePontosDetalhe = () => this.setState(s => ({ pontosDetalheAberto: s.pontosDetalheAberto === undefined ? false : !s.pontosDetalheAberto }));
   setPontosListaOrdem = (v) => () => this.setState({ pontosListaOrdem: v });
   onCrachaQuery = (e) => this.setState({ crachaQuery: e.target.value });
   onDadosQuery = (e) => this.setState({ dadosQuery: e.target.value });
@@ -5502,8 +5513,8 @@ class Component extends DCLogic {
       const distratores = this.seededShuffle(poolDistratores, key + '-d').slice(0, 3);
       const opcoes = this.seededShuffle([q.nome].concat(distratores), key + '-o');
       return {
-        key, texto: q.texto, respondida: !!respondida,
-        resultLabel: respondida ? (respondida.certo ? 'Acertou! +1 ponto' : 'Não foi dessa vez.') : '',
+        key, texto: q.texto, respondida: !!respondida, naoRespondida: !respondida, nomeCorreto: q.nome,
+        resultLabel: respondida ? (respondida.certo ? 'Acertou! +1 ponto' : ('Não foi dessa vez — era ' + q.nome + '.')) : '',
         resultColor: respondida ? (respondida.certo ? '#1E7A45' : '#B02D1C') : '#6B6B70',
         opcoes: opcoes.map(op => ({
           nome: op, onClick: this.responderQuiz(key, op, q.nome),
@@ -6039,6 +6050,9 @@ class Component extends DCLogic {
       viewPrestColor: s.contatosView === 'prest' ? '#FFFFFF' : '#002855',
       setViewOrg: this.setContatosView('org'), setViewPrest: this.setContatosView('prest'),
       pontosAcoesView, pontosTotal, pontosGastos, pontosDisponiveis, brindesView, brindeAviso: s.brindeAviso || '', mercadoAberto, mercadoFechado: !mercadoAberto, adesaoGeralPct, descontoColetivoPct,
+      pontosDetalheAberto: s.pontosDetalheAberto === undefined ? false : s.pontosDetalheAberto,
+      pontosDetalheLabel: (s.pontosDetalheAberto === undefined ? false : s.pontosDetalheAberto) ? 'ocultar detalhe' : 'ver detalhe',
+      togglePontosDetalhe: this.togglePontosDetalhe,
       quizPerguntasView, quizVazio,
       manualJogoAberto: s.manualJogoAberto === undefined ? true : s.manualJogoAberto,
       toggleManualJogo: this.toggleManualJogo, manualJogoToggleLabel: (s.manualJogoAberto === undefined || s.manualJogoAberto) ? 'Ocultar' : 'Ver regras',
