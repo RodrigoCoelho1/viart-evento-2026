@@ -64,39 +64,32 @@
           <div style="display:inline-block;background:#E8EFF9;color:#0057A6;border-radius:999px;padding:5px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em">Novidades no app</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:16px;padding:16px 26px;overflow-y:auto;flex:1;min-height:0">
-          <div style="display:flex;gap:12px">
-            <div style="font-size:22px;line-height:1">🚨</div>
+          <div style="display:flex;gap:12px;background:#FDF1DC;border:1px solid #F39200;border-radius:12px;padding:14px">
+            <div style="font-size:22px;line-height:1">📣</div>
             <div>
-              <div style="font-weight:800;font-size:14.5px;color:#002855">Alerta de restrição e necessidade especial</div>
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">A organização agora recebe um aviso assim que alguém marca restrição alimentar ou necessidade especial no Cadastro.</div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Ainda não confirmou sua presença?</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Responda agora no Cadastro se vai ao evento — leva 10 segundos, ajuda demais a organização e vale ponto. E chame os colegas que ainda não fizeram o cadastro no app: quanto mais gente participar, mais barato ficam os brindes pra todo mundo.</div>
             </div>
           </div>
           <div style="display:flex;gap:12px">
-            <div style="font-size:22px;line-height:1">💼</div>
+            <div style="font-size:22px;line-height:1">💰</div>
             <div>
-              <div style="font-weight:800;font-size:14.5px;color:#002855">Nova área Wallet</div>
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Guarde print ou PDF da passagem de ida, da passagem de volta e o endereço do hotel, com botões diretos de Uber e Google Maps. Fica salvo só no seu aparelho, na aba Informações.</div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Como funciona o preço dos brindes</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">O preço de cada item no Mercado de Brindes acompanha a % de participantes que já completou o pré-cadastro: quanto mais colegas responderem, mais barato fica pra todo mundo — dá um toque em quem ainda não respondeu.</div>
             </div>
           </div>
           <div style="display:flex;gap:12px">
-            <div style="font-size:22px;line-height:1">✈️</div>
+            <div style="font-size:22px;line-height:1">📎</div>
             <div>
-              <div style="font-weight:800;font-size:14.5px;color:#002855">Check-in das companhias aéreas</div>
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Links diretos para o check-in online da Gol, LATAM e Azul, na aba Informações.</div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Estudo de caso disponível</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">O PDF do estudo de caso da atividade em grupo (11h30–12h45) já está na aba Informações — dá uma lida antes do horário.</div>
             </div>
           </div>
           <div style="display:flex;gap:12px">
-            <div style="font-size:22px;line-height:1">🎁</div>
+            <div style="font-size:22px;line-height:1">👥</div>
             <div>
-              <div style="font-weight:800;font-size:14.5px;color:#002855">Novo brinde: Copo CAIXA Térmico</div>
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Copo térmico de 360ml chegou ao Marketplace de Brindes. Confira em Pontos & Brindes.</div>
-            </div>
-          </div>
-          <div style="display:flex;gap:12px">
-            <div style="font-size:22px;line-height:1">✅</div>
-            <div>
-              <div style="font-weight:800;font-size:14.5px;color:#002855">Confirme sua presença</div>
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Ainda não confirmou se vai ao evento? Responda no Cadastro — ajuda muito a organização e vale ponto.</div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Jogo de xícaras, agora num item só</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">O brinde "Jogo de xícaras" juntou os dois modelos que existiam separados no Marketplace.</div>
             </div>
           </div>
         </div>
@@ -335,6 +328,11 @@
                   <div style="flex:0 0 auto;align-self:center;font-size:10.5px;font-weight:700;color:{{ item.badgeColor }};background:{{ item.badgeBg }};padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap">{{ item.agoraLabel }}</div>
                 </sc-if>
               </div>
+              <sc-if value="{{ item.isCase }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
+                  <a href="assets/estudo-caso-goldman-sachs.pdf" target="_blank" style="display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px;text-decoration:none">Abrir estudo de caso (PDF)</a>
+                </div>
+              </sc-if>
               <sc-if value="{{ item.isConfra }}" hint-placeholder-val="{{ false }}">
                 <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
                   <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Local da confraternização</div>
@@ -2201,13 +2199,24 @@
                 <tbody>
                   <sc-for list="{{ malasLinhas }}" as="l" hint-placeholder-count="10">
                     <tr style="border-bottom:1px solid #EEF2F8">
-                      <td style="padding:10px 12px;font-weight:700;color:#002855;white-space:nowrap">{{ l.passageiro }}</td>
-                      <td style="padding:10px 12px;color:#6B6B70;white-space:nowrap">{{ l.chegada }}</td>
-                      <td style="padding:10px 12px;white-space:nowrap"><span onClick="{{ l.ciclo }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 10px;border-radius:999px;background:{{ l.statusBg }};color:{{ l.statusColor }}">{{ l.status }}</span></td>
-                      <td style="padding:10px 12px;color:#002855;white-space:nowrap">{{ l.nome }}</td>
-                      <td style="padding:10px 12px;text-align:right;font-weight:700;color:#0057A6">{{ l.qtd }}</td>
-                      <td style="padding:10px 12px;text-align:right;color:#6B6B70">{{ l.restanteBSB }}</td>
-                      <td style="padding:10px 12px;text-align:right;font-weight:700;color:{{ l.spColor }};white-space:nowrap">{{ l.spLabel }}</td>
+                      <sc-if value="{{ l.primeiraDoGrupo }}" hint-placeholder-val="{{ true }}">
+                        <td style="padding:10px 12px;font-weight:700;color:#002855;white-space:nowrap;border-top:2px solid #DCE6F2">{{ l.passageiro }}</td>
+                        <td style="padding:10px 12px;color:#6B6B70;white-space:nowrap;border-top:2px solid #DCE6F2">{{ l.chegada }}</td>
+                        <td style="padding:10px 12px;white-space:nowrap;border-top:2px solid #DCE6F2"><span onClick="{{ l.ciclo }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 10px;border-radius:999px;background:{{ l.statusBg }};color:{{ l.statusColor }}">{{ l.status }}</span></td>
+                        <td style="padding:10px 12px;color:#002855;white-space:nowrap;border-top:2px solid #DCE6F2">{{ l.nome }}</td>
+                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:#0057A6;border-top:2px solid #DCE6F2">{{ l.qtd }}</td>
+                        <td style="padding:10px 12px;text-align:right;color:#6B6B70;border-top:2px solid #DCE6F2">{{ l.restanteBSB }}</td>
+                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:{{ l.spColor }};white-space:nowrap;border-top:2px solid #DCE6F2">{{ l.spLabel }}</td>
+                      </sc-if>
+                      <sc-if value="{{ l.naoPrimeiraDoGrupo }}" hint-placeholder-val="{{ false }}">
+                        <td style="padding:10px 12px"></td>
+                        <td style="padding:10px 12px"></td>
+                        <td style="padding:10px 12px"></td>
+                        <td style="padding:10px 12px;color:#002855;white-space:nowrap">{{ l.nome }}</td>
+                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:#0057A6">{{ l.qtd }}</td>
+                        <td style="padding:10px 12px;text-align:right;color:#6B6B70">{{ l.restanteBSB }}</td>
+                        <td style="padding:10px 12px;text-align:right;font-weight:700;color:{{ l.spColor }};white-space:nowrap">{{ l.spLabel }}</td>
+                      </sc-if>
                     </tr>
                   </sc-for>
                 </tbody>
@@ -2688,7 +2697,7 @@ const SCHEDULE_PUBLIC = [
   { time: '09h30 – 10h30', title: 'Report Planejamento VIART 1S-2026', desc: 'Resultados e direcionamentos 2026', pillar: 'Alinhar' },
   { time: '10h30 – 10h50', title: 'Coffee Break', desc: '', pillar: '' },
   { time: '10h50 – 11h30', title: 'Programas VIART', desc: 'Comissão do Clima · Comissão da Diversidade · Escola VIART · INOVAVIART', pillar: 'Alinhar' },
-  { time: '11h30 – 12h45', title: 'Estudo de Caso', desc: 'Atividade em grupo — surpresa do dia!', pillar: 'Conectar' },
+  { time: '11h30 – 12h45', title: 'Estudo de Caso', desc: 'Atividade em grupo — leia o estudo de caso na aba Informações antes do horário.', pillar: 'Conectar' },
   { time: '12h45 – 14h00', title: 'Almoço', desc: 'Integração entre equipes e momento de descontração', pillar: 'Conectar' },
   { time: '14h00 – 15h00', title: 'Momento de Conexão', desc: 'Atividade interativa em equipe — surpresa do dia!', pillar: 'Conectar' },
   { time: '15h00 – 17h30', title: 'Dinâmica em Equipe', desc: 'Atividade prática e colaborativa — surpresa do dia!', pillar: 'Executar' },
@@ -2894,7 +2903,6 @@ const CHECKLIST_CATS = [
     ['Providenciar camisetas', 'nao', '', '2026-08-11', 'camisetas'],
     ['Providenciar outros brindes', 'nao', '', '2026-07-31', 'outros-brindes'],
     ['Acionar GEIMP para cobrir evento na Intranet', 'nao', '', '2026-07-31', 'geimp-intranet'],
-    ['Entregar ppt do Report Planejamento VIART 2026', 'nao', '', '2026-08-07', 'ppt-report-planejamento'],
     ['Entregar ppt das 4 comissões (Clima, Diversidade, Escola VIART, INOVAVIART)', 'nao', '', '2026-08-07', 'ppt-4-comissoes'],
     ['Criar gamificação com brindes para receber insights', 'nao', '', '2026-08-11', 'gamificacao-brindes'],
     ['Entregar slide de créditos ao staff para Encerramento', 'nao', '', '2026-08-11', 'slide-creditos'],
@@ -3496,7 +3504,7 @@ class Component extends DCLogic {
     this.setCampos({ 'popup-urgente': null });
   };
   fecharPopupNovidades = () => {
-    try { localStorage.setItem('viart2026_popup_novidades_v4_visto', '1'); } catch (e) {}
+    try { localStorage.setItem('viart2026_popup_novidades_v5_visto', '1'); } catch (e) {}
     this.setState({ popupNovidadesFechado: true });
   };
   fecharPopupFc = () => {
@@ -4051,7 +4059,8 @@ class Component extends DCLogic {
   setAnaliseFiltroStatus = (v) => () => this.setState({ analiseFiltroStatus: v });
   cycleMalaStatus = (id) => () => {
     const m = MALAS_BSB_SP.find(x => x.id === id) || {};
-    const atual = this.valor('mala-' + id) || m.statusInicial || MALA_STATUS_CICLO[0];
+    if (m.statusInicial) return;
+    const atual = this.valor('mala-' + id) || MALA_STATUS_CICLO[0];
     const i = MALA_STATUS_CICLO.indexOf(atual);
     const proximo = MALA_STATUS_CICLO[(i + 1) % MALA_STATUS_CICLO.length];
     this.setCampos({ ['mala-' + id]: proximo });
@@ -4149,7 +4158,8 @@ class Component extends DCLogic {
       if (item.title.indexOf('Confraternização') === 0) descShow = 'Celebração da equipe e encerramento do dia · ' + cityData.confraternizacao;
       const isConfraPublic = item.title.indexOf('Confraternização') === 0;
       const isCredPublic = item.title === 'Credenciamento';
-      return { ...item, title: titleShow, desc: descShow, isConfra: isConfraPublic, isCred: isCredPublic, hasPillar: !!item.pillar, pillarColor: item.isAgora ? '#1E7A45' : st.color,
+      const isCasePublic = item.title === 'Estudo de Caso';
+      return { ...item, title: titleShow, desc: descShow, isConfra: isConfraPublic, isCred: isCredPublic, isCase: isCasePublic, hasPillar: !!item.pillar, pillarColor: item.isAgora ? '#1E7A45' : st.color,
         cardBg: item.isAgora ? '#EAF7EF' : st.bg, cardBorder: item.isAgora ? '2px solid #2E9E5B' : '2px solid transparent',
         badgeBg: item.isAgora ? '#2E9E5B' : 'rgba(255,255,255,0.6)', badgeColor: item.isAgora ? '#FFFFFF' : st.color,
         agoraLabel: item.isAgora ? 'AGORA' : item.pillar };
@@ -5447,7 +5457,7 @@ class Component extends DCLogic {
     const souGestor = (s.meuNome && infoDe(s.meuNome).tipo === 'gestor') || (s.dadosNome && infoDe(s.dadosNome).tipo === 'gestor');
     const mostrarPopupAviso = !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
       String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || ''));
-    const mostrarPopupNovidades = !s.popupNovidadesFechado && !mostrarPopupAviso && (localStorage.getItem('viart2026_popup_novidades_v4_visto') || '') !== '1';
+    const mostrarPopupNovidades = !s.popupNovidadesFechado && !mostrarPopupAviso && (localStorage.getItem('viart2026_popup_novidades_v5_visto') || '') !== '1';
     const mostrarPopupFc = s.orgUnlocked && !s.popupFcFechado && fcNaoLidas.length > 0 && !souGestor && !mostrarPopupAviso && !mostrarPopupNovidades;
 
     const restPcdView = Object.keys(s.sync).filter(k => (k.indexOf('rt-') === 0 && s.sync[k] && s.sync[k].v && s.sync[k].v !== 'Nenhuma') || (k.indexOf('pcd-') === 0 && s.sync[k] && s.sync[k].v === 'Sim'))
@@ -5733,7 +5743,13 @@ class Component extends DCLogic {
             });
           });
         });
-        return linhas.filter(l => (!s.malaFiltroPassageiro || l.malaId === s.malaFiltroPassageiro) && (!s.malaFiltroStatus || l.status === s.malaFiltroStatus));
+        const filtradas = linhas.filter(l => (!s.malaFiltroPassageiro || l.malaId === s.malaFiltroPassageiro) && (!s.malaFiltroStatus || l.status === s.malaFiltroStatus));
+        let malaAnterior = null;
+        return filtradas.map(l => {
+          const primeira = l.malaId !== malaAnterior;
+          malaAnterior = l.malaId;
+          return { ...l, primeiraDoGrupo: primeira, naoPrimeiraDoGrupo: !primeira };
+        });
       })(),
       malasAnaliseSP: (() => {
         const enviadoPorItem = {};
