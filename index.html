@@ -313,7 +313,7 @@
           <sc-for list="{{ schedule }}" as="item" hint-placeholder-count="9">
             <div style="padding:16px 20px;border-radius:14px;background:{{ item.cardBg }};border:{{ item.cardBorder }};transition:background 0.3s">
               <div style="display:flex;gap:18px">
-                <div style="flex:0 0 clamp(80px,10vw,120px);font-family:'Sora',sans-serif;font-weight:700;color:{{ item.pillarColor }};font-size:clamp(13px,1.1vw,16px)">{{ item.time }}</div>
+                <div style="flex:0 0 clamp(100px,11vw,130px);font-family:'Sora',sans-serif;font-weight:700;color:{{ item.pillarColor }};font-size:clamp(12px,1.05vw,15px);white-space:nowrap">{{ item.time }}</div>
                 <div style="flex:1">
                   <div style="font-weight:700;font-size:clamp(14px,1.2vw,17px);color:#002855">{{ item.title }}</div>
                   <div style="font-size:13.5px;color:#4A4A50;margin-top:4px;line-height:1.5">{{ item.desc }}</div>
@@ -326,17 +326,17 @@
                 </sc-if>
               </div>
               <sc-if value="{{ item.isCase }}" hint-placeholder-val="{{ false }}">
-                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
+                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(100px,11vw,130px) + 18px)">
                   <a href="assets/estudo-caso-goldman-sachs.pdf" target="_blank" style="display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px;text-decoration:none">Abrir estudo de caso (PDF)</a>
                 </div>
               </sc-if>
               <sc-if value="{{ item.isReport }}" hint-placeholder-val="{{ false }}">
-                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
+                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(100px,11vw,130px) + 18px)">
                   <a href="assets/plano-atuacao-viart-26-30.pdf" target="_blank" style="display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px;text-decoration:none">Abrir Plano de Atuação VIART 2026-2030 (PDF)</a>
                 </div>
               </sc-if>
               <sc-if value="{{ item.isConfra }}" hint-placeholder-val="{{ false }}">
-                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
+                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(100px,11vw,130px) + 18px)">
                   <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Local da confraternização</div>
                   <div style="font-size:13px;color:#4A4A50;margin-bottom:10px">{{ confraEndereco }}</div>
                   <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -346,7 +346,7 @@
                 </div>
               </sc-if>
               <sc-if value="{{ item.isCred }}" hint-placeholder-val="{{ false }}">
-                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
+                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(100px,11vw,130px) + 18px)">
                   <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Local do evento</div>
                   <div style="font-size:13px;color:#4A4A50;font-weight:700">{{ cityData.venue }}</div>
                   <div style="font-size:13px;color:#4A4A50;margin-bottom:10px">{{ cityData.address }}</div>
@@ -2198,9 +2198,9 @@
                 <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:10px;padding:10px 12px;min-width:0">
                   <div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-bottom:3px">
                     <div style="font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ pr.nome }}</div>
-                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:14px;color:#0057A6;flex-shrink:0">{{ pr.pontos }}</div>
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:14px;color:#0057A6;flex-shrink:0" title="{{ pr.pontos }} ganhos − {{ pr.pontosGastos }} gastos">{{ pr.pontosDisponiveis }}</div>
                   </div>
-                  <div style="font-size:10.5px;color:#6B6B70;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ pr.origens }}">{{ pr.cidade }} · {{ pr.origens }}</div>
+                  <div style="font-size:10.5px;color:#6B6B70;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ pr.origens }}">{{ pr.cidade }} · {{ pr.pontos }} ganhos · {{ pr.origens }}</div>
                   <div style="font-size:10.5px;color:#6B6B70;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ pr.resgates }}">resgatou: {{ pr.resgates }}</div>
                 </div>
               </sc-for>
@@ -2487,7 +2487,7 @@
               <sc-for list="{{ scheduleReal }}" as="item" hint-placeholder-count="9">
                 <div style="padding:16px 20px;border-radius:14px;background:{{ item.cardBg }};border:{{ item.cardBorder }};transition:background 0.3s">
                   <div style="display:flex;gap:18px">
-                    <div style="flex:0 0 clamp(80px,10vw,120px);font-family:'Sora',sans-serif;font-weight:700;color:{{ item.pillarColor }};font-size:clamp(13px,1.1vw,16px)">{{ item.time }}</div>
+                    <div style="flex:0 0 clamp(100px,11vw,130px);font-family:'Sora',sans-serif;font-weight:700;color:{{ item.pillarColor }};font-size:clamp(12px,1.05vw,15px);white-space:nowrap">{{ item.time }}</div>
                     <div style="flex:1">
                       <div style="font-weight:700;font-size:clamp(14px,1.2vw,17px);color:#002855">{{ item.title }}</div>
                       <div style="font-size:13.5px;color:#4A4A50;margin-top:4px;line-height:1.5">{{ item.desc }}</div>
@@ -2503,7 +2503,7 @@
                     </sc-if>
                   </div>
                   <sc-if value="{{ item.isConfra }}" hint-placeholder-val="{{ false }}">
-                    <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
+                    <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(100px,11vw,130px) + 18px)">
                       <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Local da confraternização</div>
                       <div style="font-size:13px;color:#4A4A50;margin-bottom:10px">{{ confraEndereco }}</div>
                       <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -2513,7 +2513,7 @@
                     </div>
                   </sc-if>
                   <sc-if value="{{ item.isCred }}" hint-placeholder-val="{{ false }}">
-                    <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
+                    <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(100px,11vw,130px) + 18px)">
                       <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Local do evento</div>
                       <div style="font-size:13px;color:#4A4A50;font-weight:700">{{ cityData.venue }}</div>
                       <div style="font-size:13px;color:#4A4A50;margin-bottom:10px">{{ cityData.address }}</div>
@@ -3645,6 +3645,7 @@ class Component extends DCLogic {
   resgatarBrinde = (itemId) => () => {
     const nome = this.state.meuNome;
     if (!nome) return;
+    if ((PARTICIPANTES_INFO[nome] || {}).d) { this.setState({ brindeAviso: 'Organização e Gestores têm acesso de visualização — o resgate de brindes é só para participantes.' }); return; }
     const cidade = this.cidadeDe(nome);
     if (!cidade) { this.setState({ brindeAviso: 'Sua cidade ainda não foi definida — confirme presença primeiro.' }); return; }
     if (cidade !== 'sp') { this.setState({ brindeAviso: 'Pontos & Brindes está disponível, por enquanto, apenas para participantes do evento de São Paulo.' }); return; }
@@ -4967,7 +4968,7 @@ class Component extends DCLogic {
     });
     const meusPontosFotos = temNome ? this.pontosFotosDe(s.meuNome) : 0;
     const minhaCidadeId = temNome ? cidadeDe(s.meuNome) : '';
-    const bloqueadoBrindes = temNome && (minhaCidadeId !== 'sp' || infoDe(s.meuNome).d);
+    const bloqueadoBrindes = temNome && minhaCidadeId !== 'sp' && !infoDe(s.meuNome).d;
     const temNomeLiberado = temNome && !bloqueadoBrindes;
     const minhaCidade = minhaCidadeId === 'sp' ? 'São Paulo' : (minhaCidadeId === 'bsb' ? 'Brasília' : '');
     const minhaData = minhaCidadeId === 'sp' ? '13 de agosto' : (minhaCidadeId === 'bsb' ? '20 de agosto' : '');
@@ -5193,7 +5194,8 @@ class Component extends DCLogic {
       const origensLabels = PONTOS_ACOES.filter(a => feitosN.indexOf(a.key) !== -1).map(a => a.label);
       if (acertosQuizN > 0) origensLabels.push('Detetive VIART (' + acertosQuizN + ' acerto' + (acertosQuizN > 1 ? 's' : '') + ')');
       const resgatesArr = BRINDES_MARKETPLACE.filter(b => this.valor('brinde-' + b.id + '-' + n));
-      return { nome: n, cidade: cidadeDe(n) === 'sp' ? 'SP' : 'BSB', area: infoDe(n).u ? infoDe(n).u.split(' - ')[0] : '—', pontos: pts, ativoReal: this.temAcaoRealDe(n), resgatesCount: resgatesArr.length, resgates: resgatesArr.map(b => b.nome).join(', ') || '—', origens: origensLabels.length ? origensLabels.join(' · ') : 'Nenhum ponto ainda' };
+      const gastos = resgatesArr.reduce((a, b) => a + this.precoBrinde(b), 0);
+      return { nome: n, cidade: cidadeDe(n) === 'sp' ? 'SP' : 'BSB', area: infoDe(n).u ? infoDe(n).u.split(' - ')[0] : '—', pontos: pts, pontosGastos: gastos, pontosDisponiveis: pts - gastos, ativoReal: this.temAcaoRealDe(n), resgatesCount: resgatesArr.length, resgates: resgatesArr.map(b => b.nome).join(', ') || '—', origens: origensLabels.length ? origensLabels.join(' · ') : 'Nenhum ponto ainda' };
     }).sort((a, b) => b.pontos - a.pontos);
     const areaGroupsEngajamento = {};
     pontosRankingView.forEach(p => {
@@ -5530,12 +5532,13 @@ class Component extends DCLogic {
       const usados = this.contarResgates(b.id, minhaCidadeId || 'sp');
       const restante = Math.max(0, estoqueTotal - usados);
       const jaTem = temNome && !!this.valor('brinde-' + b.id + '-' + s.meuNome);
-      const podeComprar = temNome && minhaCidadeId === 'sp' && mercadoAberto && !jaTem && restante > 0 && pontosDisponiveis >= custo;
+      const souOrgGestor = temNome && !!infoDe(s.meuNome).d;
+      const podeComprar = temNome && !souOrgGestor && minhaCidadeId === 'sp' && mercadoAberto && !jaTem && restante > 0 && pontosDisponiveis >= custo;
       return {
         id: b.id, nome: b.nome, desc: b.desc, foto: b.foto, semFoto: !b.foto, fit: b.fit || 'contain', pontos: custo, restante, esgotado: restante <= 0, jaTem, podeComprar,
         resgatar: this.resgatarBrinde(b.id),
         engajamentoTexto: descontoColetivoPct > 0 ? ('Esse preço já tem ' + descontoColetivoPct + '% de desconto, porque ' + adesaoGeralPct + '% da equipe de SP já respondeu o pré-cadastro. Quanto mais gente responder, mais barato fica pra todo mundo.') : ('Conforme mais gente completar o pré-cadastro, esse preço vai caindo pra todo mundo.'),
-        statusLabel: jaTem ? 'Resgatado' : (restante <= 0 ? 'Esgotado' : (temNome && minhaCidadeId !== 'sp' ? 'Só p/ SP, por enquanto' : (!mercadoAberto ? 'Abre às 12h45' : (podeComprar ? 'Resgatar' : 'Pontos insuficientes')))),
+        statusLabel: jaTem ? 'Resgatado' : (restante <= 0 ? 'Esgotado' : (souOrgGestor ? 'Só visualização (Org/Gestor)' : (temNome && minhaCidadeId !== 'sp' ? 'Só p/ SP, por enquanto' : (!mercadoAberto ? 'Abre às 12h45' : (podeComprar ? 'Resgatar' : 'Pontos insuficientes'))))),
         statusBg: jaTem ? '#E3F3E8' : (podeComprar ? '#0057A6' : '#EDEDED'),
         statusColor: jaTem ? '#1E7A45' : (podeComprar ? '#FFFFFF' : '#8A8A90'),
       };
