@@ -2115,6 +2115,11 @@
                 <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
               </sc-for>
             </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+              <sc-for list="{{ estoqueOrdemOpcoes }}" as="op" hint-placeholder-count="2">
+                <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
+              </sc-for>
+            </div>
             <div style="overflow-x:auto;margin-bottom:20px;border:1px solid #DCE6F2;border-radius:10px">
               <table style="width:100%;border-collapse:collapse;font-size:12.5px;background:#FFFFFF">
                 <thead>
@@ -2899,6 +2904,7 @@ const CHECKLIST_CATS = [
     ['Providenciar confraternização BSB', 'nao', '', '2026-08-07', 'confraternizacao-bsb'],
     ['Informar contatos dos prestadores (nome, serviço, status)', 'nao', '', '2026-07-31', 'contatos-prestadores'],
     ['Identificar quem está de férias', 'nao', '', '2026-08-07', 'identificar-ferias'],
+    ['Enviar e-mail com orientações de destacamento', 'nao', '', '2026-08-12', 'email-destacamento'],
     ['Providenciar Mentimeter', 'nao', '', '2026-07-31', 'mentimeter'],
     ['Providenciar opções alimentares', 'nao', '', '2026-08-07', 'opcoes-alimentares'],
     ['Providenciar CIAUS para suporte audiovisual', 'nao', '', '2026-07-31', 'ciaus-audiovisual'],
@@ -3020,12 +3026,12 @@ const MALAS_BSB_SP = [
   { id: 'edu', passageiro: 'Eduardo', data: '', chegada: '', conteudoItens: [
     { id: 'maleta-churrasco', qtd: 1 }, { id: 'garrafinha', qtd: 3 }, { id: 'moleskine-x', qtd: 34 },
   ] },
-  { id: 'troes', passageiro: 'Troes (mala 1)', data: '07/08/2026', chegada: '14h', conteudoItens: [
+  { id: 'troes', passageiro: 'Troes (mala 1)', data: '07/08/2026', chegada: '14h', statusInicial: 'Recebida em SP', conteudoItens: [
     { id: 'kit-uau', qtd: 12 }, { id: 'necessaire', qtd: 5 }, { id: 'bone-caixa', qtd: 5 }, { id: 'bolsa-cop30', qtd: 2 },
     { id: 'xicaras', qtd: 6 }, { id: 'mochila-loterias', qtd: 7 }, { id: 'maleta-churrasco', qtd: 1 },
     { id: 'mouse-pad', qtd: 2 },
   ] },
-  { id: 'troes2', passageiro: 'Troes (mala 2)', data: '07/08/2026', chegada: '14h', conteudoItens: [
+  { id: 'troes2', passageiro: 'Troes (mala 2)', data: '07/08/2026', chegada: '14h', statusInicial: 'Recebida em SP', conteudoItens: [
     { id: 'bloco-rapidex', qtd: 7 }, { id: 'moleskine-seguridade-caneta', qtd: 4 }, { id: 'bolsa-cop30', qtd: 2 },
     { id: 'maleta-churrasco', qtd: 1 }, { id: 'mochila-caixa', qtd: 2 }, { id: 'mochila-seguridade', qtd: 1 },
     { id: 'copo-caixa', qtd: 3 }, { id: 'kit-uau', qtd: 7 },
@@ -3429,6 +3435,7 @@ class Component extends DCLogic {
   irParaNps = () => this.setState({ activeTab: 'programacao' });
   setOrgSubTab = (id) => () => this.setState({ orgSubTab: id });
   setOrgPessoasSub = (id) => () => this.setState({ orgPessoasSub: id });
+  setEstoqueOrdem = (id) => () => this.setState({ estoqueOrdem: id });
   toggleManualSecao = (id) => () => this.setState(s => ({ manualAppOpen: { ...(s.manualAppOpen || {}), [id]: !(s.manualAppOpen || {})[id] } }));
 
   onDiarioNomeChange = (e) => this.setState({ diarioNome: e.target.value });
@@ -4043,7 +4050,8 @@ class Component extends DCLogic {
   setMalaFiltroStatus = (v) => () => this.setState({ malaFiltroStatus: v });
   setAnaliseFiltroStatus = (v) => () => this.setState({ analiseFiltroStatus: v });
   cycleMalaStatus = (id) => () => {
-    const atual = this.valor('mala-' + id) || MALA_STATUS_CICLO[0];
+    const m = MALAS_BSB_SP.find(x => x.id === id) || {};
+    const atual = this.valor('mala-' + id) || m.statusInicial || MALA_STATUS_CICLO[0];
     const i = MALA_STATUS_CICLO.indexOf(atual);
     const proximo = MALA_STATUS_CICLO[(i + 1) % MALA_STATUS_CICLO.length];
     this.setCampos({ ['mala-' + id]: proximo });
@@ -5248,7 +5256,7 @@ class Component extends DCLogic {
           statusLogisticaColor: malaOk ? '#1E7A45' : '#B4471F',
           barColor: pct >= 100 ? '#B4471F' : (pct >= 60 ? '#F39200' : '#0057A6'),
         };
-      }).sort((a, b) => b.preco - a.preco)
+      }).sort((a, b) => (s.estoqueOrdem === 'az' ? a.nome.localeCompare(b.nome) : b.preco - a.preco))
         .filter(l => !s.analiseFiltroStatus || (s.analiseFiltroStatus === 'completo' ? l.malaOk : !l.malaOk));
     })();
     const maxVelocidade = Math.max.apply(null, brindesDashPre.map(b => b.velocidade24h).concat([0]));
@@ -5674,7 +5682,7 @@ class Component extends DCLogic {
         const enviadoPorItem = {};
         MALAS_BSB_SP.forEach(m => (m.conteudoItens || []).forEach(it => { enviadoPorItem[it.id] = (enviadoPorItem[it.id] || 0) + it.qtd; }));
         return MALAS_BSB_SP.map(m => {
-          const status = this.valor('mala-' + m.id) || MALA_STATUS_CICLO[0];
+          const status = this.valor('mala-' + m.id) || m.statusInicial || MALA_STATUS_CICLO[0];
           const cor = status === 'Recebida em SP' ? { bg: '#E3F3E9', color: '#1E7A45' } : (status === 'Despachada em BSB' ? { bg: '#FDECC8', color: '#8A5A00' } : { bg: '#F2F5FA', color: '#6B6B70' });
           const itens = (m.conteudoItens || []).map(it => {
             const item = BRINDES_MARKETPLACE.find(b => b.id === it.id);
@@ -5706,7 +5714,7 @@ class Component extends DCLogic {
         MALAS_BSB_SP.forEach(m => (m.conteudoItens || []).forEach(it => { enviadoPorItem[it.id] = (enviadoPorItem[it.id] || 0) + it.qtd; }));
         const linhas = [];
         MALAS_BSB_SP.forEach(m => {
-          const status = this.valor('mala-' + m.id) || MALA_STATUS_CICLO[0];
+          const status = this.valor('mala-' + m.id) || m.statusInicial || MALA_STATUS_CICLO[0];
           const cor = status === 'Recebida em SP' ? { bg: '#E3F3E9', color: '#1E7A45' } : (status === 'Despachada em BSB' ? { bg: '#FDECC8', color: '#8A5A00' } : { bg: '#F2F5FA', color: '#6B6B70' });
           (m.conteudoItens || []).forEach(it => {
             const item = BRINDES_MARKETPLACE.find(b => b.id === it.id);
@@ -5756,6 +5764,10 @@ class Component extends DCLogic {
         { id: '', label: 'Todos' }, { id: 'faltam', label: 'Faltam p/ SP' }, { id: 'completo', label: 'Completo' },
       ].map(o => ({ id: o.id, label: o.label, onClick: this.setAnaliseFiltroStatus(o.id),
         bg: (s.analiseFiltroStatus || '') === o.id ? '#0057A6' : '#F2F5FA', color: (s.analiseFiltroStatus || '') === o.id ? '#FFFFFF' : '#4A4A50' })),
+      estoqueOrdemOpcoes: [
+        { id: 'preco', label: 'Maior para o menor' }, { id: 'az', label: 'Ordem alfabética' },
+      ].map(o => ({ id: o.id, label: o.label, onClick: this.setEstoqueOrdem(o.id),
+        bg: (s.estoqueOrdem || 'preco') === o.id ? '#0057A6' : '#F2F5FA', color: (s.estoqueOrdem || 'preco') === o.id ? '#FFFFFF' : '#4A4A50' })),
       malasRecebidasCount: MALAS_BSB_SP.filter(m => this.valor('mala-' + m.id) === 'Recebida em SP').length,
       malasDespachadasCount: MALAS_BSB_SP.filter(m => this.valor('mala-' + m.id) === 'Despachada em BSB').length,
       malasTotal: MALAS_BSB_SP.length,
