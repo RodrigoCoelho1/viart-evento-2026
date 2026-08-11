@@ -65,32 +65,25 @@
           <div style="display:inline-block;background:#E8EFF9;color:#0057A6;border-radius:999px;padding:5px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em">Novidades no app</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:16px;padding:16px 26px;overflow-y:auto;flex:1;min-height:0">
-          <div style="display:flex;gap:12px;background:#FDF1DC;border:1px solid #F39200;border-radius:12px;padding:14px">
-            <div style="font-size:22px;line-height:1">📣</div>
-            <div>
-              <div style="font-weight:800;font-size:14.5px;color:#002855">Ainda não confirmou sua presença?</div>
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Responda agora no Cadastro se vai ao evento — leva 10 segundos, ajuda demais a organização e vale ponto. E chame os colegas que ainda não fizeram o cadastro no app: quanto mais gente participar, mais barato ficam os brindes pra todo mundo.</div>
-            </div>
-          </div>
           <div style="display:flex;gap:12px">
-            <div style="font-size:22px;line-height:1">💰</div>
+            <div style="font-size:22px;line-height:1">🗓️</div>
             <div>
-              <div style="font-weight:800;font-size:14.5px;color:#002855">Como funciona o preço dos brindes</div>
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">O preço de cada item no Mercado de Brindes acompanha a % de participantes que já completou o pré-cadastro: quanto mais colegas responderem, mais barato fica pra todo mundo — dá um toque em quem ainda não respondeu.</div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Cronograma atualizado</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Novos horários do dia na aba Programação, com o local de cada atividade em SP e em BSB.</div>
             </div>
           </div>
           <div style="display:flex;gap:12px">
             <div style="font-size:22px;line-height:1">📎</div>
             <div>
-              <div style="font-weight:800;font-size:14.5px;color:#002855">Estudo de caso disponível</div>
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">O PDF do estudo de caso da atividade em grupo (11h30–12h45) já está na aba Informações — dá uma lida antes do horário.</div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Plano de Atuação VIART 2026-2030</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">O card do Report Planejamento, na Programação, agora tem link direto para o PDF do plano.</div>
             </div>
           </div>
           <div style="display:flex;gap:12px">
-            <div style="font-size:22px;line-height:1">👥</div>
+            <div style="font-size:22px;line-height:1">🎁</div>
             <div>
-              <div style="font-weight:800;font-size:14.5px;color:#002855">Jogo de xícaras, agora num item só</div>
-              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">O brinde "Jogo de xícaras" juntou os dois modelos que existiam separados no Marketplace.</div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Corrigimos o Marketplace de Brindes</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Alguns itens apareciam "Esgotado" por engano, mesmo já estando em SP. Já está certo.</div>
             </div>
           </div>
         </div>
@@ -324,6 +317,9 @@
                 <div style="flex:1">
                   <div style="font-weight:700;font-size:clamp(14px,1.2vw,17px);color:#002855">{{ item.title }}</div>
                   <div style="font-size:13.5px;color:#4A4A50;margin-top:4px;line-height:1.5">{{ item.desc }}</div>
+                  <sc-if value="{{ item.hasLocal }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:11.5px;color:#8A8A90;margin-top:4px">{{ item.local }}</div>
+                  </sc-if>
                 </div>
                 <sc-if value="{{ item.hasPillar }}" hint-placeholder-val="{{ true }}">
                   <div style="flex:0 0 auto;align-self:center;font-size:10.5px;font-weight:700;color:{{ item.badgeColor }};background:{{ item.badgeBg }};padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap">{{ item.agoraLabel }}</div>
@@ -332,6 +328,11 @@
               <sc-if value="{{ item.isCase }}" hint-placeholder-val="{{ false }}">
                 <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
                   <a href="assets/estudo-caso-goldman-sachs.pdf" target="_blank" style="display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px;text-decoration:none">Abrir estudo de caso (PDF)</a>
+                </div>
+              </sc-if>
+              <sc-if value="{{ item.isReport }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(80px,10vw,120px) + 18px)">
+                  <a href="assets/plano-atuacao-viart-26-30.pdf" target="_blank" style="display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px;text-decoration:none">Abrir Plano de Atuação VIART 2026-2030 (PDF)</a>
                 </div>
               </sc-if>
               <sc-if value="{{ item.isConfra }}" hint-placeholder-val="{{ false }}">
@@ -2118,6 +2119,7 @@
               <sc-for list="{{ estoqueOrdemOpcoes }}" as="op" hint-placeholder-count="2">
                 <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
               </sc-for>
+              <div onClick="{{ toggleEstoqueFiltroEnviarBSB }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ estoqueFiltroEnviarBSBBg }};color:{{ estoqueFiltroEnviarBSBColor }}">Só o que falta enviar p/ BSB</div>
             </div>
             <div style="overflow-x:auto;margin-bottom:20px;border:1px solid #DCE6F2;border-radius:10px">
               <table style="width:100%;border-collapse:collapse;font-size:12.5px;background:#FFFFFF">
@@ -2489,6 +2491,12 @@
                     <div style="flex:1">
                       <div style="font-weight:700;font-size:clamp(14px,1.2vw,17px);color:#002855">{{ item.title }}</div>
                       <div style="font-size:13.5px;color:#4A4A50;margin-top:4px;line-height:1.5">{{ item.desc }}</div>
+                      <sc-if value="{{ item.hasLocal }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap">
+                          <div style="font-size:11.5px;color:#0057A6;font-weight:700">SP: <span style="color:#4A4A50;font-weight:400">{{ item.localSP }}</span></div>
+                          <div style="font-size:11.5px;color:#F39200;font-weight:700">BSB: <span style="color:#4A4A50;font-weight:400">{{ item.localBSB }}</span></div>
+                        </div>
+                      </sc-if>
                     </div>
                     <sc-if value="{{ item.hasPillar }}" hint-placeholder-val="{{ true }}">
                       <div style="flex:0 0 auto;align-self:center;font-size:10.5px;font-weight:700;color:{{ item.badgeColor }};background:{{ item.badgeBg }};padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap">{{ item.agoraLabel }}</div>
@@ -2625,6 +2633,13 @@ const CARTAZES = [
 });
 
 const ATUALIZACOES_INICIAIS = [
+  { quando: '11/08 11:40', texto: 'Cronograma atualizado com os novos horários do dia, mais o local de cada atividade em SP e em BSB.' },
+  { quando: '11/08 11:35', texto: 'Card do Report Planejamento VIART, na Programação, ganhou link direto para o PDF do Plano de Atuação VIART 2026-2030.' },
+  { quando: '11/08 11:20', texto: 'Correção no Mercado de Brindes: alguns itens apareciam "Esgotado" mesmo já estando em SP (Canetas CAIXA, Pasta executiva CAIXA Asset, Carregador Wireless e Moleskine com caneta CAIXA Asset).' },
+  { quando: '11/08 10:45', texto: 'Nova seção Relatórios na área restrita: exporta em .docx a lista de pessoas (camisa e gênero, por cidade e área) e o Controle de estoques (por categoria, com SP/BSB e o que falta enviar entre as cidades).' },
+  { quando: '11/08 10:05', texto: 'Tabela Controle de estoques recriada: agora organizada por categoria, com quantidade total, divisão SP/BSB e o que já foi/falta enviar entre as cidades.' },
+  { quando: '11/08 09:20', texto: 'Visão de Engajamento (Gamificação) reorganizada: pontuação, participação e ranking agora abrem separados por cidade (SP/BSB).' },
+  { quando: '11/08 09:00', texto: 'Filtro por cidade (SP/BSB/Todos) na Lista nome a nome, em Pontos & Brindes.' },
   { quando: '10/08 19:20', texto: 'Alerta imediato para a organização: quando alguém marca uma restrição alimentar ou necessidade especial no Cadastro, um pop-up avisa a organização na próxima vez que abrir o app.' },
   { quando: '10/08 19:20', texto: 'Manual de instalação do app ganhou passo a passo também para Samsung Internet e Edge no Android, além de Chrome.' },
   { quando: '10/08 17:40', texto: 'Nova área Wallet, na aba Informações: guarde print ou PDF da passagem de ida, da passagem de volta e o endereço do hotel — 3 cards, salvos só no seu aparelho, com botões diretos de Uber e Google Maps até o hotel.' },
@@ -2650,35 +2665,35 @@ const TABS_DEF = [
 ];
 
 const SCHEDULE_PUBLIC = [
-  { time: '08h30 – 09h00', title: 'Credenciamento', desc: 'Chegada e lista de presença na entrada do auditório', pillar: '' },
-  { time: '09h00 – 09h30', title: 'Abertura Institucional', desc: 'Boas-vindas e palavra do VP Sérgio Bini', pillar: 'Alinhar' },
-  { time: '09h30 – 10h30', title: 'Report Planejamento VIART 1S-2026', desc: 'Resultados e direcionamentos 2026', pillar: 'Alinhar' },
-  { time: '10h30 – 10h50', title: 'Coffee Break', desc: '', pillar: '' },
-  { time: '10h50 – 11h30', title: 'Programas VIART', desc: 'Comissão do Clima · Comissão da Diversidade · Escola VIART · INOVAVIART', pillar: 'Alinhar' },
-  { time: '11h30 – 12h45', title: 'Estudo de Caso', desc: 'Atividade em grupo — leia o estudo de caso na aba Informações antes do horário.', pillar: 'Conectar' },
-  { time: '12h45 – 14h00', title: 'Almoço', desc: 'Integração entre equipes e momento de descontração', pillar: 'Conectar' },
-  { time: '14h00 – 15h00', title: 'Momento de Conexão', desc: 'Atividade interativa em equipe — surpresa do dia!', pillar: 'Conectar' },
-  { time: '15h00 – 17h30', title: 'Dinâmica em Equipe', desc: 'Atividade prática e colaborativa — surpresa do dia!', pillar: 'Executar' },
-  { time: '17h30 – 17h50', title: 'Coffee Break', desc: '', pillar: '' },
-  { time: '17h50 – 18h10', title: 'Reconhecimento & Entregas', desc: '', pillar: 'Executar' },
-  { time: '18h10 – 18h30', title: 'Encerramento', desc: 'Palavra final do VP Sérgio Bini e direcionamentos de 2026', pillar: 'Executar' },
-  { time: '19h00', title: 'Confraternização (informal)', desc: 'Celebração da equipe e encerramento do dia · local a definir', pillar: null },
+  { time: '08h30 – 09h00', title: 'Credenciamento', desc: 'Chegada e lista de presença na entrada do auditório', pillar: '', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '09h00 – 09h30', title: 'Abertura Institucional', desc: 'Boas-vindas e palavra do VP Sérgio Bini', pillar: 'Alinhar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '09h30 – 10h30', title: 'Report Planejamento VIART 1S-2026', desc: 'Resultados e direcionamentos 2026', pillar: 'Alinhar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '10h30 – 10h50', title: 'Coffee Break', desc: '', pillar: '', localSP: 'Átrio', localBSB: 'Auditório MZII' },
+  { time: '10h50 – 11h30', title: 'Programas VIART', desc: 'Comissão do Clima · Comissão da Diversidade · Escola VIART · InovaVIART', pillar: 'Alinhar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '11h30 – 12h45', title: 'Estudo de Caso Goldman Sachs', desc: 'Atividade em grupo — leia o estudo de caso na aba Informações antes do horário.', pillar: 'Alinhar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '12h45 – 14h00', title: 'Almoço', desc: 'Integração entre equipes e momento de descontração', pillar: 'Conectar', localSP: 'Átrio', localBSB: 'Auditório MZII' },
+  { time: '14h00 – 15h00', title: 'Atividade coletiva', desc: '', pillar: 'Conectar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '15h00 – 17h30', title: 'Atividade coletiva', desc: '', pillar: 'Executar', localSP: '18º andar', localBSB: 'Foyer MZII' },
+  { time: '17h30 – 17h50', title: 'Coffee Break', desc: '', pillar: '', localSP: '18º andar', localBSB: 'Foyer MZII' },
+  { time: '17h50 – 18h10', title: 'Reconhecimento & Entregas', desc: '', pillar: 'Executar', localSP: '18º andar', localBSB: 'Foyer MZII' },
+  { time: '18h10 – 18h30', title: 'Encerramento', desc: 'Palavra final do VP Sérgio Bini e direcionamentos de 2026', pillar: 'Executar', localSP: '18º andar', localBSB: 'Foyer MZII' },
+  { time: '19h00', title: 'Confraternização (informal)', desc: 'Celebração da equipe e encerramento do dia · local a definir', pillar: null, localSP: '', localBSB: '' },
 ];
 
 const SCHEDULE_REAL = [
-  { time: '08h30 – 09h00', title: 'Credenciamento', desc: 'Chegada e lista de presença na entrada do auditório', pillar: '' },
-  { time: '09h00 – 09h30', title: 'Abertura Institucional', desc: 'Boas-vindas e palavra do VP Sérgio Bini', pillar: 'Alinhar' },
-  { time: '09h30 – 10h30', title: 'Report Planejamento VIART 1S-2026', desc: 'Resultados e direcionamentos 2026', pillar: 'Alinhar' },
-  { time: '10h30 – 10h50', title: 'Coffee Break', desc: '', pillar: '' },
-  { time: '10h50 – 11h30', title: 'Programas VIART', desc: 'Comissão do Clima · Comissão da Diversidade · Escola VIART · INOVAVIART', pillar: 'Alinhar' },
-  { time: '11h30 – 12h45', title: 'Estudo de Caso Goldman', desc: '', pillar: 'Conectar' },
-  { time: '12h45 – 14h00', title: 'Almoço', desc: 'Integração entre equipes e momento de descontração', pillar: 'Conectar' },
-  { time: '14h00 – 15h00', title: 'Histórias que Inspiram (Tema: Divertidamente)', desc: 'O que fizemos acontecer · entregas que nos dão orgulho', pillar: 'Conectar' },
-  { time: '15h00 – 17h30', title: 'Team Building', desc: 'Dinâmica de grupo experiencial: integração, colaboração e aprendizado com propósito', pillar: 'Executar' },
-  { time: '17h30 – 17h50', title: 'Coffee Break', desc: '', pillar: '' },
-  { time: '17h50 – 18h10', title: 'Reconhecimento & Entregas', desc: '', pillar: 'Executar' },
-  { time: '18h10 – 18h30', title: 'Encerramento', desc: 'Palavra final do VP Sérgio Bini e direcionamentos de 2026', pillar: 'Executar' },
-  { time: '19h00', title: 'Confraternização (informal)', desc: 'Celebração da equipe e encerramento do dia · local a definir', pillar: null },
+  { time: '08h30 – 09h00', title: 'Credenciamento', desc: 'Chegada e lista de presença na entrada do auditório', pillar: '', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '09h00 – 09h30', title: 'Abertura Institucional', desc: 'Boas-vindas e palavra do VP Sérgio Bini', pillar: 'Alinhar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '09h30 – 10h30', title: 'Report Planejamento VIART 1S-2026', desc: 'Resultados e direcionamentos 2026', pillar: 'Alinhar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '10h30 – 10h50', title: 'Coffee Break', desc: '', pillar: '', localSP: 'Átrio', localBSB: 'Auditório MZII' },
+  { time: '10h50 – 11h30', title: 'Programas VIART', desc: 'Comissão do Clima · Comissão da Diversidade · Escola VIART · InovaVIART', pillar: 'Alinhar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '11h30 – 12h45', title: 'Estudo de Caso Goldman Sachs', desc: '', pillar: 'Alinhar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '12h45 – 14h00', title: 'Almoço', desc: 'Integração entre equipes e momento de descontração', pillar: 'Conectar', localSP: 'Átrio', localBSB: 'Auditório MZII' },
+  { time: '14h00 – 15h00', title: 'Histórias que Inspiram (Tema: Divertidamente)', desc: 'O que fizemos acontecer · entregas que nos dão orgulho', pillar: 'Conectar', localSP: 'Auditório', localBSB: 'Auditório MZII' },
+  { time: '15h00 – 17h30', title: 'Team Building', desc: 'Dinâmica de grupo experiencial: integração, colaboração e aprendizado com propósito', pillar: 'Executar', localSP: '18º andar', localBSB: 'Foyer MZII' },
+  { time: '17h30 – 17h50', title: 'Coffee Break', desc: '', pillar: '', localSP: '18º andar', localBSB: 'Foyer MZII' },
+  { time: '17h50 – 18h10', title: 'Reconhecimento & Entregas', desc: '', pillar: 'Executar', localSP: '18º andar', localBSB: 'Foyer MZII' },
+  { time: '18h10 – 18h30', title: 'Encerramento', desc: 'Palavra final do VP Sérgio Bini e direcionamentos de 2026', pillar: 'Executar', localSP: '18º andar', localBSB: 'Foyer MZII' },
+  { time: '19h00', title: 'Confraternização (informal)', desc: 'Celebração da equipe e encerramento do dia · local a definir', pillar: null, localSP: '', localBSB: '' },
 ];
 
 const OBJETIVOS = [
@@ -2728,9 +2743,9 @@ const BRINDES_MARKETPLACE = [
   {"id":"mouse-pad","nome":"Desk Pad","categoria":"Tecnologia","desc":"Desk pad estendido em couro sintético preto de alta qualidade, com acabamento costurado nas bordas.","foto":"mouse-pad.jpg","peso":0.6,"estoqueTotal":9,"enviadoSP":2,"fit":"cover"},
   {"id":"copo-caixa","nome":"Copo CAIXA Térmico","categoria":"Casa & Lazer","desc":"Copo térmico de aço inox 360ml, tampa com abertura para canudo e a marca CAIXA impressa no corpo azul marinho.","foto":"copo-caixa.jpg","peso":3.2,"estoqueTotal":5,"enviadoSP":3,"fit":"cover"},
   {"id":"moleskine-seguridade-caneta","nome":"Moleskine Seguridade c/ caneta","categoria":"Cadernos & Blocos","desc":"Caderno executivo azul com elástico vertical na cor azul royal, caneta metálica encaixada na lateral e estampa da CAIXA Seguridade.","foto":"moleskine-seguridade-caneta.jpg","peso":0.3,"estoqueTotal":11,"enviadoSP":4},
-  {"id":"moleskine-caneta-asset","nome":"Moleskine com caneta CAIXA Asset","categoria":"Cadernos & Blocos","desc":"Kit em caixa preta com caderno executivo preto e caneta esferográfica metálica preta, ambos com a marca \"CAIXA Asset\".","foto":"moleskine-caneta-asset.jpg","peso":0.35,"estoqueTotal":2,"enviadoSP":0,"origemSP":true},
-  {"id":"moleskine-seguridade-10anos","nome":"Moleskine CAIXA Seguridade","categoria":"Cadernos & Blocos","desc":"Caderno especial comemorativo de 10 Anos da CAIXA Seguridade, com design degradê em tons de azul e rosa, fechamento em elástico e caneta metálica inclusa.","foto":"moleskine-seguridade-10anos.jpg","peso":0.3,"estoqueTotal":2,"enviadoSP":0},
-  {"id":"moleskine-loterias","nome":"Moleskine CAIXA Loterias","categoria":"Cadernos & Blocos","desc":"Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.","foto":"moleskine-loterias.jpg","fit":"contain","peso":0.3,"estoqueTotal":198,"enviadoSP":0},
+  {"id":"moleskine-caneta-asset","nome":"Moleskine com caneta CAIXA Asset","categoria":"Cadernos & Blocos","desc":"Kit em caixa preta com caderno executivo preto e caneta esferográfica metálica preta, ambos com a marca \"CAIXA Asset\".","foto":"moleskine-caneta-asset.jpg","peso":0.35,"estoqueTotal":2,"enviadoSP":2,"origemSP":true,"aindaEmSP":true},
+  {"id":"moleskine-seguridade-10anos","nome":"Moleskine CAIXA Seguridade","categoria":"Cadernos & Blocos","desc":"Caderno especial comemorativo de 10 Anos da CAIXA Seguridade, com design degradê em tons de azul e rosa, fechamento em elástico e caneta metálica inclusa.","foto":"moleskine-seguridade-10anos.jpg","peso":0.3,"estoqueTotal":2,"enviadoSP":0,"ocultoMarketplace":true},
+  {"id":"moleskine-loterias","nome":"Moleskine CAIXA Loterias","categoria":"Cadernos & Blocos","desc":"Caderno executivo azul marinho de capa dura com fechamento em elástico vertical, marcador de página em fita e personalização da CAIXA Loterias.","foto":"moleskine-loterias.jpg","fit":"contain","peso":0.3,"estoqueTotal":198,"enviadoSP":0,"ocultoMarketplace":true},
   {"id":"moleskine-x","nome":"Moleskine X","categoria":"Cadernos & Blocos","desc":"Caderno de capa dura azul texturizada com padrão geométrico, logo da CAIXA na base inferior e fita de cetim marcador de página.","foto":"moleskine-x.jpg","fit":"contain","peso":0.3,"estoqueTotal":205,"enviadoSP":140},
   {"id":"bloco-rapidex","nome":"Bloco Rapidex","categoria":"Cadernos & Blocos","desc":"Caderno corporativo com capa em tons de azul e detalhes geométricos coloridos nas bordas, com a marca \"Rapidex\" em destaque.","foto":"bloco-rapidex.jpg","peso":0.6,"estoqueTotal":15,"enviadoSP":7},
   {"id":"caneta-tipo1","nome":"Caneta CAIXA Tipo 1","categoria":"Canetas","desc":"Caneta esferográfica metálica azul, com clipe prateado e a marca CAIXA Asset gravada no corpo.","foto":"caneta-caixa-tipo1.jpg","peso":0.2,"estoqueTotal":96,"enviadoSP":96,"fit":"contain","origemSP":true,"aindaEmSP":true},
@@ -2864,7 +2879,7 @@ const CHECKLIST_CATS = [
     ['Providenciar camisetas', 'nao', '', '2026-08-11', 'camisetas'],
     ['Providenciar outros brindes', 'nao', '', '2026-07-31', 'outros-brindes'],
     ['Acionar GEIMP para cobrir evento na Intranet', 'nao', '', '2026-07-31', 'geimp-intranet'],
-    ['Entregar ppt das 4 comissões (Clima, Diversidade, Escola VIART, INOVAVIART)', 'nao', '', '2026-08-07', 'ppt-4-comissoes'],
+    ['Entregar ppt das 4 comissões (Clima, Diversidade, Escola VIART, InovaVIART)', 'nao', '', '2026-08-07', 'ppt-4-comissoes'],
     ['Criar gamificação com brindes para receber insights', 'nao', '', '2026-08-11', 'gamificacao-brindes'],
     ['Entregar slide de créditos ao staff para Encerramento', 'nao', '', '2026-08-11', 'slide-creditos'],
     ['Providenciar Wi-Fi (rede e senha) de SP', 'nao', '', '2026-07-31', 'wifi-sp'],
@@ -3405,6 +3420,7 @@ class Component extends DCLogic {
   setOrgSubTab = (id) => () => this.setState({ orgSubTab: id });
   setOrgPessoasSub = (id) => () => this.setState({ orgPessoasSub: id });
   setEstoqueOrdem = (id) => () => this.setState({ estoqueOrdem: id });
+  setEstoqueFiltroEnviarBSB = () => this.setState(s => ({ estoqueFiltroEnviarBSB: !s.estoqueFiltroEnviarBSB }));
   setPontosListaFiltroCidade = (id) => () => this.setState({ pontosListaFiltroCidade: id });
   toggleManualSecao = (id) => () => this.setState(s => ({ manualAppOpen: { ...(s.manualAppOpen || {}), [id]: !(s.manualAppOpen || {})[id] } }));
 
@@ -3466,7 +3482,7 @@ class Component extends DCLogic {
     this.setCampos({ 'popup-urgente': null });
   };
   fecharPopupNovidades = () => {
-    try { localStorage.setItem('viart2026_popup_novidades_v5_visto', '1'); } catch (e) {}
+    try { localStorage.setItem('viart2026_popup_novidades_v6_visto', '1'); } catch (e) {}
     this.setState({ popupNovidadesFechado: true });
   };
   fecharPopupFc = () => {
@@ -4165,7 +4181,7 @@ class Component extends DCLogic {
             { nome: 'Fê Herbst', papel: 'Consultor de Dirigente SE', tel: '(11) 98931-9941', foto: 'assets/fe-herbst.jpg' },
             { nome: 'Ricardinho', papel: 'Gerente Executivo', tel: '(11) 97035-7055', foto: 'assets/ricardinho-amaral.jpg' },
           ] }
-      : { id: 'bsb', name: 'Brasília', date: '20 de Agosto', dateISO: '2026-08-20', venue: 'Auditório Matriz II', address: 'SAUS Quadra 5, Lote 9/10, Brasília - DF, CEP 70070-050', bikes: 10, mapEmbedUrl: 'https://www.google.com/maps?q=Caixa+Econômica+Federal+Matriz+II+SAUS+Quadra+5+Brasília&output=embed',
+      : { id: 'bsb', name: 'Brasília', date: '20 de Agosto', dateISO: '2026-08-20', venue: 'Auditório Matriz II', address: 'SAUS Quadra 5, Lote 9/10, Brasília - DF', bikes: 10, mapEmbedUrl: 'https://www.google.com/maps?q=Caixa+Econômica+Federal+Matriz+II+SAUS+Quadra+5+Brasília&output=embed',
           transporte: 'Estação Galeria dos Estados (metrô), a 900 m · diversas linhas de ônibus no Setor de Autarquias Sul', estacionamento: 'Estacionamento do edifício conforme disponibilidade — chegue com folga ou use transporte por app',
           wifiRede: 'wfcv', wifiSenha: 'a confirmar', wifiGuest: true, wifiGuestNot: false, wifiQR: 'assets/qrcode-wifi-bsb.png',
           almoco: 'No próprio prédio · 12h15 às 14h', confraternizacao: 'Hidden · a partir das 19h', confraternizacaoEndereco: 'Antigo Galpão do Jornal de Brasília, SIG, Brasília - DF',
@@ -4207,8 +4223,11 @@ class Component extends DCLogic {
       if (item.title.indexOf('Confraternização') === 0) descShow = 'Celebração da equipe e encerramento do dia · ' + cityData.confraternizacao;
       const isConfraPublic = item.title.indexOf('Confraternização') === 0;
       const isCredPublic = item.title === 'Credenciamento';
-      const isCasePublic = item.title === 'Estudo de Caso';
-      return { ...item, title: titleShow, desc: descShow, isConfra: isConfraPublic, isCred: isCredPublic, isCase: isCasePublic, hasPillar: !!item.pillar, pillarColor: item.isAgora ? '#1E7A45' : st.color,
+      const isCasePublic = item.title.indexOf('Estudo de Caso') === 0;
+      const isReportPublic = item.title.indexOf('Report Planejamento VIART') === 0;
+      const local = s.city === 'bsb' ? item.localBSB : item.localSP;
+      const hasLocal = !!local;
+      return { ...item, title: titleShow, desc: descShow, isConfra: isConfraPublic, isCred: isCredPublic, isCase: isCasePublic, isReport: isReportPublic, local, hasLocal, hasPillar: !!item.pillar, pillarColor: item.isAgora ? '#1E7A45' : st.color,
         cardBg: item.isAgora ? '#EAF7EF' : st.bg, cardBorder: item.isAgora ? '2px solid #2E9E5B' : '2px solid transparent',
         badgeBg: item.isAgora ? '#2E9E5B' : 'rgba(255,255,255,0.6)', badgeColor: item.isAgora ? '#FFFFFF' : st.color,
         agoraLabel: item.isAgora ? 'AGORA' : item.pillar };
@@ -4218,7 +4237,8 @@ class Component extends DCLogic {
       const descShowReal = item.title.indexOf('Confraternização') === 0 ? 'Celebração da equipe e encerramento do dia · ' + cityData.confraternizacao : item.desc;
       const isConfra = item.title.indexOf('Confraternização') === 0;
       const isCred = item.title === 'Credenciamento';
-      return { ...item, desc: descShowReal, isConfra, isCred, hasPillar: !!item.pillar, pillarColor: item.isAgora ? '#1E7A45' : st.color,
+      const hasLocal = !!(item.localSP || item.localBSB);
+      return { ...item, desc: descShowReal, isConfra, isCred, hasLocal, hasPillar: !!item.pillar, pillarColor: item.isAgora ? '#1E7A45' : st.color,
         cardBg: item.isAgora ? '#EAF7EF' : st.bg, cardBorder: item.isAgora ? '2px solid #2E9E5B' : '2px solid transparent',
         badgeBg: item.isAgora ? '#2E9E5B' : 'rgba(255,255,255,0.6)', badgeColor: item.isAgora ? '#FFFFFF' : st.color,
         agoraLabel: item.isAgora ? 'AGORA' : item.pillar };
@@ -5342,7 +5362,8 @@ class Component extends DCLogic {
           statusEstoqueLabel: restante <= 0 ? 'Esgotado' : (vels[b.id] === maxVel && maxVel > 0 ? '🔥 caindo rápido' : (usado === 0 ? 'Encalhando' : '—')),
           statusEstoqueColor: restante <= 0 ? '#B4471F' : (vels[b.id] === maxVel && maxVel > 0 ? '#B4471F' : '#8A8A90'),
         };
-      }).sort((a, b) => (s.estoqueOrdem === 'az' ? a.nome.localeCompare(b.nome) : b.preco - a.preco));
+      }).sort((a, b) => (s.estoqueOrdem === 'az' ? a.nome.localeCompare(b.nome) : b.preco - a.preco))
+        .filter(it => !s.estoqueFiltroEnviarBSB || it.enviarBSB > 0);
       const CATEGORIA_ORDEM = ['Mochilas', 'Cadernos & Blocos', 'Canetas', 'Tecnologia', 'Casa & Lazer', 'Bolsas & Necessaires', 'Vestuário & Kits'];
       const grupos = {};
       itensView.forEach(it => { (grupos[it.categoria] = grupos[it.categoria] || []).push(it); });
@@ -5498,7 +5519,7 @@ class Component extends DCLogic {
     const mercadoAberto = !!minhaCidadeId && hojeISOAtual(new Date()) === DATA_EVENTO_MERCADO[minhaCidadeId] && minutosAgoraMercado >= 765;
     const adesaoGeralPct = Math.round(this.adesaoGeralSP() * 100);
     const descontoColetivoPct = Math.round(this.adesaoGeralSP() * 50);
-    const brindesView = BRINDES_MARKETPLACE.map(b => {
+    const brindesView = BRINDES_MARKETPLACE.filter(b => !b.ocultoMarketplace).map(b => {
       const custo = this.precoBrinde(b);
       const baseSemDesconto = Math.max(1, Math.round(b.peso * 8));
       const { sp: estSP, bsb: estBSB } = this.splitEstoqueItem(b);
@@ -5551,7 +5572,7 @@ class Component extends DCLogic {
     const souGestor = (s.meuNome && infoDe(s.meuNome).tipo === 'gestor') || (s.dadosNome && infoDe(s.dadosNome).tipo === 'gestor');
     const mostrarPopupAviso = !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
       String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || ''));
-    const mostrarPopupNovidades = !s.popupNovidadesFechado && !mostrarPopupAviso && (localStorage.getItem('viart2026_popup_novidades_v5_visto') || '') !== '1';
+    const mostrarPopupNovidades = !s.popupNovidadesFechado && !mostrarPopupAviso && (localStorage.getItem('viart2026_popup_novidades_v6_visto') || '') !== '1';
     const mostrarPopupFc = s.orgUnlocked && !s.popupFcFechado && fcNaoLidas.length > 0 && !souGestor && !mostrarPopupAviso && !mostrarPopupNovidades;
 
     const restPcdView = Object.keys(s.sync).filter(k => (k.indexOf('rt-') === 0 && s.sync[k] && s.sync[k].v && s.sync[k].v !== 'Nenhuma') || (k.indexOf('pcd-') === 0 && s.sync[k] && s.sync[k].v === 'Sim'))
@@ -5878,6 +5899,8 @@ class Component extends DCLogic {
         { id: 'preco', label: 'Maior para o menor' }, { id: 'az', label: 'Ordem alfabética' },
       ].map(o => ({ id: o.id, label: o.label, onClick: this.setEstoqueOrdem(o.id),
         bg: (s.estoqueOrdem || 'preco') === o.id ? '#0057A6' : '#F2F5FA', color: (s.estoqueOrdem || 'preco') === o.id ? '#FFFFFF' : '#4A4A50' })),
+      estoqueFiltroEnviarBSB: !!s.estoqueFiltroEnviarBSB, toggleEstoqueFiltroEnviarBSB: this.setEstoqueFiltroEnviarBSB,
+      estoqueFiltroEnviarBSBBg: s.estoqueFiltroEnviarBSB ? '#F39200' : '#F2F5FA', estoqueFiltroEnviarBSBColor: s.estoqueFiltroEnviarBSB ? '#FFFFFF' : '#4A4A50',
       malasRecebidasCount: MALAS_BSB_SP.filter(m => this.valor('mala-' + m.id) === 'Recebida em SP').length,
       malasDespachadasCount: MALAS_BSB_SP.filter(m => this.valor('mala-' + m.id) === 'Despachada em BSB').length,
       despachoConsolidadoView: (() => {
