@@ -5541,7 +5541,7 @@ class Component extends DCLogic {
       const opcoes = this.seededShuffle([q.nome].concat(distratores), key + '-o');
       return {
         key, texto: q.texto, respondida: !!respondida, naoRespondida: !respondida, nomeCorreto: q.nome,
-        resultLabel: respondida ? (respondida.certo ? 'Acertou! +1 ponto' : ('Não foi dessa vez — era ' + q.nome + '.')) : '',
+        resultLabel: respondida ? (respondida.certo ? ('Acertou! Era ' + q.nome + '. +1 ponto') : ('Não foi dessa vez — era ' + q.nome + '.')) : '',
         resultColor: respondida ? (respondida.certo ? '#1E7A45' : '#B02D1C') : '#6B6B70',
         opcoes: opcoes.map(op => ({
           nome: op, onClick: this.responderQuiz(key, op, q.nome),
