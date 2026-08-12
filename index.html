@@ -485,7 +485,14 @@
           </div>
         </sc-if>
 
-        <sc-if value="{{ temNomeLiberado }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ mostrarSubtabsBrindes }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+            <div onClick="{{ setSubTabDetetive }}" style="cursor:pointer;padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ subTabDetetiveBg }};color:{{ subTabDetetiveColor }};border:1px solid #DCE6F2">🕵️ Detetive VIART</div>
+            <div onClick="{{ setSubTabMercado }}" style="cursor:pointer;padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ subTabMercadoBg }};color:{{ subTabMercadoColor }};border:1px solid #DCE6F2">🎁 Mercado de brindes</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showDetetiveCard }}" hint-placeholder-val="{{ false }}">
           <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;margin-bottom:24px">
             <div style="font-weight:700;font-size:15px;margin-bottom:4px">Detetive VIART: quem é quem?</div>
             <div style="font-size:12.5px;color:#6B6B70;margin-bottom:16px">Curiosidades da equipe, sem nome — adivinhe de quem é. Acerto vale 1 ponto, uma tentativa por pergunta. Novas perguntas liberam aos poucos, todo dia, até o evento.</div>
@@ -495,9 +502,9 @@
             <div style="display:flex;flex-direction:column;gap:16px">
               <sc-for list="{{ quizPerguntasView }}" as="q" hint-placeholder-count="3">
                 <sc-if value="{{ q.respondida }}" hint-placeholder-val="{{ false }}">
-                  <div style="display:flex;align-items:baseline;gap:8px;font-size:12.5px;padding:8px 4px;border-bottom:1px solid #EEF2F8">
-                    <div style="font-style:italic;color:#6B6B70;flex-shrink:0">"{{ q.texto }}"</div>
-                    <div style="font-weight:700;color:{{ q.resultColor }}">{{ q.resultLabel }}</div>
+                  <div style="display:flex;align-items:baseline;gap:8px;font-size:12.5px;padding:8px 4px;border-bottom:1px solid #EEF2F8;flex-wrap:wrap">
+                    <div style="font-style:italic;color:#6B6B70;min-width:0">"{{ q.texto }}"</div>
+                    <div style="font-weight:700;color:{{ q.resultColor }};white-space:nowrap">{{ q.resultLabel }}</div>
                   </div>
                 </sc-if>
                 <sc-if value="{{ q.naoRespondida }}" hint-placeholder-val="{{ true }}">
@@ -518,6 +525,7 @@
           </div>
         </sc-if>
 
+        <sc-if value="{{ showMercadoTab }}" hint-placeholder-val="{{ true }}">
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 4px">Mercado de brindes</div>
         <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">{{ adesaoGeralPct }}% da equipe de SP já respondeu o pré-cadastro, o que já deu <b>{{ descontoColetivoPct }}%</b> de desconto no preço de cada item abaixo. Quanto mais gente responder, mais barato fica pra todo mundo.</div>
         <sc-if value="{{ mercadoFechado }}" hint-placeholder-val="{{ true }}">
@@ -545,6 +553,7 @@
             </div>
           </sc-for>
         </div>
+        </sc-if>
       </div>
     </sc-if>
 
@@ -2706,6 +2715,17 @@ const SCHEDULE_REAL = [
   { time: '19h00', title: 'Confraternização (informal)', desc: 'Celebração da equipe e encerramento do dia · local a definir', pillar: null, localSP: '', localBSB: '' },
 ];
 
+function mercadoParseMin(t) {
+  const m = t.trim().match(/(\d+)h(\d*)/);
+  return m ? parseInt(m[1], 10) * 60 + (parseInt(m[2] || '0', 10)) : 0;
+}
+const MERCADO_JANELAS = SCHEDULE_PUBLIC
+  .filter(it => it.title === 'Almoço' || (it.title === 'Coffee Break' && mercadoParseMin(it.time.split('–')[0]) >= 720))
+  .map(it => { const [ini, fim] = it.time.split('–'); return { ini: mercadoParseMin(ini), fim: mercadoParseMin(fim) }; });
+function mercadoJanelaAberta(minutos) {
+  return MERCADO_JANELAS.some(j => minutos >= j.ini && minutos < j.fim);
+}
+
 const OBJETIVOS = [
   { title: 'Alinhamento Estratégico', desc: 'Apresentar o planejamento e os direcionamentos da VIART para 2026, para todos os funcionários da VIART.' },
   { title: 'Mesma Voz para Todos', desc: 'A equipe recebe diretamente a mensagem da liderança.' },
@@ -3662,8 +3682,8 @@ class Component extends DCLogic {
     const DATA_EVENTO_MERCADO = { sp: '2026-08-13', bsb: '2026-08-20' };
     const agoraMercado = new Date();
     const minutosMercado = agoraMercado.getHours() * 60 + agoraMercado.getMinutes();
-    const mercadoAbertoAgora = hojeISOAtual(agoraMercado) === DATA_EVENTO_MERCADO[cidade] && minutosMercado >= 765;
-    if (!mercadoAbertoAgora) { this.setState({ brindeAviso: 'O mercado de brindes abre às 12h45, no horário do almoço.' }); return; }
+    const mercadoAbertoAgora = hojeISOAtual(agoraMercado) === DATA_EVENTO_MERCADO[cidade] && mercadoJanelaAberta(minutosMercado);
+    if (!mercadoAbertoAgora) { this.setState({ brindeAviso: 'O mercado de brindes abre nos intervalos da programação (coffee breaks e almoço).' }); return; }
     const item = BRINDES_MARKETPLACE.find(b => b.id === itemId);
     if (!item) return;
     const custo = this.precoBrinde(item);
@@ -4213,7 +4233,7 @@ class Component extends DCLogic {
     const ehDiaEventoSchedule = hojeISOSchedule === '2026-08-13' || hojeISOSchedule === '2026-08-20';
     const minutosAgoraSchedule = agoraParaSchedule.getHours() * 60 + agoraParaSchedule.getMinutes();
     const parseHoraSchedule = (t) => { const m = t.match(/(\d{2})h(\d{2})?/); return m ? parseInt(m[1], 10) * 60 + (m[2] ? parseInt(m[2], 10) : 0) : null; };
-    const enderecoQ = encodeURIComponent(cityData.venue.split('·')[0].trim() + ', ' + cityData.address);
+    const enderecoQ = encodeURIComponent(cityData.address);
     const mapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + enderecoQ;
     const uberUrl = 'https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=' + enderecoQ;
     const marcarAgora = (list) => {
@@ -4981,6 +5001,13 @@ class Component extends DCLogic {
     const minhaCidadeId = temNome ? cidadeDe(s.meuNome) : '';
     const bloqueadoBrindes = temNome && minhaCidadeId !== 'sp' && !infoDe(s.meuNome).d;
     const temNomeLiberado = temNome && !bloqueadoBrindes;
+    const brindesSubTab = s.brindesSubTab || 'detetive';
+    const showDetetiveTab = brindesSubTab === 'detetive';
+    const showMercadoTab = brindesSubTab === 'mercado';
+    const showDetetiveCard = temNomeLiberado && showDetetiveTab;
+    const mostrarSubtabsBrindes = !bloqueadoBrindes;
+    const setSubTabDetetive = () => this.setState({ brindesSubTab: 'detetive' });
+    const setSubTabMercado = () => this.setState({ brindesSubTab: 'mercado' });
     const minhaCidade = minhaCidadeId === 'sp' ? 'São Paulo' : (minhaCidadeId === 'bsb' ? 'Brasília' : '');
     const minhaData = minhaCidadeId === 'sp' ? '13 de agosto' : (minhaCidadeId === 'bsb' ? '20 de agosto' : '');
     const jaCredenciado = temNome && !!gv('ps-' + s.meuNome);
@@ -5529,7 +5556,7 @@ class Component extends DCLogic {
     const pontosDisponiveis = pontosTotal - pontosGastos;
     const DATA_EVENTO_MERCADO = { sp: '2026-08-13', bsb: '2026-08-20' };
     const minutosAgoraMercado = new Date().getHours() * 60 + new Date().getMinutes();
-    const mercadoAberto = !!minhaCidadeId && hojeISOAtual(new Date()) === DATA_EVENTO_MERCADO[minhaCidadeId] && minutosAgoraMercado >= 765;
+    const mercadoAberto = !!minhaCidadeId && hojeISOAtual(new Date()) === DATA_EVENTO_MERCADO[minhaCidadeId] && mercadoJanelaAberta(minutosAgoraMercado);
     const adesaoGeralPct = Math.round(this.adesaoGeralSP() * 100);
     const descontoColetivoPct = Math.round(this.adesaoGeralSP() * 50);
     const brindesView = BRINDES_MARKETPLACE.filter(b => !b.ocultoMarketplace).map(b => {
@@ -5620,6 +5647,9 @@ class Component extends DCLogic {
       showFaleConosco: s.activeTab === 'faleconosco',
       showInfo: s.activeTab === 'info', showOrg: s.activeTab === 'org',
       temNomeLiberado, bloqueadoBrindes, temDadosLiberado, bloqueadoCadastro,
+      mostrarSubtabsBrindes, showDetetiveCard, showMercadoTab, setSubTabDetetive, setSubTabMercado,
+      subTabDetetiveBg: showDetetiveTab ? '#0057A6' : '#FFFFFF', subTabDetetiveColor: showDetetiveTab ? '#FFFFFF' : '#4A4A50',
+      subTabMercadoBg: showMercadoTab ? '#0057A6' : '#FFFFFF', subTabMercadoColor: showMercadoTab ? '#FFFFFF' : '#4A4A50',
       irParaFaleConosco: this.irParaFaleConosco, irParaFotos: this.irParaFotos,
       fcNome: s.fcNome || '', onFcNome: this.onFcNome, fcOpcoes,
       fcMensagem: s.fcMensagem || '', onFcMensagem: this.onFcMensagem,
