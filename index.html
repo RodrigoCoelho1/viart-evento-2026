@@ -5989,7 +5989,7 @@ class Component extends DCLogic {
     const mostrarVotacaoBanner = !modoApresentacao && aoVivoSessaoAtiva && ehQuizOuVotacao && !!meuNomeQualquer && souOrganizacaoAoVivo && !jaVotei;
     const mostrarVotacaoConfirmada = !modoApresentacao && aoVivoSessaoAtiva && ehQuizOuVotacao && !!meuNomeQualquer && souOrganizacaoAoVivo && jaVotei;
     const votacaoBannerPergunta = sessaoAtualObj ? sessaoAtualObj.pergunta : '';
-    const votacaoBannerOpcoesView = sessaoAtualObj ? sessaoAtualObj.opcoes.map((texto, i) => ({ texto, votar: this.votar(sessaoAtualObj.id, i) })) : [];
+    const votacaoBannerOpcoesView = ehQuizOuVotacao ? sessaoAtualObj.opcoes.map((texto, i) => ({ texto, votar: this.votar(sessaoAtualObj.id, i) })) : [];
     const votacaoEhQuiz = !!sessaoAtualObj && sessaoAtualObj.tipo === 'quiz';
     const meuVotoIdx = (sessaoAtualObj && meuNomeQualquer) ? this.valor('voto-' + sessaoAtualObj.id + '-' + meuNomeQualquer) : undefined;
     const quizAcertei = votacaoEhQuiz && meuVotoIdx === sessaoAtualObj.correta;
