@@ -44,6 +44,38 @@
 
 <div style="min-height:100vh;background:#F2F5FA;padding-bottom:60px">
 
+  <sc-if value="{{ modoApresentacao }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:500;background:#002855;color:#F2F5FA;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(24px,5vw,72px);text-align:center">
+      <div style="position:absolute;top:24px;left:32px;font-family:'Sora',sans-serif;font-weight:800;font-size:14px;color:#7BAEDB;letter-spacing:0.06em;text-transform:uppercase">VIART 2026 · Ao vivo</div>
+      <sc-if value="{{ apresentacaoOciosa }}" hint-placeholder-val="{{ true }}">
+        <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(24px,3vw,40px);color:#7BAEDB">Aguardando o início de uma sessão…</div>
+      </sc-if>
+      <sc-if value="{{ apresentacaoComPergunta }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:13px;font-weight:800;color:#F39200;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">{{ apresentacaoTipoLabel }}</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(28px,4vw,52px);line-height:1.15;max-width:1000px">{{ apresentacaoPergunta }}</div>
+        <sc-if value="{{ apresentacaoEhVotacao }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px;width:100%;max-width:780px;margin-top:40px">
+            <sc-for list="{{ apresentacaoOpcoesView }}" as="op" hint-placeholder-count="4">
+              <div style="text-align:left">
+                <div style="display:flex;justify-content:space-between;font-size:18px;font-weight:700;margin-bottom:6px">
+                  <div>{{ op.texto }}</div>
+                  <div>{{ op.pctLabel }}</div>
+                </div>
+                <div style="background:rgba(255,255,255,0.12);border-radius:999px;height:22px;overflow:hidden">
+                  <div style="background:#F39200;height:100%;border-radius:999px;width:{{ op.barWidth }};transition:width 0.5s ease"></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:28px;font-size:14px;color:#A9C0DE">{{ apresentacaoTotalVotos }} respostas</div>
+        </sc-if>
+        <sc-if value="{{ apresentacaoEmConstrucao }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:32px;font-size:16px;color:#A9C0DE">Essa dinâmica ainda está sendo construída — a pergunta já aparece, o resultado ao vivo chega em seguida.</div>
+        </sc-if>
+      </sc-if>
+    </div>
+  </sc-if>
+
   <sc-if value="{{ mostrarPopupAviso }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;background:rgba(0,20,45,0.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px">
       <div style="background:#FFFFFF;border-radius:16px;max-width:420px;width:100%;max-height:85vh;box-shadow:0 20px 60px rgba(0,0,0,0.3);display:flex;flex-direction:column;overflow:hidden">
@@ -154,6 +186,21 @@
             <div style="font-weight:700;font-size:14px">Como foi o seu dia? Sua avaliação está disponível agora.</div>
             <div style="font-weight:800;font-size:12.5px;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap">Avaliar →</div>
           </div>
+        </sc-if>
+
+        <sc-if value="{{ mostrarVotacaoBanner }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#002855;color:#F2F5FA;border-radius:16px;padding:20px 22px;margin-bottom:20px">
+            <div style="font-size:11px;font-weight:800;color:#7BAEDB;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Ao vivo agora</div>
+            <div style="font-weight:700;font-size:16px;margin-bottom:14px">{{ votacaoBannerPergunta }}</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ votacaoBannerOpcoesView }}" as="op" hint-placeholder-count="4">
+                <div onClick="{{ op.votar }}" style="cursor:pointer;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:11px 16px;font-weight:600;font-size:13.5px">{{ op.texto }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ mostrarVotacaoConfirmada }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#E3F3E8;border:1px solid #8FD9A8;color:#1E7A45;border-radius:14px;padding:14px 20px;margin-bottom:20px;font-size:13.5px;font-weight:700">Voto registrado — obrigado por participar!</div>
         </sc-if>
         <div style="background:#002855;border-radius:20px;padding:clamp(28px,5vw,56px);color:#F2F5FA;margin-bottom:28px">
           <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(28px,4.2vw,54px);line-height:1.05">Planejamento Estratégico VIART</div>
@@ -1375,6 +1422,39 @@
               </div>
               <div onClick="{{ baixarRelatorioEstoque }}" style="cursor:pointer;background:#0057A6;color:#fff;font-weight:700;padding:10px 20px;border-radius:10px;font-size:13px;white-space:nowrap">Baixar .docx</div>
             </div>
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ showOrgAoVivo }}" hint-placeholder-val="{{ false }}">
+            <div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Sessão ao vivo</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Ative uma pergunta e abra o modo apresentação numa segunda janela — os participantes respondem pelo próprio celular, sem depender do telão pra ver o resultado.</div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:18px 20px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:13.5px;margin-bottom:8px">Tipo de dinâmica</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+                <sc-for list="{{ aoVivoTiposView }}" as="tp" hint-placeholder-count="4">
+                  <div onClick="{{ tp.onClick }}" style="cursor:pointer;padding:8px 14px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ tp.bg }};color:{{ tp.color }};border:1px solid #DCE6F2">{{ tp.label }}</div>
+                </sc-for>
+              </div>
+              <div style="font-weight:700;font-size:13.5px;margin-bottom:6px">Pergunta</div>
+              <textarea value="{{ aoVivoPergunta }}" onChange="{{ onAoVivoPergunta }}" placeholder="Ex.: Qual desses pilares mais representa 2026 pra você?" style="width:100%;box-sizing:border-box;border:1px solid #C9D6E8;border-radius:10px;padding:10px 12px;font-size:13.5px;font-family:inherit;resize:vertical;min-height:44px;margin-bottom:14px"></textarea>
+              <sc-if value="{{ aoVivoPrecisaOpcoes }}" hint-placeholder-val="{{ true }}">
+                <div style="font-weight:700;font-size:13.5px;margin-bottom:6px">Opções (uma por linha)</div>
+                <textarea value="{{ aoVivoOpcoes }}" onChange="{{ onAoVivoOpcoes }}" placeholder="Alinhar / Conectar / Executar" style="width:100%;box-sizing:border-box;border:1px solid #C9D6E8;border-radius:10px;padding:10px 12px;font-size:13.5px;font-family:inherit;resize:vertical;min-height:88px;margin-bottom:14px"></textarea>
+              </sc-if>
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <div onClick="{{ ativarSessao }}" style="cursor:pointer;background:#0057A6;color:#fff;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px">Ativar</div>
+                <sc-if value="{{ aoVivoSessaoAtiva }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ encerrarSessao }}" style="cursor:pointer;background:#F2F5FA;color:#B02D1C;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px;border:1px solid #F5CDBB">Encerrar sessão ativa</div>
+                </sc-if>
+                <div onClick="{{ abrirApresentacao }}" style="cursor:pointer;background:#F2F5FA;color:#002855;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px;border:1px solid #DCE6F2">Abrir modo apresentação</div>
+              </div>
+            </div>
+            <sc-if value="{{ aoVivoStatusVisivel }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#F2F5FA;border-radius:12px;padding:14px 18px;font-size:13px;color:#4A4A50">
+                <b>Sessão atual:</b> {{ aoVivoStatusTexto }}
+              </div>
+            </sc-if>
             </div>
             </sc-if>
 
@@ -2603,7 +2683,14 @@ const ORG_SUBTABS_DEF = [
   { id: 'contatos', label: 'Contatos' },
   { id: 'programacaoreal', label: 'Programação real 🔒' },
   { id: 'relatorios', label: 'Relatórios' },
+  { id: 'aovivo', label: 'Sessão ao vivo' },
   { id: 'manual', label: 'Manual do App' },
+];
+const SESSAO_TIPOS = [
+  { id: 'votacao', label: 'Votação ao vivo' },
+  { id: 'nuvem', label: 'Nuvem de palavras' },
+  { id: 'qa', label: 'Perguntas (Q&A)' },
+  { id: 'quiz', label: 'Quiz rápido' },
 ];
 const ORG_PESSOAS_SUBTABS_DEF = [
   { id: 'participantes', label: 'Participantes' },
@@ -3186,6 +3273,9 @@ class Component extends DCLogic {
       if (s.activeTab === 'org' && s.orgUnlocked && document.visibilityState === 'visible') this.puxarEstado();
       if (s.activeTab === 'fotos' && document.visibilityState === 'visible') this.puxarFotos();
     }, 20000);
+    if (new URLSearchParams(window.location.search).get('modo') === 'apresentacao') {
+      this._syncRapido = setInterval(() => this.puxarEstado(), 3000);
+    }
   }
 
   migrarAntigos() {
@@ -3440,6 +3530,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     if (this._poll) clearInterval(this._poll);
     if (this._sync) clearInterval(this._sync);
+    if (this._syncRapido) clearInterval(this._syncRapido);
     window.removeEventListener('online', this.reenviarPendentes);
   }
 
@@ -3449,6 +3540,36 @@ class Component extends DCLogic {
   irParaNps = () => this.setState({ activeTab: 'programacao' });
   setOrgSubTab = (id) => () => this.setState({ orgSubTab: id });
   setOrgPessoasSub = (id) => () => this.setState({ orgPessoasSub: id });
+  onAoVivoTipo = (id) => () => this.setState({ aoVivoTipo: id });
+  onAoVivoPergunta = (e) => this.setState({ aoVivoPergunta: e.target.value });
+  onAoVivoOpcoes = (e) => this.setState({ aoVivoOpcoes: e.target.value });
+  ativarSessao = () => {
+    const s = this.state;
+    const tipo = s.aoVivoTipo || 'votacao';
+    const pergunta = (s.aoVivoPergunta || '').trim();
+    if (!pergunta) return;
+    const opcoes = (s.aoVivoOpcoes || '').split('\n').map(o => o.trim()).filter(Boolean);
+    const sessao = { id: Date.now(), tipo, pergunta, opcoes, ativa: true };
+    this.empurrarEstado({ 'sessao-ao-vivo': { v: JSON.stringify(sessao), t: Date.now() } });
+  };
+  encerrarSessao = () => {
+    const atual = this.sessaoAtual();
+    if (!atual) return;
+    this.empurrarEstado({ 'sessao-ao-vivo': { v: JSON.stringify({ ...atual, ativa: false }), t: Date.now() } });
+  };
+  abrirApresentacao = () => {
+    window.open(window.location.pathname + '?modo=apresentacao', '_blank');
+  };
+  sessaoAtual = () => {
+    const bruto = this.valor('sessao-ao-vivo');
+    if (!bruto) return null;
+    try { return JSON.parse(bruto); } catch (e) { return null; }
+  };
+  votar = (sessaoId, idx) => () => {
+    const nome = this.state.meuNome || this.state.dadosNome;
+    if (!nome) return;
+    this.empurrarEstado({ ['voto-' + sessaoId + '-' + nome]: { v: idx, t: Date.now() } });
+  };
   setEstoqueOrdem = (id) => () => this.setState({ estoqueOrdem: id });
   setEstoqueFiltroEnviarBSB = () => this.setState(s => ({ estoqueFiltroEnviarBSB: !s.estoqueFiltroEnviarBSB }));
   setPontosListaFiltroCidade = (id) => () => this.setState({ pontosListaFiltroCidade: id });
@@ -5628,6 +5749,45 @@ class Component extends DCLogic {
     const restPcdNaoLidos = restPcdView.filter(a => a.t > restPcdUltimaVista);
     const mostrarPopupRestPcd = s.orgUnlocked && !s.popupRestPcdFechado && restPcdNaoLidos.length > 0 && !souGestor && !mostrarPopupAviso && !mostrarPopupNovidades && !mostrarPopupFc;
 
+    // --- Sessão ao vivo (votação / nuvem / Q&A / quiz) ---
+    const sessaoAtualObj = this.sessaoAtual();
+    const modoApresentacao = new URLSearchParams(window.location.search).get('modo') === 'apresentacao';
+    const apresentacaoOciosa = !sessaoAtualObj;
+    const apresentacaoComPergunta = !!sessaoAtualObj;
+    const apresentacaoTipoLabel = sessaoAtualObj ? (SESSAO_TIPOS.find(t => t.id === sessaoAtualObj.tipo) || {}).label || '' : '';
+    const apresentacaoPergunta = sessaoAtualObj ? sessaoAtualObj.pergunta : '';
+    const apresentacaoEhVotacao = !!sessaoAtualObj && sessaoAtualObj.tipo === 'votacao';
+    const apresentacaoEmConstrucao = !!sessaoAtualObj && sessaoAtualObj.tipo !== 'votacao';
+    let apresentacaoOpcoesView = [];
+    let apresentacaoTotalVotos = 0;
+    if (apresentacaoEhVotacao) {
+      const pref = 'voto-' + sessaoAtualObj.id + '-';
+      const contagens = sessaoAtualObj.opcoes.map(() => 0);
+      Object.keys(s.sync).forEach(k => {
+        if (!k.startsWith(pref)) return;
+        const idx = this.valor(k);
+        if (typeof idx === 'number' && contagens[idx] !== undefined) contagens[idx]++;
+      });
+      apresentacaoTotalVotos = contagens.reduce((a, b) => a + b, 0);
+      apresentacaoOpcoesView = sessaoAtualObj.opcoes.map((texto, i) => {
+        const pct = apresentacaoTotalVotos ? Math.round((contagens[i] / apresentacaoTotalVotos) * 100) : 0;
+        return { texto, pctLabel: contagens[i] + ' · ' + pct + '%', barWidth: pct + '%' };
+      });
+    }
+
+    const aoVivoTipo = s.aoVivoTipo || 'votacao';
+    const aoVivoTiposView = SESSAO_TIPOS.map(t => ({
+      id: t.id, label: t.label, onClick: this.onAoVivoTipo(t.id),
+      bg: aoVivoTipo === t.id ? '#0057A6' : '#FFFFFF', color: aoVivoTipo === t.id ? '#FFFFFF' : '#4A4A50',
+    }));
+    const aoVivoSessaoAtiva = !!(sessaoAtualObj && sessaoAtualObj.ativa);
+    const meuNomeQualquer = s.meuNome || s.dadosNome;
+    const jaVotei = !!(sessaoAtualObj && meuNomeQualquer && this.valor('voto-' + sessaoAtualObj.id + '-' + meuNomeQualquer) !== undefined);
+    const mostrarVotacaoBanner = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'votacao' && !!meuNomeQualquer && !jaVotei;
+    const mostrarVotacaoConfirmada = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'votacao' && !!meuNomeQualquer && jaVotei;
+    const votacaoBannerPergunta = sessaoAtualObj ? sessaoAtualObj.pergunta : '';
+    const votacaoBannerOpcoesView = sessaoAtualObj ? sessaoAtualObj.opcoes.map((texto, i) => ({ texto, votar: this.votar(sessaoAtualObj.id, i) })) : [];
+
     return {
       spBg: s.city === 'sp' ? '#F39200' : 'transparent', spColor: s.city === 'sp' ? '#002855' : '#C9D6E8',
       bsbBg: s.city === 'bsb' ? '#F39200' : 'transparent', bsbColor: s.city === 'bsb' ? '#002855' : '#C9D6E8',
@@ -5964,6 +6124,16 @@ class Component extends DCLogic {
       showOrgCuriosidades: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'pontos',
       showOrgManual: s.orgSubTab === 'manual',
       showOrgRelatorios: s.orgSubTab === 'relatorios', baixarRelatorioPessoas: this.baixarRelatorioPessoas, baixarRelatorioEstoque: this.baixarRelatorioEstoque,
+      showOrgAoVivo: s.orgSubTab === 'aovivo', aoVivoTiposView,
+      aoVivoPergunta: s.aoVivoPergunta || '', onAoVivoPergunta: this.onAoVivoPergunta,
+      aoVivoOpcoes: s.aoVivoOpcoes === undefined ? 'Alinhar\nConectar\nExecutar' : s.aoVivoOpcoes, onAoVivoOpcoes: this.onAoVivoOpcoes,
+      aoVivoPrecisaOpcoes: aoVivoTipo === 'votacao' || aoVivoTipo === 'quiz',
+      ativarSessao: this.ativarSessao, encerrarSessao: this.encerrarSessao, abrirApresentacao: this.abrirApresentacao,
+      aoVivoSessaoAtiva, aoVivoStatusVisivel: !!sessaoAtualObj,
+      aoVivoStatusTexto: sessaoAtualObj ? ((SESSAO_TIPOS.find(t => t.id === sessaoAtualObj.tipo) || {}).label + ' — "' + sessaoAtualObj.pergunta + '"' + (sessaoAtualObj.ativa ? ' (ativa)' : ' (encerrada)') + (apresentacaoEhVotacao ? ' · ' + apresentacaoTotalVotos + ' respostas' : '')) : '',
+      modoApresentacao, apresentacaoOciosa, apresentacaoComPergunta, apresentacaoTipoLabel, apresentacaoPergunta,
+      apresentacaoEhVotacao, apresentacaoEmConstrucao, apresentacaoOpcoesView, apresentacaoTotalVotos,
+      mostrarVotacaoBanner, mostrarVotacaoConfirmada, votacaoBannerPergunta, votacaoBannerOpcoesView,
       manualSecoes: (() => {
         let n = 0;
         return MANUAL_SECOES.map(sec => ({
