@@ -727,7 +727,7 @@
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 4px">Mercado de brindes</div>
         <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">{{ adesaoGeralPct }}% da equipe de SP já respondeu o pré-cadastro, o que já deu <b>{{ descontoColetivoPct }}%</b> de desconto no preço de cada item abaixo. Quanto mais gente responder, mais barato fica pra todo mundo.</div>
         <sc-if value="{{ mercadoFechado }}" hint-placeholder-val="{{ true }}">
-          <div style="background:#FDF1DC;border:1px solid #F39200;color:#8A5A0B;border-radius:10px;padding:12px 16px;font-size:13px;font-weight:700;margin-bottom:16px">O mercado de brindes abre nos intervalos: <b>almoço e coffee breaks</b>, no dia do evento da sua cidade.</div>
+          <div style="background:#FDF1DC;border:1px solid #F39200;color:#8A5A0B;border-radius:10px;padding:12px 16px;font-size:13px;font-weight:700;margin-bottom:16px">O mercado de brindes está fechado no momento pela organização.</div>
         </sc-if>
         <sc-if value="{{ brindeAviso }}" hint-placeholder-val="{{ false }}">
           <div style="background:#FDECE3;border:1px solid #F5CDBB;color:#B4471F;border-radius:10px;padding:12px 16px;font-size:13px;font-weight:700;margin-bottom:14px">{{ brindeAviso }}</div>
@@ -4217,8 +4217,8 @@ class Component extends DCLogic {
     const DATA_EVENTO_MERCADO = { sp: '2026-08-13', bsb: '2026-08-20' };
     const agoraMercado = new Date();
     const minutosMercado = agoraMercado.getHours() * 60 + agoraMercado.getMinutes();
-    const mercadoAbertoAgora = hojeISOAtual(agoraMercado) === DATA_EVENTO_MERCADO[cidade] && mercadoJanelaAberta(minutosMercado);
-    if (!mercadoAbertoAgora) { this.setState({ brindeAviso: 'O mercado de brindes abre nos intervalos da programação (coffee breaks e almoço).' }); return; }
+    const mercadoAbertoAgora = false; // fechado manualmente pela organização
+    if (!mercadoAbertoAgora) { this.setState({ brindeAviso: 'O mercado de brindes está fechado no momento pela organização.' }); return; }
     const item = BRINDES_MARKETPLACE.find(b => b.id === itemId);
     if (!item) return;
     const custo = this.precoBrinde(item);
@@ -6121,7 +6121,7 @@ class Component extends DCLogic {
     const pontosDisponiveis = pontosTotal - pontosGastos;
     const DATA_EVENTO_MERCADO = { sp: '2026-08-13', bsb: '2026-08-20' };
     const minutosAgoraMercado = new Date().getHours() * 60 + new Date().getMinutes();
-    const mercadoAberto = !!minhaCidadeId && hojeISOAtual(new Date()) === DATA_EVENTO_MERCADO[minhaCidadeId] && mercadoJanelaAberta(minutosAgoraMercado);
+    const mercadoAberto = false; // fechado manualmente pela organização
     const adesaoGeralPct = Math.round(this.adesaoGeralSP() * 100);
     const descontoColetivoPct = Math.round(this.adesaoGeralSP() * 50);
     const brindesView = BRINDES_MARKETPLACE.filter(b => !b.ocultoMarketplace).map(b => {
@@ -6141,7 +6141,7 @@ class Component extends DCLogic {
         id: b.id, nome: b.nome, desc: b.desc, foto: b.foto, semFoto: !b.foto, fit: b.fit || 'contain', pontos: custo, restante, esgotado: restante <= 0, jaTem, podeComprar,
         resgatar: this.resgatarBrinde(b.id),
         engajamentoTexto: descontoColetivoPct > 0 ? ('Esse preço já tem ' + descontoColetivoPct + '% de desconto, porque ' + adesaoGeralPct + '% da equipe de SP já respondeu o pré-cadastro. Quanto mais gente responder, mais barato fica pra todo mundo.') : ('Conforme mais gente completar o pré-cadastro, esse preço vai caindo pra todo mundo.'),
-        statusLabel: jaTem ? 'Resgatado' : (restante <= 0 ? 'Esgotado' : (souOrgGestor ? 'Só visualização (Org/Gestor)' : (temNome && minhaCidadeId !== 'sp' ? 'Só p/ SP, por enquanto' : (!mercadoAberto ? 'Abre às 12h45' : (podeComprar ? 'Resgatar' : 'Pontos insuficientes'))))),
+        statusLabel: jaTem ? 'Resgatado' : (restante <= 0 ? 'Esgotado' : (souOrgGestor ? 'Só visualização (Org/Gestor)' : (temNome && minhaCidadeId !== 'sp' ? 'Só p/ SP, por enquanto' : (!mercadoAberto ? 'Fechado' : (podeComprar ? 'Resgatar' : 'Pontos insuficientes'))))),
         statusBg: jaTem ? '#E3F3E8' : (podeComprar ? '#0057A6' : '#EDEDED'),
         statusColor: jaTem ? '#1E7A45' : (podeComprar ? '#FFFFFF' : '#8A8A90'),
       };
