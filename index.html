@@ -237,6 +237,17 @@
     </div>
   </sc-if>
 
+  <sc-if value="{{ mostrarPopupCheckin }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(0,20,45,0.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div style="background:#FFFFFF;border-radius:16px;padding:28px 26px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+        <div style="display:inline-block;background:#E8EFF9;color:#0057A6;border-radius:999px;padding:5px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px">Check-in do credenciamento</div>
+        <div style="font-weight:800;font-size:16px;color:#002855;margin-bottom:6px">{{ checkinPctPopup }}% do time já confirmou presença</div>
+        <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-bottom:22px">Se um colega ainda não fez o check-in no app, dá um toque nele — leva 10 segundos e já libera os pontos da participação.</div>
+        <div onClick="{{ fecharPopupCheckin }}" style="cursor:pointer;text-align:center;padding:12px;border-radius:10px;font-size:14px;font-weight:700;background:#0057A6;color:#FFFFFF">Entendi</div>
+      </div>
+    </div>
+  </sc-if>
+
   <div style="position:sticky;top:0;z-index:50;background:#002855;box-shadow:0 4px 18px rgba(0,0,0,0.25)">
     <div style="max-width:1180px;margin:0 auto;padding:16px clamp(16px,4vw,36px) 8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px">
       <div style="display:flex;align-items:center;gap:18px">
@@ -264,6 +275,13 @@
 
     <sc-if value="{{ showInicio }}" hint-placeholder-val="{{ true }}">
       <div>
+        <sc-if value="{{ mostrarCheckinBanner }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ irParaCheckin }}" style="cursor:pointer;background:#002855;color:#F2F5FA;border-radius:14px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div style="font-weight:700;font-size:14px">Você ainda não fez seu check-in — confirme sua presença agora.</div>
+            <div style="font-weight:800;font-size:12.5px;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap;color:#F39200">Credenciar →</div>
+          </div>
+        </sc-if>
+
         <sc-if value="{{ mostrarNpsBanner }}" hint-placeholder-val="{{ false }}">
           <div onClick="{{ irParaNps }}" style="cursor:pointer;background:#F39200;color:#002855;border-radius:14px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
             <div style="font-weight:700;font-size:14px">Como foi o seu dia? Sua avaliação está disponível agora.</div>
@@ -4002,6 +4020,10 @@ class Component extends DCLogic {
     try { localStorage.setItem('viart2026_restpcd_ultima_vista', String(this._restPcdUltimoT || 0)); } catch (e) {}
     this.setState({ popupRestPcdFechado: true });
   };
+  fecharPopupCheckin = () => {
+    try { localStorage.setItem('viart2026_popup_checkin_v1_visto', '1'); } catch (e) {}
+    this.setState({ popupCheckinFechado: true });
+  };
   fecharPopupAviso = () => {
     const entry = this.state.sync['popup-urgente'];
     try { localStorage.setItem('viart2026_popup_visto', String(entry ? entry.t : Date.now())); } catch (e) {}
@@ -6153,6 +6175,13 @@ class Component extends DCLogic {
     const restPcdUltimaVista = Number(localStorage.getItem('viart2026_restpcd_ultima_vista') || '0');
     const restPcdNaoLidos = restPcdView.filter(a => a.t > restPcdUltimaVista);
     const mostrarPopupRestPcd = s.orgUnlocked && !s.popupRestPcdFechado && restPcdNaoLidos.length > 0 && !souGestor && !mostrarPopupAviso && !mostrarPopupNovidades && !mostrarPopupFc;
+    const checkinPctPopup = (() => {
+      const total = PARTICIPANTES.filter(n => cidadeDe(n) === 'sp' && !infoDe(n).d).length || 1;
+      const feito = PARTICIPANTES.filter(n => cidadeDe(n) === 'sp' && !infoDe(n).d && gv('ps-' + n)).length;
+      return Math.round(100 * feito / total);
+    })();
+    const mostrarPopupCheckin = credenciamentoCidadeHoje === 'sp' && !s.popupCheckinFechado && !mostrarPopupAviso && !mostrarPopupNovidades && !mostrarPopupFc && !mostrarPopupRestPcd &&
+      (localStorage.getItem('viart2026_popup_checkin_v1_visto') || '') !== '1';
 
     // --- Sessão ao vivo (votação / nuvem / Q&A / quiz) ---
     const sessaoAtualObj = this.sessaoAtual();
@@ -6464,6 +6493,9 @@ class Component extends DCLogic {
       atualizarAgora: this.puxarEstado,
       credenciamentoHabilitado, credenciamentoIndisponivel: !credenciamentoHabilitado, mostrarAgora, agoraLabel, agoraTitulo, agoraHora, proximoTexto, temProximo, mostrarFeedback, ehDiaDoEvento,
       irParaNps: this.irParaNps, mostrarNpsBanner: mostrarFeedback && !s.npsEnviado,
+      mostrarPopupCheckin, checkinPctPopup, fecharPopupCheckin: this.fecharPopupCheckin,
+      mostrarCheckinBanner: temNome && cidadeDe(s.meuNome) === 'sp' && !infoDe(s.meuNome).d && credenciamentoCidadeHoje === 'sp' && !this.valor('ps-' + s.meuNome),
+      irParaCheckin: () => this.setState({ activeTab: 'checkin' }),
       mostrarContador: mostrarAgora && !ehDiaDoEvento,
       mapsUrl, uberUrl, confraMapsUrl, confraUberUrl, confraEndereco: cityData.confraternizacaoEndereco,
       crachaQuery: s.crachaQuery, onCrachaQuery: this.onCrachaQuery, crachaOpcoes,
