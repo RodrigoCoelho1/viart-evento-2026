@@ -44,6 +44,16 @@
 
 <div style="min-height:100vh;background:#F2F5FA;padding-bottom:60px">
 
+  <sc-if value="{{ pdfModalAberto }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:600;background:rgba(0,20,45,0.85);display:flex;flex-direction:column">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#002855">
+        <div style="color:#F2F5FA;font-weight:700;font-size:14px">{{ pdfModalTitulo }}</div>
+        <div onClick="{{ fecharPdfModal }}" style="cursor:pointer;background:#F39200;color:#002855;font-weight:800;padding:8px 18px;border-radius:8px;font-size:13px">Fechar</div>
+      </div>
+      <iframe src="{{ pdfModalUrl }}" style="flex:1;border:none;width:100%"></iframe>
+    </div>
+  </sc-if>
+
   <sc-if value="{{ modoApresentacao }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;z-index:500;background:#002855;color:#F2F5FA;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px clamp(24px,5vw,72px) clamp(24px,5vw,72px);text-align:center;overflow-y:auto">
       <div style="position:absolute;top:24px;left:32px;font-family:'Sora',sans-serif;font-weight:800;font-size:14px;color:#7BAEDB;letter-spacing:0.06em;text-transform:uppercase">VIART 2026 · Ao vivo</div>
@@ -134,6 +144,20 @@
           <div style="display:inline-block;background:#E8EFF9;color:#0057A6;border-radius:999px;padding:5px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em">Novidades no app</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:16px;padding:16px 26px;overflow-y:auto;flex:1;min-height:0">
+          <div style="display:flex;gap:12px">
+            <div style="font-size:22px;line-height:1">📄</div>
+            <div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">PDFs corrigidos no iOS</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">Plano de Atuação e Estudo de Caso agora abrem dentro do app, com botão "Fechar" — sem precisar fechar e reabrir o app no iPhone.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px">
+            <div style="font-size:22px;line-height:1">📸</div>
+            <div>
+              <div style="font-weight:800;font-size:14.5px;color:#002855">Bônus na primeira foto</div>
+              <div style="font-size:13.5px;color:#4A4A50;line-height:1.5;margin-top:2px">O programador do app ficou maluco e resolveu dar +1 ponto extra pra primeira foto que você postar no Mural. Aproveita antes que ele mude de ideia!</div>
+            </div>
+          </div>
           <div style="display:flex;gap:12px">
             <div style="font-size:22px;line-height:1">🗓️</div>
             <div>
@@ -400,14 +424,14 @@
           </div>
         </div>
 
-        <a href="assets/plano-atuacao-viart-26-30.pdf" target="_blank" style="text-decoration:none;color:inherit"><div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:28px">
+        <div onClick="{{ abrirPdfPlano }}" style="cursor:pointer;color:inherit"><div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:28px">
           <img src="assets/plano-atuacao-capa.png" alt="Capa do Plano de Atuação VIART 2026-2030" style="width:64px;aspect-ratio:16/9;object-fit:cover;border-radius:8px;flex-shrink:0">
           <div style="flex:1">
             <div style="font-weight:700;font-size:14.5px;color:#002855">Plano de Atuação VIART 2026-2030</div>
             <div style="font-size:12.5px;color:#6B6B70">O documento central do planejamento estratégico · PDF</div>
           </div>
           <div style="background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:13px;white-space:nowrap">Abrir PDF</div>
-        </div></a>
+        </div></div>
 
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(18px,1.8vw,24px);margin-bottom:14px">Objetivos do evento</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
@@ -444,12 +468,12 @@
               </div>
               <sc-if value="{{ item.isCase }}" hint-placeholder-val="{{ false }}">
                 <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(100px,11vw,130px) + 18px)">
-                  <a href="assets/estudo-caso-goldman-sachs.pdf" target="_blank" style="display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px;text-decoration:none">Abrir estudo de caso (PDF)</a>
+                  <div onClick="{{ abrirPdfCase }}" style="cursor:pointer;display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px">Abrir estudo de caso (PDF)</div>
                 </div>
               </sc-if>
               <sc-if value="{{ item.isReport }}" hint-placeholder-val="{{ false }}">
                 <div style="margin-top:14px;padding-top:14px;border-top:1px solid #E8EFF9;margin-left:calc(clamp(100px,11vw,130px) + 18px)">
-                  <a href="assets/plano-atuacao-viart-26-30.pdf" target="_blank" style="display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px;text-decoration:none">Abrir Plano de Atuação VIART 2026-2030 (PDF)</a>
+                  <div onClick="{{ abrirPdfPlano }}" style="cursor:pointer;display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:10px;font-size:12.5px">Abrir Plano de Atuação VIART 2026-2030 (PDF)</div>
                 </div>
               </sc-if>
               <sc-if value="{{ item.isConfra }}" hint-placeholder-val="{{ false }}">
@@ -678,6 +702,7 @@
       <div>
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(20px,2vw,28px);margin-bottom:4px">Mural de fotos</div>
         <div style="font-size:14px;color:#6B6B70;margin-bottom:24px">Poste fotos do evento, curta e comente as dos colegas. Toda interação vale 1 ponto: postar, curtir, comentar, e também receber curtida ou comentário de outra pessoa.</div>
+        <div style="background:#FDF1DC;border:1px solid #F39200;color:#8A5A0B;border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:13.5px;line-height:1.5"><b>Novidade:</b> a sua primeira foto postada no mural vale <b>+1 ponto extra</b>, além do ponto normal — um empurrãozinho pra todo mundo começar a postar.</div>
 
         <sc-if value="{{ crachaSemNome }}" hint-placeholder-val="{{ true }}">
           <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px);margin-bottom:24px">
@@ -1338,7 +1363,7 @@
 
           <div style="grid-column:1 / -1">
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:0 0 12px">Material de consulta</div>
-            <a href="assets/plano-atuacao-viart-26-30.pdf" target="_blank" style="text-decoration:none;color:inherit"><div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px">
+            <div onClick="{{ abrirPdfPlano }}" style="cursor:pointer;color:inherit"><div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px">
               <img src="assets/plano-atuacao-capa.png" alt="Capa do Plano de Atuação VIART 2026-2030" style="width:90px;aspect-ratio:16/9;object-fit:cover;border-radius:8px;flex-shrink:0">
               <div style="flex:1;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
                 <div>
@@ -1347,9 +1372,9 @@
                 </div>
                 <div style="display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 18px;border-radius:10px;font-size:13px;white-space:nowrap">Abrir PDF</div>
               </div>
-            </div></a>
+            </div></div>
 
-            <a href="assets/estudo-caso-goldman-sachs.pdf" target="_blank" style="text-decoration:none;color:inherit;display:block;margin-top:14px"><div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px">
+            <div onClick="{{ abrirPdfCase }}" style="cursor:pointer;color:inherit;display:block;margin-top:14px"><div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px">
               <div style="width:90px;aspect-ratio:16/9;border-radius:8px;flex-shrink:0;background:#002855;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:11px;color:#F39200;text-align:center;line-height:1.3">GOLDMAN<br>SACHS</div>
               <div style="flex:1;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
                 <div>
@@ -1358,7 +1383,7 @@
                 </div>
                 <div style="display:inline-block;background:#0057A6;color:#fff;font-weight:700;padding:9px 18px;border-radius:10px;font-size:13px;white-space:nowrap">Abrir PDF</div>
               </div>
-            </div></a>
+            </div></div>
 
           </div>
         </div>
@@ -2930,6 +2955,8 @@ const CARTAZES = [
 });
 
 const ATUALIZACOES_INICIAIS = [
+  { quando: '12/08 16:30', texto: 'PDFs (Plano de Atuação e Estudo de Caso) agora abrem dentro do próprio app, com botão "Fechar" — resolve o problema no iOS onde o PDF abria sem jeito de voltar.' },
+  { quando: '12/08 16:00', texto: 'Mural de fotos: a primeira foto que você postar vale +1 ponto extra, além do ponto normal.' },
   { quando: '12/08 15:00', texto: 'Nova aba "Sessão ao vivo" (Organização): votação, Guess the Number, Quiz com pontuação, Nuvem de palavras e Ranking, usados no bloco Report Planejamento.' },
   { quando: '12/08 15:00', texto: 'Credenciamento ganhou um item opcional: "Qual a sua expectativa pra esse evento?" — as respostas viram uma nuvem de palavras coletiva.' },
   { quando: '11/08 11:40', texto: 'Cronograma atualizado com os novos horários do dia, mais o local de cada atividade em SP e em BSB.' },
@@ -3113,7 +3140,7 @@ const MANUAL_SECOES = [
     'Wi-Fi do local.',
     'Foto da camiseta do evento.',
     'Contatos de emergência, com foto de cada contato.',
-    'Material de consulta: link para o Plano de Atuação VIART 2026-2030 (PDF).',
+    'Material de consulta: link para o Plano de Atuação VIART 2026-2030 e Estudo de Caso Goldman Sachs (abrem num visualizador dentro do próprio app, com botão Fechar).',
   ] },
   { id: 'dashboard', titulo: 'Organização · Dashboard', itens: [
     'Indicadores gerais: presença, camisetas por tamanho/gênero, confraternização, distribuição SP x BSB.',
@@ -3894,7 +3921,7 @@ class Component extends DCLogic {
     this.setCampos({ 'popup-urgente': null });
   };
   fecharPopupNovidades = () => {
-    try { localStorage.setItem('viart2026_popup_novidades_v6_visto', '1'); } catch (e) {}
+    try { localStorage.setItem('viart2026_popup_novidades_v8_visto', '1'); } catch (e) {}
     this.setState({ popupNovidadesFechado: true });
   };
   fecharPopupFc = () => {
@@ -3989,6 +4016,7 @@ class Component extends DCLogic {
     return n;
   };
   pontosTotalDe = (nome) => this.calcularPontosFeitos(nome).length + this.contarAcertosQuiz(nome);
+  temFotoBonus = (nome) => (this.state.fotos || []).some(f => f.autor === nome);
   temAcaoRealDe = (nome) => {
     if (this.valor('ps-' + nome) || this.valor('rt-' + nome) || this.valor('cs-' + nome) || this.valor('cf-' + nome) || this.valor('pp-' + nome) || this.valor('pcd-' + nome)) return true;
     const npsEntry = this.state.sync['nps-' + nome];
@@ -4141,6 +4169,9 @@ class Component extends DCLogic {
   onCiQuery = (e) => this.setState({ ciQuery: e.target.value, ciErro: '' });
   ciEscolher = (nome) => () => this.setState({ ciNome: nome, ciQuery: '', ciErro: '' });
   ciTrocar = () => this.setState({ ciNome: '', ciErro: '' });
+  abrirPdfPlano = () => this.setState({ pdfModalUrl: 'assets/plano-atuacao-viart-26-30.pdf', pdfModalTitulo: 'Plano de Atuação VIART 2026-2030' });
+  abrirPdfCase = () => this.setState({ pdfModalUrl: 'assets/estudo-caso-goldman-sachs.pdf', pdfModalTitulo: 'Estudo de caso · Goldman Sachs' });
+  fecharPdfModal = () => this.setState({ pdfModalUrl: '' });
   onCiCodigo = (e) => this.setState({ ciCodigo: e.target.value.replace(/\D/g, '').slice(0, 4), ciErro: '' });
   onCiExpectativa = (e) => this.setState({ ciExpectativa: e.target.value });
   ciConfirmar = () => {
@@ -5915,7 +5946,8 @@ class Component extends DCLogic {
     const pontosAcoesView = PONTOS_ACOES.map(a => ({ label: a.label, feito: pontosFeitos.indexOf(a.key) !== -1, marca: pontosFeitos.indexOf(a.key) !== -1 ? '✓' : '○', cor: pontosFeitos.indexOf(a.key) !== -1 ? '#8FD9A8' : '#5E7DA6' }));
     const acertosQuizMeu = temNome ? this.contarAcertosQuiz(s.meuNome) : 0;
     const acertosAoVivoMeu = temNome ? this.contarAcertosSessaoAoVivo(s.meuNome) : 0;
-    const pontosTotal = pontosFeitos.length + acertosQuizMeu + acertosAoVivoMeu;
+    const fotoBonusMeu = temNome && this.temFotoBonus(s.meuNome) ? 1 : 0;
+    const pontosTotal = pontosFeitos.length + acertosQuizMeu + acertosAoVivoMeu + fotoBonusMeu;
 
     const CAMPAIGN_START_QUIZ = '2026-08-05';
     const curiosOrdenadas = PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d && this.valor('cur-' + n))
@@ -6008,7 +6040,7 @@ class Component extends DCLogic {
     const souGestor = (s.meuNome && infoDe(s.meuNome).tipo === 'gestor') || (s.dadosNome && infoDe(s.dadosNome).tipo === 'gestor');
     const mostrarPopupAviso = !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
       String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || ''));
-    const mostrarPopupNovidades = !s.popupNovidadesFechado && !mostrarPopupAviso && (localStorage.getItem('viart2026_popup_novidades_v6_visto') || '') !== '1';
+    const mostrarPopupNovidades = !s.popupNovidadesFechado && !mostrarPopupAviso && (localStorage.getItem('viart2026_popup_novidades_v8_visto') || '') !== '1';
     const mostrarPopupFc = s.orgUnlocked && !s.popupFcFechado && fcNaoLidas.length > 0 && !souGestor && !mostrarPopupAviso && !mostrarPopupNovidades;
 
     const restPcdView = Object.keys(s.sync).filter(k => (k.indexOf('rt-') === 0 && s.sync[k] && s.sync[k].v && s.sync[k].v !== 'Nenhuma') || (k.indexOf('pcd-') === 0 && s.sync[k] && s.sync[k].v === 'Sim'))
@@ -6554,6 +6586,8 @@ class Component extends DCLogic {
       ativarSessao: this.ativarSessao, encerrarSessao: this.encerrarSessao, abrirApresentacao: this.abrirApresentacao,
       aoVivoSessaoAtiva, aoVivoStatusVisivel: !!sessaoAtualObj,
       aoVivoStatusTexto: sessaoAtualObj ? ((SESSAO_TIPOS.find(t => t.id === sessaoAtualObj.tipo) || {}).label + ' — "' + sessaoAtualObj.pergunta + '"' + (sessaoAtualObj.ativa ? ' (ativa)' : ' (encerrada)') + (apresentacaoEhVotacao ? ' · ' + apresentacaoTotalVotos + ' respostas' : apresentacaoEhNumero ? ' · ' + apresentacaoQtdChutes + ' respostas' + (apresentacaoRevelado ? ' · revelado' : '') : apresentacaoEhNuvem ? ' · ' + apresentacaoNuvemTotal + ' respostas' : '')) : '',
+      abrirPdfPlano: this.abrirPdfPlano, abrirPdfCase: this.abrirPdfCase, fecharPdfModal: this.fecharPdfModal,
+      pdfModalAberto: !!s.pdfModalUrl, pdfModalUrl: s.pdfModalUrl || '', pdfModalTitulo: s.pdfModalTitulo || '',
       modoApresentacao, apresentacaoOciosa, apresentacaoComPergunta, apresentacaoTipoLabel, apresentacaoPergunta,
       apresentacaoEhVotacao, apresentacaoEmConstrucao, apresentacaoOpcoesView, apresentacaoTotalVotos,
       apresentacaoEhNumero, apresentacaoRevelado, apresentacaoNaoRevelado, apresentacaoQtdChutes, apresentacaoMediaChuteLabel,
