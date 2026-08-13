@@ -673,9 +673,9 @@
                 <sc-if value="{{ q.naoRespondida }}" hint-placeholder-val="{{ true }}">
                   <div style="background:#F7F9FC;border:1px solid #DCE6F2;border-radius:12px;padding:14px 16px">
                     <div style="font-size:13.5px;color:#002855;font-style:italic;margin-bottom:10px">"{{ q.texto }}" — quem é?</div>
-                    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+                    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
                       <sc-for list="{{ q.opcoes }}" as="op" hint-placeholder-count="4">
-                        <div onClick="{{ op.onClick }}" style="cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;padding:10px 12px;border-radius:10px;background:{{ op.bg }};color:#002855;border:1.5px solid {{ op.border }}">
+                        <div onClick="{{ op.onClick }}" style="cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;padding:10px 12px;border-radius:10px;background:{{ op.bg }};color:#002855;border:1.5px solid {{ op.border }};min-width:0">
                           <div style="width:26px;height:26px;border-radius:999px;background:#DCE6F2;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px">🕵️</div>
                           <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ op.nome }}</div>
                         </div>
