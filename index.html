@@ -854,6 +854,15 @@
 
         <sc-if value="{{ ciFormVisivel }}" hint-placeholder-val="{{ true }}">
           <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:16px;padding:clamp(20px,3vw,30px)">
+            <sc-if value="{{ ciPedirExpectativa }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="font-weight:700;font-size:15px;margin-bottom:4px">Antes de continuar: qual a sua expectativa pra esse evento?</div>
+                <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">Opcional — as respostas de todo mundo vão formando um retrato coletivo, mostrado depois pra organização.</div>
+                <input type="text" placeholder="Uma palavra ou frase curta" maxlength="60" value="{{ ciExpectativa }}" onChange="{{ onCiExpectativa }}" style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:15px"></input>
+                <div onClick="{{ ciContinuarExpectativa }}" style="cursor:pointer;margin-top:18px;background:#F39200;color:#fff;font-weight:700;padding:14px 26px;border-radius:10px;font-size:15px;text-align:center">Continuar</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ ciMostrarPassoNome }}" hint-placeholder-val="{{ false }}">
             <sc-if value="{{ ciSemNome }}" hint-placeholder-val="{{ true }}">
               <div>
                 <div style="font-weight:700;font-size:15px;margin-bottom:4px">Quem é você?</div>
@@ -890,21 +899,17 @@
                 </sc-if>
                 <sc-if value="{{ ciPedirCodigo }}" hint-placeholder-val="{{ true }}">
                   <div>
-                    <div style="font-weight:700;font-size:15px;margin-bottom:4px">2. Código da entrada</div>
+                    <div style="font-weight:700;font-size:15px;margin-bottom:4px">1. Código da entrada</div>
                     <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">Se você não leu o QR do cartaz, peça os 4 dígitos à equipe na mesa.</div>
                     <input type="tel" placeholder="0000" value="{{ ciCodigo }}" onChange="{{ onCiCodigo }}" style="width:140px;box-sizing:border-box;padding:13px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:20px;font-weight:800;letter-spacing:0.22em;text-align:center;font-family:'Manrope',sans-serif"></input>
                   </div>
                 </sc-if>
-                <div style="margin-top:16px">
-                  <div style="font-weight:700;font-size:15px;margin-bottom:4px">3. Sua expectativa pra esse evento</div>
-                  <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">Opcional — as respostas de todo mundo vão formando um retrato coletivo, mostrado depois pra organização.</div>
-                  <input type="text" placeholder="Uma palavra ou frase curta" maxlength="60" value="{{ ciExpectativa }}" onChange="{{ onCiExpectativa }}" style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:15px"></input>
-                </div>
                 <sc-if value="{{ ciTemErro }}" hint-placeholder-val="{{ false }}">
                   <div style="font-size:12.5px;color:#C0392B;font-weight:700;margin-top:10px">{{ ciErro }}</div>
                 </sc-if>
                 <div onClick="{{ ciConfirmar }}" style="cursor:pointer;margin-top:18px;background:#F39200;color:#fff;font-weight:700;padding:14px 26px;border-radius:10px;font-size:15px;text-align:center">{{ ciBotaoLabel }}</div>
               </div>
+            </sc-if>
             </sc-if>
           </div>
         </sc-if>
@@ -3417,6 +3422,7 @@ class Component extends DCLogic {
     ciNome: '',
     ciCodigo: '',
     ciErro: '',
+    ciExpectativaPasso: false,
     ciFeito: false,
     ciEnviando: false,
     ciSalvoLocal: false,
@@ -4186,6 +4192,7 @@ class Component extends DCLogic {
   fecharPdfModal = () => this.setState({ pdfModalUrl: '' });
   onCiCodigo = (e) => this.setState({ ciCodigo: e.target.value.replace(/\D/g, '').slice(0, 4), ciErro: '' });
   onCiExpectativa = (e) => this.setState({ ciExpectativa: e.target.value });
+  ciContinuarExpectativa = () => this.setState({ ciExpectativaPasso: true });
   ciConfirmar = () => {
     const { ciNome, ciCodigo, city, ciExpectativa } = this.state;
     if (!ciNome) return this.setState({ ciErro: 'Escolha seu nome na lista.' });
@@ -4213,7 +4220,7 @@ class Component extends DCLogic {
     if (!cidadeHoje) return;
     this.setCampos({ ['ps-' + this.state.meuNome]: true, ['cd-' + this.state.meuNome]: cidadeHoje });
   };
-  ciNovo = () => this.setState({ ciFeito: false, ciSalvoLocal: false, ciNome: '', ciQuery: '', ciCodigo: '', ciErro: '' });
+  ciNovo = () => this.setState({ ciFeito: false, ciSalvoLocal: false, ciNome: '', ciQuery: '', ciCodigo: '', ciErro: '', ciExpectativaPasso: false });
   setMeuNome = (nome) => () => {
     try { localStorage.setItem('viart2026_meu_nome', nome); localStorage.setItem('viart2026_dados_nome', nome); } catch (e) {}
     this.setState(s => ({ meuNome: nome, crachaQuery: '', dadosNome: nome,
@@ -6361,6 +6368,9 @@ class Component extends DCLogic {
       ciTemNomeLiberado: !!s.ciNome && (cidadeDe(s.ciNome) === 'sp' || infoDe(s.ciNome).d),
       ciCodigo: s.ciCodigo, onCiCodigo: this.onCiCodigo, ciConfirmar: this.ciConfirmar,
       ciExpectativa: s.ciExpectativa || '', onCiExpectativa: this.onCiExpectativa,
+      ciContinuarExpectativa: this.ciContinuarExpectativa,
+      ciPedirExpectativa: !s.ciFeito && !s.ciExpectativaPasso,
+      ciMostrarPassoNome: !s.ciFeito && !!s.ciExpectativaPasso,
       ciCodigoDoQR: s.ciCodigo === CODIGO_ENTRADA[s.city],
       ciPedirCodigo: s.ciCodigo !== CODIGO_ENTRADA[s.city],
       ciErro: s.ciErro, ciTemErro: !!s.ciErro, ciFeito: s.ciFeito, ciNovo: this.ciNovo,
