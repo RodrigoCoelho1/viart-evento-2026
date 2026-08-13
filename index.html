@@ -45,7 +45,7 @@
 <div style="min-height:100vh;background:#F2F5FA;padding-bottom:60px">
 
   <sc-if value="{{ modoApresentacao }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;inset:0;z-index:500;background:#002855;color:#F2F5FA;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(24px,5vw,72px);text-align:center">
+    <div style="position:fixed;inset:0;z-index:500;background:#002855;color:#F2F5FA;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px clamp(24px,5vw,72px) clamp(24px,5vw,72px);text-align:center;overflow-y:auto">
       <div style="position:absolute;top:24px;left:32px;font-family:'Sora',sans-serif;font-weight:800;font-size:14px;color:#7BAEDB;letter-spacing:0.06em;text-transform:uppercase">VIART 2026 · Ao vivo</div>
       <sc-if value="{{ apresentacaoOciosa }}" hint-placeholder-val="{{ true }}">
         <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(24px,3vw,40px);color:#7BAEDB">Aguardando o início de uma sessão…</div>
@@ -86,14 +86,17 @@
           </sc-if>
         </sc-if>
         <sc-if value="{{ apresentacaoEhNuvem }}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex;flex-wrap:wrap;gap:14px 22px;justify-content:center;align-items:center;max-width:1000px;margin-top:32px">
+          <div style="display:flex;flex-wrap:wrap;gap:12px 20px;justify-content:center;align-items:center;max-width:min(1000px,90vw);margin-top:32px">
             <sc-for list="{{ apresentacaoNuvemView }}" as="pw" hint-placeholder-count="10">
-              <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:{{ pw.tamanho }};color:{{ pw.cor }}">{{ pw.texto }}</div>
+              <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:{{ pw.tamanho }};color:{{ pw.cor }};max-width:90vw;overflow-wrap:break-word;line-height:1.15">{{ pw.texto }}</div>
             </sc-for>
           </div>
           <div style="margin-top:28px;font-size:14px;color:#A9C0DE">{{ apresentacaoNuvemTotal }} respostas</div>
         </sc-if>
         <sc-if value="{{ apresentacaoEhRanking }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ apresentacaoRankingVazio }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:32px;font-size:18px;color:#A9C0DE">Ainda ninguém acertou o Quiz Competition do bloco.</div>
+          </sc-if>
           <div style="display:flex;flex-direction:column;gap:20px;margin-top:32px;width:100%;max-width:600px">
             <sc-for list="{{ apresentacaoRankingView }}" as="rk" hint-placeholder-count="3">
               <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
@@ -857,6 +860,11 @@
                     <input type="tel" placeholder="0000" value="{{ ciCodigo }}" onChange="{{ onCiCodigo }}" style="width:140px;box-sizing:border-box;padding:13px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:20px;font-weight:800;letter-spacing:0.22em;text-align:center;font-family:'Manrope',sans-serif"></input>
                   </div>
                 </sc-if>
+                <div style="margin-top:16px">
+                  <div style="font-weight:700;font-size:15px;margin-bottom:4px">3. Sua expectativa pra esse evento</div>
+                  <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">Opcional — as respostas de todo mundo vão formando um retrato coletivo, mostrado depois pra organização.</div>
+                  <input type="text" placeholder="Uma palavra ou frase curta" maxlength="60" value="{{ ciExpectativa }}" onChange="{{ onCiExpectativa }}" style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:15px"></input>
+                </div>
                 <sc-if value="{{ ciTemErro }}" hint-placeholder-val="{{ false }}">
                   <div style="font-size:12.5px;color:#C0392B;font-weight:700;margin-top:10px">{{ ciErro }}</div>
                 </sc-if>
@@ -1487,20 +1495,57 @@
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Sessão ao vivo</div>
             <div style="font-size:13px;color:#6B6B70;margin-bottom:16px">Ative uma pergunta e abra o modo apresentação numa segunda janela — os participantes respondem pelo próprio celular, sem depender do telão pra ver o resultado.</div>
 
-            <div style="background:#002855;color:#F2F5FA;border-radius:12px;padding:18px 20px;margin-bottom:16px">
-              <div style="font-weight:700;font-size:14px;margin-bottom:4px">Fila do bloco Report Planejamento</div>
-              <sc-if value="{{ filaAcabou }}" hint-placeholder-val="{{ false }}">
-                <div style="font-size:13px;color:#A9C0DE;margin-bottom:4px">Todas as 12 perguntas já foram usadas.</div>
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:18px 20px;margin-bottom:16px">
+              <div onClick="{{ toggleExpectativas }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                <div style="font-weight:700;font-size:14px">Expectativas do credenciamento ({{ expectativasTotal }})</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#0057A6">{{ expectativasSinal }}</div>
+              </div>
+              <sc-if value="{{ expectativasAberto }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid #E8EFF9">
+              <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">Coletadas automaticamente no Credenciamento (item opcional) — sem precisar ativar nada.</div>
+              <sc-if value="{{ expectativasVazias }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:13px;color:#8A8A90">Ninguém respondeu ainda.</div>
               </sc-if>
-              <sc-if value="{{ filaTemProxima }}" hint-placeholder-val="{{ true }}">
-                <div style="font-size:13px;color:#A9C0DE;margin-bottom:14px">Próxima ({{ filaPosicao }} de 12): {{ filaProximoLabel }}</div>
-                <div onClick="{{ ativarProximaFila }}" style="cursor:pointer;display:inline-block;background:#F39200;color:#002855;font-weight:800;padding:11px 22px;border-radius:10px;font-size:13.5px">Ativar próxima pergunta</div>
-              </sc-if>
-              <sc-if value="{{ filaTemAnterior }}" hint-placeholder-val="{{ false }}">
-                <div onClick="{{ voltarFila }}" style="cursor:pointer;display:inline-block;margin-left:10px;color:#A9C0DE;font-weight:700;font-size:12.5px;text-decoration:underline">voltar uma</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px 14px">
+                <sc-for list="{{ expectativasNuvemView }}" as="ew" hint-placeholder-count="8">
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:{{ ew.tamanho }};color:{{ ew.cor }}">{{ ew.texto }}</div>
+                </sc-for>
+              </div>
+              </div>
               </sc-if>
             </div>
+
+            <div style="background:#002855;color:#F2F5FA;border-radius:12px;padding:18px 20px;margin-bottom:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+                <div style="font-weight:700;font-size:14px">Fila do bloco Report Planejamento</div>
+                <div onClick="{{ abrirApresentacao }}" style="cursor:pointer;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:#F2F5FA;font-weight:700;padding:8px 16px;border-radius:8px;font-size:12.5px">Abrir modo apresentação</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ filaView }}" as="fq" hint-placeholder-count="12">
+                  <div style="background:{{ fq.bg }};border-radius:10px;padding:12px 14px">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap">
+                      <div style="font-size:12.5px;font-weight:700;color:{{ fq.corTexto }}">{{ fq.numero }}. {{ fq.label }} · {{ fq.tag }}</div>
+                      <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:{{ fq.corStatus }}">{{ fq.statusLabel }}</div>
+                    </div>
+                    <div style="font-size:13px;margin-top:4px;color:{{ fq.corTexto }}">{{ fq.pergunta }}</div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                      <div onClick="{{ fq.ativar }}" style="cursor:pointer;background:{{ fq.botaoBg }};color:{{ fq.botaoCor }};font-weight:800;padding:8px 16px;border-radius:8px;font-size:12.5px">{{ fq.botaoLabel }}</div>
+                      <sc-if value="{{ fq.podeRevelar }}" hint-placeholder-val="{{ false }}">
+                        <div onClick="{{ revelarResposta }}" style="cursor:pointer;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3);color:#F2F5FA;font-weight:800;padding:8px 16px;border-radius:8px;font-size:12.5px">Revelar resposta real</div>
+                      </sc-if>
+                      <sc-if value="{{ fq.podeEncerrar }}" hint-placeholder-val="{{ false }}">
+                        <div onClick="{{ encerrarSessao }}" style="cursor:pointer;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.3);color:#F2F5FA;font-weight:800;padding:8px 16px;border-radius:8px;font-size:12.5px">Encerrar pesquisa</div>
+                      </sc-if>
+                    </div>
+                    <sc-if value="{{ fq.mostrarStatusTexto }}" hint-placeholder-val="{{ false }}">
+                      <div style="font-size:11.5px;color:#A9C0DE;margin-top:8px">{{ fq.statusTexto }}</div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:18px 20px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:13px;margin-bottom:12px;color:#6B6B70">Pergunta avulsa (fora da fila do Report — ex.: expectativas do credenciamento)</div>
               <div style="font-weight:700;font-size:13.5px;margin-bottom:8px">Tipo de dinâmica</div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
                 <sc-for list="{{ aoVivoTiposView }}" as="tp" hint-placeholder-count="4">
@@ -1547,16 +1592,11 @@
                   <div onClick="{{ revelarResposta }}" style="cursor:pointer;background:#F39200;color:#002855;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px">Revelar resposta real</div>
                 </sc-if>
                 <sc-if value="{{ aoVivoSessaoAtiva }}" hint-placeholder-val="{{ false }}">
-                  <div onClick="{{ encerrarSessao }}" style="cursor:pointer;background:#F2F5FA;color:#B02D1C;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px;border:1px solid #F5CDBB">Encerrar sessão ativa</div>
+                  <div onClick="{{ encerrarSessao }}" style="cursor:pointer;background:#F2F5FA;color:#B02D1C;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px;border:1px solid #F5CDBB">Encerrar pesquisa</div>
                 </sc-if>
                 <div onClick="{{ abrirApresentacao }}" style="cursor:pointer;background:#F2F5FA;color:#002855;font-weight:700;padding:11px 22px;border-radius:10px;font-size:13.5px;border:1px solid #DCE6F2">Abrir modo apresentação</div>
               </div>
             </div>
-            <sc-if value="{{ aoVivoStatusVisivel }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#F2F5FA;border-radius:12px;padding:14px 18px;font-size:13px;color:#4A4A50">
-                <b>Sessão atual:</b> {{ aoVivoStatusTexto }}
-              </div>
-            </sc-if>
             </div>
             </sc-if>
 
@@ -2799,12 +2839,12 @@ const SESSAO_TIPOS = [
 const PILAR_PRESETS = [
   { label: 'Pilar 1 · Int. 1 — Cliente no Centro', tipo: 'numero', pergunta: 'Qual a posição da Caixa no NPS da jornada de investimento?', min: 1, max: 20, unidade: '', valorReal: 14, contexto: 'Meta: TOP 3 · Fonte: NPS Prism – BCG, ranking por produto = Investimento (4T25)' },
   { label: 'Pilar 1 · Int. 2 — Cliente no Centro', tipo: 'numero', pergunta: 'Qual a rentabilidade do FI-FGTS em 2025?', min: 0, max: 20, unidade: '%', valorReal: 11.76, contexto: 'Lucro R$2,21bi · 15,1% do lucro do FGTS · acumulada 243,9% desde a criação · Fonte: Informe VIART/DEGES Nº 0010/2026' },
-  { label: 'Pilar 2 · Int. 1 — Eficiência e Rentabilidade', tipo: 'numero', pergunta: 'Em que posição a VIART está no ranking ANBIMA?', min: 1, max: 10, unidade: 'º', valorReal: 5, contexto: 'Subiu do 6º · Market Share 6,96% (Jun/2026) · YoY +14bps · MoM +2bps' },
+  { label: 'Pilar 2 · Int. 1 — Eficiência e Rentabilidade', tipo: 'numero', pergunta: 'Ranking de administração ANBIMA', min: 1, max: 10, unidade: 'º', valorReal: 5, contexto: 'Subiu do 6º · Market Share 6,96% (Jun/2026) · YoY +14bps · MoM +2bps' },
   { label: 'Pilar 2 · Int. 2 — Eficiência e Rentabilidade', tipo: 'numero', pergunta: 'Quantos % do orçamento já rodamos até junho?', min: 0, max: 150, unidade: '%', valorReal: 109.33, contexto: 'R$270mi realizado vs. R$247mi orçado · meta anual R$579mi' },
   { label: 'Pilar 3 · Int. 1 — Tecnologia e Inovação', tipo: 'nuvem', pergunta: 'Uma palavra pra inovação na VIART hoje?' },
   { label: 'Pilar 3 · Int. 2 — Tecnologia e Inovação', tipo: 'votacao', pergunta: 'Você sabe se já são usados agentes de IA nos processos da VIART?', opcoes: ['Sim', 'Não', 'Não sei'] },
-  { label: 'Pilar 4 · Int. 1 — Pessoas, Cultura e Agilidade', tipo: 'quiz', pergunta: 'Qual das opções é um dos comportamentos que a CAIXA quer ver no dia a dia?', opcoes: ['Fazer acontecer para trazer resultados com ética e respeito', 'Nossa integridade é inegociável', 'Cliente é o centro de tudo', 'Errar pequeno para acertar grande'], correta: 0 },
-  { label: 'Pilar 4 · Int. 2 — Pessoas, Cultura e Agilidade', tipo: 'votacao', pergunta: 'Qual desses comportamentos você mais usa no dia a dia?', opcoes: ['Fazer acontecer para trazer resultados com ética e respeito', 'Nossa integridade é inegociável', 'Cliente é o centro de tudo', 'Errar pequeno para acertar grande'] },
+  { label: 'Pilar 4 · Int. 1 — Pessoas, Cultura e Agilidade', tipo: 'quiz', pergunta: 'Qual das opções é um dos comportamentos que a CAIXA quer ver no dia a dia?', opcoes: ['Fazer acontecer para trazer resultados com ética e respeito', 'Nossa integridade é inegociável', 'O cliente guia as nossas escolhas', 'Temos coragem para inovar'], correta: 0 },
+  { label: 'Pilar 4 · Int. 2 — Pessoas, Cultura e Agilidade', tipo: 'votacao', pergunta: 'Qual desses comportamentos você mais usa no dia a dia?', opcoes: ['Trabalhar juntos de maneira eficiente tanto com membros da própria equipe quanto em alinhamento com outras equipes da organização', 'Manter o cliente no centro de tudo o que é feito, independentemente da área de atuação na organização', 'Gerar novas ideias e tomar decisões que mantenham a CAIXA sempre na liderança', 'Fazer acontecer para trazer resultados com ética e respeito'] },
   { label: 'Pilar 5 · Int. 1 — Sustentabilidade e Cidadania', tipo: 'numero', pergunta: 'Quantos % dos ativos já têm análise ASG?', min: 0, max: 100, unidade: '%', valorReal: 84, contexto: 'Meta 100% (KR12) · Fonte: Glayce, área de Risco' },
   { label: 'Pilar 5 · Int. 2 — Sustentabilidade e Cidadania', tipo: 'votacao', pergunta: 'Você conhece o superapp Caixa / MiniApp de investimento?', opcoes: ['Sim', 'Não'] },
   { label: 'Pilar 6 · Int. 1 — Atuação em Ecossistema', tipo: 'numero', pergunta: 'Quanto vale o patrimônio imobiliário da União sob gestão federal?', min: 0, max: 5, unidade: ' tri', valorReal: 1.8, contexto: '791 mil imóveis (SP, RJ, PE) · R$814mi depreciação/ano · R$1,2bi/ano aluguéis privados · 48% dos leilões fracassados (2022-2024)' },
@@ -3699,7 +3739,7 @@ class Component extends DCLogic {
     if (!atual) return;
     this.empurrarEstado({ 'sessao-ao-vivo': { v: JSON.stringify({ ...atual, revelado: true }), t: Date.now() } });
   };
-  ativarPreset = (preset) => () => {
+  ativarPreset = (preset, idx) => () => {
     const sessao = { id: Date.now(), tipo: preset.tipo, pergunta: preset.pergunta, ativa: true };
     if (preset.opcoes) sessao.opcoes = preset.opcoes;
     if (preset.correta !== undefined) sessao.correta = preset.correta;
@@ -3708,9 +3748,8 @@ class Component extends DCLogic {
       sessao.valorReal = preset.valorReal; sessao.contexto = preset.contexto || ''; sessao.revelado = false;
     }
     this.empurrarEstado({ 'sessao-ao-vivo': { v: JSON.stringify(sessao), t: Date.now() } });
-    this.setState(s => ({ aoVivoFilaIndex: (s.aoVivoFilaIndex || 0) + 1 }));
+    this.setState({ aoVivoAtivoIndex: idx });
   };
-  voltarFila = () => this.setState(s => ({ aoVivoFilaIndex: Math.max(0, (s.aoVivoFilaIndex || 0) - 1) }));
   ativarSessao = () => {
     const s = this.state;
     const tipo = s.aoVivoTipo || 'votacao';
@@ -3843,6 +3882,7 @@ class Component extends DCLogic {
 
   valor = (k) => (this.state.sync[k] ? this.state.sync[k].v : undefined);
   cidadeDe = (n) => this.valor('cd-' + n) || PARTICIPANTES_CIDADE_AUTO[n] || '';
+  infoDe = (n) => PARTICIPANTES_INFO[n] || {};
   // Proporção de pessoas SP x BSB, recalculada sempre a partir da cidade atual de cada um —
   // qualquer correção de alocação (SP/BSB) já reflete automaticamente no estoque dividido por cidade.
   // Já exclui quem está em Licenças e afins (sem cidade) e organização/gestores (dupla função).
@@ -4062,14 +4102,17 @@ class Component extends DCLogic {
   ciEscolher = (nome) => () => this.setState({ ciNome: nome, ciQuery: '', ciErro: '' });
   ciTrocar = () => this.setState({ ciNome: '', ciErro: '' });
   onCiCodigo = (e) => this.setState({ ciCodigo: e.target.value.replace(/\D/g, '').slice(0, 4), ciErro: '' });
+  onCiExpectativa = (e) => this.setState({ ciExpectativa: e.target.value });
   ciConfirmar = () => {
-    const { ciNome, ciCodigo, city } = this.state;
+    const { ciNome, ciCodigo, city, ciExpectativa } = this.state;
     if (!ciNome) return this.setState({ ciErro: 'Escolha seu nome na lista.' });
     if (this.cidadeDe(ciNome) !== 'sp') return this.setState({ ciErro: 'Credenciamento disponível, por enquanto, apenas para participantes do evento de São Paulo.' });
     if (ciCodigo !== CODIGO_ENTRADA[city]) return this.setState({ ciErro: 'Código incorreto. Leia o QR do cartaz na entrada ou peça o código à equipe.' });
     try { localStorage.setItem('viart2026_meu_nome', ciNome); localStorage.setItem('viart2026_dados_nome', ciNome); } catch (e) {}
     this.setState({ ciEnviando: true, ciErro: '' });
-    this.setCampos({ ['ps-' + ciNome]: true, ['cd-' + ciNome]: city }).then(ok => {
+    const campos = { ['ps-' + ciNome]: true, ['cd-' + ciNome]: city };
+    if ((ciExpectativa || '').trim()) campos['exp-' + ciNome] = ciExpectativa.trim();
+    this.setCampos(campos).then(ok => {
       this.setState({ ciEnviando: false, ciFeito: true, ciSalvoLocal: !ok, ciCodigo: '', meuNome: ciNome, dadosNome: ciNome });
     });
   };
@@ -4080,7 +4123,7 @@ class Component extends DCLogic {
   };
   confirmarPresenca = () => {
     if (!this.state.meuNome) return;
-    if (this.cidadeDe(this.state.meuNome) !== 'sp') return;
+    if (this.cidadeDe(this.state.meuNome) !== 'sp' && !this.infoDe(this.state.meuNome).d) return;
     const agora = new Date();
     const hojeISO = hojeISOAtual(agora);
     const cidadeHoje = hojeISO === '2026-08-13' ? 'sp' : (hojeISO === '2026-08-20' ? 'bsb' : '');
@@ -5973,13 +6016,7 @@ class Component extends DCLogic {
       bg: aoVivoTipo === t.id ? '#0057A6' : '#FFFFFF', color: aoVivoTipo === t.id ? '#FFFFFF' : '#4A4A50',
     }));
     const aoVivoSessaoAtiva = !!(sessaoAtualObj && sessaoAtualObj.ativa);
-    const aoVivoFilaIndex = s.aoVivoFilaIndex || 0;
-    const filaAcabou = aoVivoFilaIndex >= PILAR_PRESETS.length;
-    const filaTemProxima = !filaAcabou;
-    const filaTemAnterior = aoVivoFilaIndex > 0;
-    const filaPosicao = aoVivoFilaIndex + 1;
-    const filaProximoLabel = filaTemProxima ? PILAR_PRESETS[aoVivoFilaIndex].label : '';
-    const ativarProximaFila = filaTemProxima ? this.ativarPreset(PILAR_PRESETS[aoVivoFilaIndex]) : () => {};
+    const aoVivoAtivoIndex = s.aoVivoAtivoIndex === undefined ? -1 : s.aoVivoAtivoIndex;
     const aoVivoEhNumero = aoVivoTipo === 'numero';
     const aoVivoPodeRevelar = aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'numero' && !sessaoAtualObj.revelado;
     const meuNomeQualquer = s.meuNome || s.dadosNome;
@@ -6030,23 +6067,32 @@ class Component extends DCLogic {
         if (!txt) return;
         freq[txt] = (freq[txt] || 0) + 1;
       });
-      const entradas = Object.keys(freq).map(t => ({ texto: t, n: freq[t] })).sort((a, b) => b.n - a.n).slice(0, 40);
+      const entradas = Object.keys(freq).map(t => ({ texto: t, n: freq[t] })).sort((a, b) => b.n - a.n).slice(0, 24);
       apresentacaoNuvemTotal = Object.values(freq).reduce((a, b) => a + b, 0);
       const maxN = entradas.length ? entradas[0].n : 1;
       const cores = ['#FFFFFF', '#F39200', '#7BAEDB'];
       apresentacaoNuvemView = entradas.map((e, i) => ({
         texto: e.texto,
-        tamanho: Math.round(20 + (e.n / maxN) * 60) + 'px',
+        tamanho: Math.round(18 + (e.n / maxN) * 46) + 'px',
         cor: cores[i % cores.length],
       }));
     }
 
     let apresentacaoQtdChutes = 0, apresentacaoMediaChuteLabel = '', apresentacaoValorRealLabel = '', apresentacaoTemContexto = false, apresentacaoContexto = '', apresentacaoRevelado = false, apresentacaoNaoRevelado = true;
     const apresentacaoEhRanking = !!sessaoAtualObj && sessaoAtualObj.tipo === 'ranking';
-    const apresentacaoRankingView = apresentacaoEhRanking ? pontosRankingView.slice(0, 3).map((p, i) => ({
-      nome: p.nome, pontos: p.pontos, medalha: ['🥇', '🥈', '🥉'][i],
-      tamanho: i === 0 ? 'clamp(32px,4vw,52px)' : 'clamp(24px,3vw,36px)',
-    })) : [];
+    const apresentacaoRankingView = apresentacaoEhRanking ? (() => {
+      // Pontos ganhos só dentro do bloco (via Quiz Competition da Sessão ao vivo), não o placar geral do app.
+      const tally = {};
+      Object.keys(s.sync).forEach(k => {
+        const m = k.match(/^quizpt-\d+-(.+)$/);
+        if (!m || !this.valor(k)) return;
+        tally[m[1]] = (tally[m[1]] || 0) + 1;
+      });
+      return Object.keys(tally).map(nome => ({ nome, pontos: tally[nome] }))
+        .sort((a, b) => b.pontos - a.pontos)
+        .slice(0, 3)
+        .map((p, i) => ({ nome: p.nome, pontos: p.pontos, medalha: ['🥇', '🥈', '🥉'][i], tamanho: i === 0 ? 'clamp(32px,4vw,52px)' : 'clamp(24px,3vw,36px)' }));
+    })() : [];
     if (apresentacaoEhNumero) {
       const prefC = 'chute-' + sessaoAtualObj.id + '-';
       const chutes = [];
@@ -6061,6 +6107,47 @@ class Component extends DCLogic {
       apresentacaoTemContexto = !!sessaoAtualObj.contexto;
       apresentacaoContexto = sessaoAtualObj.contexto || '';
     }
+
+    const expectativasFreq = {};
+    Object.keys(s.sync).forEach(k => {
+      if (!k.startsWith('exp-')) return;
+      const txt = (this.valor(k) || '').toLowerCase().trim();
+      if (txt) expectativasFreq[txt] = (expectativasFreq[txt] || 0) + 1;
+    });
+    const expectativasEntradas = Object.keys(expectativasFreq).map(t => ({ texto: t, n: expectativasFreq[t] })).sort((a, b) => b.n - a.n).slice(0, 24);
+    const expectativasTotal = Object.values(expectativasFreq).reduce((a, b) => a + b, 0);
+    const expectativasMax = expectativasEntradas.length ? expectativasEntradas[0].n : 1;
+    const expectativasCores = ['#0057A6', '#F39200', '#1E7A45'];
+    const expectativasNuvemView = expectativasEntradas.map((e, i) => ({
+      texto: e.texto, tamanho: Math.round(14 + (e.n / expectativasMax) * 28) + 'px', cor: expectativasCores[i % expectativasCores.length],
+    }));
+    const expectativasVazias = expectativasEntradas.length === 0;
+
+    const filaView = PILAR_PRESETS.map((preset, i) => {
+      const ehAtiva = i === aoVivoAtivoIndex && aoVivoSessaoAtiva;
+      const jaUsada = i <= aoVivoAtivoIndex && !ehAtiva;
+      const tag = (SESSAO_TIPOS.find(t => t.id === preset.tipo) || {}).label || '';
+      const podeRevelar = ehAtiva && preset.tipo === 'numero' && sessaoAtualObj && !sessaoAtualObj.revelado;
+      let statusTexto = '';
+      if (ehAtiva) {
+        if (preset.tipo === 'votacao' || preset.tipo === 'quiz') statusTexto = apresentacaoTotalVotos + ' respostas';
+        else if (preset.tipo === 'numero') statusTexto = apresentacaoQtdChutes + ' respostas' + (apresentacaoRevelado ? ' · revelado' : '');
+        else if (preset.tipo === 'nuvem') statusTexto = apresentacaoNuvemTotal + ' respostas';
+      }
+      return {
+        numero: i + 1, label: preset.label, tag, pergunta: preset.pergunta,
+        bg: ehAtiva ? 'rgba(243,146,0,0.16)' : (jaUsada ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.08)'),
+        corTexto: jaUsada && !ehAtiva ? '#7BAEDB' : '#F2F5FA',
+        corStatus: ehAtiva ? '#F39200' : (jaUsada ? '#7BAEDB' : '#A9C0DE'),
+        statusLabel: ehAtiva ? 'Ativa agora' : (jaUsada ? 'Concluída' : 'Pendente'),
+        ativar: this.ativarPreset(preset, i),
+        botaoLabel: ehAtiva ? 'Reativar' : (jaUsada ? 'Ativar de novo' : 'Ativar'),
+        botaoBg: ehAtiva ? 'rgba(255,255,255,0.16)' : '#F39200',
+        botaoCor: ehAtiva ? '#F2F5FA' : '#002855',
+        podeRevelar, podeEncerrar: ehAtiva,
+        mostrarStatusTexto: ehAtiva && !!statusTexto, statusTexto,
+      };
+    });
 
     return {
       spBg: s.city === 'sp' ? '#F39200' : 'transparent', spColor: s.city === 'sp' ? '#002855' : '#C9D6E8',
@@ -6171,9 +6258,10 @@ class Component extends DCLogic {
       showCheckin: s.activeTab === 'checkin',
       ciQuery: s.ciQuery, onCiQuery: this.onCiQuery, ciOpcoes,
       ciNome: s.ciNome, ciTemNome: !!s.ciNome, ciSemNome: !s.ciNome && !s.ciFeito,
-      bloqueadoCheckin: !!s.ciNome && cidadeDe(s.ciNome) !== 'sp',
-      ciTemNomeLiberado: !!s.ciNome && cidadeDe(s.ciNome) === 'sp',
+      bloqueadoCheckin: !!s.ciNome && cidadeDe(s.ciNome) !== 'sp' && !infoDe(s.ciNome).d,
+      ciTemNomeLiberado: !!s.ciNome && (cidadeDe(s.ciNome) === 'sp' || infoDe(s.ciNome).d),
       ciCodigo: s.ciCodigo, onCiCodigo: this.onCiCodigo, ciConfirmar: this.ciConfirmar,
+      ciExpectativa: s.ciExpectativa || '', onCiExpectativa: this.onCiExpectativa,
       ciCodigoDoQR: s.ciCodigo === CODIGO_ENTRADA[s.city],
       ciPedirCodigo: s.ciCodigo !== CODIGO_ENTRADA[s.city],
       ciErro: s.ciErro, ciTemErro: !!s.ciErro, ciFeito: s.ciFeito, ciNovo: this.ciNovo,
@@ -6399,7 +6487,10 @@ class Component extends DCLogic {
       showOrgManual: s.orgSubTab === 'manual',
       showOrgRelatorios: s.orgSubTab === 'relatorios', baixarRelatorioPessoas: this.baixarRelatorioPessoas, baixarRelatorioEstoque: this.baixarRelatorioEstoque,
       showOrgAoVivo: s.orgSubTab === 'aovivo', aoVivoTiposView,
-      filaAcabou, filaTemProxima, filaTemAnterior, filaPosicao, filaProximoLabel, ativarProximaFila, voltarFila: this.voltarFila,
+      expectativasNuvemView, expectativasTotal, expectativasVazias,
+      expectativasAberto: !!s.expectativasAberto, expectativasSinal: s.expectativasAberto ? '−' : '+',
+      toggleExpectativas: () => this.setState(s2 => ({ expectativasAberto: !s2.expectativasAberto })),
+      filaView, voltarFila: this.voltarFila,
       aoVivoPergunta: s.aoVivoPergunta || '', onAoVivoPergunta: this.onAoVivoPergunta,
       aoVivoOpcoes: s.aoVivoOpcoes === undefined ? 'Alinhar\nConectar\nExecutar' : s.aoVivoOpcoes, onAoVivoOpcoes: this.onAoVivoOpcoes,
       aoVivoPrecisaOpcoes: aoVivoTipo === 'votacao' || aoVivoTipo === 'quiz',
@@ -6412,7 +6503,7 @@ class Component extends DCLogic {
       aoVivoContexto: s.aoVivoContexto || '', onAoVivoContexto: this.onAoVivoContexto,
       ativarSessao: this.ativarSessao, encerrarSessao: this.encerrarSessao, abrirApresentacao: this.abrirApresentacao,
       aoVivoSessaoAtiva, aoVivoStatusVisivel: !!sessaoAtualObj,
-      aoVivoStatusTexto: sessaoAtualObj ? ((SESSAO_TIPOS.find(t => t.id === sessaoAtualObj.tipo) || {}).label + ' — "' + sessaoAtualObj.pergunta + '"' + (sessaoAtualObj.ativa ? ' (ativa)' : ' (encerrada)') + (apresentacaoEhVotacao ? ' · ' + apresentacaoTotalVotos + ' respostas' : '')) : '',
+      aoVivoStatusTexto: sessaoAtualObj ? ((SESSAO_TIPOS.find(t => t.id === sessaoAtualObj.tipo) || {}).label + ' — "' + sessaoAtualObj.pergunta + '"' + (sessaoAtualObj.ativa ? ' (ativa)' : ' (encerrada)') + (apresentacaoEhVotacao ? ' · ' + apresentacaoTotalVotos + ' respostas' : apresentacaoEhNumero ? ' · ' + apresentacaoQtdChutes + ' respostas' + (apresentacaoRevelado ? ' · revelado' : '') : apresentacaoEhNuvem ? ' · ' + apresentacaoNuvemTotal + ' respostas' : '')) : '',
       modoApresentacao, apresentacaoOciosa, apresentacaoComPergunta, apresentacaoTipoLabel, apresentacaoPergunta,
       apresentacaoEhVotacao, apresentacaoEmConstrucao, apresentacaoOpcoesView, apresentacaoTotalVotos,
       apresentacaoEhNumero, apresentacaoRevelado, apresentacaoNaoRevelado, apresentacaoQtdChutes, apresentacaoMediaChuteLabel,
@@ -6424,7 +6515,7 @@ class Component extends DCLogic {
       mostrarNuvemBanner, mostrarNuvemConfirmada, nuvemBannerPergunta,
       nuvemTexto: s.nuvemTexto || '', onNuvemTexto: this.onNuvemTexto, enviarPalavra: this.enviarPalavra,
       apresentacaoEhNuvem, apresentacaoNuvemView, apresentacaoNuvemTotal,
-      apresentacaoEhRanking, apresentacaoRankingView,
+      apresentacaoEhRanking, apresentacaoRankingView, apresentacaoRankingVazio: apresentacaoEhRanking && apresentacaoRankingView.length === 0,
       manualSecoes: (() => {
         let n = 0;
         return MANUAL_SECOES.map(sec => ({
