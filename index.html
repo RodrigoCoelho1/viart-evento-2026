@@ -262,6 +262,16 @@
         <sc-if value="{{ mostrarNuvemConfirmada }}" hint-placeholder-val="{{ false }}">
           <div style="background:#E3F3E8;border:1px solid #8FD9A8;color:#1E7A45;border-radius:14px;padding:14px 20px;margin-bottom:20px;font-size:13.5px;font-weight:700">Palavra enviada — acompanhe a nuvem no telão!</div>
         </sc-if>
+        <sc-if value="{{ mostrarInteresseCta }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#F39200;color:#002855;border-radius:16px;padding:18px 20px;margin-bottom:20px">
+            <div style="font-weight:800;font-size:15px;margin-bottom:6px">Quer ter acesso ao superapp / MiniApp de investimento?</div>
+            <div style="font-size:13px;margin-bottom:12px">A gente guarda seu nome numa lista e a equipe entra em contato pra liberar seu acesso.</div>
+            <div onClick="{{ manifestarInteresseSuperapp }}" style="cursor:pointer;text-align:center;background:#002855;color:#F2F5FA;font-weight:800;padding:12px;border-radius:10px;font-size:14px">Quero ter acesso</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ mostrarInteresseConfirmada }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#E3F3E8;border:1px solid #8FD9A8;color:#1E7A45;border-radius:14px;padding:14px 20px;margin-bottom:20px;font-size:13.5px;font-weight:700">Interesse registrado — a equipe vai entrar em contato pra liberar seu acesso!</div>
+        </sc-if>
         <div style="background:#002855;border-radius:20px;padding:clamp(28px,5vw,56px);color:#F2F5FA;margin-bottom:28px">
           <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(28px,4.2vw,54px);line-height:1.05">Planejamento Estratégico VIART</div>
           <div style="font-size:clamp(15px,1.4vw,20px);color:#C9D6E8;margin-top:14px;max-width:640px">Um só time que faz acontecer.<br/>Um novo formato: todos os funcionários, uma única mensagem.</div>
@@ -1509,6 +1519,26 @@
               <div style="display:flex;flex-wrap:wrap;gap:8px 14px">
                 <sc-for list="{{ expectativasNuvemView }}" as="ew" hint-placeholder-count="8">
                   <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:{{ ew.tamanho }};color:{{ ew.cor }}">{{ ew.texto }}</div>
+                </sc-for>
+              </div>
+              </div>
+              </sc-if>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:18px 20px;margin-bottom:16px">
+              <div onClick="{{ toggleInteresse }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                <div style="font-weight:700;font-size:14px">Interesse no superapp / MiniApp ({{ interesseTotal }})</div>
+                <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:#0057A6">{{ interesseSinal }}</div>
+              </div>
+              <sc-if value="{{ interesseAberto }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid #E8EFF9">
+              <div style="font-size:12.5px;color:#6B6B70;margin-bottom:12px">Pessoas que clicaram "Quero ter acesso" no Pilar 5 Int.2 -- repassar pra equipe liberar o acesso.</div>
+              <sc-if value="{{ interesseVazio }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:13px;color:#8A8A90">Ningu\u00e9m manifestou interesse ainda.</div>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ interesseNomes }}" as="nm" hint-placeholder-count="4">
+                  <div style="font-size:13px;color:#002855">{{ nm }}</div>
                 </sc-for>
               </div>
               </div>
@@ -2839,14 +2869,14 @@ const SESSAO_TIPOS = [
 const PILAR_PRESETS = [
   { label: 'Pilar 1 · Int. 1 — Cliente no Centro', tipo: 'numero', pergunta: 'Qual a posição da Caixa no NPS da jornada de investimento?', min: 1, max: 20, unidade: '', valorReal: 14, contexto: 'Meta: TOP 3 · Fonte: NPS Prism – BCG, ranking por produto = Investimento (4T25)' },
   { label: 'Pilar 1 · Int. 2 — Cliente no Centro', tipo: 'numero', pergunta: 'Qual a rentabilidade do FI-FGTS em 2025?', min: 0, max: 20, unidade: '%', valorReal: 11.76, contexto: 'Lucro R$2,21bi · 15,1% do lucro do FGTS · acumulada 243,9% desde a criação · Fonte: Informe VIART/DEGES Nº 0010/2026' },
-  { label: 'Pilar 2 · Int. 1 — Eficiência e Rentabilidade', tipo: 'numero', pergunta: 'Ranking de administração ANBIMA', min: 1, max: 10, unidade: 'º', valorReal: 5, contexto: 'Subiu do 6º · Market Share 6,96% (Jun/2026) · YoY +14bps · MoM +2bps' },
+  { label: 'Pilar 2 · Int. 1 — Eficiência e Rentabilidade', tipo: 'numero', pergunta: 'Qual a posição da VIART no Ranking de Administração ANBIMA?', min: 1, max: 10, unidade: 'º', valorReal: 5, contexto: 'Subiu do 6º · Market Share 6,96% (Jun/2026) · YoY +14bps · MoM +2bps' },
   { label: 'Pilar 2 · Int. 2 — Eficiência e Rentabilidade', tipo: 'numero', pergunta: 'Quantos % do orçamento já rodamos até junho?', min: 0, max: 150, unidade: '%', valorReal: 109.33, contexto: 'R$270mi realizado vs. R$247mi orçado · meta anual R$579mi' },
   { label: 'Pilar 3 · Int. 1 — Tecnologia e Inovação', tipo: 'nuvem', pergunta: 'Uma palavra pra inovação na VIART hoje?' },
   { label: 'Pilar 3 · Int. 2 — Tecnologia e Inovação', tipo: 'votacao', pergunta: 'Você sabe se já são usados agentes de IA nos processos da VIART?', opcoes: ['Sim', 'Não', 'Não sei'] },
   { label: 'Pilar 4 · Int. 1 — Pessoas, Cultura e Agilidade', tipo: 'quiz', pergunta: 'Qual das opções é um dos comportamentos que a CAIXA quer ver no dia a dia?', opcoes: ['Fazer acontecer para trazer resultados com ética e respeito', 'Nossa integridade é inegociável', 'O cliente guia as nossas escolhas', 'Temos coragem para inovar'], correta: 0 },
   { label: 'Pilar 4 · Int. 2 — Pessoas, Cultura e Agilidade', tipo: 'votacao', pergunta: 'Qual desses comportamentos você mais usa no dia a dia?', opcoes: ['Trabalhar juntos de maneira eficiente tanto com membros da própria equipe quanto em alinhamento com outras equipes da organização', 'Manter o cliente no centro de tudo o que é feito, independentemente da área de atuação na organização', 'Gerar novas ideias e tomar decisões que mantenham a CAIXA sempre na liderança', 'Fazer acontecer para trazer resultados com ética e respeito'] },
   { label: 'Pilar 5 · Int. 1 — Sustentabilidade e Cidadania', tipo: 'numero', pergunta: 'Quantos % dos ativos já têm análise ASG?', min: 0, max: 100, unidade: '%', valorReal: 84, contexto: 'Meta 100% (KR12) · Fonte: Glayce, área de Risco' },
-  { label: 'Pilar 5 · Int. 2 — Sustentabilidade e Cidadania', tipo: 'votacao', pergunta: 'Você conhece o superapp Caixa / MiniApp de investimento?', opcoes: ['Sim', 'Não'] },
+  { label: 'Pilar 5 · Int. 2 — Sustentabilidade e Cidadania', tipo: 'votacao', pergunta: 'Você conhece o superapp Caixa / MiniApp de investimento?', opcoes: ['Sim', 'Não'], interesseCta: true },
   { label: 'Pilar 6 · Int. 1 — Atuação em Ecossistema', tipo: 'numero', pergunta: 'Quanto vale o patrimônio imobiliário da União sob gestão federal?', min: 0, max: 5, unidade: ' tri', valorReal: 1.8, contexto: '791 mil imóveis (SP, RJ, PE) · R$814mi depreciação/ano · R$1,2bi/ano aluguéis privados · 48% dos leilões fracassados (2022-2024)' },
   { label: 'Pilar 6 · Int. 2 — Atuação em Ecossistema', tipo: 'ranking', pergunta: 'Ranking do bloco Report Planejamento' },
 ];
@@ -2900,6 +2930,8 @@ const CARTAZES = [
 });
 
 const ATUALIZACOES_INICIAIS = [
+  { quando: '12/08 15:00', texto: 'Nova aba "Sessão ao vivo" (Organização): votação, Guess the Number, Quiz com pontuação, Nuvem de palavras e Ranking, usados no bloco Report Planejamento.' },
+  { quando: '12/08 15:00', texto: 'Credenciamento ganhou um item opcional: "Qual a sua expectativa pra esse evento?" — as respostas viram uma nuvem de palavras coletiva.' },
   { quando: '11/08 11:40', texto: 'Cronograma atualizado com os novos horários do dia, mais o local de cada atividade em SP e em BSB.' },
   { quando: '11/08 11:35', texto: 'Card do Report Planejamento VIART, na Programação, ganhou link direto para o PDF do Plano de Atuação VIART 2026-2030.' },
   { quando: '11/08 11:20', texto: 'Correção no Mercado de Brindes: alguns itens apareciam "Esgotado" mesmo já estando em SP (Canetas CAIXA, Pasta executiva CAIXA Asset, Carregador Wireless e Moleskine com caneta CAIXA Asset).' },
@@ -3056,7 +3088,9 @@ const MANUAL_SECOES = [
   { id: 'brindes', titulo: 'Pontos & Brindes (público)', itens: [
     'Identificação por nome (busca na lista de participantes).',
     'Pontos por ação de participação: confirmar presença, restrição alimentar, camiseta, confraternização, necessidade especial, avaliação do evento, acertos no Detetive VIART — e novas formas de interação podem ser adicionadas ao longo da campanha, sempre valendo ponto também.',
-    'Detetive VIART: adivinhe de quem é cada curiosidade cadastrada no pré-cadastro (sem nome exposto); acerto vale 1 ponto, uma tentativa por pergunta, novas perguntas liberam aos poucos até o evento.',
+    'Detetive VIART: adivinhe de quem é cada curiosidade cadastrada no pré-cadastro (sem nome exposto); acerto vale 1 ponto, uma tentativa por pergunta, novas perguntas liberam aos poucos até o evento. Enviar a própria curiosidade é opcional e não é necessário pra jogar.',
+    'Sessão ao vivo (Organização): dinâmicas ao vivo pro bloco Report Planejamento — Votação, Guess the Number (chute + revelação do dado real), Quiz com pontuação, Nuvem de palavras e Ranking (Top 3, só pontos do bloco). Fila com as 12 perguntas pré-carregadas; participação restrita à categoria Organização por enquanto. Tela de apresentação em janela separada (?modo=apresentacao) pro telão.',
+    'Credenciamento tem um item opcional: "Qual a sua expectativa pra esse evento?" — respostas viram uma nuvem de palavras coletiva, vista em Organização · Sessão ao vivo.',
     'Mercado de brindes: preço = base fixa por item (peso × 8) com desconto coletivo de até 50%, proporcional à % de participantes de SP que já completaram as ações básicas do pré-cadastro — mais gente participando, mais barato pra todo mundo; quanto cada um paga de fato ainda depende só dos próprios pontos; cada card do marketplace mostra a adesão geral atual e o desconto resultante; resgate por ordem de chegada; abre às 12h45 (horário do almoço) no dia do evento da cidade.',
     'Estoque disponível pra resgate em SP = o que já chegou nas malas BSB → SP (não a meta teórica do item) — quantidade total do item, pra planejamento, fica na tabela "Controle de estoques" (Gamificação).',
     'Jogo de xícaras é um item só no marketplace (os dois modelos que existiam separados foram unificados).',
@@ -3743,12 +3777,18 @@ class Component extends DCLogic {
     const sessao = { id: Date.now(), tipo: preset.tipo, pergunta: preset.pergunta, ativa: true };
     if (preset.opcoes) sessao.opcoes = preset.opcoes;
     if (preset.correta !== undefined) sessao.correta = preset.correta;
+    if (preset.interesseCta) sessao.interesseCta = true;
     if (preset.tipo === 'numero') {
       sessao.min = preset.min; sessao.max = preset.max; sessao.unidade = preset.unidade || '';
       sessao.valorReal = preset.valorReal; sessao.contexto = preset.contexto || ''; sessao.revelado = false;
     }
     this.empurrarEstado({ 'sessao-ao-vivo': { v: JSON.stringify(sessao), t: Date.now() } });
     this.setState({ aoVivoAtivoIndex: idx });
+  };
+  manifestarInteresseSuperapp = () => {
+    const nome = this.state.meuNome || this.state.dadosNome;
+    if (!nome) return;
+    this.empurrarEstado({ ['interesse-superapp-' + nome]: { v: true, t: Date.now() } });
   };
   ativarSessao = () => {
     const s = this.state;
@@ -6056,6 +6096,9 @@ class Component extends DCLogic {
     const mostrarNuvemBanner = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'nuvem' && !!meuNomeQualquer && souOrganizacaoAoVivo && !jaEnviouPalavra;
     const mostrarNuvemConfirmada = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'nuvem' && !!meuNomeQualquer && souOrganizacaoAoVivo && jaEnviouPalavra;
     const nuvemBannerPergunta = sessaoAtualObj ? sessaoAtualObj.pergunta : '';
+    const jaManifesteiInteresse = !!(meuNomeQualquer && this.valor('interesse-superapp-' + meuNomeQualquer));
+    const mostrarInteresseCta = !modoApresentacao && aoVivoSessaoAtiva && !!(sessaoAtualObj && sessaoAtualObj.interesseCta) && !!meuNomeQualquer && souOrganizacaoAoVivo && !jaManifesteiInteresse;
+    const mostrarInteresseConfirmada = !modoApresentacao && aoVivoSessaoAtiva && !!(sessaoAtualObj && sessaoAtualObj.interesseCta) && !!meuNomeQualquer && souOrganizacaoAoVivo && jaManifesteiInteresse;
     let apresentacaoNuvemView = [];
     let apresentacaoNuvemTotal = 0;
     if (apresentacaoEhNuvem) {
@@ -6122,6 +6165,10 @@ class Component extends DCLogic {
       texto: e.texto, tamanho: Math.round(14 + (e.n / expectativasMax) * 28) + 'px', cor: expectativasCores[i % expectativasCores.length],
     }));
     const expectativasVazias = expectativasEntradas.length === 0;
+
+    const interesseNomes = Object.keys(s.sync).filter(k => k.startsWith('interesse-superapp-') && this.valor(k)).map(k => k.replace('interesse-superapp-', ''));
+    const interesseTotal = interesseNomes.length;
+    const interesseVazio = interesseTotal === 0;
 
     const filaView = PILAR_PRESETS.map((preset, i) => {
       const ehAtiva = i === aoVivoAtivoIndex && aoVivoSessaoAtiva;
@@ -6490,6 +6537,9 @@ class Component extends DCLogic {
       expectativasNuvemView, expectativasTotal, expectativasVazias,
       expectativasAberto: !!s.expectativasAberto, expectativasSinal: s.expectativasAberto ? '−' : '+',
       toggleExpectativas: () => this.setState(s2 => ({ expectativasAberto: !s2.expectativasAberto })),
+      interesseNomes, interesseTotal, interesseVazio,
+      interesseAberto: !!s.interesseAberto, interesseSinal: s.interesseAberto ? '−' : '+',
+      toggleInteresse: () => this.setState(s2 => ({ interesseAberto: !s2.interesseAberto })),
       filaView, voltarFila: this.voltarFila,
       aoVivoPergunta: s.aoVivoPergunta || '', onAoVivoPergunta: this.onAoVivoPergunta,
       aoVivoOpcoes: s.aoVivoOpcoes === undefined ? 'Alinhar\nConectar\nExecutar' : s.aoVivoOpcoes, onAoVivoOpcoes: this.onAoVivoOpcoes,
@@ -6514,6 +6564,7 @@ class Component extends DCLogic {
       onNumeroBannerValor: this.onNumeroBannerValor, enviarChute: this.enviarChute,
       mostrarNuvemBanner, mostrarNuvemConfirmada, nuvemBannerPergunta,
       nuvemTexto: s.nuvemTexto || '', onNuvemTexto: this.onNuvemTexto, enviarPalavra: this.enviarPalavra,
+      mostrarInteresseCta, mostrarInteresseConfirmada, manifestarInteresseSuperapp: this.manifestarInteresseSuperapp,
       apresentacaoEhNuvem, apresentacaoNuvemView, apresentacaoNuvemTotal,
       apresentacaoEhRanking, apresentacaoRankingView, apresentacaoRankingVazio: apresentacaoEhRanking && apresentacaoRankingView.length === 0,
       manualSecoes: (() => {
