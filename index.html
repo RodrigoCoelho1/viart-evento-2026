@@ -3108,9 +3108,7 @@ function mercadoParseMin(t) {
   const m = t.trim().match(/(\d+)h(\d*)/);
   return m ? parseInt(m[1], 10) * 60 + (parseInt(m[2] || '0', 10)) : 0;
 }
-const MERCADO_JANELAS = SCHEDULE_PUBLIC
-  .filter(it => it.title === 'Almoço' || (it.title === 'Coffee Break' && mercadoParseMin(it.time.split('–')[0]) >= 720))
-  .map(it => { const [ini, fim] = it.time.split('–'); return { ini: mercadoParseMin(ini), fim: mercadoParseMin(fim) }; });
+const MERCADO_JANELAS = [{ ini: 765, fim: 1439 }]; // aberta das 12h45 até o fim do dia
 function mercadoJanelaAberta(minutos) {
   return MERCADO_JANELAS.some(j => minutos >= j.ini && minutos < j.fim);
 }
