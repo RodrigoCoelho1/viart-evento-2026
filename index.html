@@ -581,8 +581,8 @@
             <div style="font-weight:700;font-size:15px;margin-bottom:4px">Como foi o seu dia?</div>
             <div style="font-size:13px;color:#4A4A50;margin-bottom:18px">Sua avaliação ajuda a montar o próximo encontro. Leva dois minutos.</div>
 
-            <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Seu nome</div>
-            <input type="text" placeholder="Digite seu nome completo" value="{{ npsNome }}" onChange="{{ onNpsNome }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:18px"></input>
+            <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Seu nome (opcional)</div>
+            <input type="text" placeholder="Se quiser se identificar" value="{{ npsNome }}" onChange="{{ onNpsNome }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:18px"></input>
 
             <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">De 0 a 10, o quanto você recomendaria este evento a um colega?</div>
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px">
@@ -610,15 +610,22 @@
             </div>
             </sc-if>
 
-            <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">O que mais funcionou?</div>
-            <textarea placeholder="Opcional" value="{{ npsFuncionou }}" onChange="{{ onNpsFuncionou }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:14px;resize:vertical"></textarea>
+            <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">De 0 a 10, qual nota você dá para o app do evento?</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px">
+              <sc-for list="{{ npsNotasApp }}" as="na" hint-placeholder-count="11">
+                <div onClick="{{ na.onClick }}" style="cursor:pointer;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:{{ na.bg }};color:{{ na.color }};border:1px solid {{ na.border }}">{{ na.n }}</div>
+              </sc-for>
+            </div>
 
-            <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">O que podemos melhorar?</div>
+            <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Se pudesse resumir o evento em uma palavra, qual seria?</div>
+            <input type="text" placeholder="Opcional" value="{{ npsPalavra }}" onChange="{{ onNpsPalavra }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #C9D6E8;font-size:14px;font-family:'Manrope',sans-serif;margin-bottom:18px"></input>
+
+            <div style="font-size:12.5px;font-weight:700;color:#002855;margin-bottom:8px">Compartilhe com a gente sugestões, críticas ou elogios</div>
             <textarea placeholder="Opcional" value="{{ npsMelhorar }}" onChange="{{ onNpsMelhorar }}" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid #C9D6E8;font-size:13px;font-family:'Manrope',sans-serif;margin-bottom:18px;resize:vertical"></textarea>
 
             <div onClick="{{ npsEnviar }}" style="cursor:pointer;display:inline-block;background:{{ npsEnviarBg }};color:#fff;font-weight:700;padding:12px 24px;border-radius:10px;font-size:14px">Enviar avaliação</div>
             <sc-if value="{{ npsErro }}" hint-placeholder-val="{{ false }}">
-              <div style="font-size:12px;color:#B4471F;margin-top:10px">Preencha seu nome e a nota de 0 a 10.</div>
+              <div style="font-size:12px;color:#B4471F;margin-top:10px">Selecione uma nota de 0 a 10.</div>
             </sc-if>
           </div>
           </sc-if>
@@ -2589,6 +2596,67 @@
               </sc-for>
             </div>
             </sc-if>
+
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;margin:24px 0 4px">Tabela completa · pontos e brindes por participante</div>
+            <div style="font-size:11.5px;color:#8A8A90;margin-bottom:10px">Pontos, como foram ganhos e quais brindes cada pessoa já resgatou.</div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;margin-bottom:16px">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Pontos x brindes resgatados</div>
+              <div style="font-size:13px;color:#4A4A50;line-height:1.7;margin-bottom:10px">Correlação: <b style="color:#0057A6">{{ correlacaoPontosBrindes }}</b> ({{ correlacaoPontosBrindesLabel }}). Quanto mais perto de 1, mais forte a relação entre ter mais pontos e resgatar mais brindes; perto de 0, não há relação.</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px">
+                <sc-for list="{{ correlacaoTercos }}" as="ct" hint-placeholder-count="3">
+                  <div style="background:#F7F9FC;border-radius:10px;padding:10px 12px">
+                    <div style="font-size:10.5px;color:#6B6B70;margin-bottom:4px">{{ ct.label }}</div>
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:18px;color:#002855">{{ ct.media }} <span style="font-size:11px;font-weight:600;color:#8A8A90">brindes em média</span></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+              <input type="text" placeholder="Buscar por nome" value="{{ tabelaPontosBuscaVal }}" onChange="{{ onTabelaPontosBusca }}" style="padding:8px 12px;border-radius:8px;border:1px solid #C9D6E8;font-size:12.5px;font-family:'Manrope',sans-serif;min-width:180px"></input>
+              <sc-for list="{{ tabelaPontosCidadeOpcoes }}" as="op" hint-placeholder-count="3">
+                <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
+              </sc-for>
+              <select value="{{ tabelaPontosAreaVal }}" onChange="{{ onTabelaPontosArea }}" style="padding:8px 10px;border-radius:8px;border:1px solid #C9D6E8;font-size:12px;font-family:'Manrope',sans-serif">
+                <option value="">Todas as áreas</option>
+                <sc-for list="{{ tabelaPontosAreasOpcoes }}" as="ao" hint-placeholder-count="8">
+                  <option value="{{ ao.value }}">{{ ao.value }}</option>
+                </sc-for>
+              </select>
+            </div>
+
+            <sc-if value="{{ tabelaPontosVazia }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12.5px;color:#8A8A90;padding:8px 0">Nenhum participante encontrado com esses filtros.</div>
+            </sc-if>
+            <div style="overflow-x:auto;margin-bottom:20px;border:1px solid #DCE6F2;border-radius:10px">
+              <table style="width:100%;border-collapse:collapse;font-size:12.5px;background:#FFFFFF">
+                <thead>
+                  <tr style="background:#F7F9FC">
+                    <th onClick="{{ toggleOrdemNome }}" style="cursor:pointer;text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2;white-space:nowrap">Nome{{ tabelaOrdemNomeArrow }}</th>
+                    <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Cidade</th>
+                    <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Área</th>
+                    <th onClick="{{ toggleOrdemPontos }}" style="cursor:pointer;text-align:right;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2;white-space:nowrap">Pontos{{ tabelaOrdemPontosArrow }}</th>
+                    <th onClick="{{ toggleOrdemBrindes }}" style="cursor:pointer;text-align:right;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2;white-space:nowrap">Nº brindes{{ tabelaOrdemBrindesArrow }}</th>
+                    <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Brindes resgatados</th>
+                    <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Como ganhou os pontos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <sc-for list="{{ tabelaPontosView }}" as="tp" hint-placeholder-count="10">
+                    <tr>
+                      <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;font-weight:700;color:#002855;white-space:nowrap">{{ tp.nome }}</td>
+                      <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;color:#6B6B70">{{ tp.cidade }}</td>
+                      <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;color:#6B6B70">{{ tp.area }}</td>
+                      <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;text-align:right;font-weight:700;color:#0057A6">{{ tp.pontos }}</td>
+                      <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;text-align:right">{{ tp.resgatesCount }}</td>
+                      <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;color:#4A4A50;min-width:160px">{{ tp.resgates }}</td>
+                      <td style="padding:8px 10px;border-bottom:1px solid #EDF1F7;color:#4A4A50;min-width:200px">{{ tp.origens }}</td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
             </div>
             </sc-if>
 
@@ -3104,6 +3172,12 @@ const SCHEDULE_REAL = [
   { time: '19h00', title: 'Confraternização (informal)', desc: 'Celebração da equipe e encerramento do dia · local a definir', pillar: null, localSP: '', localBSB: '' },
 ];
 
+const NPS_BLOCOS = [
+  { title: 'Estudo de Caso Goldman Sachs' },
+  { title: 'Histórias que Inspiram' },
+  { title: 'Dinâmica das Bikes' },
+];
+
 function mercadoParseMin(t) {
   const m = t.trim().match(/(\d+)h(\d*)/);
   return m ? parseInt(m[1], 10) * 60 + (parseInt(m[2] || '0', 10)) : 0;
@@ -3486,7 +3560,7 @@ class Component extends DCLogic {
     confraternizacaoResposta: '',
     presencaPreviaResposta: '',
     curiosidadeTexto: '',
-    npsNome: '', npsNota: null, npsFuncionou: '', npsMelhorar: '', npsErro: false, npsEnviado: false, npsPaineis: {},
+    npsNome: '', npsNota: null, npsNotaApp: null, npsPalavra: '', npsMelhorar: '', npsErro: false, npsEnviado: false, npsPaineis: {},
     camisaTamanhoSel: '',
     camisaModelagemSel: '',
     camisaEditando: false,
@@ -3964,6 +4038,13 @@ class Component extends DCLogic {
   setEstoqueOrdem = (id) => () => this.setState({ estoqueOrdem: id });
   setEstoqueFiltroEnviarBSB = () => this.setState(s => ({ estoqueFiltroEnviarBSB: !s.estoqueFiltroEnviarBSB }));
   setPontosListaFiltroCidade = (id) => () => this.setState({ pontosListaFiltroCidade: id });
+  onTabelaPontosBusca = (e) => this.setState({ tabelaPontosBusca: e.target.value });
+  setTabelaPontosCidade = (id) => () => this.setState({ tabelaPontosCidade: id });
+  onTabelaPontosArea = (e) => this.setState({ tabelaPontosArea: e.target.value });
+  toggleTabelaOrdem = (field) => () => this.setState(s => {
+    const cur = s.tabelaPontosOrdem || { field: 'pontos', dir: 'desc' };
+    return { tabelaPontosOrdem: cur.field === field ? { field, dir: cur.dir === 'asc' ? 'desc' : 'asc' } : { field, dir: field === 'nome' ? 'asc' : 'desc' } };
+  });
   toggleManualSecao = (id) => () => this.setState(s => ({ manualAppOpen: { ...(s.manualAppOpen || {}), [id]: !(s.manualAppOpen || {})[id] } }));
 
   onDiarioNomeChange = (e) => this.setState({ diarioNome: e.target.value });
@@ -4407,14 +4488,16 @@ class Component extends DCLogic {
     this.setState({ cadastroFlash: true, camisaEditando: false });
   };
   onNpsNome = (e) => this.setState({ npsNome: e.target.value, npsErro: false });
-  onNpsFuncionou = (e) => this.setState({ npsFuncionou: e.target.value });
+  onNpsPalavra = (e) => this.setState({ npsPalavra: e.target.value });
   onNpsMelhorar = (e) => this.setState({ npsMelhorar: e.target.value });
   setNpsNota = (n) => () => this.setState({ npsNota: n, npsErro: false });
+  setNpsNotaApp = (n) => () => this.setState({ npsNotaApp: n });
   setNpsPainel = (idx, v) => () => this.setState(s => ({ npsPaineis: { ...s.npsPaineis, [idx]: v } }));
   npsEnviar = () => {
-    const nome = this.state.npsNome.trim();
-    if (!nome || this.state.npsNota === null || this.state.npsNota === undefined) { this.setState({ npsErro: true }); return; }
-    this.setCampos({ ['nps-' + nome]: { nota: this.state.npsNota, funcionou: this.state.npsFuncionou.trim(), melhorar: this.state.npsMelhorar.trim(), paineis: this.state.npsPaineis, ts: Date.now() } });
+    const chave = this.state.meuNome || this.state.dadosNome;
+    if (!chave || this.state.npsNota === null || this.state.npsNota === undefined) { this.setState({ npsErro: true }); return; }
+    const nomeInformado = this.state.npsNome.trim();
+    this.setCampos({ ['nps-' + chave]: { nota: this.state.npsNota, notaApp: this.state.npsNotaApp, nomeInformado, palavra: this.state.npsPalavra.trim(), melhorar: this.state.npsMelhorar.trim(), paineis: this.state.npsPaineis, ts: Date.now() } });
     this.setState({ npsEnviado: true });
   };
   confraternizacaoTrocarNome = () => {
@@ -5480,7 +5563,15 @@ class Component extends DCLogic {
     const credenciamentoHabilitado = !!credenciamentoCidadeHoje;
     const ehDiaDoEvento = hojeISO === cityData.dateISO;
     const minutosAgora = agora.getHours() * 60 + agora.getMinutes();
-    let blocoAgora = null, blocoProximo = null, faltamDias = null, mostrarAgora = false, mostrarFeedback = false;
+    // Gatilho do NPS: independente da aba SP/Brasília selecionada na tela — usa a cidade
+    // real da pessoa (ou "qualquer uma das duas datas" pra Organização/Gestor).
+    const minhaCidadeIdNps = s.meuNome ? cidadeDe(s.meuNome) : '';
+    const souOrgGestorNps = s.meuNome && !!infoDe(s.meuNome).d;
+    const npsDataEvento = minhaCidadeIdNps === 'sp' ? '2026-08-13' : (minhaCidadeIdNps === 'bsb' ? '2026-08-20' : '');
+    const npsEhHojeEvento = npsDataEvento ? hojeISO === npsDataEvento : (souOrgGestorNps && (hojeISO === '2026-08-13' || hojeISO === '2026-08-20'));
+    const npsDepoisDoEvento = npsDataEvento ? hojeISO > npsDataEvento : (souOrgGestorNps && hojeISO > '2026-08-20');
+    let blocoAgora = null, blocoProximo = null, faltamDias = null, mostrarAgora = false;
+    let mostrarFeedback = npsEhHojeEvento ? (minutosAgora >= 18 * 60 + 10) : npsDepoisDoEvento;
     if (ehDiaDoEvento) {
       mostrarAgora = true;
       const comInicio = SCHEDULE_PUBLIC.map(it => ({ it, ini: parseHora(it.time), fim: parseHora((it.time.split('–')[1] || it.time).trim()) }));
@@ -5490,10 +5581,7 @@ class Component extends DCLogic {
         if (minutosAgora >= c.ini && minutosAgora < fim) blocoAgora = c.it;
         if (!blocoProximo && c.ini > minutosAgora) blocoProximo = c.it;
       }
-      mostrarFeedback = minutosAgora >= 18 * 60 + 10;
-    } else if (new Date(hojeISO + 'T00:00:00') - new Date(cityData.dateISO + 'T00:00:00') === 86400000) {
-      mostrarFeedback = true;
-    } else {
+    } else if (new Date(hojeISO + 'T00:00:00') - new Date(cityData.dateISO + 'T00:00:00') !== 86400000) {
       const d0 = new Date(cityData.dateISO + 'T00:00:00');
       const dias = Math.round((d0 - new Date(hojeISO + 'T00:00:00')) / 86400000);
       if (dias > 0) { faltamDias = dias; mostrarAgora = true; blocoProximo = SCHEDULE_PUBLIC[0]; }
@@ -5551,6 +5639,7 @@ class Component extends DCLogic {
     });
     const meusPontosFotos = temNome ? this.pontosFotosDe(s.meuNome) : 0;
     const minhaCidadeId = temNome ? cidadeDe(s.meuNome) : '';
+    const npsElegivel = temNome && (minhaCidadeId === 'sp' || infoDe(s.meuNome).tipo === 'organizacao' || infoDe(s.meuNome).tipo === 'gestor');
     const bloqueadoBrindes = temNome && minhaCidadeId !== 'sp' && !infoDe(s.meuNome).d;
     const temNomeLiberado = temNome && !bloqueadoBrindes;
     const brindesSubTab = s.brindesSubTab || 'detetive';
@@ -5737,7 +5826,7 @@ class Component extends DCLogic {
     const npsNeutros = npsRaw.filter(r => r.nota >= 7 && r.nota <= 8).length;
     const npsDetratores = npsRaw.filter(r => r.nota <= 6).length;
     const npsScore = npsTotal ? Math.round(100 * npsPromotores / npsTotal) - Math.round(100 * npsDetratores / npsTotal) : 0;
-    const NPS_PAINEIS_DEFS = SCHEDULE_PUBLIC.filter(b => b.title.indexOf('Confraternização') !== 0);
+    const NPS_PAINEIS_DEFS = NPS_BLOCOS;
     const npsPainelStats = NPS_PAINEIS_DEFS.map((b, i) => {
       const notas = npsRaw.filter(r => r.paineis && (r.paineis[i] || r.paineis[i] === 0)).map(r => r.paineis[i]);
       const media = notas.length ? Math.round(10 * notas.reduce((a, v) => a + v, 0) / notas.length) / 10 : null;
@@ -5766,8 +5855,8 @@ class Component extends DCLogic {
     });
     const npsPainelChart = npsPainelStats.map(p => ({ ...p, barPct: p.media === '—' ? 0 : Math.round(100 * p.media / 10) }));
     const npsComentarios = Object.entries(s.sync)
-      .filter(([k, v]) => k.startsWith('nps-') && v && v.v && (v.v.funcionou || v.v.melhorar))
-      .map(([k, v]) => ({ nome: k.slice(4), nota: v.v.nota, funcionou: v.v.funcionou, melhorar: v.v.melhorar, ts: v.t }))
+      .filter(([k, v]) => k.startsWith('nps-') && v && v.v && (v.v.palavra || v.v.melhorar))
+      .map(([k, v]) => ({ nome: k.slice(4), nota: v.v.nota, funcionou: v.v.palavra, melhorar: v.v.melhorar, ts: v.t }))
       .sort((a, b) => b.ts - a.ts)
       .slice(0, 8);
 
@@ -5787,6 +5876,46 @@ class Component extends DCLogic {
       const gastos = resgatesArr.reduce((a, b) => a + this.precoBrinde(b), 0);
       return { nome: n, cidade: cidadeDe(n) === 'sp' ? 'SP' : 'BSB', area: infoDe(n).u ? infoDe(n).u.split(' - ')[0] : '—', pontos: pts, pontosGastos: gastos, pontosDisponiveis: pts - gastos, ativoReal: this.temAcaoRealDe(n), resgatesCount: resgatesArr.length, resgates: resgatesArr.map(b => b.nome).join(', ') || '—', origens: origensLabels.length ? origensLabels.join(' · ') : 'Nenhum ponto ainda' };
     }).sort((a, b) => b.pontos - a.pontos);
+
+    // Tabela completa por participante + correlação pontos x brindes (independente dos filtros da tabela)
+    const nCorr = pontosRankingView.length;
+    const sumXCorr = pontosRankingView.reduce((a, p) => a + p.pontos, 0);
+    const sumYCorr = pontosRankingView.reduce((a, p) => a + p.resgatesCount, 0);
+    const sumXYCorr = pontosRankingView.reduce((a, p) => a + p.pontos * p.resgatesCount, 0);
+    const sumX2Corr = pontosRankingView.reduce((a, p) => a + p.pontos * p.pontos, 0);
+    const sumY2Corr = pontosRankingView.reduce((a, p) => a + p.resgatesCount * p.resgatesCount, 0);
+    const numCorr = nCorr * sumXYCorr - sumXCorr * sumYCorr;
+    const denCorr = Math.sqrt(Math.max(0, (nCorr * sumX2Corr - sumXCorr * sumXCorr) * (nCorr * sumY2Corr - sumYCorr * sumYCorr)));
+    const correlacaoPontosBrindes = denCorr ? Math.round(100 * numCorr / denCorr) / 100 : 0;
+    const corrAbs = Math.abs(correlacaoPontosBrindes);
+    const correlacaoPontosBrindesLabel = corrAbs >= 0.7 ? 'relação forte' : (corrAbs >= 0.4 ? 'relação moderada' : (corrAbs >= 0.15 ? 'relação fraca' : 'praticamente sem relação'));
+    const sortedPorPontos = pontosRankingView.slice().sort((a, b) => a.pontos - b.pontos);
+    const terco = Math.ceil(sortedPorPontos.length / 3) || 1;
+    const gBaixo = sortedPorPontos.slice(0, terco);
+    const gMedio = sortedPorPontos.slice(terco, terco * 2);
+    const gAlto = sortedPorPontos.slice(terco * 2);
+    const mediaResgatesGrupo = (arr) => arr.length ? Math.round(10 * arr.reduce((a, p) => a + p.resgatesCount, 0) / arr.length) / 10 : 0;
+    const correlacaoTercos = [
+      { label: 'Menos pontos (' + gBaixo.length + ' pessoas, até ' + (gBaixo.length ? gBaixo[gBaixo.length - 1].pontos : 0) + ' pts)', media: mediaResgatesGrupo(gBaixo) },
+      { label: 'Pontos médios (' + gMedio.length + ' pessoas)', media: mediaResgatesGrupo(gMedio) },
+      { label: 'Mais pontos (' + gAlto.length + ' pessoas, ' + (gAlto.length ? gAlto[0].pontos : 0) + '+ pts)', media: mediaResgatesGrupo(gAlto) },
+    ];
+    const tabelaPontosAreasOpcoes = Array.from(new Set(pontosRankingView.map(p => p.area))).sort().map(a => ({ value: a }));
+    const tabelaPontosOrdem = s.tabelaPontosOrdem || { field: 'pontos', dir: 'desc' };
+    const tabelaOrdemArrow = (f) => tabelaPontosOrdem.field === f ? (tabelaPontosOrdem.dir === 'asc' ? ' ▲' : ' ▼') : '';
+    const tabelaPontosBuscaNorm = norm((s.tabelaPontosBusca || '').trim());
+    const tabelaPontosView = pontosRankingView.slice()
+      .filter(p => !s.tabelaPontosCidade || p.cidade === s.tabelaPontosCidade)
+      .filter(p => !s.tabelaPontosArea || p.area === s.tabelaPontosArea)
+      .filter(p => !tabelaPontosBuscaNorm || norm(p.nome).includes(tabelaPontosBuscaNorm))
+      .sort((a, b) => {
+        const f = tabelaPontosOrdem.field;
+        let av = a[f], bv = b[f];
+        if (f === 'nome') { av = norm(a.nome); bv = norm(b.nome); }
+        if (av < bv) return tabelaPontosOrdem.dir === 'asc' ? -1 : 1;
+        if (av > bv) return tabelaPontosOrdem.dir === 'asc' ? 1 : -1;
+        return 0;
+      });
     const areaGroupsEngajamento = {};
     pontosRankingView.forEach(p => {
       const key = p.area || '—';
@@ -6515,8 +6644,8 @@ class Component extends DCLogic {
       syncLabel: s.syncStatus === 'online' ? 'Sincronizado com a equipe' : 'Somente neste aparelho (sem conexão com o servidor)',
       syncColor: s.syncStatus === 'online' ? '#2E9E5B' : '#F39200',
       atualizarAgora: this.puxarEstado,
-      credenciamentoHabilitado, credenciamentoIndisponivel: !credenciamentoHabilitado, mostrarAgora, agoraLabel, agoraTitulo, agoraHora, proximoTexto, temProximo, mostrarFeedback, ehDiaDoEvento,
-      irParaNps: this.irParaNps, mostrarNpsBanner: mostrarFeedback && !s.npsEnviado,
+      credenciamentoHabilitado, credenciamentoIndisponivel: !credenciamentoHabilitado, mostrarAgora, agoraLabel, agoraTitulo, agoraHora, proximoTexto, temProximo, mostrarFeedback: mostrarFeedback && npsElegivel, ehDiaDoEvento,
+      irParaNps: this.irParaNps, mostrarNpsBanner: mostrarFeedback && npsElegivel && !s.npsEnviado,
       mostrarPopupCheckin, checkinPctPopup, fecharPopupCheckin: this.fecharPopupCheckin,
       mostrarCheckinBanner: temNome && cidadeDe(s.meuNome) === 'sp' && !infoDe(s.meuNome).d && credenciamentoCidadeHoje === 'sp' && !this.valor('ps-' + s.meuNome),
       irParaCheckin: () => this.setState({ activeTab: 'checkin' }),
@@ -6553,16 +6682,21 @@ class Component extends DCLogic {
       curiosidadeTexto: s.curiosidadeTexto, onCuriosidadeTexto: this.onCuriosidadeTexto,
       temCuriosidadeSalva: temDados && !!this.valor('cur-' + s.dadosNome),
       cadastroSalvar: this.cadastroSalvar, cadastroSalvarBg: '#0057A6', cadastroSalvo: !!s.cadastroFlash, cadastroTravado, cadastroAberto: !cadastroTravado,
-      npsNome: s.npsNome, onNpsNome: this.onNpsNome, onNpsFuncionou: this.onNpsFuncionou, onNpsMelhorar: this.onNpsMelhorar,
-      npsFuncionou: s.npsFuncionou, npsMelhorar: s.npsMelhorar, npsEnviar: this.npsEnviar, npsErro: s.npsErro,
+      npsNome: s.npsNome, onNpsNome: this.onNpsNome, onNpsPalavra: this.onNpsPalavra, onNpsMelhorar: this.onNpsMelhorar,
+      npsPalavra: s.npsPalavra, npsMelhorar: s.npsMelhorar, npsEnviar: this.npsEnviar, npsErro: s.npsErro,
+      npsNotasApp: Array.from({ length: 11 }, (_, n) => ({
+        n, onClick: this.setNpsNotaApp(n),
+        bg: s.npsNotaApp === n ? '#0057A6' : '#FFFFFF', color: s.npsNotaApp === n ? '#FFFFFF' : '#002855',
+        border: s.npsNotaApp === n ? '#0057A6' : '#C9D6E8',
+      })),
       npsEnviado: s.npsEnviado, npsNaoEnviado: !s.npsEnviado,
-      npsEnviarBg: (s.npsNome.trim() && s.npsNota !== null) ? '#0057A6' : '#8FAFD1',
+      npsEnviarBg: (s.npsNota !== null) ? '#0057A6' : '#8FAFD1',
       npsNotas: Array.from({ length: 11 }, (_, n) => ({
         n, onClick: this.setNpsNota(n),
         bg: s.npsNota === n ? '#0057A6' : '#FFFFFF', color: s.npsNota === n ? '#FFFFFF' : '#002855',
         border: s.npsNota === n ? '#0057A6' : '#C9D6E8',
       })),
-      npsPaineisView: SCHEDULE_PUBLIC.filter(b => b.title.indexOf('Confraternização') !== 0).map((b, i) => ({
+      npsPaineisView: NPS_BLOCOS.map((b, i) => ({
         idx: i, title: b.title,
         notas: Array.from({ length: 11 }, (_, v) => ({
           v, onClick: this.setNpsPainel(i, v),
@@ -6891,6 +7025,15 @@ class Component extends DCLogic {
       manualJogoAberto: s.manualJogoAberto === undefined ? true : s.manualJogoAberto,
       toggleManualJogo: this.toggleManualJogo, manualJogoToggleLabel: (s.manualJogoAberto === undefined || s.manualJogoAberto) ? 'Ocultar' : 'Ver regras',
       showOrgPontos: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'pontos', pontosRankingView, mediaPontosGeral: Math.round(mediaPontosAtivosGlobal * 10) / 10,
+      correlacaoPontosBrindes, correlacaoPontosBrindesLabel, correlacaoTercos,
+      tabelaPontosBuscaVal: s.tabelaPontosBusca || '', onTabelaPontosBusca: this.onTabelaPontosBusca,
+      tabelaPontosAreaVal: s.tabelaPontosArea || '', onTabelaPontosArea: this.onTabelaPontosArea,
+      tabelaPontosAreasOpcoes,
+      tabelaPontosCidadeOpcoes: [{ id: '', label: 'Todos' }, { id: 'SP', label: 'São Paulo' }, { id: 'BSB', label: 'Brasília' }]
+        .map(o => ({ ...o, onClick: this.setTabelaPontosCidade(o.id), bg: (s.tabelaPontosCidade || '') === o.id ? '#0057A6' : '#F2F5FA', color: (s.tabelaPontosCidade || '') === o.id ? '#FFFFFF' : '#4A4A50' })),
+      tabelaPontosView, tabelaPontosVazia: tabelaPontosView.length === 0,
+      toggleOrdemNome: this.toggleTabelaOrdem('nome'), toggleOrdemPontos: this.toggleTabelaOrdem('pontos'), toggleOrdemBrindes: this.toggleTabelaOrdem('resgatesCount'),
+      tabelaOrdemNomeArrow: tabelaOrdemArrow('nome'), tabelaOrdemPontosArrow: tabelaOrdemArrow('pontos'), tabelaOrdemBrindesArrow: tabelaOrdemArrow('resgatesCount'),
       showOrgFotos: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'fotos',
       showOrgNps: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'nps', npsPainelStats, npsPainelStatsVazio, npsSemComentarios: npsComentarios.length === 0,
       npsDistChart, npsPainelChart,
