@@ -273,7 +273,7 @@
           </div>
         </sc-if>
         <sc-if value="{{ mostrarNumeroConfirmada }}" hint-placeholder-val="{{ false }}">
-          <div style="background:#E3F3E8;border:1px solid #8FD9A8;color:#1E7A45;border-radius:14px;padding:14px 20px;margin-bottom:20px;font-size:13.5px;font-weight:700">Chute registrado — aguarde a revelação no telão!</div>
+          <div style="background:#E3F3E8;border:1px solid #8FD9A8;color:#1E7A45;border-radius:14px;padding:14px 20px;margin-bottom:20px;font-size:13.5px;font-weight:700">Chute registrado (+1 ponto) — aguarde a revelação no telão!</div>
         </sc-if>
         <sc-if value="{{ mostrarNuvemBanner }}" hint-placeholder-val="{{ false }}">
           <div style="background:#002855;color:#F2F5FA;border-radius:16px;padding:20px 22px;margin-bottom:20px">
@@ -284,7 +284,7 @@
           </div>
         </sc-if>
         <sc-if value="{{ mostrarNuvemConfirmada }}" hint-placeholder-val="{{ false }}">
-          <div style="background:#E3F3E8;border:1px solid #8FD9A8;color:#1E7A45;border-radius:14px;padding:14px 20px;margin-bottom:20px;font-size:13.5px;font-weight:700">Palavra enviada — acompanhe a nuvem no telão!</div>
+          <div style="background:#E3F3E8;border:1px solid #8FD9A8;color:#1E7A45;border-radius:14px;padding:14px 20px;margin-bottom:20px;font-size:13.5px;font-weight:700">Palavra enviada (+1 ponto) — acompanhe a nuvem no telão!</div>
         </sc-if>
         <sc-if value="{{ mostrarInteresseCta }}" hint-placeholder-val="{{ false }}">
           <div style="background:#F39200;color:#002855;border-radius:16px;padding:18px 20px;margin-bottom:20px">
@@ -3784,6 +3784,7 @@ class Component extends DCLogic {
     const texto = (s.nuvemTexto || '').trim();
     if (!sessao || !nome || !texto) return;
     this.empurrarEstado({ ['palavra-' + sessao.id + '-' + nome]: { v: texto, t: Date.now() } });
+    this.empurrarEstado({ ['vivopt-' + sessao.id + '-' + nome]: { v: true, t: Date.now() } });
     this.setState({ nuvemTexto: '' });
   };
   enviarChute = () => {
@@ -3793,6 +3794,7 @@ class Component extends DCLogic {
     if (!sessao || !nome) return;
     const val = s.numeroChuteAtual !== undefined ? s.numeroChuteAtual : Math.round((sessao.min + sessao.max) / 2);
     this.empurrarEstado({ ['chute-' + sessao.id + '-' + nome]: { v: val, t: Date.now() } });
+    this.empurrarEstado({ ['vivopt-' + sessao.id + '-' + nome]: { v: true, t: Date.now() } });
     this.setState({ numeroChuteAtual: undefined });
   };
   revelarResposta = () => {
@@ -3854,8 +3856,10 @@ class Component extends DCLogic {
     if (!nome) return;
     this.empurrarEstado({ ['voto-' + sessaoId + '-' + nome]: { v: idx, t: Date.now() } });
     const sessao = this.sessaoAtual();
-    if (sessao && sessao.id === sessaoId && sessao.tipo === 'quiz' && idx === sessao.correta) {
-      this.empurrarEstado({ ['quizpt-' + sessaoId + '-' + nome]: { v: true, t: Date.now() } });
+    if (sessao && sessao.id === sessaoId && sessao.tipo === 'quiz') {
+      if (idx === sessao.correta) this.empurrarEstado({ ['quizpt-' + sessaoId + '-' + nome]: { v: true, t: Date.now() } });
+    } else if (sessao && sessao.id === sessaoId) {
+      this.empurrarEstado({ ['vivopt-' + sessaoId + '-' + nome]: { v: true, t: Date.now() } });
     }
   };
   setEstoqueOrdem = (id) => () => this.setState({ estoqueOrdem: id });
@@ -4015,7 +4019,7 @@ class Component extends DCLogic {
     });
     return n;
   };
-  pontosTotalDe = (nome) => this.calcularPontosFeitos(nome).length + this.contarAcertosQuiz(nome);
+  pontosTotalDe = (nome) => this.calcularPontosFeitos(nome).length + this.contarAcertosQuiz(nome) + this.contarAcertosSessaoAoVivo(nome) + this.contarParticipacoesAoVivo(nome) + (this.temFotoBonus(nome) ? 1 : 0) + this.pontosFotosDe(nome);
   temFotoBonus = (nome) => (this.state.fotos || []).some(f => f.autor === nome);
   temAcaoRealDe = (nome) => {
     if (this.valor('ps-' + nome) || this.valor('rt-' + nome) || this.valor('cs-' + nome) || this.valor('cf-' + nome) || this.valor('pp-' + nome) || this.valor('pcd-' + nome)) return true;
@@ -4035,6 +4039,14 @@ class Component extends DCLogic {
     const suf = '-' + nome;
     Object.keys(this.state.sync).forEach(k => {
       if (k.indexOf('quizpt-') === 0 && k.endsWith(suf) && this.state.sync[k].v) n++;
+    });
+    return n;
+  };
+  contarParticipacoesAoVivo = (nome) => {
+    let n = 0;
+    const suf = '-' + nome;
+    Object.keys(this.state.sync).forEach(k => {
+      if (k.indexOf('vivopt-') === 0 && k.endsWith(suf) && this.state.sync[k].v) n++;
     });
     return n;
   };
@@ -5944,10 +5956,7 @@ class Component extends DCLogic {
         })),
       }));
     const pontosAcoesView = PONTOS_ACOES.map(a => ({ label: a.label, feito: pontosFeitos.indexOf(a.key) !== -1, marca: pontosFeitos.indexOf(a.key) !== -1 ? '✓' : '○', cor: pontosFeitos.indexOf(a.key) !== -1 ? '#8FD9A8' : '#5E7DA6' }));
-    const acertosQuizMeu = temNome ? this.contarAcertosQuiz(s.meuNome) : 0;
-    const acertosAoVivoMeu = temNome ? this.contarAcertosSessaoAoVivo(s.meuNome) : 0;
-    const fotoBonusMeu = temNome && this.temFotoBonus(s.meuNome) ? 1 : 0;
-    const pontosTotal = pontosFeitos.length + acertosQuizMeu + acertosAoVivoMeu + fotoBonusMeu;
+    const pontosTotal = temNome ? this.pontosTotalDe(s.meuNome) : 0;
 
     const CAMPAIGN_START_QUIZ = '2026-08-05';
     const curiosOrdenadas = PARTICIPANTES.filter(n => cidadeDe(n) && !infoDe(n).d && this.valor('cur-' + n))
@@ -6101,7 +6110,7 @@ class Component extends DCLogic {
     const votacaoEhQuiz = !!sessaoAtualObj && sessaoAtualObj.tipo === 'quiz';
     const meuVotoIdx = (sessaoAtualObj && meuNomeQualquer) ? this.valor('voto-' + sessaoAtualObj.id + '-' + meuNomeQualquer) : undefined;
     const quizAcertei = votacaoEhQuiz && meuVotoIdx === sessaoAtualObj.correta;
-    const votacaoConfirmadaTexto = votacaoEhQuiz ? (quizAcertei ? 'Acertou! +1 ponto 🎉' : 'Não foi dessa vez — resposta registrada.') : 'Voto registrado — obrigado por participar!';
+    const votacaoConfirmadaTexto = votacaoEhQuiz ? (quizAcertei ? 'Acertou! +1 ponto 🎉' : 'Não foi dessa vez — resposta registrada.') : 'Voto registrado — +1 ponto! Obrigado por participar.';
     const votacaoConfirmadaBg = votacaoEhQuiz && !quizAcertei ? '#FDECE3' : '#E3F3E8';
     const votacaoConfirmadaBorder = votacaoEhQuiz && !quizAcertei ? '#F5CDBB' : '#8FD9A8';
     const votacaoConfirmadaColor = votacaoEhQuiz && !quizAcertei ? '#B02D1C' : '#1E7A45';
