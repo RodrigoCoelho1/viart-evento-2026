@@ -6092,11 +6092,10 @@ class Component extends DCLogic {
     const aoVivoEhNumero = aoVivoTipo === 'numero';
     const aoVivoPodeRevelar = aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'numero' && !sessaoAtualObj.revelado;
     const meuNomeQualquer = s.meuNome || s.dadosNome;
-    const souOrganizacaoAoVivo = !!meuNomeQualquer && infoDe(meuNomeQualquer).tipo === 'organizacao';
     const ehQuizOuVotacao = !!sessaoAtualObj && (sessaoAtualObj.tipo === 'votacao' || sessaoAtualObj.tipo === 'quiz');
     const jaVotei = !!(sessaoAtualObj && ehQuizOuVotacao && meuNomeQualquer && this.valor('voto-' + sessaoAtualObj.id + '-' + meuNomeQualquer) !== undefined);
-    const mostrarVotacaoBanner = !modoApresentacao && aoVivoSessaoAtiva && ehQuizOuVotacao && !!meuNomeQualquer && souOrganizacaoAoVivo && !jaVotei;
-    const mostrarVotacaoConfirmada = !modoApresentacao && aoVivoSessaoAtiva && ehQuizOuVotacao && !!meuNomeQualquer && souOrganizacaoAoVivo && jaVotei;
+    const mostrarVotacaoBanner = !modoApresentacao && aoVivoSessaoAtiva && ehQuizOuVotacao && !!meuNomeQualquer && !jaVotei;
+    const mostrarVotacaoConfirmada = !modoApresentacao && aoVivoSessaoAtiva && ehQuizOuVotacao && !!meuNomeQualquer && jaVotei;
     const votacaoBannerPergunta = sessaoAtualObj ? sessaoAtualObj.pergunta : '';
     const votacaoBannerOpcoesView = ehQuizOuVotacao ? sessaoAtualObj.opcoes.map((texto, i) => ({ texto, votar: this.votar(sessaoAtualObj.id, i) })) : [];
     const votacaoEhQuiz = !!sessaoAtualObj && sessaoAtualObj.tipo === 'quiz';
@@ -6115,8 +6114,8 @@ class Component extends DCLogic {
     }));
 
     const jaChutei = !!(sessaoAtualObj && meuNomeQualquer && sessaoAtualObj.tipo === 'numero' && this.valor('chute-' + sessaoAtualObj.id + '-' + meuNomeQualquer) !== undefined);
-    const mostrarNumeroBanner = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'numero' && !!meuNomeQualquer && souOrganizacaoAoVivo && !jaChutei;
-    const mostrarNumeroConfirmada = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'numero' && !!meuNomeQualquer && souOrganizacaoAoVivo && jaChutei;
+    const mostrarNumeroBanner = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'numero' && !!meuNomeQualquer && !jaChutei;
+    const mostrarNumeroConfirmada = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'numero' && !!meuNomeQualquer && jaChutei;
     const numeroBannerPergunta = sessaoAtualObj ? sessaoAtualObj.pergunta : '';
     const numeroMin = (sessaoAtualObj && sessaoAtualObj.tipo === 'numero') ? sessaoAtualObj.min : 0;
     const numeroMax = (sessaoAtualObj && sessaoAtualObj.tipo === 'numero') ? sessaoAtualObj.max : 100;
@@ -6125,12 +6124,12 @@ class Component extends DCLogic {
 
     const apresentacaoEhNuvem = !!sessaoAtualObj && sessaoAtualObj.tipo === 'nuvem';
     const jaEnviouPalavra = !!(sessaoAtualObj && meuNomeQualquer && sessaoAtualObj.tipo === 'nuvem' && this.valor('palavra-' + sessaoAtualObj.id + '-' + meuNomeQualquer) !== undefined);
-    const mostrarNuvemBanner = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'nuvem' && !!meuNomeQualquer && souOrganizacaoAoVivo && !jaEnviouPalavra;
-    const mostrarNuvemConfirmada = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'nuvem' && !!meuNomeQualquer && souOrganizacaoAoVivo && jaEnviouPalavra;
+    const mostrarNuvemBanner = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'nuvem' && !!meuNomeQualquer && !jaEnviouPalavra;
+    const mostrarNuvemConfirmada = !modoApresentacao && aoVivoSessaoAtiva && sessaoAtualObj.tipo === 'nuvem' && !!meuNomeQualquer && jaEnviouPalavra;
     const nuvemBannerPergunta = sessaoAtualObj ? sessaoAtualObj.pergunta : '';
     const jaManifesteiInteresse = !!(meuNomeQualquer && this.valor('interesse-superapp-' + meuNomeQualquer));
-    const mostrarInteresseCta = !modoApresentacao && aoVivoSessaoAtiva && !!(sessaoAtualObj && sessaoAtualObj.interesseCta) && !!meuNomeQualquer && souOrganizacaoAoVivo && !jaManifesteiInteresse;
-    const mostrarInteresseConfirmada = !modoApresentacao && aoVivoSessaoAtiva && !!(sessaoAtualObj && sessaoAtualObj.interesseCta) && !!meuNomeQualquer && souOrganizacaoAoVivo && jaManifesteiInteresse;
+    const mostrarInteresseCta = !modoApresentacao && aoVivoSessaoAtiva && !!(sessaoAtualObj && sessaoAtualObj.interesseCta) && !!meuNomeQualquer && !jaManifesteiInteresse;
+    const mostrarInteresseConfirmada = !modoApresentacao && aoVivoSessaoAtiva && !!(sessaoAtualObj && sessaoAtualObj.interesseCta) && !!meuNomeQualquer && jaManifesteiInteresse;
     let apresentacaoNuvemView = [];
     let apresentacaoNuvemTotal = 0;
     if (apresentacaoEhNuvem) {
