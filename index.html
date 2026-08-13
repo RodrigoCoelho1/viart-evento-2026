@@ -2459,7 +2459,6 @@
                 <sc-for list="{{ resgatesFiltroOpcoes }}" as="op" hint-placeholder-count="3">
                   <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
                 </sc-for>
-                <div onClick="{{ toggleResgatesOrdemAlfabetica }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ resgatesOrdemBg }};color:{{ resgatesOrdemColor }}">A–Z</div>
               </div>
               <sc-if value="{{ resgatesConfirmadosVazio }}" hint-placeholder-val="{{ false }}">
                 <div style="font-size:12.5px;color:#8A8A90;padding:8px 0">Nenhum resgate nessa categoria.</div>
@@ -2468,10 +2467,10 @@
                 <table style="width:100%;border-collapse:collapse;font-size:12.5px">
                   <thead>
                     <tr style="background:#F7F9FC">
-                      <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Item</th>
-                      <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Nome</th>
+                      <th onClick="{{ toggleSortItem }}" style="cursor:pointer;text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2;white-space:nowrap">Item{{ itemArrow }}</th>
+                      <th onClick="{{ toggleSortNome }}" style="cursor:pointer;text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2;white-space:nowrap">Nome{{ nomeArrow }}</th>
                       <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Cidade</th>
-                      <th style="text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Quando</th>
+                      <th onClick="{{ toggleSortQuando }}" style="cursor:pointer;text-align:left;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2;white-space:nowrap">Quando{{ quandoArrow }}</th>
                       <th style="text-align:right;padding:8px 10px;font-size:10.5px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DCE6F2">Entrega</th>
                     </tr>
                   </thead>
@@ -6042,10 +6041,16 @@ class Component extends DCLogic {
       { id: 'entregues', label: 'Entregues (' + resgatesEntreguesCount + ')' },
       { id: 'todos', label: 'Todos (' + resgatesConfirmadosPre.length + ')' },
     ].map(op => ({ ...op, onClick: this.setResgatesFiltro(op.id), bg: resgatesFiltroAtivo === op.id ? '#0057A6' : '#F2F5FA', color: resgatesFiltroAtivo === op.id ? '#FFFFFF' : '#4A4A50' }));
-    const resgatesOrdemAlfabetica = !!s.resgatesOrdemAlfabetica;
+    const resgatesSort = s.resgatesSort || { field: 'quando', dir: 'desc' };
     const resgatesConfirmadosView = resgatesConfirmadosPre
       .filter(r => resgatesFiltroAtivo === 'todos' || (resgatesFiltroAtivo === 'pendentes' ? !r.entregue : r.entregue))
-      .sort((a, b) => resgatesOrdemAlfabetica ? a.nome.localeCompare(b.nome, 'pt-BR') : b.t - a.t)
+      .sort((a, b) => {
+        if (resgatesSort.field === 'quando') return resgatesSort.dir === 'asc' ? a.t - b.t : b.t - a.t;
+        const av = resgatesSort.field === 'item' ? a.itemNome : a.nome;
+        const bv = resgatesSort.field === 'item' ? b.itemNome : b.nome;
+        const cmp = String(av).localeCompare(String(bv), 'pt-BR');
+        return resgatesSort.dir === 'asc' ? cmp : -cmp;
+      })
       .map(r => ({
         ...r,
         quando: r.t ? new Date(r.t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—',
@@ -6894,8 +6899,12 @@ class Component extends DCLogic {
       precoPontos, mediaPontos: medianaPontos, chartPontosView, chartGapLabel, chartW, chartH, podeComprarView, totalAtivosPontosSP,
       markerX, markerY, adesaoAtualPct, precoAtualChart, medianaAtual,
       resgatesConfirmadosView, resgatesConfirmadosVazio, resgatesFiltroOpcoes,
-      toggleResgatesOrdemAlfabetica: () => this.setState(st => ({ resgatesOrdemAlfabetica: !st.resgatesOrdemAlfabetica })),
-      resgatesOrdemBg: resgatesOrdemAlfabetica ? '#0057A6' : '#F2F5FA', resgatesOrdemColor: resgatesOrdemAlfabetica ? '#FFFFFF' : '#4A4A50',
+      toggleSortItem: () => this.setState(st => { const cur = st.resgatesSort || { field: 'quando', dir: 'desc' }; return { resgatesSort: cur.field === 'item' ? { field: 'item', dir: cur.dir === 'asc' ? 'desc' : 'asc' } : { field: 'item', dir: 'asc' } }; }),
+      toggleSortNome: () => this.setState(st => { const cur = st.resgatesSort || { field: 'quando', dir: 'desc' }; return { resgatesSort: cur.field === 'nome' ? { field: 'nome', dir: cur.dir === 'asc' ? 'desc' : 'asc' } : { field: 'nome', dir: 'asc' } }; }),
+      toggleSortQuando: () => this.setState(st => { const cur = st.resgatesSort || { field: 'quando', dir: 'desc' }; return { resgatesSort: cur.field === 'quando' ? { field: 'quando', dir: cur.dir === 'asc' ? 'desc' : 'asc' } : { field: 'quando', dir: 'desc' } }; }),
+      itemArrow: resgatesSort.field === 'item' ? (resgatesSort.dir === 'asc' ? ' ▲' : ' ▼') : '',
+      nomeArrow: resgatesSort.field === 'nome' ? (resgatesSort.dir === 'asc' ? ' ▲' : ' ▼') : '',
+      quandoArrow: resgatesSort.field === 'quando' ? (resgatesSort.dir === 'asc' ? ' ▲' : ' ▼') : '',
       proporcaoCidadesLabel: (() => {
         const { sp, bsb } = this.contagemCidades();
         const total = sp + bsb || 1;
