@@ -2613,6 +2613,26 @@
               </div>
             </div>
 
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:16px 18px;margin-bottom:16px">
+              <div style="font-size:11px;font-weight:800;color:#6B6B70;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Brindes entregues por área</div>
+              <div style="font-size:12px;color:#8A8A90;margin-bottom:10px">Quantidade de brindes resgatados, somada pela área de quem recebeu — mostra se alguma área está concentrando mais brindes que as outras.</div>
+              <sc-if value="{{ brindesPorAreaVazio }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12.5px;color:#8A8A90">Nenhum brinde resgatado ainda.</div>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ brindesPorAreaView }}" as="ba" hint-placeholder-count="6">
+                  <div style="background:#F7F9FC;border-radius:10px;padding:9px 12px">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:11.5px;margin-bottom:6px">
+                      <div style="font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ba.area }}</div>
+                      <div style="color:#6B6B70;flex-shrink:0;white-space:nowrap">{{ ba.brindes }} brinde(s) · {{ ba.pctDoTotal }}% do total</div>
+                    </div>
+                    <div style="height:6px;border-radius:999px;background:#EDF1F7;overflow:hidden;margin-bottom:4px"><div style="height:100%;width:{{ ba.pctDoTotal }}%;background:#0057A6;border-radius:999px"></div></div>
+                    <div style="font-size:10.5px;color:#8A8A90">{{ ba.pessoas }} pessoa(s) na área · média {{ ba.mediaPorPessoa }} brinde(s)/pessoa · {{ ba.pctPessoasComBrinde }}% já resgatou algo</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
               <input type="text" placeholder="Buscar por nome" value="{{ tabelaPontosBuscaVal }}" onChange="{{ onTabelaPontosBusca }}" style="padding:8px 12px;border-radius:8px;border:1px solid #C9D6E8;font-size:12.5px;font-family:'Manrope',sans-serif;min-width:180px"></input>
               <sc-for list="{{ tabelaPontosCidadeOpcoes }}" as="op" hint-placeholder-count="3">
@@ -3250,7 +3270,8 @@ const MANUAL_SECOES = [
     'Mensagens da liderança (VP e Diretor).',
     'Objetivos do evento.',
     'Contador de dias até o evento da sua cidade.',
-    'Avaliação "Como foi o seu dia?" (NPS) — libera após o horário de encerramento; nota geral 0-10, nota por painel/momento do dia, e perguntas abertas.',
+    'Avaliação "Como foi o seu dia?" (NPS): nome opcional, nota geral 0-10, nota por bloco (Estudo de Caso Goldman Sachs, Histórias que Inspiram, Dinâmica das Bikes), nota para o app, "resuma o evento numa palavra" e sugestões/críticas/elogios — libera às 18h10 no dia do evento da cidade da pessoa (ou depois), só para participantes de São Paulo, Organização e Gestores.',
+    'Banner "Quer ter acesso ao superapp / MiniApp de investimento?": CTA fixo na Início para quem ainda não manifestou interesse; um clique registra o nome na lista de interessados (vista em Organização · Sessão ao vivo).',
     'Avisos: mural fixo explicando que o app mantém o time atualizado sobre novidades, que as áreas interativas estão liberadas por enquanto só para SP, e como usar o Fale conosco.',
     'Atualizações: novidades publicadas pela organização (mais recentes primeiro).',
     'Banner "Chegou o Mural de Fotos!": leva direto para a aba Fotos.',
@@ -3312,6 +3333,9 @@ const MANUAL_SECOES = [
     'Controle de brindes: quantidade prevista por área/fornecedor, status e pendências de logística.',
   ] },
   { id: 'participantes', titulo: 'Organização · Participantes', itens: [
+    'Check-in do credenciamento: % geral e por cidade (São Paulo x Brasília) de quem já fez check-in, sempre visível no topo desta aba.',
+    'Publicar atualização: manda uma novidade para a aba Início de todo mundo (lista de Atualizações).',
+    'Pop-up de aviso urgente: dispara um aviso que interrompe a tela de quem estiver com o app aberto, até a pessoa clicar em "Entendi" — com botão para retirar o aviso ativo.',
     'Sub-abas: Participantes, Gamificação, NPS, Fotos, QR Codes e Fale conosco — tudo reunido num só lugar, com navegação por pills no topo.',
     'Lista completa dos participantes, com busca por nome.',
     'Filtros cumulativos: cidade, tamanho/modelagem de camiseta, confraternização, mesa, presença, camiseta entregue, unidade/área.',
@@ -3328,14 +3352,24 @@ const MANUAL_SECOES = [
     'Comparação SP x BSB (pontos e resgates).',
     'Gráfico "Quem conta pra brindes": donut com os 187 participantes segmentados em São Paulo, Brasília, Organização, Gestor, Férias, Destacamento e Licença/outros, com selo de quem conta ou não pra contagem de brindes.',
     'Seção "Controle de estoques" (acima de Malas de brindes): uma única tabela por item, com preço atual, estoque total, restante por cidade, enviado p/ SP, excedente e status (estoque e logística); filtro por status logístico e por ordem (maior pro menor preço ou alfabética).',
-    'Tabela "Resgates confirmados": lista de quem já garantiu qual brinde, com filtro Pendentes/Entregues/Todos e botão para marcar a entrega — usada para saber quem deve receber o brinde.',
+    'Tabela "Resgates confirmados": lista de quem já garantiu qual brinde, com filtro Pendentes/Entregues/Todos, ordenação por clique nos cabeçalhos (Item, Nome ou Quando — crescente/decrescente) e botão para marcar a entrega.',
+    'Tabela completa "pontos e brindes por participante": nome, cidade, área, pontos, número de brindes, quais brindes cada pessoa resgatou e como ganhou os pontos — com busca por nome, filtro de cidade/área e ordenação por clique no cabeçalho (Nome, Pontos ou Nº de brindes).',
+    'Correlação pontos x brindes: coeficiente de correlação entre pontuação e brindes resgatados, mais a média de brindes por faixa de pontuação (menos pontos / médio / mais pontos).',
+    'Brindes entregues por área: total de brindes resgatados somado por área de quem recebeu, com média por pessoa e % de pessoas da área que já resgatou algo — para identificar concentração por área.',
 
     'Subaba Fotos: lista de todas as fotos postadas, com "Remover" para moderação — some do mural e deixa de contar pontos.',
   ] },
   { id: 'nps-org', titulo: 'Organização · NPS', itens: [
-    'Nota média e NPS (promotores menos detratores) das avaliações "Como foi o seu dia?".',
+    'Nota média geral, nota média do app e NPS (promotores menos detratores) das avaliações "Como foi o seu dia?".',
     'Distribuição das notas em promotores, neutros e detratores.',
-    'Notas por momento do dia (painel), e lista de comentários abertos recebidos.',
+    'Notas por bloco de atividade (Estudo de Caso Goldman Sachs, Histórias que Inspiram, Dinâmica das Bikes), e lista de comentários abertos recebidos ("uma palavra" e sugestões/críticas/elogios).',
+  ] },
+  { id: 'aovivo-org', titulo: 'Organização · Sessão ao vivo', itens: [
+    'Expectativas do credenciamento: nuvem de palavras coletada automaticamente na pergunta opcional do Credenciamento, com botão para abrir em modo apresentação (telão).',
+    'Interesse no superapp / MiniApp: lista de quem clicou no CTA "Quero ter acesso" na Início, para a equipe liberar o acesso.',
+    'Fila do bloco Report Planejamento: perguntas pré-configuradas para ativar em sequência durante o bloco, com botões Ativar, Revelar resposta real e Encerrar pesquisa por pergunta.',
+    'Pergunta avulsa: cria uma dinâmica fora da fila (votação, quiz com resposta correta, chute de número com revelação do valor real, ou nuvem de palavras), com pergunta, opções e contexto configuráveis.',
+    'Modo apresentação: abre numa segunda janela/telão, mostrando resultado em tempo real conforme as pessoas respondem pelo próprio celular.',
   ] },
   { id: 'qrcodes', titulo: 'Organização · QR Codes', itens: [
     'Geração de PDF: cartazes de credenciamento por cidade (A4).',
@@ -3353,6 +3387,11 @@ const MANUAL_SECOES = [
   { id: 'faleconosco-org', titulo: 'Organização · Fale conosco', itens: [
     'Lista de mensagens recebidas pelo Fale conosco, mais recentes primeiro, com nome (ou "Anônimo") e horário.',
     'Opção de excluir mensagens já tratadas.',
+  ] },
+  { id: 'relatorios', titulo: 'Organização · Relatórios', itens: [
+    'Documentos .docx prontos para impressão, com cabeçalho, rodapé e numeração de páginas.',
+    'Lista de pessoas · camisa e gênero: 100% dos participantes (inclusive Organização, Gestores, Férias, Destacamento e Licença/outros), separados por cidade/grupo e por área.',
+    'Controle de estoques: todos os brindes por categoria, com estoque total, divisão SP/BSB, enviado p/ SP e o que falta enviar p/ BSB.',
   ] },
   { id: 'programacaoreal', titulo: 'Organização · Programação real', itens: [
     'Ajuste da agenda em tempo real, visível ao público a partir do dia do evento — para registrar mudanças de horário que aconteceram de fato.',
@@ -5916,6 +5955,22 @@ class Component extends DCLogic {
         if (av > bv) return tabelaPontosOrdem.dir === 'asc' ? 1 : -1;
         return 0;
       });
+    const brindesPorAreaMap = {};
+    pontosRankingView.forEach(p => {
+      const key = p.area || '—';
+      if (!brindesPorAreaMap[key]) brindesPorAreaMap[key] = { area: key, pessoas: 0, brindes: 0, pessoasComBrinde: 0 };
+      brindesPorAreaMap[key].pessoas++;
+      brindesPorAreaMap[key].brindes += p.resgatesCount;
+      if (p.resgatesCount > 0) brindesPorAreaMap[key].pessoasComBrinde++;
+    });
+    const totalBrindesGeral = Math.max(1, pontosRankingView.reduce((a, p) => a + p.resgatesCount, 0));
+    const brindesPorAreaView = Object.values(brindesPorAreaMap).map(g => ({
+      area: g.area, pessoas: g.pessoas, brindes: g.brindes,
+      mediaPorPessoa: g.pessoas ? Math.round(10 * g.brindes / g.pessoas) / 10 : 0,
+      pctDoTotal: Math.round(100 * g.brindes / totalBrindesGeral),
+      pctPessoasComBrinde: g.pessoas ? Math.round(100 * g.pessoasComBrinde / g.pessoas) : 0,
+    })).sort((a, b) => b.brindes - a.brindes);
+    const brindesPorAreaVazio = brindesPorAreaView.every(g => g.brindes === 0);
     const areaGroupsEngajamento = {};
     pontosRankingView.forEach(p => {
       const key = p.area || '—';
@@ -7026,6 +7081,7 @@ class Component extends DCLogic {
       toggleManualJogo: this.toggleManualJogo, manualJogoToggleLabel: (s.manualJogoAberto === undefined || s.manualJogoAberto) ? 'Ocultar' : 'Ver regras',
       showOrgPontos: s.orgSubTab === 'pessoas' && s.orgPessoasSub === 'pontos', pontosRankingView, mediaPontosGeral: Math.round(mediaPontosAtivosGlobal * 10) / 10,
       correlacaoPontosBrindes, correlacaoPontosBrindesLabel, correlacaoTercos,
+      brindesPorAreaView, brindesPorAreaVazio,
       tabelaPontosBuscaVal: s.tabelaPontosBusca || '', onTabelaPontosBusca: this.onTabelaPontosBusca,
       tabelaPontosAreaVal: s.tabelaPontosArea || '', onTabelaPontosArea: this.onTabelaPontosArea,
       tabelaPontosAreasOpcoes,
