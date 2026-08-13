@@ -5956,6 +5956,18 @@ class Component extends DCLogic {
         })),
       }));
     const pontosAcoesView = PONTOS_ACOES.map(a => ({ label: a.label, feito: pontosFeitos.indexOf(a.key) !== -1, marca: pontosFeitos.indexOf(a.key) !== -1 ? '✓' : '○', cor: pontosFeitos.indexOf(a.key) !== -1 ? '#8FD9A8' : '#5E7DA6' }));
+    if (temNome) {
+      const acertosQuizExtra = this.contarAcertosQuiz(s.meuNome);
+      const acertosAoVivoExtra = this.contarAcertosSessaoAoVivo(s.meuNome);
+      const participAoVivoExtra = this.contarParticipacoesAoVivo(s.meuNome);
+      const fotoBonusExtra = this.temFotoBonus(s.meuNome) ? 1 : 0;
+      const pontosFotosExtra = this.pontosFotosDe(s.meuNome);
+      if (acertosQuizExtra > 0) pontosAcoesView.push({ label: 'Detetive VIART · ' + acertosQuizExtra + ' acerto' + (acertosQuizExtra > 1 ? 's' : ''), feito: true, marca: '✓', cor: '#8FD9A8' });
+      if (acertosAoVivoExtra > 0) pontosAcoesView.push({ label: 'Sessão ao vivo · ' + acertosAoVivoExtra + ' acerto' + (acertosAoVivoExtra > 1 ? 's' : '') + ' no quiz', feito: true, marca: '✓', cor: '#8FD9A8' });
+      if (participAoVivoExtra > 0) pontosAcoesView.push({ label: 'Sessão ao vivo · ' + participAoVivoExtra + ' participaç' + (participAoVivoExtra > 1 ? 'ões' : 'ão'), feito: true, marca: '✓', cor: '#8FD9A8' });
+      if (fotoBonusExtra > 0) pontosAcoesView.push({ label: 'Bônus da primeira foto no mural', feito: true, marca: '✓', cor: '#8FD9A8' });
+      if (pontosFotosExtra > 0) pontosAcoesView.push({ label: 'Mural de fotos · ' + pontosFotosExtra + ' ponto' + (pontosFotosExtra > 1 ? 's' : '') + ' (posts, curtidas e comentários)', feito: true, marca: '✓', cor: '#8FD9A8' });
+    }
     const pontosTotal = temNome ? this.pontosTotalDe(s.meuNome) : 0;
 
     const CAMPAIGN_START_QUIZ = '2026-08-05';
