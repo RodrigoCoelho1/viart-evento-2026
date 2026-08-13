@@ -2459,6 +2459,7 @@
                 <sc-for list="{{ resgatesFiltroOpcoes }}" as="op" hint-placeholder-count="3">
                   <div onClick="{{ op.onClick }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ op.bg }};color:{{ op.color }}">{{ op.label }}</div>
                 </sc-for>
+                <div onClick="{{ toggleResgatesOrdemAlfabetica }}" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ resgatesOrdemBg }};color:{{ resgatesOrdemColor }}">A–Z</div>
               </div>
               <sc-if value="{{ resgatesConfirmadosVazio }}" hint-placeholder-val="{{ false }}">
                 <div style="font-size:12.5px;color:#8A8A90;padding:8px 0">Nenhum resgate nessa categoria.</div>
@@ -6041,9 +6042,10 @@ class Component extends DCLogic {
       { id: 'entregues', label: 'Entregues (' + resgatesEntreguesCount + ')' },
       { id: 'todos', label: 'Todos (' + resgatesConfirmadosPre.length + ')' },
     ].map(op => ({ ...op, onClick: this.setResgatesFiltro(op.id), bg: resgatesFiltroAtivo === op.id ? '#0057A6' : '#F2F5FA', color: resgatesFiltroAtivo === op.id ? '#FFFFFF' : '#4A4A50' }));
+    const resgatesOrdemAlfabetica = !!s.resgatesOrdemAlfabetica;
     const resgatesConfirmadosView = resgatesConfirmadosPre
       .filter(r => resgatesFiltroAtivo === 'todos' || (resgatesFiltroAtivo === 'pendentes' ? !r.entregue : r.entregue))
-      .sort((a, b) => b.t - a.t)
+      .sort((a, b) => resgatesOrdemAlfabetica ? a.nome.localeCompare(b.nome, 'pt-BR') : b.t - a.t)
       .map(r => ({
         ...r,
         quando: r.t ? new Date(r.t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—',
@@ -6892,6 +6894,8 @@ class Component extends DCLogic {
       precoPontos, mediaPontos: medianaPontos, chartPontosView, chartGapLabel, chartW, chartH, podeComprarView, totalAtivosPontosSP,
       markerX, markerY, adesaoAtualPct, precoAtualChart, medianaAtual,
       resgatesConfirmadosView, resgatesConfirmadosVazio, resgatesFiltroOpcoes,
+      toggleResgatesOrdemAlfabetica: () => this.setState(st => ({ resgatesOrdemAlfabetica: !st.resgatesOrdemAlfabetica })),
+      resgatesOrdemBg: resgatesOrdemAlfabetica ? '#0057A6' : '#F2F5FA', resgatesOrdemColor: resgatesOrdemAlfabetica ? '#FFFFFF' : '#4A4A50',
       proporcaoCidadesLabel: (() => {
         const { sp, bsb } = this.contagemCidades();
         const total = sp + bsb || 1;
