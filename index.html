@@ -3882,9 +3882,9 @@ class Component extends DCLogic {
     reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => {
-        const LIMITE_CHARS = 550000; // margem segura abaixo do limite de payload do banco
-        let max = 1080, qualidade = 0.72, dataUrl = '';
-        for (let tentativa = 0; tentativa < 6; tentativa++) {
+        const LIMITE_CHARS = 200000; // margem bem folgada abaixo do limite de payload do banco
+        let max = 900, qualidade = 0.65, dataUrl = '';
+        for (let tentativa = 0; tentativa < 8; tentativa++) {
           const escala = Math.min(1, max / Math.max(img.width, img.height));
           const w = Math.round(img.width * escala), h = Math.round(img.height * escala);
           const canvas = document.createElement('canvas');
@@ -3892,8 +3892,8 @@ class Component extends DCLogic {
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
           dataUrl = canvas.toDataURL('image/jpeg', qualidade);
           if (dataUrl.length <= LIMITE_CHARS) break;
-          max = Math.round(max * 0.8);
-          qualidade = Math.max(0.4, qualidade - 0.12);
+          max = Math.round(max * 0.75);
+          qualidade = Math.max(0.3, qualidade - 0.08);
         }
         this.setState({ fotoRascunho: { imagem: dataUrl, legenda: '' }, fotoErro: '' });
       };
@@ -6670,9 +6670,8 @@ class Component extends DCLogic {
     const souGestor = (s.meuNome && infoDe(s.meuNome).tipo === 'gestor') || (s.dadosNome && infoDe(s.dadosNome).tipo === 'gestor');
     const mostrarPopupAviso = !!(s.sync['popup-urgente'] && s.sync['popup-urgente'].v && !s.popupAvisoFechado &&
       String(s.sync['popup-urgente'].t) !== (localStorage.getItem('viart2026_popup_visto') || ''));
-    const mostrarPopupNovidades = !s.popupNovidadesFechado && !mostrarPopupAviso && (localStorage.getItem('viart2026_popup_novidades_v12_visto') || '') !== '1';
-    const mostrarPopupChegueCedo = !s.popupChegueCedoFechado && !mostrarPopupAviso && !mostrarPopupNovidades &&
-      (localStorage.getItem('viart2026_popup_chegue_cedo_v2_visto') || '') !== '1';
+    const mostrarPopupNovidades = false;
+    const mostrarPopupChegueCedo = false;
     const minhaCidadeIdPopupHidden = temNome ? cidadeDe(s.meuNome) : '';
     const mostrarPopupHidden = minhaCidadeIdPopupHidden === 'bsb' && !s.popupHiddenFechado && !mostrarPopupAviso && !mostrarPopupNovidades && !mostrarPopupChegueCedo &&
       (localStorage.getItem('viart2026_popup_hidden_v2_visto') || '') !== '1';
