@@ -3882,13 +3882,20 @@ class Component extends DCLogic {
     reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => {
-        const MAX = 1080;
-        const escala = Math.min(1, MAX / Math.max(img.width, img.height));
-        const w = Math.round(img.width * escala), h = Math.round(img.height * escala);
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        this.setState({ fotoRascunho: { imagem: canvas.toDataURL('image/jpeg', 0.72), legenda: '' }, fotoErro: '' });
+        const LIMITE_CHARS = 550000; // margem segura abaixo do limite de payload do banco
+        let max = 1080, qualidade = 0.72, dataUrl = '';
+        for (let tentativa = 0; tentativa < 6; tentativa++) {
+          const escala = Math.min(1, max / Math.max(img.width, img.height));
+          const w = Math.round(img.width * escala), h = Math.round(img.height * escala);
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          dataUrl = canvas.toDataURL('image/jpeg', qualidade);
+          if (dataUrl.length <= LIMITE_CHARS) break;
+          max = Math.round(max * 0.8);
+          qualidade = Math.max(0.4, qualidade - 0.12);
+        }
+        this.setState({ fotoRascunho: { imagem: dataUrl, legenda: '' }, fotoErro: '' });
       };
       img.src = ev.target.result;
     };
