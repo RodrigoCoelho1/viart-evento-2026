@@ -1751,6 +1751,106 @@
             </div>
             </sc-if>
 
+            <sc-if value="{{ showOrgAnalises }}" hint-placeholder-val="{{ false }}">
+            <div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Análises</div>
+            <div style="font-size:13px;color:#6B6B70;margin-bottom:18px">Cruzamentos e leituras a partir dos dados já coletados pelo app.</div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:12px">Comparativo São Paulo × Brasília</div>
+              <div style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;font-size:13px">
+                <tr style="text-align:left;color:#6B6B70;font-size:11.5px;text-transform:uppercase;letter-spacing:0.04em">
+                  <td style="padding:6px 10px 8px 0">Indicador</td><td style="padding:6px 10px 8px">São Paulo</td><td style="padding:6px 10px 8px">Brasília</td>
+                </tr>
+                <sc-for list="{{ comparativoCidadesView }}" as="cc" hint-placeholder-count="5">
+                  <tr style="border-top:1px solid #EDF1F7">
+                    <td style="padding:9px 10px 9px 0;font-weight:700;color:#002855">{{ cc.label }}</td>
+                    <td style="padding:9px 10px">{{ cc.sp }}</td>
+                    <td style="padding:9px 10px">{{ cc.bsb }}</td>
+                  </tr>
+                </sc-for>
+              </table>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px">Funil de conversão</div>
+              <div style="font-size:12px;color:#6B6B70;margin-bottom:14px">Check-in → pré-cadastro → mercado de brindes → NPS (participantes ativos, ambas as cidades)</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ funilView }}" as="fn" hint-placeholder-count="4">
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px"><b style="color:#002855">{{ fn.label }}</b><span style="color:#6B6B70">{{ fn.n }} · {{ fn.pct }}%</span></div>
+                    <div style="background:#EDF1F7;border-radius:999px;height:10px;overflow:hidden"><div style="background:#0057A6;height:100%;width:{{ fn.pct }}%"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px">Ranking de engajamento por área</div>
+              <div style="font-size:12px;color:#6B6B70;margin-bottom:14px">Pontos médios e % de pessoas ativas (com pelo menos 1 ação) por área</div>
+              <sc-if value="{{ rankingAreaVazio }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:13px;color:#8A8A90">Sem dados de área suficientes ainda.</div>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ rankingAreaView }}" as="ra" hint-placeholder-count="6">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="width:150px;flex-shrink:0;font-size:12.5px;font-weight:700;color:#002855;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ra.area }}</div>
+                    <div style="flex:1;background:#EDF1F7;border-radius:999px;height:10px;overflow:hidden"><div style="background:#7B4FA6;height:100%;width:{{ ra.barPct }}%"></div></div>
+                    <div style="width:130px;flex-shrink:0;font-size:11.5px;color:#6B6B70;text-align:right">{{ ra.mediaPontos }} pts médios · {{ ra.pctAtivos }}% ativos</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px">Linha do tempo de engajamento</div>
+              <div style="font-size:12px;color:#6B6B70;margin-bottom:14px">Ações registradas no app (check-in, cadastro, votos, fotos, resgates, NPS) por hora do dia de hoje</div>
+              <sc-if value="{{ timelineVazia }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:13px;color:#8A8A90">Nenhuma ação registrada hoje ainda.</div>
+              </sc-if>
+              <div style="display:flex;align-items:flex-end;gap:4px;height:110px">
+                <sc-for list="{{ timelineView }}" as="th" hint-placeholder-count="14">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px">
+                    <div style="width:100%;background:#0057A6;border-radius:4px 4px 0 0;height:{{ th.barPct }}%;min-height:2px"></div>
+                    <div style="font-size:9.5px;color:#8A8A90">{{ th.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px">Nuvem: "o que poderia melhorar" (NPS)</div>
+              <div style="font-size:12px;color:#6B6B70;margin-bottom:14px">Palavras mais citadas nas respostas de melhoria do NPS</div>
+              <sc-if value="{{ npsMelhorarNuvemVazia }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:13px;color:#8A8A90">Sem respostas suficientes ainda.</div>
+              </sc-if>
+              <div style="display:flex;flex-wrap:wrap;gap:8px 14px">
+                <sc-for list="{{ npsMelhorarNuvemView }}" as="mw" hint-placeholder-count="8">
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:{{ mw.tamanho }};color:{{ mw.cor }}">{{ mw.texto }}</div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px">Expectativa × nota do NPS</div>
+              <div style="font-size:12px;color:#6B6B70;margin-bottom:14px">De quem respondeu as duas coisas — o que a pessoa esperava do evento e a nota que deu no fim</div>
+              <sc-if value="{{ expNpsVazio }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:13px;color:#8A8A90">Ainda ninguém respondeu expectativa e NPS ao mesmo tempo.</div>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ expNpsView }}" as="en" hint-placeholder-count="6">
+                  <div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid #EDF1F7;font-size:12.5px">
+                    <div style="color:#4A4A50">"{{ en.expectativa }}"</div>
+                    <div style="font-weight:800;color:{{ en.cor }};flex-shrink:0">nota {{ en.nota }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            </div>
+            </sc-if>
+
             <sc-if value="{{ showOrgManual }}" hint-placeholder-val="{{ false }}">
             <div>
             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Manual do App</div>
@@ -2972,6 +3072,7 @@ const ORG_SUBTABS_DEF = [
   { id: 'interessesuperapp', label: 'Interesse Superapp' },
   { id: 'relatorios', label: 'Relatórios' },
   { id: 'aovivo', label: 'Sessão ao vivo' },
+  { id: 'analises', label: 'Análises' },
   { id: 'manual', label: 'Manual do App' },
 ];
 const SESSAO_TIPOS = [
@@ -6767,6 +6868,105 @@ class Component extends DCLogic {
       };
     });
 
+    // ── Análises (Organização) ──────────────────────────────────────────────
+    const showOrgAnalises = s.orgSubTab === 'analises';
+    const ativosSP = PARTICIPANTES.filter(n => cidadeDe(n) === 'sp' && !infoDe(n).d);
+    const ativosBSB = PARTICIPANTES.filter(n => cidadeDe(n) === 'bsb' && !infoDe(n).d);
+    const pctOf = (arr, pred) => arr.length ? Math.round(100 * arr.filter(pred).length / arr.length) : 0;
+    const npsPorCidade = (cid) => {
+      const raw = Object.keys(s.sync).filter(k => k.startsWith('nps-') && s.sync[k] && s.sync[k].v && typeof s.sync[k].v.nota === 'number' && cidadeDe(k.slice(4)) === cid).map(k => s.sync[k].v);
+      if (!raw.length) return '—';
+      const prom = raw.filter(r => r.nota >= 9).length, det = raw.filter(r => r.nota <= 6).length;
+      return (Math.round(100 * prom / raw.length) - Math.round(100 * det / raw.length));
+    };
+    const mediaPontos = (arr) => arr.length ? Math.round(10 * arr.reduce((a, n) => a + this.pontosTotalDe(n), 0) / arr.length) / 10 : 0;
+    const comparativoCidadesView = [
+      { label: 'Check-in confirmado', sp: pctOf(ativosSP, n => gv('ps-' + n)) + '%', bsb: pctOf(ativosBSB, n => gv('ps-' + n)) + '%' },
+      { label: 'Pré-cadastro (adesão)', sp: Math.round(this.adesaoGeralSP('sp') * 100) + '%', bsb: Math.round(this.adesaoGeralSP('bsb') * 100) + '%' },
+      { label: 'Pontos médios/pessoa', sp: mediaPontos(ativosSP), bsb: mediaPontos(ativosBSB) },
+      { label: 'Fotos postadas', sp: (s.fotos || []).filter(f => cidadeDe(f.autor) === 'sp').length, bsb: (s.fotos || []).filter(f => cidadeDe(f.autor) === 'bsb').length },
+      { label: 'NPS (score)', sp: npsPorCidade('sp'), bsb: npsPorCidade('bsb') },
+    ];
+
+    const ativosTodos = ativosSP.concat(ativosBSB);
+    const funilCheckin = ativosTodos.filter(n => gv('ps-' + n)).length;
+    const funilPreCadastro = ativosTodos.filter(n => this.temAcaoRealDe(n)).length;
+    const funilBrindes = ativosTodos.filter(n => BRINDES_MARKETPLACE.some(b => gv('brinde-' + b.id + '-' + n))).length;
+    const funilNps = ativosTodos.filter(n => { const e = s.sync['nps-' + n]; return e && e.v && typeof e.v.nota === 'number'; }).length;
+    const funilBase = ativosTodos.length || 1;
+    const funilView = [
+      { label: 'Check-in', n: funilCheckin, pct: Math.round(100 * funilCheckin / funilBase) },
+      { label: 'Pré-cadastro', n: funilPreCadastro, pct: Math.round(100 * funilPreCadastro / funilBase) },
+      { label: 'Mercado de brindes', n: funilBrindes, pct: Math.round(100 * funilBrindes / funilBase) },
+      { label: 'NPS', n: funilNps, pct: Math.round(100 * funilNps / funilBase) },
+    ];
+
+    const areaMap = {};
+    ativosTodos.forEach(n => {
+      const ar = (infoDe(n).u || '—').split(' - ')[0];
+      if (!areaMap[ar]) areaMap[ar] = { area: ar, pessoas: 0, pontos: 0, ativosCount: 0 };
+      areaMap[ar].pessoas++;
+      areaMap[ar].pontos += this.pontosTotalDe(n);
+      if (this.temAcaoRealDe(n)) areaMap[ar].ativosCount++;
+    });
+    const rankingAreaBase = Object.values(areaMap).filter(a => a.pessoas >= 2).map(a => ({
+      area: a.area, mediaPontos: Math.round(10 * a.pontos / a.pessoas) / 10, pctAtivos: Math.round(100 * a.ativosCount / a.pessoas),
+    })).sort((a, b) => b.mediaPontos - a.mediaPontos);
+    const maxMediaArea = Math.max(1, ...rankingAreaBase.map(a => a.mediaPontos));
+    const rankingAreaView = rankingAreaBase.map(a => ({ ...a, barPct: Math.round(100 * a.mediaPontos / maxMediaArea) }));
+    const rankingAreaVazio = rankingAreaView.length === 0;
+
+    const timelineBuckets = {};
+    Object.keys(s.sync).forEach(k => {
+      const isAcao = /^(ps|exp|cur|rt|cs|cf|pp|pcd|brinde|nps)-/.test(k);
+      if (!isAcao) return;
+      const t = s.sync[k] && s.sync[k].t;
+      if (!t) return;
+      const d = new Date(t);
+      if (hojeISOAtual(d) !== hojeISOAtual(new Date())) return;
+      const h = d.getHours();
+      timelineBuckets[h] = (timelineBuckets[h] || 0) + 1;
+    });
+    (s.fotos || []).forEach(f => {
+      const d = new Date(f.criadoEm);
+      if (hojeISOAtual(d) !== hojeISOAtual(new Date())) return;
+      const h = d.getHours();
+      timelineBuckets[h] = (timelineBuckets[h] || 0) + 1;
+    });
+    const horasComEvento = Object.keys(timelineBuckets).map(Number);
+    const horaMin = horasComEvento.length ? Math.min(...horasComEvento, 7) : 7;
+    const horaMax = horasComEvento.length ? Math.max(...horasComEvento, 20) : 20;
+    const maxTimeline = Math.max(1, ...Object.values(timelineBuckets));
+    const timelineView = [];
+    for (let h = horaMin; h <= horaMax; h++) {
+      timelineView.push({ label: String(h).padStart(2, '0') + 'h', barPct: Math.round(100 * (timelineBuckets[h] || 0) / maxTimeline) });
+    }
+    const timelineVazia = horasComEvento.length === 0;
+
+    const stopwords = ['de', 'da', 'do', 'e', 'a', 'o', 'que', 'para', 'com', 'em', 'os', 'as', 'um', 'uma', 'mais', 'foi', 'ser', 'ter', 'no', 'na', 'se', 'ao', 'pra', 'não', 'sim', 'muito', 'bem'];
+    const npsMelhorarFreq = {};
+    npsComentarios.forEach(c => {
+      if (!c.melhorar) return;
+      c.melhorar.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/[^a-z0-9çãõéê]+/i).forEach(w => {
+        if (w.length < 4 || stopwords.indexOf(w) !== -1) return;
+        npsMelhorarFreq[w] = (npsMelhorarFreq[w] || 0) + 1;
+      });
+    });
+    const npsMelhorarCores = ['#0057A6', '#F39200', '#1E7A45'];
+    const npsMelhorarEntradas = Object.keys(npsMelhorarFreq).map(w => ({ texto: w, n: npsMelhorarFreq[w] })).sort((a, b) => b.n - a.n).slice(0, 20);
+    const maxMelhorar = npsMelhorarEntradas.length ? npsMelhorarEntradas[0].n : 1;
+    const npsMelhorarNuvemView = npsMelhorarEntradas.map((e, i) => ({ texto: e.texto, tamanho: Math.round(13 + (e.n / maxMelhorar) * 26) + 'px', cor: npsMelhorarCores[i % npsMelhorarCores.length] }));
+    const npsMelhorarNuvemVazia = npsMelhorarEntradas.length === 0;
+
+    const expNpsView = Object.keys(s.sync).filter(k => k.startsWith('exp-') && s.sync[k] && s.sync[k].v).map(k => {
+      const nome = k.slice(4);
+      const npsEntry = s.sync['nps-' + nome];
+      if (!npsEntry || !npsEntry.v || typeof npsEntry.v.nota !== 'number') return null;
+      const nota = npsEntry.v.nota;
+      return { expectativa: s.sync[k].v, nota, cor: nota >= 9 ? '#1E7A45' : (nota >= 7 ? '#F39200' : '#C0392B') };
+    }).filter(Boolean).slice(0, 30);
+    const expNpsVazio = expNpsView.length === 0;
+
     return {
       spBg: s.city === 'sp' ? '#F39200' : 'transparent', spColor: s.city === 'sp' ? '#002855' : '#C9D6E8',
       bsbBg: s.city === 'bsb' ? '#F39200' : 'transparent', bsbColor: s.city === 'bsb' ? '#002855' : '#C9D6E8',
@@ -7162,8 +7362,8 @@ class Component extends DCLogic {
       malasTotal: MALAS_BSB_SP.length,
       showOrgCuriosidades: s.orgSubTab === 'pontos',
       showOrgManual: s.orgSubTab === 'manual',
-      showOrgAoVivo: s.orgSubTab === 'aovivo', aoVivoTiposView,
-      expectativasNuvemView, expectativasTotal, expectativasVazias,
+      showOrgAnalises, comparativoCidadesView, funilView, rankingAreaView, rankingAreaVazio,
+      timelineView, timelineVazia, npsMelhorarNuvemView, npsMelhorarNuvemVazia, expNpsView, expNpsVazio,      expectativasNuvemView, expectativasTotal, expectativasVazias,
       expectativasSubTabSPBg: expectativasSubTab === 'sp' ? '#0057A6' : '#FFFFFF',
       expectativasSubTabSPColor: expectativasSubTab === 'sp' ? '#FFFFFF' : '#4A4A50',
       expectativasSubTabBSBBg: expectativasSubTab === 'bsb' ? '#0057A6' : '#FFFFFF',
