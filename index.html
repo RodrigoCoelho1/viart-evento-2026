@@ -1121,6 +1121,16 @@
               </sc-if>
               <sc-if value="{{ jaCredenciado }}" hint-placeholder-val="{{ false }}">
                 <div style="display:inline-block;margin-top:14px;background:#1E5E38;color:#C7EFD5;font-size:11.5px;font-weight:800;padding:6px 14px;border-radius:999px;text-transform:uppercase;letter-spacing:0.07em">Presença confirmada</div>
+                <sc-if value="{{ minhaExpectativaSalva }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:14px;font-size:12.5px;color:#A9C0DE">Sua expectativa: <b style="color:#F2F5FA">{{ minhaExpectativaSalva }}</b></div>
+                </sc-if>
+                <sc-if value="{{ minhaExpectativaFalta }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:18px;text-align:left">
+                    <div style="font-size:12px;color:#A9C0DE;margin-bottom:6px">Qual a sua expectativa pra esse evento? (opcional)</div>
+                    <input type="text" placeholder="Uma palavra ou frase curta" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="60" onChange="{{ onCiExpectativa }}" style="width:100%;box-sizing:border-box;padding:11px 13px;border-radius:10px;border:1px solid #3D6693;background:#00193A;color:#F2F5FA;font-size:14px"></input>
+                    <div onClick="{{ salvarExpectativaTardia }}" style="cursor:pointer;display:inline-block;margin-top:10px;background:#F39200;color:#002855;font-size:12.5px;font-weight:800;padding:8px 18px;border-radius:999px;text-transform:uppercase;letter-spacing:0.06em">Salvar resposta</div>
+                  </div>
+                </sc-if>
               </sc-if>
               <sc-if value="{{ aguardandoCredenciamento }}" hint-placeholder-val="{{ false }}">
                 <div style="margin-top:18px;text-align:left">
@@ -4410,6 +4420,13 @@ class Component extends DCLogic {
     this.setState({ ciEnviando: true });
     this.reenviarPendentes().then(ok => this.setState({ ciEnviando: false, ciSalvoLocal: !ok }));
   };
+  salvarExpectativaTardia = () => {
+    this.flushPendentes('ciExpectativa');
+    const nome = this.state.meuNome;
+    const txt = (this.state.ciExpectativa || '').trim();
+    if (!nome || !txt) return;
+    this.setCampos({ ['exp-' + nome]: txt });
+  };
   confirmarPresenca = () => {
     this.flushPendentes('ciExpectativa');
     if (!this.state.meuNome) return;
@@ -6922,6 +6939,7 @@ class Component extends DCLogic {
       crachaQuery: s.crachaQuery, onCrachaQuery: this.onCrachaQuery, crachaOpcoes,
       temNome, crachaSemNome: !temNome, meuNome: s.meuNome, primeiroNome, limparMeuNome: this.limparMeuNome, goToPreCadastro: this.goToPreCadastro,
       crachaLocal, jaCredenciado, aguardandoCredenciamento: temNome && !jaCredenciado, confirmarPresenca: this.confirmarPresenca,
+      minhaExpectativaSalva: temNome ? this.valor('exp-' + s.meuNome) : '', minhaExpectativaFalta: temNome && !this.valor('exp-' + s.meuNome), salvarExpectativaTardia: this.salvarExpectativaTardia,
       minhaMesa, temMesa: !!minhaMesa, mesasSP,
       temDados, dadosSemNome: !temDados, dadosNome: s.dadosNome, limparDadosNome: this.limparDadosNome,
       meuKitLabel: temDados ? (gv('kit-' + s.dadosNome) ? '✓ Camiseta já entregue' : 'Camiseta ainda pendente') : '',
