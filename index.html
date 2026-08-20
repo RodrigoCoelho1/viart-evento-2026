@@ -842,7 +842,12 @@
               <image-slot id="{{ f.id }}" src="{{ f.imagem }}" fit="cover" placeholder="Foto do mural" style="width:100%;aspect-ratio:4/3"></image-slot>
               <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;flex:1">
                 <div>
-                  <div style="font-weight:700;font-size:13.5px;color:#002855">{{ f.autor }}</div>
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+                    <div style="font-weight:700;font-size:13.5px;color:#002855">{{ f.autor }}</div>
+                    <sc-if value="{{ f.podeExcluir }}" hint-placeholder-val="{{ false }}">
+                      <div onClick="{{ f.onExcluir }}" style="cursor:pointer;flex-shrink:0;font-size:11px;font-weight:700;color:#B4471F">excluir</div>
+                    </sc-if>
+                  </div>
                   <sc-if value="{{ f.legenda }}" hint-placeholder-val="{{ false }}">
                     <div style="font-size:12.5px;color:#4A4A50;margin-top:2px;line-height:1.5">{{ f.legenda }}</div>
                   </sc-if>
@@ -3133,7 +3138,7 @@ function mercadoParseMin(t) {
   const m = t.trim().match(/(\d+)h(\d*)/);
   return m ? parseInt(m[1], 10) * 60 + (parseInt(m[2] || '0', 10)) : 0;
 }
-const MERCADO_JANELAS = [{ ini: 735, fim: 1439 }]; // aberta a partir do horário do almoço (12h15) até o fim do evento
+const MERCADO_JANELAS = [{ ini: 780, fim: 1439 }]; // aberta a partir do horário do almoço (13h00) até o fim do evento
 function mercadoJanelaAberta(minutos) {
   return MERCADO_JANELAS.some(j => minutos >= j.ini && minutos < j.fim);
 }
@@ -5773,7 +5778,7 @@ class Component extends DCLogic {
     // Fotos postadas antes da sessão de BSB começar de fato ficam todas em SP (eram testes/fotos
     // de antes de haver postagens reais em BSB); só fotos novas a partir de agora contam para BSB.
     const FOTOS_SESSAO_BSB_A_PARTIR_DE = 1787116604034;
-    const sessaoDaFoto = (f) => f.criadoEm >= FOTOS_SESSAO_BSB_A_PARTIR_DE ? (cidadeDe(f.autor) || 'sp') : 'sp';
+    const sessaoDaFoto = (f) => f.criadoEm >= FOTOS_SESSAO_BSB_A_PARTIR_DE ? 'bsb' : 'sp';
     const fotosOrdenadasFiltradas = fotosOrdenadas.filter(f => sessaoDaFoto(f) === fotosSubTab);
     const setFotosSubTabSP = () => this.setState({ fotosSubTab: 'sp' });
     const setFotosSubTabBSB = () => this.setState({ fotosSubTab: 'bsb' });
