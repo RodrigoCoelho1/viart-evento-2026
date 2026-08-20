@@ -2924,29 +2924,6 @@
             </div>
             </sc-if>
 
-            <sc-if value="{{ showOrgFotos }}" hint-placeholder-val="{{ false }}">
-            <div>
-            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;margin:12px 0 4px">Mural de fotos · moderação</div>
-            <div style="font-size:12.5px;color:#6B6B70;margin-bottom:16px">Fotos aparecem direto no mural, sem aprovação prévia. Use "Remover" para tirar do ar qualquer foto inadequada — a ação também remove os pontos que ela gerou.</div>
-            <sc-if value="{{ fotosVazias }}" hint-placeholder-val="{{ false }}">
-              <div style="font-size:13px;color:#8A8A90">Nenhuma foto postada ainda.</div>
-            </sc-if>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <sc-for list="{{ fotosView }}" as="f" hint-placeholder-count="0">
-                <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:14px">
-                  <image-slot id="mod-{{ f.id }}" src="{{ f.imagem }}" fit="cover" shape="rounded" radius="8" placeholder="Foto" style="width:56px;height:56px;flex-shrink:0"></image-slot>
-                  <div style="flex:1;min-width:0">
-                    <div style="font-weight:700;font-size:13px;color:#002855">{{ f.autor }}</div>
-                    <div style="font-size:11.5px;color:#8A8A90">{{ f.quando }} · ❤️ {{ f.curtidasCount }} · 💬 {{ f.comentariosCount }}</div>
-                  </div>
-                  <div onClick="{{ f.onExcluir }}" style="cursor:pointer;flex-shrink:0;font-size:12px;font-weight:700;color:#B4471F;border:1px solid #F5CDBB;border-radius:8px;padding:7px 12px">Remover</div>
-                </div>
-              </sc-for>
-            </div>
-            </div>
-            </sc-if>
-
-
             <sc-if value="{{ showOrgCompartilhar }}" hint-placeholder-val="{{ false }}">
             <div>
             </div>
@@ -2989,7 +2966,6 @@ const ORG_SUBTABS_DEF = [
   { id: 'pessoas', label: 'Participantes' },
   { id: 'pontos', label: 'Pontos & Brindes' },
   { id: 'nps', label: 'NPS' },
-  { id: 'fotos', label: 'Fotos' },
   { id: 'faleconosco', label: 'Fale conosco' },
   { id: 'cartazes', label: 'Materiais para impressão' },
   { id: 'contatos', label: 'Contatos' },
@@ -7388,7 +7364,6 @@ class Component extends DCLogic {
       tabelaPontosView, tabelaPontosVazia: tabelaPontosView.length === 0,
       toggleOrdemNome: this.toggleTabelaOrdem('nome'), toggleOrdemPontos: this.toggleTabelaOrdem('pontos'), toggleOrdemBrindes: this.toggleTabelaOrdem('resgatesCount'),
       tabelaOrdemNomeArrow: tabelaOrdemArrow('nome'), tabelaOrdemPontosArrow: tabelaOrdemArrow('pontos'), tabelaOrdemBrindesArrow: tabelaOrdemArrow('resgatesCount'),
-      showOrgFotos: s.orgSubTab === 'fotos',
       showOrgNps: s.orgSubTab === 'nps', npsPainelStats, npsPainelStatsVazio, npsSemComentarios: npsComentarios.length === 0,
       npsDistChart, npsPainelChart,
       engajamentoDash, engajCidadeDonutBg, engajCidadeChart, brindesDashView, brindesDashResumo, origemPontosView, brindesUnificadoView, brindesUnificadoTotal,
