@@ -3906,7 +3906,7 @@ class Component extends DCLogic {
       body: JSON.stringify({ action: 'post', autor: nome, imagem: rascunho.imagem, legenda: rascunho.legenda || '' }),
     }).then(r => r.json()).then(j => {
       if (j && j.ok) this.setState({ fotos: j.fotos, fotoRascunho: null, fotoEnviando: false });
-      else this.setState({ fotoEnviando: false, fotoErro: 'Não foi possível publicar. Tente de novo.' });
+      else this.setState({ fotoEnviando: false, fotoErro: 'Não foi possível publicar' + (j && j.erro ? ' (' + j.erro + ')' : '') + '. Tente de novo.' });
     }).catch(() => this.setState({ fotoEnviando: false, fotoErro: 'Sem conexão. Tente de novo.' }));
   };
   curtirFoto = (fotoId) => () => {
