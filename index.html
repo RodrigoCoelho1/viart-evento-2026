@@ -1806,14 +1806,21 @@
 
             <div style="background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px;margin-bottom:16px">
               <div style="font-weight:700;font-size:14px;margin-bottom:4px">Linha do tempo de engajamento</div>
-              <div style="font-size:12px;color:#6B6B70;margin-bottom:14px">Ações registradas no app (check-in, cadastro, votos, fotos, resgates, NPS) por hora do dia de hoje</div>
+              <div style="font-size:12px;color:#6B6B70;margin-bottom:10px">Ações registradas no app (check-in, cadastro, votos, fotos, resgates, NPS) por hora do dia, São Paulo (13/08) × Brasília (20/08)</div>
+              <div style="display:flex;gap:14px;margin-bottom:12px;font-size:11.5px">
+                <div style="display:flex;align-items:center;gap:5px"><div style="width:9px;height:9px;border-radius:2px;background:#F39200"></div>São Paulo</div>
+                <div style="display:flex;align-items:center;gap:5px"><div style="width:9px;height:9px;border-radius:2px;background:#0057A6"></div>Brasília</div>
+              </div>
               <sc-if value="{{ timelineVazia }}" hint-placeholder-val="{{ false }}">
-                <div style="font-size:13px;color:#8A8A90">Nenhuma ação registrada hoje ainda.</div>
+                <div style="font-size:13px;color:#8A8A90">Nenhuma ação registrada ainda.</div>
               </sc-if>
               <div style="display:flex;align-items:flex-end;gap:4px;height:110px">
                 <sc-for list="{{ timelineView }}" as="th" hint-placeholder-count="14">
                   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px">
-                    <div style="width:100%;background:#0057A6;border-radius:4px 4px 0 0;height:{{ th.barPct }}%;min-height:2px"></div>
+                    <div style="display:flex;align-items:flex-end;gap:2px;height:100%;width:100%">
+                      <div style="flex:1;background:#F39200;border-radius:4px 4px 0 0;height:{{ th.spBarPct }}%;min-height:2px"></div>
+                      <div style="flex:1;background:#0057A6;border-radius:4px 4px 0 0;height:{{ th.bsbBarPct }}%;min-height:2px"></div>
+                    </div>
                     <div style="font-size:9.5px;color:#8A8A90">{{ th.label }}</div>
                   </div>
                 </sc-for>
@@ -2794,6 +2801,17 @@
                 <div onClick="{{ baixarRelatorioHidden }}" style="cursor:pointer;background:#0057A6;color:#fff;font-weight:700;padding:9px 18px;border-radius:10px;font-size:13px;white-space:nowrap">Baixar CSV (Excel)</div>
               </div>
               <div style="font-size:12.5px;color:#6B6B70;margin-bottom:14px">{{ hiddenConfirmadosTotal }} confirmado(s) com CPF · os 30 primeiros da fila ficam isentos.</div>
+              <div style="background:#F7F9FC;border-radius:10px;padding:12px 14px;margin-bottom:14px">
+                <div style="font-size:12px;font-weight:700;color:#002855;margin-bottom:8px">Adicionar pessoa fora dos grupos (vai ao HIDDEN)</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <input type="text" placeholder="Nome completo" value="{{ hiddenExtraNome }}" onChange="{{ onHiddenExtraNome }}" style="flex:1;min-width:160px;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid #C9D6E8;font-size:13px"></input>
+                  <input type="text" placeholder="CPF (só números)" value="{{ hiddenExtraCpf }}" onChange="{{ onHiddenExtraCpf }}" maxlength="14" style="width:150px;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid #C9D6E8;font-size:13px"></input>
+                  <div onClick="{{ adicionarHiddenExtra }}" style="cursor:pointer;background:#0057A6;color:#fff;font-weight:700;padding:9px 16px;border-radius:8px;font-size:13px;white-space:nowrap">Adicionar</div>
+                </div>
+                <sc-if value="{{ hiddenExtraErro }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:12px;color:#C0392B;font-weight:700;margin-top:8px">{{ hiddenExtraErro }}</div>
+                </sc-if>
+              </div>
               <sc-if value="{{ hiddenConfirmadosVazio }}" hint-placeholder-val="{{ false }}">
                 <div style="font-size:13px;color:#8A8A90">Ninguém confirmou com CPF ainda.</div>
               </sc-if>
@@ -4594,6 +4612,23 @@ class Component extends DCLogic {
   orgRemoverHidden = (nome) => () => {
     if (!window.confirm('Remover ' + nome + ' da lista de confirmados do HIDDEN? Isso apaga o CPF cadastrado e libera a posição para o próximo da fila.')) return;
     this.setCampos({ ['cf-cpf-' + nome]: null, ['cf-' + nome]: 'Não' });
+  };
+  onHiddenExtraNome = (e) => this.setState({ hiddenExtraNome: e.target.value });
+  onHiddenExtraCpf = (e) => {
+    const v = e.target.value.replace(/\D/g, '').slice(0, 11).replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    this.setState({ hiddenExtraCpf: v });
+  };
+  adicionarHiddenExtra = () => {
+    const nome = (this.state.hiddenExtraNome || '').trim();
+    const cpf = (this.state.hiddenExtraCpf || '').trim();
+    if (!nome || cpf.replace(/\D/g, '').length !== 11) { this.setState({ hiddenExtraErro: 'Informe nome e CPF completo (11 dígitos).' }); return; }
+    const id = 'hx-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+    this.setCampos({ [id]: { nome, cpf } });
+    this.setState({ hiddenExtraNome: '', hiddenExtraCpf: '', hiddenExtraErro: '' });
+  };
+  orgRemoverHiddenExtra = (key) => () => {
+    if (!window.confirm('Remover esse registro da lista do HIDDEN?')) return;
+    this.setCampos({ [key]: null });
   };
   onCpfConfraternizacao = (e) => {
     const v = e.target.value.replace(/\D/g, '').slice(0, 11).replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
@@ -6433,13 +6468,17 @@ class Component extends DCLogic {
     Object.keys(HIDDEN_FIXOS).forEach(n => {
       if (!hiddenConfirmadosPre.some(h => h.nome === n)) hiddenConfirmadosPre.push({ nome: n, cpf: HIDDEN_FIXOS[n], t: 0 });
     });
+    const hiddenExtras = Object.keys(s.sync).filter(k => k.startsWith('hx-') && s.sync[k] && s.sync[k].v).map(k => ({
+      nome: s.sync[k].v.nome, cpf: s.sync[k].v.cpf, t: s.sync[k].t || 0, key: k,
+    }));
+    hiddenExtras.forEach(h => hiddenConfirmadosPre.push(h));
     hiddenConfirmadosPre.sort((a, b) => a.t - b.t);
     const hiddenConfirmadosView = hiddenConfirmadosPre.map((h, i) => ({
       ordem: i + 1, nome: h.nome, cpf: h.cpf,
       isento: i < 30,
       statusLabel: i < 30 ? 'Isento' : 'Paga consumo',
       statusBg: i < 30 ? '#E3F3E8' : '#FDF1DC', statusColor: i < 30 ? '#1E7A45' : '#8A5A0B',
-      remover: this.orgRemoverHidden(h.nome),
+      remover: h.key ? this.orgRemoverHiddenExtra(h.key) : this.orgRemoverHidden(h.nome),
     }));
     const resgatesConfirmadosPre = [];
     BRINDES_MARKETPLACE.forEach(b => {
@@ -6916,30 +6955,32 @@ class Component extends DCLogic {
     const rankingAreaView = rankingAreaBase.map(a => ({ ...a, barPct: Math.round(100 * a.mediaPontos / maxMediaArea) }));
     const rankingAreaVazio = rankingAreaView.length === 0;
 
-    const timelineBuckets = {};
+    const timelineSP = {}, timelineBSB = {};
+    const bucketPorDia = (t) => {
+      const d = new Date(t);
+      const iso = hojeISOAtual(d);
+      const h = d.getHours();
+      if (iso === DATA_EVENTO_CIDADE.sp) timelineSP[h] = (timelineSP[h] || 0) + 1;
+      else if (iso === DATA_EVENTO_CIDADE.bsb) timelineBSB[h] = (timelineBSB[h] || 0) + 1;
+    };
     Object.keys(s.sync).forEach(k => {
       const isAcao = /^(ps|exp|cur|rt|cs|cf|pp|pcd|brinde|nps)-/.test(k);
       if (!isAcao) return;
       const t = s.sync[k] && s.sync[k].t;
-      if (!t) return;
-      const d = new Date(t);
-      if (hojeISOAtual(d) !== hojeISOAtual(new Date())) return;
-      const h = d.getHours();
-      timelineBuckets[h] = (timelineBuckets[h] || 0) + 1;
+      if (t) bucketPorDia(t);
     });
-    (s.fotos || []).forEach(f => {
-      const d = new Date(f.criadoEm);
-      if (hojeISOAtual(d) !== hojeISOAtual(new Date())) return;
-      const h = d.getHours();
-      timelineBuckets[h] = (timelineBuckets[h] || 0) + 1;
-    });
-    const horasComEvento = Object.keys(timelineBuckets).map(Number);
+    (s.fotos || []).forEach(f => bucketPorDia(f.criadoEm));
+    const horasComEvento = Array.from(new Set(Object.keys(timelineSP).concat(Object.keys(timelineBSB)).map(Number)));
     const horaMin = horasComEvento.length ? Math.min(...horasComEvento, 7) : 7;
     const horaMax = horasComEvento.length ? Math.max(...horasComEvento, 20) : 20;
-    const maxTimeline = Math.max(1, ...Object.values(timelineBuckets));
+    const maxTimeline = Math.max(1, ...Object.values(timelineSP), ...Object.values(timelineBSB));
     const timelineView = [];
     for (let h = horaMin; h <= horaMax; h++) {
-      timelineView.push({ label: String(h).padStart(2, '0') + 'h', barPct: Math.round(100 * (timelineBuckets[h] || 0) / maxTimeline) });
+      timelineView.push({
+        label: String(h).padStart(2, '0') + 'h',
+        spBarPct: Math.round(100 * (timelineSP[h] || 0) / maxTimeline),
+        bsbBarPct: Math.round(100 * (timelineBSB[h] || 0) / maxTimeline),
+      });
     }
     const timelineVazia = horasComEvento.length === 0;
 
@@ -7046,6 +7087,9 @@ class Component extends DCLogic {
       showOrgOrcamento: s.orgSubTab === 'orcamento', showOrgContatos: s.orgSubTab === 'contatos',
       showOrgInteresseSuperapp: s.orgSubTab === 'interessesuperapp',
       showOrgRelatorios: s.orgSubTab === 'relatorios', hiddenConfirmadosView, hiddenConfirmadosTotal: hiddenConfirmadosView.length,
+      hiddenExtraNome: s.hiddenExtraNome || '', onHiddenExtraNome: this.onHiddenExtraNome,
+      hiddenExtraCpf: s.hiddenExtraCpf || '', onHiddenExtraCpf: this.onHiddenExtraCpf,
+      hiddenExtraErro: s.hiddenExtraErro || '', adicionarHiddenExtra: this.adicionarHiddenExtra,
       hiddenConfirmadosVazio: hiddenConfirmadosView.length === 0, baixarRelatorioHidden: this.baixarRelatorioHidden,
       baixarRelatorioContatosBSB: this.baixarRelatorioContatosBSB,
       baixarRelatorioNpsSP: this.baixarRelatorioNpsSP,
