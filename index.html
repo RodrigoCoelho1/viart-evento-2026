@@ -2972,6 +2972,25 @@
                 </div>
               </div>
               <div style="flex:1 1 260px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:14px">NPS · nota do app</div>
+                <div style="flex:1">
+                  <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:28px;color:#002855">{{ npsAppMedia }}</div>
+                  <div style="font-size:11.5px;color:#6B6B70">média · {{ npsAppTotal }} respostas</div>
+                </div>
+              </div>
+              <div style="flex:1 1 620px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
+                <div style="font-weight:700;font-size:14px;margin-bottom:4px">Nuvem: "resuma o evento em uma palavra"</div>
+                <div style="font-size:12px;color:#6B6B70;margin-bottom:14px">Palavras mais citadas nas respostas do NPS</div>
+                <sc-if value="{{ npsPalavraNuvemVazia }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:13px;color:#8A8A90">Sem respostas suficientes ainda.</div>
+                </sc-if>
+                <div style="display:flex;flex-wrap:wrap;gap:8px 14px">
+                  <sc-for list="{{ npsPalavraNuvemView }}" as="pw" hint-placeholder-count="8">
+                    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:{{ pw.tamanho }};color:{{ pw.cor }}">{{ pw.texto }}</div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="flex:1 1 260px;background:#FFFFFF;border:1px solid #DCE6F2;border-radius:14px;padding:20px">
                 <div style="font-weight:700;font-size:14px;margin-bottom:14px">Distribuição das notas</div>
                 <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
                   <div style="position:relative;flex-shrink:0;width:130px;height:130px">
@@ -6119,6 +6138,9 @@ class Component extends DCLogic {
     const npsNeutros = npsRaw.filter(r => r.nota >= 7 && r.nota <= 8).length;
     const npsDetratores = npsRaw.filter(r => r.nota <= 6).length;
     const npsScore = npsTotal ? Math.round(100 * npsPromotores / npsTotal) - Math.round(100 * npsDetratores / npsTotal) : 0;
+    const npsAppRaw = npsRaw.filter(r => typeof r.notaApp === 'number');
+    const npsAppTotal = npsAppRaw.length;
+    const npsAppMedia = npsAppTotal ? (npsAppRaw.reduce((a, r) => a + r.notaApp, 0) / npsAppTotal) : 0;
     const NPS_PAINEIS_DEFS = NPS_BLOCOS;
     const npsPainelStats = NPS_PAINEIS_DEFS.map((b, i) => {
       const notas = npsRaw.filter(r => r.paineis && (r.paineis[i] || r.paineis[i] === 0)).map(r => r.paineis[i]);
@@ -7006,6 +7028,20 @@ class Component extends DCLogic {
     const npsMelhorarNuvemView = npsMelhorarEntradas.map((e, i) => ({ texto: e.texto, tamanho: Math.round(13 + (e.n / maxMelhorar) * 26) + 'px', cor: npsMelhorarCores[i % npsMelhorarCores.length] }));
     const npsMelhorarNuvemVazia = npsMelhorarEntradas.length === 0;
 
+    const npsPalavraFreq = {};
+    npsComentarios.forEach(c => {
+      if (!c.funcionou) return;
+      const w = c.funcionou.trim();
+      if (!w) return;
+      const key = w.toLowerCase();
+      npsPalavraFreq[key] = npsPalavraFreq[key] || { texto: w, n: 0 };
+      npsPalavraFreq[key].n++;
+    });
+    const npsPalavraEntradas = Object.values(npsPalavraFreq).sort((a, b) => b.n - a.n).slice(0, 20);
+    const maxPalavra = npsPalavraEntradas.length ? npsPalavraEntradas[0].n : 1;
+    const npsPalavraNuvemView = npsPalavraEntradas.map((e, i) => ({ texto: e.texto, tamanho: Math.round(13 + (e.n / maxPalavra) * 26) + 'px', cor: npsMelhorarCores[i % npsMelhorarCores.length] }));
+    const npsPalavraNuvemVazia = npsPalavraEntradas.length === 0;
+
     const expNpsView = Object.keys(s.sync).filter(k => k.startsWith('exp-') && s.sync[k] && s.sync[k].v).map(k => {
       const nome = k.slice(4);
       const npsEntry = s.sync['nps-' + nome];
@@ -7571,6 +7607,8 @@ class Component extends DCLogic {
       mesasSPComPresenca, numMesas, mesasBSBComPresenca, numMesasBSB,
       mesasSPComPresencaPct, mesasBSBComPresencaPct,
       npsTotal, npsMedia: npsMedia.toFixed(1), npsScore, npsPromotores, npsNeutros, npsDetratores,
+      npsAppTotal, npsAppMedia: npsAppMedia.toFixed(1),
+      npsPalavraNuvemView, npsPalavraNuvemVazia,
       npsComentarios,
       camisaSizeCountList: Object.entries(camisaSizeCount).map(([size, n]) => camisaGrupoRow(size, n)),
       camisaFaltamCount,
